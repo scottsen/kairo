@@ -1,0 +1,435 @@
+"""Recursive descent parser for Creative Computation DSL."""
+
+from typing import List, Optional
+from creative_computation.lexer.lexer import Token, TokenType, Lexer
+from creative_computation.ast.nodes import *
+
+
+class ParseError(Exception):
+    """Exception raised during parsing."""
+    pass
+
+
+class Parser:
+    """Recursive descent parser for the DSL."""
+
+    def __init__(self, tokens: List[Token]):
+        self.tokens = tokens
+        self.pos = 0
+
+    def current_token(self) -> Token:
+        """Get the current token."""
+        if self.pos >= len(self.tokens):
+            return self.tokens[-1]  # Return EOF
+        return self.tokens[self.pos]
+
+    def peek_token(self, offset: int = 1) -> Token:
+        """Peek at a token ahead."""
+        pos = self.pos + offset
+        if pos >= len(self.tokens):
+            return self.tokens[-1]  # Return EOF
+        return self.tokens[pos]
+
+    def advance(self) -> Token:
+        """Advance to the next token."""
+        token = self.current_token()
+        if self.pos < len(self.tokens) - 1:
+            self.pos += 1
+        return token
+
+    def expect(self, token_type: TokenType) -> Token:
+        """Expect a specific token type and advance."""
+        token = self.current_token()
+        if token.type != token_type:
+            raise ParseError(
+                f"Expected {token_type.name}, got {token.type.name} "
+                f"at {token.line}:{token.column}"
+            )
+        return self.advance()
+
+    def skip_newlines(self):
+        """Skip any newline tokens."""
+        while self.current_token().type == TokenType.NEWLINE:
+            self.advance()
+
+    def parse(self) -> Program:
+        """Parse the entire program."""
+        statements = []
+        self.skip_newlines()
+
+        while self.current_token().type != TokenType.EOF:
+            stmt = self.parse_statement()
+            if stmt:
+                statements.append(stmt)
+            self.skip_newlines()
+
+        return Program(statements)
+
+    def parse_statement(self) -> Optional[Statement]:
+        """Parse a single statement."""
+        self.skip_newlines()
+        token = self.current_token()
+
+        # Parse decorators
+        decorators = []
+        while token.type == TokenType.AT:
+            decorators.append(self.parse_decorator())
+            self.skip_newlines()
+            token = self.current_token()
+
+        # Step block
+        if token.type == TokenType.STEP:
+            return self.parse_step()
+
+        # Substep block
+        if token.type == TokenType.SUBSTEP:
+            return self.parse_substep()
+
+        # Module definition
+        if token.type == TokenType.MODULE:
+            return self.parse_module()
+
+        # Compose statement
+        if token.type == TokenType.COMPOSE:
+            return self.parse_compose()
+
+        # Assignment (with possible decorators)
+        if token.type == TokenType.IDENTIFIER:
+            return self.parse_assignment(decorators)
+
+        # Type definition
+        if token.type == TokenType.TYPE:
+            return self.parse_type_definition()
+
+        # Set statement (for configuration)
+        if token.type == TokenType.SET:
+            return self.parse_set_statement()
+
+        return None
+
+    def parse_decorator(self) -> Decorator:
+        """Parse a decorator (@name or @name(args))."""
+        self.expect(TokenType.AT)
+        name_token = self.expect(TokenType.IDENTIFIER)
+        name = name_token.value
+
+        args = []
+        kwargs = {}
+
+        # Check for arguments
+        if self.current_token().type == TokenType.LPAREN:
+            self.advance()
+            self.skip_newlines()
+
+            while self.current_token().type != TokenType.RPAREN:
+                # Check if it's a keyword argument
+                if (self.current_token().type == TokenType.IDENTIFIER and
+                    self.peek_token().type == TokenType.ASSIGN):
+                    key = self.current_token().value
+                    self.advance()
+                    self.advance()  # Skip '='
+                    value = self.parse_expression()
+                    kwargs[key] = value
+                else:
+                    args.append(self.parse_expression())
+
+                if self.current_token().type == TokenType.COMMA:
+                    self.advance()
+                    self.skip_newlines()
+
+            self.expect(TokenType.RPAREN)
+
+        return Decorator(name, args, kwargs)
+
+    def parse_step(self) -> Step:
+        """Parse a step block."""
+        self.expect(TokenType.STEP)
+        self.expect(TokenType.LBRACE)
+        self.skip_newlines()
+
+        body = []
+        while self.current_token().type != TokenType.RBRACE:
+            stmt = self.parse_statement()
+            if stmt:
+                body.append(stmt)
+            self.skip_newlines()
+
+        self.expect(TokenType.RBRACE)
+        return Step(body)
+
+    def parse_substep(self) -> Substep:
+        """Parse a substep block."""
+        self.expect(TokenType.SUBSTEP)
+        self.expect(TokenType.LPAREN)
+        count = self.parse_expression()
+        self.expect(TokenType.RPAREN)
+        self.expect(TokenType.LBRACE)
+        self.skip_newlines()
+
+        body = []
+        while self.current_token().type != TokenType.RBRACE:
+            stmt = self.parse_statement()
+            if stmt:
+                body.append(stmt)
+            self.skip_newlines()
+
+        self.expect(TokenType.RBRACE)
+        return Substep(count, body)
+
+    def parse_module(self) -> Module:
+        """Parse a module definition."""
+        self.expect(TokenType.MODULE)
+        name_token = self.expect(TokenType.IDENTIFIER)
+        name = name_token.value
+
+        # Parse parameters
+        self.expect(TokenType.LPAREN)
+        params = []
+        while self.current_token().type != TokenType.RPAREN:
+            param_name = self.expect(TokenType.IDENTIFIER).value
+            self.expect(TokenType.COLON)
+            param_type = self.parse_type_annotation()
+            params.append((param_name, param_type))
+
+            if self.current_token().type == TokenType.COMMA:
+                self.advance()
+
+        self.expect(TokenType.RPAREN)
+        self.expect(TokenType.LBRACE)
+        self.skip_newlines()
+
+        # Parse body
+        body = []
+        while self.current_token().type != TokenType.RBRACE:
+            stmt = self.parse_statement()
+            if stmt:
+                body.append(stmt)
+            self.skip_newlines()
+
+        self.expect(TokenType.RBRACE)
+        return Module(name, params, body)
+
+    def parse_compose(self) -> Compose:
+        """Parse a compose statement."""
+        self.expect(TokenType.COMPOSE)
+        self.expect(TokenType.LPAREN)
+
+        modules = []
+        while self.current_token().type != TokenType.RPAREN:
+            modules.append(self.parse_expression())
+            if self.current_token().type == TokenType.COMMA:
+                self.advance()
+
+        self.expect(TokenType.RPAREN)
+        return Compose(modules)
+
+    def parse_assignment(self, decorators: List[Decorator] = None) -> Assignment:
+        """Parse an assignment statement."""
+        if decorators is None:
+            decorators = []
+
+        target = self.expect(TokenType.IDENTIFIER).value
+
+        # Check for type annotation
+        type_annotation = None
+        if self.current_token().type == TokenType.COLON:
+            self.advance()
+            type_annotation = self.parse_type_annotation()
+
+        self.expect(TokenType.ASSIGN)
+        value = self.parse_expression()
+
+        return Assignment(target, value, type_annotation, decorators)
+
+    def parse_type_annotation(self) -> TypeAnnotation:
+        """Parse a type annotation."""
+        base_type = self.expect(TokenType.IDENTIFIER).value
+
+        # Parse generic type parameters
+        type_params = []
+        if self.current_token().type == TokenType.LT:
+            self.advance()
+            while self.current_token().type != TokenType.GT:
+                type_params.append(self.parse_type_annotation())
+                if self.current_token().type == TokenType.COMMA:
+                    self.advance()
+            self.expect(TokenType.GT)
+
+        # Parse unit annotation
+        unit = None
+        if self.current_token().type == TokenType.LBRACKET:
+            self.advance()
+            unit = self.expect(TokenType.IDENTIFIER).value
+            self.expect(TokenType.RBRACKET)
+
+        return TypeAnnotation(base_type, type_params, unit)
+
+    def parse_type_definition(self) -> Statement:
+        """Parse a type definition."""
+        # This is a simplified version
+        # Full implementation would handle record types
+        self.expect(TokenType.TYPE)
+        name = self.expect(TokenType.IDENTIFIER).value
+        self.expect(TokenType.ASSIGN)
+        # Skip the type definition for now
+        # Would need to parse record/struct definitions
+        return None
+
+    def parse_set_statement(self) -> Assignment:
+        """Parse a set statement (configuration)."""
+        self.expect(TokenType.SET)
+        target = self.expect(TokenType.IDENTIFIER).value
+        self.expect(TokenType.ASSIGN)
+        value = self.parse_expression()
+        return Assignment(target, value)
+
+    def parse_expression(self) -> Expression:
+        """Parse an expression."""
+        return self.parse_assignment_expression()
+
+    def parse_assignment_expression(self) -> Expression:
+        """Parse assignment or comparison expression."""
+        return self.parse_comparison()
+
+    def parse_comparison(self) -> Expression:
+        """Parse comparison expression."""
+        left = self.parse_additive()
+
+        while self.current_token().type in [
+            TokenType.EQ, TokenType.NE,
+            TokenType.LT, TokenType.LE,
+            TokenType.GT, TokenType.GE
+        ]:
+            op_token = self.advance()
+            right = self.parse_additive()
+            left = BinaryOp(left, op_token.value, right)
+
+        return left
+
+    def parse_additive(self) -> Expression:
+        """Parse additive expression (+ -)."""
+        left = self.parse_multiplicative()
+
+        while self.current_token().type in [TokenType.PLUS, TokenType.MINUS]:
+            op_token = self.advance()
+            right = self.parse_multiplicative()
+            left = BinaryOp(left, op_token.value, right)
+
+        return left
+
+    def parse_multiplicative(self) -> Expression:
+        """Parse multiplicative expression (* / %)."""
+        left = self.parse_unary()
+
+        while self.current_token().type in [TokenType.STAR, TokenType.SLASH, TokenType.PERCENT]:
+            op_token = self.advance()
+            right = self.parse_unary()
+            left = BinaryOp(left, op_token.value, right)
+
+        return left
+
+    def parse_unary(self) -> Expression:
+        """Parse unary expression (- !)."""
+        if self.current_token().type in [TokenType.MINUS]:
+            op_token = self.advance()
+            operand = self.parse_unary()
+            return UnaryOp(op_token.value, operand)
+
+        return self.parse_postfix()
+
+    def parse_postfix(self) -> Expression:
+        """Parse postfix expression (function calls, field access)."""
+        expr = self.parse_primary()
+
+        while True:
+            token = self.current_token()
+
+            # Function call
+            if token.type == TokenType.LPAREN:
+                self.advance()
+                args = []
+                kwargs = {}
+
+                while self.current_token().type != TokenType.RPAREN:
+                    # Check for keyword argument
+                    if (self.current_token().type == TokenType.IDENTIFIER and
+                        self.peek_token().type == TokenType.ASSIGN):
+                        key = self.current_token().value
+                        self.advance()
+                        self.advance()  # Skip '='
+                        value = self.parse_expression()
+                        kwargs[key] = value
+                    else:
+                        args.append(self.parse_expression())
+
+                    if self.current_token().type == TokenType.COMMA:
+                        self.advance()
+
+                self.expect(TokenType.RPAREN)
+                expr = Call(expr, args, kwargs)
+
+            # Field access
+            elif token.type == TokenType.DOT:
+                self.advance()
+                field_name = self.expect(TokenType.IDENTIFIER).value
+                expr = FieldAccess(expr, field_name)
+
+            else:
+                break
+
+        return expr
+
+    def parse_primary(self) -> Expression:
+        """Parse primary expression (literals, identifiers, parenthesized)."""
+        token = self.current_token()
+
+        # Number literal
+        if token.type == TokenType.NUMBER:
+            self.advance()
+            return Literal(token.value)
+
+        # String literal
+        if token.type == TokenType.STRING:
+            self.advance()
+            return Literal(token.value)
+
+        # Boolean literal
+        if token.type == TokenType.BOOL:
+            self.advance()
+            return Literal(token.value)
+
+        # Identifier
+        if token.type == TokenType.IDENTIFIER:
+            self.advance()
+            return Identifier(token.value)
+
+        # Parenthesized expression
+        if token.type == TokenType.LPAREN:
+            self.advance()
+            expr = self.parse_expression()
+            self.expect(TokenType.RPAREN)
+            return expr
+
+        # List literal
+        if token.type == TokenType.LBRACKET:
+            self.advance()
+            elements = []
+            while self.current_token().type != TokenType.RBRACKET:
+                elements.append(self.parse_expression())
+                if self.current_token().type == TokenType.COMMA:
+                    self.advance()
+            self.expect(TokenType.RBRACKET)
+            # Return a list literal (would need to add ListLiteral to AST)
+            return Literal(elements)
+
+        raise ParseError(
+            f"Unexpected token {token.type.name} at {token.line}:{token.column}"
+        )
+
+
+def parse(source: str) -> Program:
+    """Parse source code into an AST."""
+    lexer = Lexer(source)
+    tokens = lexer.tokenize()
+    parser = Parser(tokens)
+    return parser.parse()
