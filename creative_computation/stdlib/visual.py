@@ -248,6 +248,19 @@ class VisualOperations:
             >>> gen = generate_frames()
             >>> visual.display(lambda: next(gen))
         """
+        # Input validation
+        if not callable(frame_generator):
+            raise TypeError(f"frame_generator must be callable, got {type(frame_generator)}")
+
+        if not isinstance(title, str):
+            raise TypeError(f"title must be str, got {type(title)}")
+
+        if not isinstance(target_fps, int) or target_fps <= 0:
+            raise ValueError(f"target_fps must be positive integer, got {target_fps}")
+
+        if not isinstance(scale, int) or scale <= 0:
+            raise ValueError(f"scale must be positive integer, got {scale}")
+
         try:
             import pygame
         except ImportError:
@@ -279,90 +292,95 @@ class VisualOperations:
         # State
         paused = False
         current_fps = target_fps
-        frame_count = 0
+        fps_frame_count = 0  # For FPS calculation (resets every second)
+        total_frames = 0  # Total frames generated
         fps_timer = time.time()
         actual_fps = 0.0
         current_visual = first_frame
 
-        running = True
-        while running:
-            # Handle events
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        paused = not paused
-                    elif event.key == pygame.K_RIGHT and paused:
-                        # Step forward one frame
-                        new_frame = frame_generator()
-                        if new_frame is not None:
-                            current_visual = new_frame
-                            frame_count += 1
-                    elif event.key == pygame.K_UP:
-                        current_fps = min(current_fps + 5, 120)
-                    elif event.key == pygame.K_DOWN:
-                        current_fps = max(current_fps - 5, 1)
-                    elif event.key in (pygame.K_q, pygame.K_ESCAPE):
+        try:
+            running = True
+            while running:
+                # Handle events
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
                         running = False
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            paused = not paused
+                        elif event.key == pygame.K_RIGHT and paused:
+                            # Step forward one frame
+                            new_frame = frame_generator()
+                            if new_frame is not None:
+                                current_visual = new_frame
+                                total_frames += 1
+                                fps_frame_count += 1
+                        elif event.key == pygame.K_UP:
+                            current_fps = min(current_fps + 5, 120)
+                        elif event.key == pygame.K_DOWN:
+                            current_fps = max(current_fps - 5, 1)
+                        elif event.key in (pygame.K_q, pygame.K_ESCAPE):
+                            running = False
 
-            # Generate next frame (if not paused)
-            if not paused:
-                new_frame = frame_generator()
-                if new_frame is None:
-                    running = False
-                    continue
-                current_visual = new_frame
-                frame_count += 1
+                # Generate next frame (if not paused)
+                if not paused:
+                    new_frame = frame_generator()
+                    if new_frame is None:
+                        running = False
+                        continue
+                    current_visual = new_frame
+                    total_frames += 1
+                    fps_frame_count += 1
 
-            # Convert visual to pygame surface
-            srgb = VisualOperations._linear_to_srgb(current_visual.data)
-            rgb_8bit = (srgb * 255).astype(np.uint8)
+                # Convert visual to pygame surface
+                srgb = VisualOperations._linear_to_srgb(current_visual.data)
+                rgb_8bit = (srgb * 255).astype(np.uint8)
 
-            # Create surface and scale
-            surf = pygame.surfarray.make_surface(np.transpose(rgb_8bit, (1, 0, 2)))
-            if scale != 1:
-                surf = pygame.transform.scale(surf, (width, height))
+                # Create surface and scale
+                surf = pygame.surfarray.make_surface(np.transpose(rgb_8bit, (1, 0, 2)))
+                if scale != 1:
+                    surf = pygame.transform.scale(surf, (width, height))
 
-            # Draw to screen
-            screen.blit(surf, (0, 0))
+                # Draw to screen
+                screen.blit(surf, (0, 0))
 
-            # Draw UI overlay
-            now = time.time()
-            if now - fps_timer >= 1.0:
-                actual_fps = frame_count / (now - fps_timer)
-                frame_count = 0
-                fps_timer = now
+                # Draw UI overlay
+                now = time.time()
+                if now - fps_timer >= 1.0:
+                    actual_fps = fps_frame_count / (now - fps_timer)
+                    fps_frame_count = 0
+                    fps_timer = now
 
-            # Status text
-            status_lines = [
-                f"FPS: {actual_fps:.1f} / {current_fps}",
-                f"Frame: {frame_count}" if paused else "",
-                "PAUSED" if paused else "RUNNING",
-                "",
-                "Controls:",
-                "SPACE: Pause/Resume",
-                "→: Step (paused)",
-                "↑↓: Speed",
-                "Q: Quit"
-            ]
+                # Status text
+                status_lines = [
+                    f"FPS: {actual_fps:.1f} / {current_fps}",
+                    f"Frame: {total_frames}" if paused else "",
+                    "PAUSED" if paused else "RUNNING",
+                    "",
+                    "Controls:",
+                    "SPACE: Pause/Resume",
+                    "→: Step (paused)",
+                    "↑↓: Speed",
+                    "Q: Quit"
+                ]
 
-            y_offset = 10
-            for line in status_lines:
-                if line:
-                    # Draw with black background for readability
-                    text = font.render(line, True, (255, 255, 255))
-                    text_bg = pygame.Surface((text.get_width() + 10, text.get_height() + 4))
-                    text_bg.set_alpha(180)
-                    text_bg.fill((0, 0, 0))
-                    screen.blit(text_bg, (5, y_offset))
-                    screen.blit(text, (10, y_offset + 2))
-                y_offset += 22
+                y_offset = 10
+                for line in status_lines:
+                    if line:
+                        # Draw with black background for readability
+                        text = font.render(line, True, (255, 255, 255))
+                        text_bg = pygame.Surface((text.get_width() + 10, text.get_height() + 4))
+                        text_bg.set_alpha(180)
+                        text_bg.fill((0, 0, 0))
+                        screen.blit(text_bg, (5, y_offset))
+                        screen.blit(text, (10, y_offset + 2))
+                    y_offset += 22
 
-            pygame.display.flip()
-            clock.tick(current_fps)
+                pygame.display.flip()
+                clock.tick(current_fps)
 
-        pygame.quit()
+        finally:
+            pygame.quit()
 
 
 # Create singleton instance for use as 'visual' namespace

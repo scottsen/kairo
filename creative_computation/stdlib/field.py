@@ -179,6 +179,57 @@ class FieldOperations:
         return result
 
     @staticmethod
+    def laplacian(field: Field2D) -> Field2D:
+        """Compute Laplacian of field using 5-point stencil.
+
+        Computes ∇²f = ∂²f/∂x² + ∂²f/∂y² using finite differences.
+        Uses central differences: ∇²f ≈ (f_left + f_right + f_up + f_down - 4*f_center)
+
+        Args:
+            field: Field to compute Laplacian of
+
+        Returns:
+            Laplacian field (same shape as input)
+
+        Notes:
+            - Uses reflective boundary conditions (duplicates edge values)
+            - For periodic boundaries, call field.boundary(result, spec="periodic") after
+            - Laplacian is scale-dependent on grid spacing (dx, dy)
+        """
+        h, w = field.shape
+        result = field.copy()
+
+        # Get shifted versions (pad with edge values for reflective boundaries)
+        if len(field.data.shape) == 2:
+            # Scalar field
+            data = field.data
+            left = np.pad(data, ((0, 0), (1, 0)), mode='edge')[:, :-1]
+            right = np.pad(data, ((0, 0), (0, 1)), mode='edge')[:, 1:]
+            up = np.pad(data, ((1, 0), (0, 0)), mode='edge')[:-1, :]
+            down = np.pad(data, ((0, 1), (0, 0)), mode='edge')[1:, :]
+
+            # 5-point stencil: ∇²f = (neighbors - 4*center)
+            result.data = (left + right + up + down - 4 * data)
+
+        else:
+            # Vector field - compute Laplacian per channel
+            for c in range(field.data.shape[2]):
+                data = field.data[:, :, c]
+                left = np.pad(data, ((0, 0), (1, 0)), mode='edge')[:, :-1]
+                right = np.pad(data, ((0, 0), (0, 1)), mode='edge')[:, 1:]
+                up = np.pad(data, ((1, 0), (0, 0)), mode='edge')[:-1, :]
+                down = np.pad(data, ((0, 1), (0, 0)), mode='edge')[1:, :]
+
+                result.data[:, :, c] = (left + right + up + down - 4 * data)
+
+        # Scale by grid spacing (for accurate derivatives)
+        dx2 = field.dx ** 2
+        dy2 = field.dy ** 2
+        result.data = result.data / ((dx2 + dy2) / 2)  # Average spacing
+
+        return result
+
+    @staticmethod
     def project(velocity: Field2D, method: str = "jacobi",
                 iterations: int = 20, tolerance: float = 1e-4) -> Field2D:
         """Make velocity field divergence-free (pressure projection).
