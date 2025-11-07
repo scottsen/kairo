@@ -16,6 +16,13 @@ class TokenType(Enum):
     IDENTIFIER = auto()
     STEP = auto()
     SUBSTEP = auto()
+    FLOW = auto()
+    FN = auto()
+    STRUCT = auto()
+    IF = auto()
+    THEN = auto()
+    ELSE = auto()
+    RETURN = auto()
     MODULE = auto()
     COMPOSE = auto()
     SET = auto()
@@ -57,6 +64,7 @@ class TokenType(Enum):
     # Special
     AT = auto()  # For decorators
     HASH = auto()  # For comments
+    PIPE = auto()  # For lambdas |args| expr
     NEWLINE = auto()
     EOF = auto()
 
@@ -79,6 +87,13 @@ class Lexer:
     KEYWORDS = {
         "step": TokenType.STEP,
         "substep": TokenType.SUBSTEP,
+        "flow": TokenType.FLOW,
+        "fn": TokenType.FN,
+        "struct": TokenType.STRUCT,
+        "if": TokenType.IF,
+        "then": TokenType.THEN,
+        "else": TokenType.ELSE,
+        "return": TokenType.RETURN,
         "module": TokenType.MODULE,
         "compose": TokenType.COMPOSE,
         "set": TokenType.SET,
@@ -335,6 +350,9 @@ class Lexer:
             elif char == '@':
                 self.advance()
                 self.tokens.append(Token(TokenType.AT, '@', line, column))
+            elif char == '|':
+                self.advance()
+                self.tokens.append(Token(TokenType.PIPE, '|', line, column))
             else:
                 raise ValueError(f"Unexpected character '{char}' at {line}:{column}")
 

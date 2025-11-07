@@ -15,12 +15,18 @@ class NodeType(Enum):
     CALL = "call"
     FIELD_ACCESS = "field_access"
     TUPLE = "tuple"
+    LAMBDA = "lambda"
+    IF_ELSE = "if_else"
 
     # Statements
     ASSIGNMENT = "assignment"
     EXPRESSION_STATEMENT = "expression_statement"
     STEP = "step"
     SUBSTEP = "substep"
+    FLOW = "flow"
+    FUNCTION = "function"
+    STRUCT = "struct"
+    RETURN = "return"
     MODULE = "module"
     COMPOSE = "compose"
 
@@ -136,6 +142,29 @@ class Tuple(Expression):
         return visitor.visit_tuple(self)
 
 
+@dataclass
+class Lambda(Expression):
+    """Lambda expression (|args| expr)."""
+    params: List[str]  # Parameter names
+    body: Expression  # Single expression body
+    node_type: NodeType = field(default=NodeType.LAMBDA)
+
+    def accept(self, visitor: 'ASTVisitor') -> Any:
+        return visitor.visit_lambda(self)
+
+
+@dataclass
+class IfElse(Expression):
+    """If/else expression (if cond then expr1 else expr2)."""
+    condition: Expression
+    then_expr: Expression
+    else_expr: Expression
+    node_type: NodeType = field(default=NodeType.IF_ELSE)
+
+    def accept(self, visitor: 'ASTVisitor') -> Any:
+        return visitor.visit_if_else(self)
+
+
 # ============================================================================
 # Statements
 # ============================================================================
@@ -210,6 +239,53 @@ class Compose(Statement):
 
     def accept(self, visitor: 'ASTVisitor') -> Any:
         return visitor.visit_compose(self)
+
+
+@dataclass
+class Flow(Statement):
+    """Flow block (temporal scope with explicit dt and steps)."""
+    dt: Optional[Expression]  # Timestep (required)
+    steps: Optional[Expression]  # Number of iterations (optional)
+    substeps: Optional[Expression]  # Inner iterations per step (optional)
+    body: List[Statement]
+    node_type: NodeType = field(default=NodeType.FLOW)
+
+    def accept(self, visitor: 'ASTVisitor') -> Any:
+        return visitor.visit_flow(self)
+
+
+@dataclass
+class Function(Statement):
+    """Function definition (fn name(params) -> return_type { body })."""
+    name: str
+    params: List[tuple[str, Optional['TypeAnnotation']]]  # (name, type) pairs
+    return_type: Optional['TypeAnnotation']
+    body: List[Statement]
+    node_type: NodeType = field(default=NodeType.FUNCTION)
+
+    def accept(self, visitor: 'ASTVisitor') -> Any:
+        return visitor.visit_function(self)
+
+
+@dataclass
+class Struct(Statement):
+    """Struct definition (struct Name { fields })."""
+    name: str
+    fields: List[tuple[str, 'TypeAnnotation']]  # (name, type) pairs
+    node_type: NodeType = field(default=NodeType.STRUCT)
+
+    def accept(self, visitor: 'ASTVisitor') -> Any:
+        return visitor.visit_struct(self)
+
+
+@dataclass
+class Return(Statement):
+    """Return statement (return expr)."""
+    value: Optional[Expression]
+    node_type: NodeType = field(default=NodeType.RETURN)
+
+    def accept(self, visitor: 'ASTVisitor') -> Any:
+        return visitor.visit_return(self)
 
 
 # ============================================================================

@@ -77,13 +77,29 @@ class Parser:
             self.skip_newlines()
             token = self.current_token()
 
-        # Step block
+        # Step block (legacy)
         if token.type == TokenType.STEP:
             return self.parse_step()
 
-        # Substep block
+        # Substep block (legacy)
         if token.type == TokenType.SUBSTEP:
             return self.parse_substep()
+
+        # Flow block (v0.3.1)
+        if token.type == TokenType.FLOW:
+            return self.parse_flow()
+
+        # Function definition (v0.3.1)
+        if token.type == TokenType.FN:
+            return self.parse_function()
+
+        # Struct definition (v0.3.1)
+        if token.type == TokenType.STRUCT:
+            return self.parse_struct()
+
+        # Return statement (v0.3.1)
+        if token.type == TokenType.RETURN:
+            return self.parse_return()
 
         # Module definition
         if token.type == TokenType.MODULE:
@@ -183,6 +199,189 @@ class Parser:
 
         self.expect(TokenType.RBRACE)
         return Substep(count, body)
+
+    def parse_flow(self) -> Flow:
+        """Parse a flow block: flow(dt=0.01, steps=100) { body }"""
+        self.expect(TokenType.FLOW)
+        self.expect(TokenType.LPAREN)
+
+        dt = None
+        steps = None
+        substeps = None
+
+        # Parse keyword arguments
+        while self.current_token().type != TokenType.RPAREN:
+            if self.current_token().type == TokenType.IDENTIFIER:
+                key = self.current_token().value
+                self.advance()
+                self.expect(TokenType.ASSIGN)
+                value = self.parse_expression()
+
+                if key == "dt":
+                    dt = value
+                elif key == "steps":
+                    steps = value
+                elif key == "substeps":
+                    substeps = value
+                else:
+                    raise ParseError(f"Unknown flow parameter: {key}")
+
+                if self.current_token().type == TokenType.COMMA:
+                    self.advance()
+            else:
+                break
+
+        self.expect(TokenType.RPAREN)
+        self.expect(TokenType.LBRACE)
+        self.skip_newlines()
+
+        # Parse body
+        body = []
+        while self.current_token().type != TokenType.RBRACE:
+            stmt = self.parse_statement()
+            if stmt:
+                body.append(stmt)
+            self.skip_newlines()
+
+        self.expect(TokenType.RBRACE)
+        return Flow(dt=dt, steps=steps, substeps=substeps, body=body)
+
+    def parse_function(self) -> Function:
+        """Parse a function definition: fn name(params) -> return_type { body }"""
+        self.expect(TokenType.FN)
+        name = self.expect(TokenType.IDENTIFIER).value
+
+        # Parse parameters
+        self.expect(TokenType.LPAREN)
+        params = []
+        while self.current_token().type != TokenType.RPAREN:
+            param_name = self.expect(TokenType.IDENTIFIER).value
+            param_type = None
+
+            if self.current_token().type == TokenType.COLON:
+                self.advance()
+                param_type = self.parse_type_annotation()
+
+            params.append((param_name, param_type))
+
+            if self.current_token().type == TokenType.COMMA:
+                self.advance()
+
+        self.expect(TokenType.RPAREN)
+
+        # Parse return type
+        return_type = None
+        if self.current_token().type == TokenType.ARROW:
+            self.advance()
+            return_type = self.parse_type_annotation()
+
+        # Parse body
+        self.expect(TokenType.LBRACE)
+        self.skip_newlines()
+
+        body = []
+        while self.current_token().type != TokenType.RBRACE:
+            stmt = self.parse_statement()
+            if stmt:
+                body.append(stmt)
+            self.skip_newlines()
+
+        self.expect(TokenType.RBRACE)
+        return Function(name=name, params=params, return_type=return_type, body=body)
+
+    def parse_struct(self) -> Struct:
+        """Parse a struct definition: struct Name { fields }"""
+        self.expect(TokenType.STRUCT)
+        name = self.expect(TokenType.IDENTIFIER).value
+
+        self.expect(TokenType.LBRACE)
+        self.skip_newlines()
+
+        fields = []
+        while self.current_token().type != TokenType.RBRACE:
+            field_name = self.expect(TokenType.IDENTIFIER).value
+            self.expect(TokenType.COLON)
+            field_type = self.parse_type_annotation()
+            fields.append((field_name, field_type))
+
+            self.skip_newlines()
+
+        self.expect(TokenType.RBRACE)
+        return Struct(name=name, fields=fields)
+
+    def parse_return(self) -> Return:
+        """Parse a return statement: return expr"""
+        self.expect(TokenType.RETURN)
+
+        # Check if there's an expression to return
+        value = None
+        if self.current_token().type not in [TokenType.NEWLINE, TokenType.RBRACE, TokenType.EOF]:
+            value = self.parse_expression()
+
+        return Return(value=value)
+
+    def parse_lambda(self) -> Lambda:
+        """Parse a lambda expression: |args| expr"""
+        self.expect(TokenType.PIPE)
+
+        # Parse parameters
+        params = []
+        while self.current_token().type != TokenType.PIPE:
+            params.append(self.expect(TokenType.IDENTIFIER).value)
+            if self.current_token().type == TokenType.COMMA:
+                self.advance()
+
+        self.expect(TokenType.PIPE)
+
+        # Parse body expression
+        body = self.parse_expression()
+
+        return Lambda(params=params, body=body)
+
+    def parse_if_else(self) -> IfElse:
+        """Parse if/else expression: if cond then expr1 else expr2 or if cond { expr1 } else { expr2 }"""
+        self.expect(TokenType.IF)
+
+        # Parse condition
+        condition = self.parse_expression()
+
+        # Check for 'then' keyword (for inline syntax) or '{' (for block syntax)
+        then_expr = None
+        if self.current_token().type == TokenType.THEN:
+            # Inline syntax: if cond then expr
+            self.advance()
+            then_expr = self.parse_expression()
+        elif self.current_token().type == TokenType.LBRACE:
+            # Block syntax: if cond { expr }
+            self.advance()
+            self.skip_newlines()
+            then_expr = self.parse_expression()
+            self.skip_newlines()
+            self.expect(TokenType.RBRACE)
+        else:
+            raise ParseError(
+                f"Expected 'then' or '{{' after if condition at {self.current_token().line}:{self.current_token().column}"
+            )
+
+        # Parse else branch
+        self.expect(TokenType.ELSE)
+
+        else_expr = None
+        if self.current_token().type == TokenType.LBRACE:
+            # Block syntax: else { expr }
+            self.advance()
+            self.skip_newlines()
+            else_expr = self.parse_expression()
+            self.skip_newlines()
+            self.expect(TokenType.RBRACE)
+        elif self.current_token().type == TokenType.IF:
+            # Chained if: else if ...
+            else_expr = self.parse_if_else()
+        else:
+            # Inline syntax: else expr
+            else_expr = self.parse_expression()
+
+        return IfElse(condition=condition, then_expr=then_expr, else_expr=else_expr)
 
     def parse_module(self) -> Module:
         """Parse a module definition."""
@@ -390,6 +589,14 @@ class Parser:
     def parse_primary(self) -> Expression:
         """Parse primary expression (literals, identifiers, parenthesized)."""
         token = self.current_token()
+
+        # Lambda expression: |args| expr
+        if token.type == TokenType.PIPE:
+            return self.parse_lambda()
+
+        # If/else expression: if cond then expr1 else expr2 or if cond { expr1 } else { expr2 }
+        if token.type == TokenType.IF:
+            return self.parse_if_else()
 
         # Number literal
         if token.type == TokenType.NUMBER:
