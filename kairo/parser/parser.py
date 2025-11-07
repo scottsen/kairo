@@ -1,8 +1,8 @@
 """Recursive descent parser for Creative Computation DSL."""
 
 from typing import List, Optional
-from creative_computation.lexer.lexer import Token, TokenType, Lexer
-from creative_computation.ast.nodes import *
+from kairo.lexer.lexer import Token, TokenType, Lexer
+from kairo.ast.nodes import *
 
 
 class ParseError(Exception):

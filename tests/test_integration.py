@@ -4,9 +4,9 @@ import pytest
 import tempfile
 from pathlib import Path
 import numpy as np
-from creative_computation.stdlib.field import field, Field2D
-from creative_computation.stdlib.visual import visual
-from creative_computation.runtime.runtime import ExecutionContext, Runtime
+from kairo.stdlib.field import field, Field2D
+from kairo.stdlib.visual import visual
+from kairo.runtime.runtime import ExecutionContext, Runtime
 
 
 @pytest.mark.integration

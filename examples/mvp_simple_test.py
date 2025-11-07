@@ -3,8 +3,8 @@ Simple Python test of MVP functionality.
 Tests field operations and visualization directly without the DSL parser.
 """
 
-from creative_computation.stdlib.field import field, Field2D
-from creative_computation.stdlib.visual import visual
+from kairo.stdlib.field import field, Field2D
+from kairo.stdlib.visual import visual
 
 # Create random field (simulates initial heat distribution)
 temp = field.random((128, 128), seed=42, low=0.0, high=1.0)

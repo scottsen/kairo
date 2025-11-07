@@ -1,7 +1,7 @@
 """Tests for the lexer."""
 
 import pytest
-from creative_computation.lexer.lexer import Lexer, TokenType
+from kairo.lexer.lexer import Lexer, TokenType
 
 
 def test_tokenize_numbers():

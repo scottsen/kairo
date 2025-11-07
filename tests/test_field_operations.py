@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from creative_computation.stdlib.field import field, Field2D
+from kairo.stdlib.field import field, Field2D
 
 
 class TestFieldAllocation:

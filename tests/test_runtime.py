@@ -2,8 +2,8 @@
 
 import pytest
 import numpy as np
-from creative_computation.runtime.runtime import Runtime, ExecutionContext
-from creative_computation.stdlib.field import field, Field2D
+from kairo.runtime.runtime import Runtime, ExecutionContext
+from kairo.stdlib.field import field, Field2D
 
 
 class TestExecutionContext:

@@ -11,8 +11,8 @@ Controls:
 - Q or ESC: Quit
 """
 
-from creative_computation.stdlib.field import field
-from creative_computation.stdlib.visual import visual
+from kairo.stdlib.field import field
+from kairo.stdlib.visual import visual
 
 
 def simulate_heat_diffusion():

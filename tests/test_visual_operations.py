@@ -5,8 +5,8 @@ import numpy as np
 import tempfile
 import os
 from pathlib import Path
-from creative_computation.stdlib.field import field, Field2D
-from creative_computation.stdlib.visual import visual, Visual
+from kairo.stdlib.field import field, Field2D
+from kairo.stdlib.visual import visual, Visual
 
 
 class TestVisualColorize:

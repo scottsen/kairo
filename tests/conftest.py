@@ -4,8 +4,8 @@ import pytest
 import tempfile
 import numpy as np
 from pathlib import Path
-from creative_computation.stdlib.field import field, Field2D
-from creative_computation.runtime.runtime import ExecutionContext, Runtime
+from kairo.stdlib.field import field, Field2D
+from kairo.runtime.runtime import ExecutionContext, Runtime
 
 
 @pytest.fixture

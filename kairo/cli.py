@@ -98,10 +98,10 @@ def cmd_run(args):
     print(f"Running {args.file} with profile={args.profile}, seed={args.seed}")
 
     try:
-        from creative_computation.parser.parser import parse
-        from creative_computation.ast.visitors import TypeChecker
-        from creative_computation.runtime.runtime import Runtime, ExecutionContext
-        from creative_computation.ast.nodes import Step
+        from kairo.parser.parser import parse
+        from kairo.ast.visitors import TypeChecker
+        from kairo.runtime.runtime import Runtime, ExecutionContext
+        from kairo.ast.nodes import Step
 
         # 1. Parse source file
         source = args.file.read_text()
@@ -211,8 +211,8 @@ def cmd_check(args):
     print(f"Type-checking {args.file}...")
 
     try:
-        from creative_computation.parser.parser import parse
-        from creative_computation.ast.visitors import TypeChecker
+        from kairo.parser.parser import parse
+        from kairo.ast.visitors import TypeChecker
 
         source = args.file.read_text()
         program = parse(source)
@@ -240,8 +240,8 @@ def cmd_parse(args):
         sys.exit(1)
 
     try:
-        from creative_computation.parser.parser import parse
-        from creative_computation.ast.visitors import ASTPrinter
+        from kairo.parser.parser import parse
+        from kairo.ast.visitors import ASTPrinter
 
         source = args.file.read_text()
         program = parse(source)
@@ -273,7 +273,7 @@ def cmd_mlir(args):
 
 def cmd_version(args):
     """Show version information."""
-    from creative_computation import __version__
+    from kairo import __version__
     print(f"Creative Computation DSL v{__version__}")
     print("A typed, semantics-first DSL for expressive, deterministic simulations")
 

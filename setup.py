@@ -1,4 +1,4 @@
-"""Setup configuration for Creative Computation DSL."""
+"""Setup configuration for Kairo."""
 
 from setuptools import setup, find_packages
 
@@ -6,10 +6,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="creative-computation-dsl",
-    version="0.2.2",
-    author="Creative Computation DSL Team",
-    description="A typed, semantics-first DSL for expressive, deterministic simulations",
+    name="kairo",
+    version="0.3.1",
+    author="Scott Sen",
+    description="A language of creative determinism for simulation, sound, and visual form",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
@@ -51,7 +51,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "ccdsl=creative_computation.cli:main",
+            "kairo=kairo.cli:main",
         ],
     },
 )

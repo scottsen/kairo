@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "creative-computation-dsl"
-version = "0.2.2"
-description = "A typed, semantics-first DSL for expressive, deterministic simulations"
+name = "kairo"
+version = "0.3.1"
+description = "A language of creative determinism for simulation, sound, and visual form"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "Creative Computation DSL Team"}
+    {name = "Scott Sen"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -50,7 +50,7 @@ viz = [
 ]
 
 [project.scripts]
-ccdsl = "creative_computation.cli:main"
+kairo = "kairo.cli:main"
 
 [tool.black]
 line-length = 100
@@ -77,7 +77,7 @@ addopts = [
     "--strict-markers",
     "--tb=short",
     # Coverage options (uncomment when coverage is desired)
-    # "--cov=creative_computation",
+    # "--cov=kairo",
     # "--cov-report=html",
     # "--cov-report=term-missing",
     # "--cov-fail-under=80",
@@ -90,7 +90,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["creative_computation"]
+source = ["kairo"]
 omit = [
     "*/tests/*",
     "*/examples/*",

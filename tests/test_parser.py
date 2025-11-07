@@ -1,8 +1,8 @@
 """Tests for the parser."""
 
 import pytest
-from creative_computation.parser.parser import parse
-from creative_computation.ast.nodes import *
+from kairo.parser.parser import parse
+from kairo.ast.nodes import *
 
 
 def test_parse_assignment():
