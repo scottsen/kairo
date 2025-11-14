@@ -7,6 +7,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.7.0] - In Development (Started 2025-11-14)
+
+**Status**: Design Phase - Phase 1 Foundation (Months 1-3 of 12+ month effort)
+
+### Overview - Real MLIR Integration
+
+Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR generation to **real MLIR integration** using Python bindings. This enables true native code generation, optimization passes, and JIT compilation.
+
+### Added - MLIR Infrastructure (Phase 1)
+
+#### Core Architecture
+- **MLIR Python bindings integration** - Replaced text-based IR generation with real MLIR
+- **`kairo.mlir.context`** - MLIR context management and dialect registration
+- **`kairo.mlir.compiler_v2`** - New compiler using real MLIR Python bindings
+- **Module structure** for progressive implementation:
+  - `kairo/mlir/dialects/` - Custom Kairo dialects (field, agent, audio, visual)
+  - `kairo/mlir/lowering/` - Lowering passes (Kairo → SCF → LLVM)
+  - `kairo/mlir/codegen/` - JIT and AOT compilation engines
+
+#### Documentation
+- **`docs/v0.7.0_DESIGN.md`** - Comprehensive design document for 12-month implementation
+  - Architecture overview and module structure
+  - Phase-by-phase implementation plan
+  - Testing strategy and success metrics
+  - Migration path from v0.6.0
+- **`requirements.txt`** - Added MLIR dependencies with installation instructions
+- **`examples/mlir_poc.py`** - Proof-of-concept demonstration
+
+#### Development Setup
+- Graceful degradation when MLIR not installed (falls back to legacy)
+- Feature flags for MLIR vs legacy backend
+- Installation instructions for MLIR Python bindings
+
+### Changed
+
+#### Deprecated
+- **`kairo/mlir/ir_builder.py`** - Legacy text-based IR builder (marked deprecated)
+- **`kairo/mlir/optimizer.py`** - Legacy optimization passes (marked deprecated)
+- Legacy components will be maintained for v0.6.0 compatibility during transition
+
+### Planned (Future Phases)
+
+#### Phase 2: Field Operations (Months 4-6)
+- Field dialect implementation
+- Basic field operations with real MLIR dialects
+- Lowering to SCF loops
+
+#### Phase 3: Temporal Execution (Months 7-9)
+- Flow block compilation to MLIR
+- State management via memref
+- Temporal iteration support
+
+#### Phase 4: JIT Compilation (Months 10-12)
+- JIT execution engine
+- Native code generation via LLVM
+- Performance optimization and benchmarking
+
+### Dependencies
+
+#### Required (when MLIR enabled)
+- `mlir>=18.0.0` - MLIR Python bindings (install separately)
+  - Installation: `pip install mlir -f https://github.com/makslevental/mlir-wheels/releases/expanded_assets/latest`
+  - Or build from source: https://mlir.llvm.org/docs/Bindings/Python/
+
+#### Optional
+- `pytest>=7.0.0` - Testing
+- `pytest-cov>=4.0.0` - Coverage
+
+### Notes
+
+- **Timeline**: 12+ month implementation effort
+- **Current Status**: Design phase and foundation setup complete
+- **Backward Compatibility**: Legacy text-based backend remains available
+- **Performance Target**: 10-100x speedup for field operations once complete
+
+---
+
 ## [0.6.0] - 2025-11-14
 
 ### Added - Audio I/O and Visual Dialect Extensions
