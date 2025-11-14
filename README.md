@@ -343,6 +343,7 @@ See `examples/` directory for more!
 
 ### Architecture & Design
 - **[Architecture](ARCHITECTURE.md)** ⭐ - Finalized Kairo Stack architecture (v1.0 Draft)
+- **[Ecosystem Map](ECOSYSTEM_MAP.md)** ⭐ - Comprehensive map of all Kairo domains, modules, and libraries
 - **[Transform Dialect](docs/SPEC-TRANSFORM.md)** - First-class domain transforms (FFT, STFT, wavelets, etc.)
 - **[Graph IR](docs/SPEC-GRAPH-IR.md)** - Frontend-kernel boundary specification
 - **[Architecture Analysis](ARCHITECTURE_ANALYSIS.md)** - Historical architectural review
