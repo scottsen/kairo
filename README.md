@@ -173,8 +173,10 @@ flow(dt=0.1) {
 
 ### 2. Agent Dialect - Sparse Particle Systems
 
+**⚠️ NOT YET IMPLEMENTED - planned for v0.4.0**
+
 ```kairo
-use agent
+use agent  # NOT YET WORKING - design only
 
 struct Boid {
     pos: Vec2<f32>
@@ -195,12 +197,16 @@ flow(dt=0.01) {
 }
 ```
 
+**Status:** Design complete, implementation planned for v0.4.0 (3-4 months)
+
 ### 3. Audio Dialect (Kairo.Audio) - Sound Synthesis and Processing
 
-Kairo.Audio is a compositional, deterministic audio language with physical modeling, synthesis, and expressive control.
+**⚠️ SPECIFICATION ONLY - NOT YET IMPLEMENTED**
+
+Kairo.Audio is a planned compositional, deterministic audio language with physical modeling, synthesis, and expressive control.
 
 ```kairo
-use audio
+use audio  # NOT YET WORKING - specification only
 
 scene PluckDemo {
   let note = note("D3")
@@ -210,12 +216,14 @@ scene PluckDemo {
 }
 ```
 
-**Key Features:**
+**Planned Features:**
 - Stream-based computation (audio-rate, control-rate, events)
 - Physical modeling (waveguides, resonant bodies, amps)
 - Deterministic polyphony and event scheduling
 - Profile-based quality control
 - Complete specification: [AUDIO_SPECIFICATION.md](AUDIO_SPECIFICATION.md)
+
+**Status:** Specification complete, implementation planned for v0.5.0 (6-8 months)
 
 ### 4. Visual Dialect - Rendering and Composition
 
@@ -308,34 +316,32 @@ See `examples/` directory for more!
 ## Project Status
 
 **Version**: 0.3.1
-**Status**: MLIR Pipeline Complete! Runtime Production-Ready
+**Status**: Alpha - Core Features Working, Honest Documentation
 
-### ✅ Complete
+### ✅ Production-Ready
 - Language specification (comprehensive)
 - Type system design
-- Syntax definition
-- **MLIR compilation pipeline (100% - all 5 phases)**
-- Optimization passes (constant folding, DCE, simplification)
-- Frontend (lexer, parser) - full v0.3.1 syntax
-- Core runtime (flow scheduler, state management, RNG)
-- Field dialect implementation
-- Visual dialect implementation
-- Documentation (comprehensive)
-- Test suite (232 tests passing)
+- Syntax definition (full v0.3.1 syntax)
+- Frontend (lexer, parser) - complete recursive descent parser
+- **Python Runtime** (production-ready NumPy interpreter)
+- **Field operations** (advect, diffuse, project, Laplacian, etc.)
+- **Visualization** (PNG/JPEG export, interactive display)
+- Documentation (comprehensive and accurate)
+- Test suite (247 tests covering all working features)
 
-### 🚧 In Progress
-- Example program expansion
-- Performance benchmarking
-- PyPI release preparation
+### 🚧 Experimental (Text-Based, Not Production)
+- **MLIR text IR generation** (not real MLIR bindings)
+- Optimization passes (basic constant folding, DCE stubs)
 
-### 📋 Next Up
-- Agent dialect implementation
-- Audio dialect (Kairo.Audio) implementation
-- Real MLIR bindings integration
-- LLVM lowering and native code generation
-- Profile system implementation
+### 📋 Planned (Not Yet Implemented)
+- **Audio Dialect (Kairo.Audio)** - Specification complete, no implementation
+- **Agent Dialect** - Design complete, no implementation
+- **Real MLIR Integration** - Currently text-based IR only
+- **Native Code Generation** - Requires real MLIR bindings
+- **Physical Unit Checking** - Annotations exist, not enforced
+- **Hot-reload** - Architecture designed, not implemented
 
-**Next Milestone**: v0.4.0 Public Release (3-4 weeks)
+**Next Milestone**: v0.4.0 Agent Dialect (3-4 months)
 
 ---
 
@@ -343,6 +349,7 @@ See `examples/` directory for more!
 
 ### Architecture & Design
 - **[Architecture](ARCHITECTURE.md)** ⭐ - Finalized Kairo Stack architecture (v1.0 Draft)
+- **[Ecosystem Map](ECOSYSTEM_MAP.md)** ⭐ - Comprehensive map of all Kairo domains, modules, and libraries
 - **[Transform Dialect](docs/SPEC-TRANSFORM.md)** - First-class domain transforms (FFT, STFT, wavelets, etc.)
 - **[Graph IR](docs/SPEC-GRAPH-IR.md)** - Frontend-kernel boundary specification
 - **[Architecture Analysis](ARCHITECTURE_ANALYSIS.md)** - Historical architectural review
@@ -407,4 +414,4 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ---
 
-**Status:** Active Development | **Version:** 0.3.1 | **Last Updated:** 2025-11-06
+**Status:** Alpha - Core Features Working | **Version:** 0.3.1 | **Last Updated:** 2025-11-14

@@ -12,6 +12,8 @@
 4. **Thin, pluggable backends** — CPU/GPU/Audio/FFT providers are replaceable modules.
 5. **Two user surfaces** — *Composer* (Kairo.Audio) and *Performer* (RiffStack) share the same kernel and operator registry.
 
+> 📍 **Ecosystem Overview:** For a comprehensive map of all potential Kairo domains, modules, and expansion roadmap, see **[ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md)**
+
 ---
 
 ## 1) Layering (crisp separation of concerns)
