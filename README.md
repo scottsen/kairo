@@ -7,6 +7,9 @@ beth_topics:
 - creative-computation
 - dsl
 - mlir
+- audio-synthesis
+- agent-simulation
+- field-operations
 tags:
 - compiler
 - simulation
