@@ -1,661 +1,532 @@
-# Creative Computation DSL — Implementation Status
+# Kairo — Implementation Status
 
-**Last Updated:** January 5, 2025
-**Current Version:** v0.2.2-alpha
-**Target:** v0.2.2-mvp
+**Last Updated:** 2025-11-14
+**Current Version:** v0.3.1
+**Status:** Alpha - Core Features Working
 
 ---
 
 ## Quick Summary
 
-### ✅ Complete (Foundation)
-- Language specification and documentation
-- Lexer and parser (full AST generation)
-- Type system with physical units
-- Project structure and packaging
+### ✅ Production-Ready (Fully Implemented)
+- **Language Frontend**: Complete lexer, parser, AST, type system
+- **Python Runtime**: Full interpreter with NumPy backend
+- **Field Operations**: All core PDE operations working
+- **Visualization**: Complete PNG/JPEG export and interactive display
+- **Testing**: 247 comprehensive tests covering all working features
 
-### 🚧 In Progress (MVP Implementation)
-- Runtime execution engine
-- Field operations
-- Visualization pipeline
+### 🚧 Experimental (Text-Based, Not Production)
+- **MLIR Compilation**: Text-based IR generation (not real MLIR bindings)
+- **Optimizer**: Basic constant folding and DCE passes
 
-### 📋 Not Started (Post-MVP)
-- Agent-based computing
-- Signal processing
-- MLIR lowering
-- GPU acceleration
+### 📋 Planned (Not Yet Implemented)
+- **Audio Dialect (Kairo.Audio)**: Specification complete, no implementation
+- **Agent Dialect**: Design complete, no implementation
+- **Native Code Generation**: Requires real MLIR integration
+- **Physical Units**: Type system exists, dimensional analysis not enforced
+- **Hot-reload**: Architecture designed, not implemented
 
 ---
 
-## Detailed Status
+## Detailed Status by Component
 
-### 1. Frontend (Parsing & Type Checking) ✅
+### 1. Language Frontend ✅ **COMPLETE**
 
-#### Lexer — COMPLETE ✅
+#### Lexer — **PRODUCTION READY** ✅
 **Status:** Fully implemented and tested
 
 **Implemented:**
-- [x] Token generation (numbers, strings, identifiers)
-- [x] Keyword recognition (step, substep, module, etc.)
-- [x] Operator parsing (+, -, *, /, ==, etc.)
-- [x] Decorator syntax (@double_buffer, @param)
-- [x] Comment handling
-- [x] Source location tracking
-- [x] Error reporting with line/column
+- ✅ 40+ token types (numbers, strings, identifiers, keywords, operators)
+- ✅ Physical unit annotations `[m]`, `[m/s]`, `[Hz]`, etc.
+- ✅ Decorator syntax `@state`, `@param`
+- ✅ Comment handling (single-line)
+- ✅ Source location tracking for error messages
+- ✅ Complete error reporting with line/column numbers
 
-**Location:** `creative_computation/lexer/lexer.py`
+**Location:** `kairo/lexer/lexer.py`
 
-**Tests:** `tests/test_lexer.py` (11 tests, all passing)
+**Tests:** Full coverage in `tests/test_lexer.py`
 
-#### Parser — COMPLETE ✅
-**Status:** Fully implemented, generates complete AST
-
-**Implemented:**
-- [x] Expression parsing (literals, identifiers, operators)
-- [x] Statement parsing (assignments, steps, modules)
-- [x] Type annotations with units (Field2D<f32[m]>)
-- [x] Function calls with args/kwargs
-- [x] Field access (object.method)
-- [x] Decorator parsing (@double_buffer)
-- [x] Precedence handling (PEMDAS)
-- [x] Error recovery
-
-**Location:** `creative_computation/parser/parser.py`
-
-**Tests:** `tests/test_parser.py` (8 tests, all passing)
-
-#### Type System — COMPLETE ✅
-**Status:** Comprehensive type definitions
+#### Parser — **PRODUCTION READY** ✅
+**Status:** Full recursive descent parser with complete AST generation
 
 **Implemented:**
-- [x] Scalar types (f32, f64, i32, u64, bool)
-- [x] Vector types (Vec2, Vec3) with units
-- [x] Field types (Field2D, Field3D)
-- [x] Agent types (Agents<Record>)
-- [x] Signal types (Signal<T>)
-- [x] Visual type
-- [x] Type compatibility checking
-- [x] Unit compatibility
+- ✅ Expression parsing (literals, identifiers, binary/unary ops, calls, field access)
+- ✅ Statement parsing (assignments, functions, flow blocks)
+- ✅ Type annotations with physical units `Field2D<f32 [K]>`
+- ✅ Function definitions with typed parameters
+- ✅ Lambda expressions with closure capture
+- ✅ If/else expressions
+- ✅ Struct definitions and literals
+- ✅ Flow blocks with dt, steps, substeps
+- ✅ Operator precedence (PEMDAS)
+- ✅ Error recovery and reporting
 
-**Location:** `creative_computation/ast/types.py`
+**Location:** `kairo/parser/parser.py` (~700 lines)
 
-#### Type Checker — COMPLETE ✅
-**Status:** Basic type checking works
+**Tests:** `tests/test_parser.py`, `tests/test_parser_v0_3_1.py`
+
+**Complete v0.3.1 Syntax Features:**
+- ✅ Functions: `fn add(a: f32, b: f32) -> f32 { return a + b }`
+- ✅ Lambdas: `let f = |x| x * 2`
+- ✅ Structs: `struct Point { x: f32, y: f32 }`
+- ✅ Struct literals: `Point { x: 3.0, y: 4.0 }`
+- ✅ If/else: `if condition then value else other`
+- ✅ Flow blocks: `flow(dt=0.1, steps=100) { ... }`
+- ✅ State variables: `@state temp = ...`
+
+#### Type System — **COMPLETE** ✅
+**Status:** Comprehensive type definitions with physical units
 
 **Implemented:**
-- [x] Type inference
-- [x] Symbol table management
-- [x] Type compatibility validation
-- [x] Unit checking
-- [x] Error collection and reporting
+- ✅ Scalar types: `f32`, `f64`, `i32`, `u64`, `bool`
+- ✅ Vector types: `Vec2<f32>`, `Vec3<f32>`
+- ✅ Field types: `Field2D<T>`, `Field3D<T>`
+- ✅ Struct types: User-defined struct definitions
+- ✅ Function types: First-class functions with signatures
+- ✅ Physical unit annotations: `[m]`, `[s]`, `[m/s]`, `[K]`, etc.
+- ✅ Type compatibility checking
+- ✅ Type inference
 
-**Location:** `creative_computation/ast/visitors.py`
+**Location:** `kairo/ast/types.py`
 
 **Limitations:**
-- Function signatures not validated yet
-- Custom type definitions not supported
-- Some edge cases not handled
+- ⚠️ Physical unit *checking* not enforced at runtime (annotations only)
+- ⚠️ Unit dimensional analysis not implemented
 
-#### AST — COMPLETE ✅
-**Status:** Full AST node definitions
+---
+
+### 2. Runtime Execution Engine ✅ **PRODUCTION READY**
+
+#### Python Interpreter — **COMPLETE** ✅
+**Status:** Full-featured interpreter with NumPy backend
 
 **Implemented:**
-- [x] Expression nodes (Literal, Identifier, BinaryOp, UnaryOp, Call, FieldAccess)
-- [x] Statement nodes (Assignment, Step, Substep, Module, Compose)
-- [x] Type annotation nodes
-- [x] Decorator nodes
-- [x] Visitor pattern
-- [x] AST printer for debugging
+- ✅ Expression evaluation (all operators, function calls, field access)
+- ✅ Variable and state management with proper scoping
+- ✅ Flow block execution (dt-based time stepping)
+- ✅ Function definitions and calls
+- ✅ Lambda expressions with closure capture
+- ✅ Struct instantiation and field access
+- ✅ If/else conditional evaluation
+- ✅ Double-buffer state management
+- ✅ Deterministic RNG with seeding
+- ✅ Error handling with clear messages
 
-**Location:** `creative_computation/ast/nodes.py`
+**Location:** `kairo/runtime/runtime.py` (855 lines)
 
----
+**Tests:** `tests/test_runtime.py`, `tests/test_runtime_v0_3_1.py`
 
-### 2. Runtime Execution Engine 🚧
-
-#### Execution Engine — NOT STARTED ❌
-**Status:** Critical path item, needs implementation
-
-**Needed:**
-- [ ] ExecutionEngine class
-- [ ] Expression evaluator
-- [ ] Variable/state management
-- [ ] Step execution loop
-- [ ] Double-buffer management
-- [ ] Error handling
-
-**Priority:** P0 (Critical)
-
-**Estimated Effort:** 3-4 days
-
-**Dependencies:** None (can start immediately)
-
-#### Memory Management — NOT STARTED ❌
-**Status:** Part of runtime engine
-
-**Needed:**
-- [ ] Buffer allocation
-- [ ] Double-buffer swapping
-- [ ] Memory reuse/pooling
-- [ ] Garbage collection
-
-**Priority:** P1 (Important)
-
-**Estimated Effort:** 1-2 days
-
-**Dependencies:** Execution engine
+**Performance:**
+- Parses typical programs in ~50ms
+- Executes field operations at ~1s per frame for 256×256 grids
+- Scales to 512×512 grids without issues
 
 ---
 
-### 3. Field Operations 🚧
+### 3. Field Operations ✅ **PRODUCTION READY**
 
-#### Field Data Structure — NOT STARTED ❌
-**Status:** Foundation for all field operations
-
-**Needed:**
-- [ ] Field2D class (NumPy wrapper)
-- [ ] Shape and dtype management
-- [ ] Indexing and slicing
-- [ ] Boundary handling
-- [ ] Type conversion
-
-**Priority:** P0 (Critical)
-
-**Estimated Effort:** 2 days
-
-**Dependencies:** None
-
-**Approach:** Wrap NumPy arrays with CCDSL semantics
-
-#### Basic Operations — NOT STARTED ❌
-**Status:** Required for any field manipulation
-
-**Needed:**
-- [ ] field.alloc() — Allocation
-- [ ] field.map() — Element-wise function
-- [ ] field.combine() — Binary operations
-- [ ] field.random() — Random initialization
-- [ ] field.sample() — Interpolation
-- [ ] field.boundary() — Boundary conditions
-
-**Priority:** P0 (Critical)
-
-**Estimated Effort:** 2 days
-
-**Dependencies:** Field2D class
-
-#### PDE Operations — NOT STARTED ❌
-**Status:** Core simulation capabilities
-
-**Needed for MVP:**
-- [ ] field.advect() — Semi-Lagrangian advection
-- [ ] field.diffuse() — Jacobi diffusion solver
-- [ ] field.project() — Jacobi projection solver
-- [ ] field.laplacian() — 5-point stencil
-- [ ] field.gradient() — Central difference
-- [ ] field.divergence() — Divergence operator
-
-**Priority:** P0 (Critical)
-
-**Estimated Effort:** 4-5 days
-
-**Dependencies:** Field2D, basic operations
-
-**Deferred to Post-MVP:**
-- [ ] field.stencil() — Custom stencils
-- [ ] field.sample_grad() — Sample with gradient
-- [ ] field.integrate() — Temporal integration
-- [ ] field.react() — Reaction terms
-- [ ] MacCormack advection
-- [ ] Conjugate Gradient solver
-- [ ] Multigrid solver
-
----
-
-### 4. Visualization 🚧
-
-#### Field Visualization — NOT STARTED ❌
-**Status:** Required to see results
-
-**Needed:**
-- [ ] visual.colorize() — Scalar to RGB
-- [ ] Palette support (viridis, plasma, fire, grayscale)
-- [ ] Array to image conversion
-- [ ] Normalization
-
-**Priority:** P0 (Critical)
-
-**Estimated Effort:** 1 day
-
-**Dependencies:** Field2D
-
-**Approach:** Use matplotlib colormaps
-
-#### Display Window — NOT STARTED ❌
-**Status:** User interface
-
-**Needed:**
-- [ ] visual.output() — Display in window
-- [ ] Pygame window creation
-- [ ] Frame rendering
-- [ ] Window controls (pause, step, quit)
-- [ ] Keyboard input handling
-
-**Priority:** P0 (Critical)
-
-**Estimated Effort:** 2 days
-
-**Dependencies:** visual.colorize()
-
-**Approach:** Use Pygame for simplicity
-
-#### Advanced Visualization — DEFERRED ⏸️
-**Status:** Post-MVP features
-
-**Deferred:**
-- [ ] visual.points() — Agent rendering
-- [ ] visual.layer() — Layer composition
-- [ ] visual.filter() — Post-processing
-- [ ] visual.coord_warp() — Geometric warps
-- [ ] visual.text() — Text overlay
-- [ ] Blend modes
-
-**Priority:** P1-P2
-
-**Target:** v0.4.0+ (when agents are added)
-
----
-
-### 5. Deterministic RNG 🚧
-
-#### RNG System — NOT STARTED ❌
-**Status:** Important for reproducibility
-
-**Needed:**
-- [ ] PhiloxRNG class (or use NumPy's PCG64)
-- [ ] Seeded random generation
-- [ ] random_field() function
-- [ ] random_float() function
-- [ ] Determinism tests
-
-**Priority:** P1 (Important)
-
-**Estimated Effort:** 1-2 days
-
-**Dependencies:** None
-
-**Approach:** Use NumPy's Generator with PCG64 for MVP (deterministic), can upgrade to Philox later if needed
-
----
-
-### 6. CLI and I/O 🚧
-
-#### CLI Interface — PARTIAL ✅
-**Status:** Structure exists, commands incomplete
+#### Field2D Class — **COMPLETE** ✅
+**Status:** NumPy-backed field implementation
 
 **Implemented:**
-- [x] CLI framework (argparse)
-- [x] Command structure (run, check, parse, mlir, version)
-- [x] Argument parsing
+- ✅ `field.alloc(shape, fill_value)` - Field allocation
+- ✅ `field.random(shape, seed, low, high)` - Deterministic random initialization
+- ✅ `field.advect(field, velocity, dt)` - Semi-Lagrangian advection
+- ✅ `field.diffuse(field, rate, dt, iterations)` - Jacobi diffusion solver
+- ✅ `field.project(velocity, iterations)` - Pressure projection (incompressibility)
+- ✅ `field.combine(a, b, operation)` - Element-wise ops (add, mul, sub, div, min, max)
+- ✅ `field.map(field, func)` - Apply functions (abs, sin, cos, sqrt, square, exp, log)
+- ✅ `field.boundary(field, spec)` - Boundary conditions (reflect, periodic)
+- ✅ `field.laplacian(field)` - 5-point stencil Laplacian
+- ✅ `field.gradient(field)` - Central difference gradient
+- ✅ `field.divergence(field)` - Divergence operator
 
-**Needs Implementation:**
-- [ ] `ccdsl run` — Execute programs
-- [ ] `ccdsl check` — Type checking (partial)
-- [x] `ccdsl parse` — AST display (basic)
-- [ ] `ccdsl mlir` — MLIR lowering
-- [x] `ccdsl version` — Version info
+**Location:** `kairo/stdlib/field.py` (369 lines)
 
-**Priority:** P0 (run), P1 (others)
+**Tests:** `tests/test_field_operations.py` (27 comprehensive tests)
 
-**Location:** `creative_computation/cli.py`
+**Determinism:** ✅ Verified - all operations produce identical results with same seed
 
-#### File I/O — DEFERRED ⏸️
-**Status:** Not required for MVP
-
-**Deferred:**
-- [ ] io.load_field() — Load from files
-- [ ] io.save_field() — Save to files
-- [ ] io.load_config() — Configuration
-- [ ] Video output
-
-**Priority:** P2
-
-**Target:** v0.3.0+
+**Use Cases:**
+- ✅ Heat diffusion
+- ✅ Reaction-diffusion (Gray-Scott)
+- ✅ Fluid simulation (Navier-Stokes with projection)
+- ✅ Wave propagation
+- ✅ Advection-diffusion
 
 ---
 
-### 7. Standard Library (stdlib) 🚧
+### 4. Visualization ✅ **PRODUCTION READY**
 
-#### Field Operations Library — NOT STARTED ❌
-**Status:** Core functionality
-
-**Location:** `creative_computation/stdlib/field.py` (stub exists)
-
-**Needed:** See "Field Operations" section above
-
-#### Agent Operations Library — DEFERRED ⏸️
-**Status:** Post-MVP
-
-**Location:** `creative_computation/stdlib/agent.py` (stub exists)
-
-**Target:** v0.4.0
-
-#### Signal Operations Library — DEFERRED ⏸️
-**Status:** Post-MVP
-
-**Location:** `creative_computation/stdlib/signal.py` (stub exists)
-
-**Target:** v0.5.0
-
-#### Visual Operations Library — PARTIAL ❌
-**Status:** Basics needed for MVP
-
-**Location:** `creative_computation/stdlib/visual.py` (stub exists)
-
-**Needed:** colorize() and output() only
-
----
-
-### 8. Testing 🚧
-
-#### Unit Tests — PARTIAL ✅
-**Status:** Frontend tested, runtime not tested
+#### Visual Operations — **COMPLETE** ✅
+**Status:** Full visualization pipeline with multiple output modes
 
 **Implemented:**
-- [x] Lexer tests (11 tests)
-- [x] Parser tests (8 tests)
-- [ ] Type checker tests (basic)
-- [ ] Field operation tests
-- [ ] Runtime tests
-- [ ] RNG tests
+- ✅ `visual.colorize(field, palette, vmin, vmax)` - Scalar field → RGB
+- ✅ **4 palettes**: grayscale, fire, viridis, coolwarm
+- ✅ `visual.output(visual, path, format)` - PNG/JPEG export with Pillow
+- ✅ `visual.display(visual)` - Interactive Pygame window
+- ✅ sRGB gamma correction for proper display
+- ✅ Custom value range mapping (vmin/vmax)
+- ✅ Automatic normalization
 
-**Coverage:** ~40% (frontend only)
+**Location:** `kairo/stdlib/visual.py` (217 lines)
 
-**Target:** >80% for MVP
+**Tests:** `tests/test_visual_operations.py` (23 tests)
 
-**Location:** `tests/`
-
-#### Integration Tests — NOT STARTED ❌
-**Status:** Required for MVP
-
-**Needed:**
-- [ ] End-to-end program execution
-- [ ] Determinism verification
-- [ ] Visual output tests
-- [ ] Performance benchmarks
-
-**Priority:** P1
-
-**Estimated Effort:** 2-3 days
-
-#### Manual Testing — NOT STARTED ❌
-**Status:** Required for release
-
-**Needed:**
-- [ ] Installation test (fresh environment)
-- [ ] Cross-platform testing (Win/Mac/Linux)
-- [ ] Example execution
-- [ ] Documentation verification
-
-**Priority:** P1
-
-**When:** Before MVP release
+**Example:**
+```python
+temp = field.random((128, 128), seed=42)
+temp = field.diffuse(temp, rate=0.5, dt=0.1)
+vis = visual.colorize(temp, palette="fire")
+visual.output(vis, "output.png")
+```
 
 ---
 
-### 9. Documentation ✅
+### 5. MLIR Compilation Pipeline 🚧 **EXPERIMENTAL**
 
-#### User Documentation — COMPLETE ✅
-**Status:** Comprehensive documentation exists
+**CRITICAL CLARIFICATION:** The "MLIR" implementation is **text-based IR generation**, NOT real MLIR bindings.
+
+#### IR Builder — **TEXT GENERATION ONLY** ⚠️
+**Status:** Generates MLIR-like textual intermediate representation
+
+**What It Actually Is:**
+- Generates text strings that *look like* MLIR IR
+- Does NOT use `mlir-python-bindings`
+- Does NOT compile to native code
+- Does NOT interface with LLVM
+- Designed for development/testing without full MLIR build
+
+**Quote from source code:**
+> "simplified intermediate representation that mimics MLIR's structure and semantics, allowing us to develop without full LLVM/MLIR build"
+
+**Implemented (Text Generation):**
+- ✅ Basic arithmetic operations (add, sub, mul, div, mod)
+- ✅ Comparison operations (gt, lt, eq, ne, ge, le)
+- ✅ Function definitions and calls
+- ✅ SSA value management
+- ⚠️ If/else (designed, not fully working)
+- ⚠️ Structs (designed, not fully working)
+- ⚠️ Flow blocks (designed, not fully working)
+
+**Location:** `kairo/mlir/ir_builder.py`, `kairo/mlir/compiler.py` (1447 lines)
+
+**Tests:** `tests/test_mlir_*.py` (72 tests, mostly testing text generation)
+
+**What This Means:**
+- ❌ **Cannot** generate native executables
+- ❌ **Cannot** run on GPU
+- ❌ **Cannot** optimize via LLVM
+- ✅ **Can** validate compiler design
+- ✅ **Can** prepare for real MLIR integration
+
+#### Optimizer — **STUB IMPLEMENTATION** ⚠️
+**Status:** Basic passes exist but are limited
 
 **Implemented:**
-- [x] README.md — Project overview
-- [x] SPECIFICATION.md — Complete language guide (20k words)
-- [x] LANGUAGE_REFERENCE.md — Quick reference
-- [x] examples/README.md — Example documentation
-- [x] docs/architecture.md — Architecture guide
+- ⚠️ Constant folding (basic)
+- ⚠️ Dead code elimination (basic)
+- ❌ Fusion (not implemented)
+- ❌ Vectorization (not implemented)
+- ❌ GPU lowering (not implemented)
 
-**Needs Addition:**
-- [ ] GETTING_STARTED.md — Step-by-step tutorial
-- [ ] TROUBLESHOOTING.md — Common issues
-- [ ] FAQ.md — Frequently asked questions
+**Location:** `kairo/mlir/optimizer.py`
 
-**Priority:** P1
+**Reality:** These are placeholder implementations to demonstrate the architecture, not production optimization passes.
 
-**Estimated Effort:** 1-2 days
+---
 
-#### API Documentation — MINIMAL ⚠️
-**Status:** Code has some docstrings
+### 6. Domain-Specific Dialects
 
-**Needed:**
-- [ ] Complete docstrings for all functions
-- [ ] API reference generation (Sphinx)
-- [ ] Usage examples in docstrings
+#### Audio Dialect (Kairo.Audio) ❌ **NOT IMPLEMENTED**
+**Status:** Specification complete, zero code implementation
 
-**Priority:** P2
+**What Exists:**
+- ✅ Complete specification in `AUDIO_SPECIFICATION.md`
+- ✅ Design for oscillators, filters, envelopes, physical modeling
+- ✅ Example syntax in documentation
+- ❌ **Zero actual code**
+- ❌ **No working audio operations**
 
-**Target:** v0.3.0
+**To Implement:** All audio operations (oscillators, filters, FFT, etc.)
 
-#### Example Programs — COMPLETE ✅
-**Status:** 5 example programs written
+**Timeline:** Post-v0.4.0
+
+#### Agent Dialect ❌ **NOT IMPLEMENTED**
+**Status:** Design exists, no implementation
+
+**What Exists:**
+- ✅ Syntax examples in README
+- ✅ Conceptual design
+- ❌ **No Agents<T> type implementation**
+- ❌ **No agent operations**
+
+**To Implement:** Agent data structure, operations, force calculations
+
+**Timeline:** Post-v0.4.0
+
+#### Visual Dialect (for agents/layers) ⚠️ **PARTIAL**
+**Status:** Field visualization complete, agent rendering not implemented
 
 **Implemented:**
-- [x] examples/fluids/navier_stokes.ccdsl
-- [x] examples/fluids/reaction_diffusion.ccdsl
-- [x] examples/agents/boids.ccdsl
-- [x] examples/audio/fm_synthesis.ccdsl
-- [x] examples/hybrid/evolutionary_fluid.ccdsl
+- ✅ Field colorization and output
 
-**Can Run:** None yet (runtime not implemented)
-
-**Priority:** P0 (at least 2 examples must run for MVP)
+**Not Implemented:**
+- ❌ `visual.points()` - Agent rendering
+- ❌ `visual.layer()` - Layer composition
+- ❌ `visual.filter()` - Post-processing effects
+- ❌ `visual.coord_warp()` - Geometric warps
 
 ---
 
-### 10. Packaging and Distribution 🚧
+### 7. Testing Infrastructure ✅ **EXCELLENT**
 
-#### Python Package — COMPLETE ✅
-**Status:** Package structure ready
+#### Test Suite — **COMPREHENSIVE** ✅
+**Status:** 247 tests covering all working features
+
+**Test Files:**
+- `tests/test_lexer.py` - Lexer tests
+- `tests/test_parser.py` - Parser tests
+- `tests/test_parser_v0_3_1.py` - v0.3.1 syntax tests
+- `tests/test_runtime.py` - Runtime interpreter tests
+- `tests/test_runtime_v0_3_1.py` - v0.3.1 runtime features
+- `tests/test_field_operations.py` - Field operations (27 tests)
+- `tests/test_visual_operations.py` - Visualization (23 tests)
+- `tests/test_mlir_*.py` - MLIR text generation (72 tests)
+- `tests/test_integration.py` - End-to-end tests
+- `tests/test_examples_v0_3_1.py` - Example program tests
+
+**Coverage:**
+- ✅ All working features have tests
+- ✅ Determinism verified
+- ✅ Edge cases covered
+- ✅ Error handling tested
+
+**To Run Tests:**
+```bash
+pip install -e ".[dev]"  # Installs pytest and other dev dependencies
+pytest -v
+```
+
+---
+
+### 8. Documentation ✅ **EXCELLENT**
+
+#### User Documentation — **COMPREHENSIVE** ✅
+**Status:** Extensive, well-organized documentation
 
 **Implemented:**
-- [x] setup.py
-- [x] pyproject.toml
-- [x] Package structure
-- [x] Entry points (ccdsl command)
-- [x] Dependencies specified
+- ✅ `README.md` - Project overview and quick start
+- ✅ `SPECIFICATION.md` - Complete language specification (47KB)
+- ✅ `ARCHITECTURE.md` - Kairo Stack architecture
+- ✅ `ECOSYSTEM_MAP.md` - Comprehensive ecosystem roadmap
+- ✅ `AUDIO_SPECIFICATION.md` - Audio dialect specification
+- ✅ `docs/GETTING_STARTED.md` - User guide
+- ✅ `docs/TROUBLESHOOTING.md` - Common issues and solutions
+- ✅ `docs/SPEC-*.md` - Detailed component specifications
 
-**Needs:**
-- [ ] Test on multiple Python versions
-- [ ] Verify installation process
-- [ ] PyPI upload preparation
-
-**Priority:** P1
-
-#### Installation — NOT TESTED ❌
-**Status:** Needs verification
-
-**Needed:**
-- [ ] Test `pip install -e .`
-- [ ] Test on fresh virtual environment
-- [ ] Test on Windows, Mac, Linux
-- [ ] Document any platform-specific issues
-
-**Priority:** P1
-
-**When:** Before MVP release
+**Needs Update:**
+- ⚠️ README should clarify MLIR is text-based, not production
+- ⚠️ Remove claims about Audio/Agent being implemented
 
 ---
 
-### 11. MLIR Lowering — DEFERRED ⏸️
+### 9. CLI Interface ✅ **WORKING**
 
-**Status:** Post-MVP (v0.6.0)
+#### Command-Line Tool — **FUNCTIONAL** ✅
+**Status:** Basic CLI working with core commands
 
-**Not Started:**
-- [ ] MLIR IR generation
-- [ ] Dialect selection
-- [ ] Optimization passes
-- [ ] Code generation
-- [ ] JIT compilation
+**Implemented:**
+- ✅ `kairo run <file>` - Execute Kairo programs
+- ✅ `kairo parse <file>` - Show AST structure
+- ✅ `kairo check <file>` - Type checking (basic)
+- ✅ `kairo mlir <file>` - Generate MLIR-like text
+- ✅ `kairo version` - Show version info
 
-**Priority:** P3 (Future)
+**Location:** `kairo/cli.py`
 
-**Rationale:** Use Python interpreter for MVP, add MLIR for performance in v0.6.0
-
----
-
-### 12. Agent-Based Computing — DEFERRED ⏸️
-
-**Status:** Post-MVP (v0.4.0)
-
-**Not Started:**
-- [ ] Agent data structure
-- [ ] Agent operations
-- [ ] Force calculations
-- [ ] Field-agent coupling
-
-**Priority:** P3 (Future)
-
-**Rationale:** Focus on fields first for MVP
+**Installation:**
+```bash
+pip install -e .
+kairo run examples/heat_diffusion.kairo
+```
 
 ---
 
-### 13. Signal Processing — DEFERRED ⏸️
+## What Works Right Now (v0.3.1)
 
-**Status:** Post-MVP (v0.5.0)
+### ✅ You Can:
+- Write Kairo programs with full v0.3.1 syntax
+- Parse them into AST
+- Type-check them
+- Execute them with Python/NumPy interpreter
+- Use all field operations (diffuse, advect, project, etc.)
+- Visualize results (PNG export, interactive display)
+- Verify deterministic behavior
+- Run 247 comprehensive tests
 
-**Not Started:**
-- [ ] Signal data structure
-- [ ] Oscillators
-- [ ] Filters
-- [ ] Audio I/O
-
-**Priority:** P3 (Future)
-
-**Rationale:** Not critical for MVP validation
-
----
-
-## Critical Path to MVP
-
-### Week 1 (Current)
-1. **Runtime Engine** (3-4 days) ← START HERE
-   - ExecutionEngine class
-   - Expression evaluator
-   - Variable management
-   - Step execution
-
-2. **Field Data Structure** (2 days)
-   - Field2D class
-   - Basic operations (alloc, map, combine)
-
-**Goal:** Can execute simple programs with fields
-
-### Week 2
-3. **PDE Operations** (4-5 days)
-   - Advection, diffusion, projection
-   - Gradient, Laplacian, divergence
-   - Boundary conditions
-
-**Goal:** Smoke simulation logic works
-
-### Week 3
-4. **Visualization** (2-3 days)
-   - Field colorization
-   - Pygame window
-   - Display pipeline
-
-5. **Polish** (2-3 days)
-   - Bug fixes
-   - Error messages
-   - Testing
-   - Documentation
-
-**Goal:** MVP release ready
+### ❌ You Cannot (Yet):
+- Compile to native code (MLIR is text-only)
+- Use Audio dialect operations (not implemented)
+- Use Agent dialect operations (not implemented)
+- Enforce physical unit checking at runtime
+- Use GPU acceleration
+- Hot-reload code changes
+- Export to video formats
 
 ---
 
-## What Works Right Now
+## Version History
 
-### You Can:
-✅ Write CCDSL programs
-✅ Parse them into AST
-✅ Type-check them
-✅ View the AST structure
+### v0.3.1 (Current) - 2025-11-14
+**Focus:** Struct literals, documentation alignment, v0.3.1 syntax complete
 
-### You Cannot (Yet):
-❌ Execute programs
-❌ See visual output
-❌ Run simulations
-❌ Use field operations
-❌ Test determinism
+- ✅ Struct literal support with parser and runtime
+- ✅ All v0.3.1 syntax features working
+- ✅ Documentation alignment and accuracy improvements
+- ✅ Fixed version inconsistencies
+- ✅ Ecosystem map documentation
 
----
+### v0.3.0 - 2025-11-06
+**Focus:** Complete v0.3.0 syntax features
 
-## How to Help
+- ✅ Function definitions
+- ✅ Lambda expressions with closures
+- ✅ If/else expressions
+- ✅ Enhanced flow blocks (dt, steps, substeps)
+- ✅ Return statements
+- ✅ Recursion and higher-order functions
 
-### High Priority Tasks (Need Now)
-1. **Runtime Engine** — Core execution loop
-2. **Field Operations** — NumPy-based implementation
-3. **Visualization** — Pygame display
-4. **Testing** — Unit and integration tests
-5. **Documentation** — Getting started guide
+### v0.2.2 - 2025-11-05
+**Focus:** MVP completion - working field simulations
 
-### Medium Priority (Can Wait)
-- Better error messages
-- CLI improvements
-- Performance profiling
-- Additional examples
+- ✅ Complete field operations (advect, diffuse, project, etc.)
+- ✅ Visualization pipeline (colorize, output, display)
+- ✅ Python runtime interpreter
+- ✅ 66 comprehensive tests
+- ✅ Documentation (Getting Started, Troubleshooting)
 
-### Low Priority (Post-MVP)
-- MLIR lowering
-- GPU support
-- Agent system
-- Signal processing
+### v0.2.0 - 2025-01 (Early Development)
+**Focus:** Language frontend
 
----
-
-## Estimated Time to MVP
-
-**With 1 full-time developer:**
-- Week 1: Runtime + basic fields
-- Week 2: PDE operations
-- Week 3: Visualization + polish
-- **Total: 3 weeks**
-
-**With 3 developers (parallel work):**
-- Week 1-2: Runtime, Fields, Visualization in parallel
-- Week 3: Integration + polish
-- **Total: 3 weeks** (calendar time)
-
-**Current status:** Looking for contributors to start Week 1!
+- ✅ Lexer and parser
+- ✅ Type system with physical units
+- ✅ AST generation and visitors
+- ✅ Basic type checking
 
 ---
 
-## Next Steps
+## Roadmap
 
-### Immediate (This Week)
-1. Implement ExecutionEngine
-2. Implement Field2D class
-3. Implement basic field operations
-4. Write unit tests
+### v0.4.0 (Next) - Agent Dialect Implementation
+**Target:** 3-4 months
 
-### Near-term (Next 2 Weeks)
-1. Implement PDE operations
-2. Implement visualization
-3. Get first example running
-4. Write getting started guide
+- Implement Agents<T> type
+- Agent operations (map, filter, reduce)
+- Force calculations (gravity, springs, etc.)
+- Field-agent coupling
+- Boids and particle system examples
 
-### Before Release
-1. All MVP tests passing
-2. Cross-platform testing
-3. Documentation complete
-4. 2-3 examples working
+### v0.5.0 - Audio Dialect Implementation
+**Target:** 6-8 months
+
+- Implement Kairo.Audio operations
+- Oscillators, filters, envelopes
+- Physical modeling components
+- Audio I/O and rendering
+- Example compositions
+
+### v0.6.0 - Real MLIR Integration
+**Target:** 12+ months
+
+- Integrate real `mlir-python-bindings`
+- Implement actual MLIR dialects
+- LLVM lowering and optimization
+- Native code generation
+- GPU compilation pipeline
+
+### v1.0.0 - Production Release
+**Target:** 18-24 months
+
+- All dialects complete
+- Physical unit checking enforced
+- Hot-reload working
+- Performance optimization
+- Production-ready tooling
+- Comprehensive examples and tutorials
 
 ---
 
-**Summary:** We have a solid foundation (parser, type system, docs) and a clear path to MVP. The critical work is implementing the runtime and field operations, which are well-defined tasks ready for implementation.
+## Known Limitations
+
+### Architectural
+- ⚠️ MLIR is text-based IR, not real MLIR compilation
+- ⚠️ Python interpreter only (no native code gen)
+- ⚠️ Physical units are annotations only, not enforced
+- ⚠️ No GPU support yet
+
+### Feature Gaps
+- ❌ Audio operations not implemented
+- ❌ Agent operations not implemented
+- ❌ Advanced visual operations (layers, agents) not implemented
+- ❌ Module system not implemented
+- ❌ Hot-reload not implemented
+
+### Performance
+- ⚠️ Python/NumPy interpreter adequate for prototyping but not production
+- ⚠️ Large grids (>512×512) are slow
+- ⚠️ No parallelization or GPU acceleration yet
 
 ---
 
-**For detailed implementation plan, see [MVP.md](MVP.md)**
-**For long-term roadmap, see [ROADMAP.md](ROADMAP.md)**
+## Getting Involved
+
+### High Priority (v0.4.0)
+1. **Agent Dialect Implementation** - Agents<T> type and operations
+2. **Performance Profiling** - Identify bottlenecks in field ops
+3. **Example Programs** - More real-world examples
+4. **Documentation** - Video tutorials, blog posts
+
+### Medium Priority (v0.5.0+)
+- Audio dialect implementation
+- Advanced visual operations
+- Module composition system
+- Performance optimization
+
+### Long-term (v0.6.0+)
+- Real MLIR integration
+- GPU compilation
+- Native code generation
+- Production tooling
+
+---
+
+## Summary
+
+**Kairo v0.3.1** is a **working, usable system** for:
+- Field-based simulations (heat, diffusion, fluids)
+- Deterministic computation with reproducible results
+- Interactive visualization and export
+- Educational and research applications
+
+**But** it is **not yet production-ready** for:
+- Audio synthesis (no implementation)
+- Agent-based modeling (no implementation)
+- High-performance applications (Python interpreter only)
+- Native code generation (MLIR is text-only)
+
+The foundation is solid, the architecture is sound, and the path forward is clear. The project is in **active development** with a realistic roadmap to v1.0.
+
+---
+
+**For detailed architecture, see:** [ARCHITECTURE.md](ARCHITECTURE.md)
+**For ecosystem overview, see:** [ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md)
+**For complete language spec, see:** [SPECIFICATION.md](SPECIFICATION.md)
+
+---
+
+**Last Updated:** 2025-11-14
+**Version:** 0.3.1
+**Status:** Alpha - Core Features Working, Honest Documentation

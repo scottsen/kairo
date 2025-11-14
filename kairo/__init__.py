@@ -1,10 +1,11 @@
-"""Creative Computation DSL v0.2.2
+"""Kairo v0.3.1
 
-A typed, semantics-first DSL for expressive, deterministic simulations
-and generative computation.
+A typed, deterministic domain-specific language for creative computation.
+Unifies simulation, sound, visualization, and procedural design within a
+single, reproducible execution model.
 """
 
-__version__ = "0.2.2"
+__version__ = "0.3.1"
 
 # Core components will be imported here as they are implemented
 # from .parser import parse
