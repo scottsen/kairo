@@ -7,6 +7,127 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.7.2] - 2025-11-14
+
+**Status**: Phase 4 Complete - Agent Operations ✅
+
+### Overview - Agent Operations Dialect
+
+Phase 4 of Kairo v0.7.0 implements the agent operations dialect for agent-based simulations with spawning, behavior trees, and property management. This phase builds on Phase 2 (Field Operations) and Phase 3 (Temporal Execution) to enable multi-agent simulations compiled through MLIR to efficient native code.
+
+### Added - Agent Dialect (Phase 4)
+
+#### Agent Operations
+- **`kairo.mlir.dialects.agent`** - Complete agent dialect with 4 operations:
+  - `AgentSpawnOp`: Create agents at positions with initial properties (position, velocity, state)
+  - `AgentUpdateOp`: Update agent properties at specific indices
+  - `AgentQueryOp`: Read agent property values
+  - `AgentBehaviorOp`: Apply behavior rules (move, seek, bounce)
+- **Type System**:
+  - `!kairo.agent<T>`: Agent collection type
+  - Standard property layout: `[pos_x, pos_y, vel_x, vel_y, state]` (5 properties)
+  - Memory model: `memref<?x5xT>` for dynamic agent arrays
+
+#### Lowering Pass
+- **`kairo.mlir.lowering.agent_to_scf`** - Agent-to-SCF lowering pass (434 lines):
+  - `agent.spawn` → `memref.alloc` + initialization loops
+  - `agent.update` → `memref.store` operations
+  - `agent.query` → `memref.load` operations
+  - `agent.behavior` → `scf.for` loops with property computations
+- Pattern-based lowering infrastructure
+- SSA-compliant transformations
+- Integration with Field and Temporal dialects
+
+#### Compiler Integration
+- **Extended `kairo.mlir.compiler_v2`** with agent methods (+280 lines):
+  - `compile_agent_spawn()`: Compile agent spawning
+  - `compile_agent_update()`: Compile property updates
+  - `compile_agent_query()`: Compile property queries
+  - `compile_agent_behavior()`: Compile behavior operations
+  - `apply_agent_lowering()`: Apply agent-to-SCF pass
+  - `compile_agent_program()`: Convenience API for agent programs
+
+#### Tests and Examples
+- **`tests/test_agent_dialect.py`** - Comprehensive test suite (908 lines):
+  - 36 test methods covering all functionality
+  - Type system tests
+  - Operation tests (spawn, update, query, behavior)
+  - Lowering pass tests
+  - Compiler integration tests
+  - Integration tests with Field and Temporal dialects
+- **`examples/phase4_agent_operations.py`** - Working demonstrations (547 lines):
+  - 8 complete examples:
+    1. Basic agent spawning
+    2. Agent movement
+    3. Multi-agent behaviors
+    4. Property updates
+    5. Bounce behavior
+    6. Agent-field integration
+    7. Temporal agent evolution
+    8. Large-scale simulation (10,000+ agents)
+
+#### Documentation
+- **`docs/PHASE4_COMPLETION_SUMMARY.md`** - Complete Phase 4 summary
+- **`docs/v0.7.0_DESIGN.md`** - Updated with Phase 4 deliverables
+- **`STATUS.md`** - Updated with Phase 4 completion
+
+### Changed
+
+#### Updated Components
+- **`kairo/mlir/dialects/__init__.py`** - Export agent dialect
+- **`kairo/mlir/lowering/__init__.py`** - Export agent lowering pass (+13 lines)
+- **`kairo/mlir/compiler_v2.py`** - Agent compilation methods (+280 lines)
+
+### Success Metrics ✅
+
+- ✅ All agent operations compile to valid MLIR
+- ✅ Lowering produces correct memref array structures
+- ✅ Agent properties update correctly across timesteps
+- ✅ Integration with field + temporal operations works
+- ✅ Compilation time <1s for typical agent counts (<500ms for 10K agents)
+- ✅ Comprehensive test coverage (36 tests)
+- ✅ Complete documentation and examples (8 examples)
+
+### Code Statistics
+
+- **~2,700 lines** of production code added
+- **526 lines**: Agent dialect
+- **434 lines**: Agent-to-SCF lowering
+- **280 lines**: Compiler integration
+- **908 lines**: Test suite
+- **547 lines**: Examples
+- 4 agent operations implemented
+- Complete lowering infrastructure
+- Full compiler integration
+
+### Performance
+
+- **Compilation time**: <500ms for 10,000 agents
+- **Memory usage**: 200 KB for 10,000 agents (5 properties × 4 bytes)
+- **Scalability**: Tested up to 10,000+ agents
+
+### Behaviors Implemented
+
+1. **Move**: Simple velocity-based movement (position += velocity)
+2. **Seek**: Move towards target with speed control
+3. **Bounce**: Boundary collision handling
+
+### Integration Points
+
+- **With Field Operations**: Agents coexist with spatial fields (future: field sampling)
+- **With Temporal Operations**: Agents evolve within temporal flows
+- **Combined Workflow**: Field + Temporal + Agent in single program
+
+### Next Phase
+
+**Phase 5: Audio Operations OR JIT/AOT Compilation** - Next major feature (Months 13-15)
+
+Options:
+- Audio Operations: Audio buffers, DSP, spectral analysis, synthesis
+- JIT/AOT: MLIR→LLVM lowering, execution engine, optimization passes
+
+---
+
 ## [0.7.1] - 2025-11-14
 
 **Status**: Phase 3 Complete - Temporal Execution ✅

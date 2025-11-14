@@ -521,6 +521,282 @@ class MLIRCompilerV2:
         pass_obj = create_temporal_to_scf_pass(self.context)
         pass_obj.run(module)
 
+    # Phase 4: Agent Operations Support
+
+    def compile_agent_spawn(
+        self,
+        count: Any,
+        position_x: Any,
+        position_y: Any,
+        velocity_x: Any,
+        velocity_y: Any,
+        state: Any,
+        element_type: Any,
+        loc: Any,
+        ip: Any
+    ) -> Any:
+        """Compile agent spawn operation.
+
+        Args:
+            count: Number of agents to spawn (ir.Value)
+            position_x: Initial x position (ir.Value)
+            position_y: Initial y position (ir.Value)
+            velocity_x: Initial x velocity (ir.Value)
+            velocity_y: Initial y velocity (ir.Value)
+            state: Initial state value (ir.Value)
+            element_type: MLIR element type
+            loc: Source location
+            ip: Insertion point
+
+        Returns:
+            Agent collection value
+
+        Example:
+            agent_spawn(count=100, pos_x=0.0, pos_y=0.0, vel_x=0.1, vel_y=0.0, state=0.0)
+            → %agents = kairo.agent.spawn %count, %pos_x, %pos_y, %vel_x, %vel_y, %state : !kairo.agent<f32>
+        """
+        from .dialects.agent import AgentDialect
+        return AgentDialect.spawn(count, position_x, position_y, velocity_x, velocity_y, state, element_type, loc, ip)
+
+    def compile_agent_update(
+        self,
+        agents: Any,
+        index: Any,
+        property_index: Any,
+        value: Any,
+        loc: Any,
+        ip: Any
+    ) -> Any:
+        """Compile agent update operation.
+
+        Args:
+            agents: Agent collection (ir.Value)
+            index: Agent index to update (ir.Value)
+            property_index: Property index (ir.Value)
+            value: New property value (ir.Value)
+            loc: Source location
+            ip: Insertion point
+
+        Returns:
+            Updated agent collection
+
+        Example:
+            agent_update(agents, index=0, property=0, value=1.5)
+            → %agents_new = kairo.agent.update %agents, %idx, %prop, %val
+        """
+        from .dialects.agent import AgentDialect
+        return AgentDialect.update(agents, index, property_index, value, loc, ip)
+
+    def compile_agent_query(
+        self,
+        agents: Any,
+        index: Any,
+        property_index: Any,
+        element_type: Any,
+        loc: Any,
+        ip: Any
+    ) -> Any:
+        """Compile agent query operation.
+
+        Args:
+            agents: Agent collection (ir.Value)
+            index: Agent index to query (ir.Value)
+            property_index: Property index to read (ir.Value)
+            element_type: MLIR element type
+            loc: Source location
+            ip: Insertion point
+
+        Returns:
+            Property value
+
+        Example:
+            agent_query(agents, index=0, property=0)
+            → %value = kairo.agent.query %agents, %idx, %prop : f32
+        """
+        from .dialects.agent import AgentDialect
+        return AgentDialect.query(agents, index, property_index, element_type, loc, ip)
+
+    def compile_agent_behavior(
+        self,
+        agents: Any,
+        behavior_type: str,
+        params: List[Any],
+        loc: Any,
+        ip: Any
+    ) -> Any:
+        """Compile agent behavior operation.
+
+        Args:
+            agents: Agent collection (ir.Value)
+            behavior_type: Type of behavior ("move", "seek", "bounce", etc.)
+            params: Optional behavior parameters (list of ir.Value)
+            loc: Source location
+            ip: Insertion point
+
+        Returns:
+            Updated agent collection
+
+        Example:
+            agent_behavior(agents, "move", [])
+            → %agents_new = kairo.agent.behavior %agents : !kairo.agent<f32>
+        """
+        from .dialects.agent import AgentDialect
+        return AgentDialect.behavior(agents, behavior_type, params, loc, ip)
+
+    def apply_agent_lowering(self, module: Any) -> None:
+        """Apply agent-to-SCF lowering pass to module.
+
+        This transforms high-level agent operations into low-level
+        SCF loops with memref-based agent storage.
+
+        Args:
+            module: MLIR module to transform (in-place)
+
+        Example:
+            >>> compiler.apply_agent_lowering(module)
+            # Agent ops → SCF loops + memref
+        """
+        from .lowering import create_agent_to_scf_pass
+
+        pass_obj = create_agent_to_scf_pass(self.context)
+        pass_obj.run(module)
+
+    def compile_agent_program(
+        self,
+        operations: List[Dict[str, Any]],
+        module_name: str = "agent_program"
+    ) -> Any:
+        """Compile a sequence of agent operations to MLIR module.
+
+        This is a convenience method for Phase 4 to compile agent operations
+        without requiring full AST support.
+
+        Args:
+            operations: List of operation dictionaries with keys:
+                - op: Operation name ("spawn", "update", "query", "behavior")
+                - args: Dictionary of arguments
+            module_name: Module name
+
+        Returns:
+            MLIR Module with lowered operations
+
+        Example:
+            >>> ops = [
+            ...     {"op": "spawn", "args": {"count": 100, "pos_x": 0.0, "pos_y": 0.0,
+            ...                              "vel_x": 0.1, "vel_y": 0.0, "state": 0.0}},
+            ...     {"op": "behavior", "args": {"agents": "agents0", "behavior": "move"}},
+            ... ]
+            >>> module = compiler.compile_agent_program(ops)
+        """
+        with self.context.ctx, ir.Location.unknown():
+            module = self.context.create_module(module_name)
+
+            # Create a wrapper function
+            with ir.InsertionPoint(module.body):
+                f32 = ir.F32Type.get()
+                func_type = ir.FunctionType.get([], [])
+                func_op = func.FuncOp(name="main", type=func_type)
+                func_op.add_entry_block()
+
+                with ir.InsertionPoint(func_op.entry_block):
+                    loc = ir.Location.unknown()
+                    ip = ir.InsertionPoint(func_op.entry_block)
+
+                    # Process operations
+                    results = {}
+                    for i, operation in enumerate(operations):
+                        op_name = operation["op"]
+                        args = operation["args"]
+
+                        if op_name == "spawn":
+                            # Create constants
+                            count_val = arith.ConstantOp(
+                                ir.IndexType.get(),
+                                ir.IntegerAttr.get(ir.IndexType.get(), args["count"])
+                            ).result
+                            pos_x_val = arith.ConstantOp(
+                                f32,
+                                ir.FloatAttr.get(f32, args["pos_x"])
+                            ).result
+                            pos_y_val = arith.ConstantOp(
+                                f32,
+                                ir.FloatAttr.get(f32, args["pos_y"])
+                            ).result
+                            vel_x_val = arith.ConstantOp(
+                                f32,
+                                ir.FloatAttr.get(f32, args["vel_x"])
+                            ).result
+                            vel_y_val = arith.ConstantOp(
+                                f32,
+                                ir.FloatAttr.get(f32, args["vel_y"])
+                            ).result
+                            state_val = arith.ConstantOp(
+                                f32,
+                                ir.FloatAttr.get(f32, args["state"])
+                            ).result
+
+                            result = self.compile_agent_spawn(
+                                count_val, pos_x_val, pos_y_val, vel_x_val, vel_y_val, state_val, f32, loc, ip
+                            )
+                            results[f"agents{i}"] = result
+
+                        elif op_name == "update":
+                            agents_name = args["agents"]
+                            agents_val = results[agents_name]
+                            index_val = arith.ConstantOp(
+                                ir.IndexType.get(),
+                                ir.IntegerAttr.get(ir.IndexType.get(), args["index"])
+                            ).result
+                            property_val = arith.ConstantOp(
+                                ir.IndexType.get(),
+                                ir.IntegerAttr.get(ir.IndexType.get(), args["property"])
+                            ).result
+                            value_val = arith.ConstantOp(
+                                f32,
+                                ir.FloatAttr.get(f32, args["value"])
+                            ).result
+
+                            result = self.compile_agent_update(
+                                agents_val, index_val, property_val, value_val, loc, ip
+                            )
+                            results[f"agents{i}"] = result
+
+                        elif op_name == "query":
+                            agents_name = args["agents"]
+                            agents_val = results[agents_name]
+                            index_val = arith.ConstantOp(
+                                ir.IndexType.get(),
+                                ir.IntegerAttr.get(ir.IndexType.get(), args["index"])
+                            ).result
+                            property_val = arith.ConstantOp(
+                                ir.IndexType.get(),
+                                ir.IntegerAttr.get(ir.IndexType.get(), args["property"])
+                            ).result
+
+                            result = self.compile_agent_query(
+                                agents_val, index_val, property_val, f32, loc, ip
+                            )
+                            results[f"value{i}"] = result
+
+                        elif op_name == "behavior":
+                            agents_name = args["agents"]
+                            agents_val = results[agents_name]
+                            behavior_type = args.get("behavior", "move")
+                            params = []  # Can be extended for parameterized behaviors
+
+                            result = self.compile_agent_behavior(
+                                agents_val, behavior_type, params, loc, ip
+                            )
+                            results[f"agents{i}"] = result
+
+                    # Return
+                    func.ReturnOp([])
+
+            # Apply lowering passes
+            self.apply_agent_lowering(module)
+
+            return module
+
     def compile_temporal_program(
         self,
         operations: List[Dict[str, Any]],

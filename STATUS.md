@@ -1,9 +1,9 @@
 # Kairo — Implementation Status
 
 **Last Updated:** 2025-11-14
-**Current Version:** v0.7.0-dev (In Development)
+**Current Version:** v0.7.2-dev (In Development)
 **Stable Version:** v0.6.0
-**Status:** v0.7.0 Development - Real MLIR Integration (Phase 3: Temporal Execution ✅ COMPLETE)
+**Status:** v0.7.0 Development - Real MLIR Integration (Phase 4: Agent Operations ✅ COMPLETE)
 
 ---
 
@@ -24,10 +24,10 @@
 - **Phase 1 (Foundation)**: ✅ **COMPLETE** - MLIR context, compiler V2, proof-of-concept
 - **Phase 2 (Field Operations Dialect)**: ✅ **COMPLETE** - Custom field dialect with 4 operations, field-to-SCF lowering pass, full test suite, examples, and benchmarks
 - **Phase 3 (Temporal Execution)**: ✅ **COMPLETE** - Temporal dialect with 6 operations, temporal-to-SCF lowering pass, state management, flow execution
-- **Phase 4 (Agent Operations)**: ⏳ **NEXT** - Agent spawning, behavior trees, property updates
-- **Phase 5 (Audio Operations)**: 📋 **PLANNED** - Oscillators, filters, envelopes compilation to MLIR
-- **Phase 6 (JIT/AOT Compilation)**: 📋 **PLANNED** - LLVM lowering, ExecutionEngine, native execution
-- **Timeline**: 12+ month effort, started 2025-11-14
+- **Phase 4 (Agent Operations)**: ✅ **COMPLETE** - Agent dialect with 4 operations, agent-to-SCF lowering pass, behavior system, 36 tests, 8 examples (~2,700 lines)
+- **Phase 5 (Audio Operations OR JIT/AOT)**: ⏳ **NEXT** - Either audio dialect OR MLIR→LLVM lowering with execution engine
+- **Phase 6 (Remaining Feature)**: 📋 **PLANNED** - Complete whichever wasn't done in Phase 5
+- **Timeline**: 12+ month effort, started 2025-11-14, Phase 4 complete Nov 14
 
 ### 🚧 Deprecated (Legacy, Maintained for Compatibility)
 - **MLIR Text-Based IR**: Legacy `ir_builder.py` and `optimizer.py` (marked deprecated)
