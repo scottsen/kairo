@@ -509,6 +509,7 @@ This positions Kairo as a **universal deterministic compute kernel** for creativ
 - **[Architecture](ARCHITECTURE.md)** ⭐ - Finalized Kairo Stack architecture (v1.0 Draft)
 - **[Domain Architecture](docs/DOMAIN_ARCHITECTURE.md)** ⭐⭐ - Complete multi-domain vision (2,266 lines, 20+ domains)
 - **[Ecosystem Map](ECOSYSTEM_MAP.md)** ⭐ - Comprehensive map of all Kairo domains, modules, and libraries
+- **[Professional Domains](docs/PROFESSIONAL_DOMAINS.md)** ⭐ - Value proposition analysis across 10 professional fields
 - **[Transform Dialect](docs/SPEC-TRANSFORM.md)** - First-class domain transforms (FFT, STFT, wavelets, etc.)
 - **[Graph IR](docs/SPEC-GRAPH-IR.md)** - Frontend-kernel boundary specification
 
