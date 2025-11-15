@@ -6,6 +6,40 @@ This directory contains comprehensive examples and case studies demonstrating Ka
 
 ## Examples
 
+### 🏎️ [Racing AI Training Pipeline: Neural Evolution Example](RACING-AI-PIPELINE.md)
+
+**Status:** Design Document
+**Domains:** Physics (Racing), Neural Network, Genetic Algorithm, Rendering, Telemetry, Recording
+**Complexity:** Advanced
+**Hardware:** GPU-optimized (RTX 3060 12GB target)
+
+A complete racing AI training pipeline demonstrating how Kairo's unified operator model enables seamless integration of physics simulation, neural network inference, genetic algorithms, and real-time visualization — all in one composable graph.
+
+**What This Demonstrates:**
+- Multi-domain composition (Physics + NN + GA + Rendering + Telemetry + Recording)
+- GPU-accelerated parallel evaluation (64+ agents simultaneously)
+- Genetic algorithm operators for neural network evolution
+- Real-time visualization and debugging
+- Deterministic training with perfect reproducibility
+- 10-100× performance vs traditional Unity + Python approaches
+
+**Key Insight:** This is **one of Kairo's strongest use cases** because it merges traditionally-separate technologies (game engine physics, ML frameworks, custom GA code) into a single clean pipeline.
+
+**Use Cases:**
+- Autonomous racing AI
+- Self-driving car simulation
+- Drone flight controllers
+- Robot navigation
+- Game AI (any physics-based agent control)
+- Reinforcement learning benchmarks
+
+**Related Documentation:**
+- [LEARNINGS/GENETIC_ALGORITHM_OPERATORS.md](../LEARNINGS/GENETIC_ALGORITHM_OPERATORS.md) — GA operator catalog
+- [SPEC-OPERATOR-REGISTRY.md](../SPEC-OPERATOR-REGISTRY.md) — Operator metadata format
+- [ADR-002: Cross-Domain Architectural Patterns](../ADR/002-cross-domain-architectural-patterns.md) — Unified patterns
+
+---
+
 ### 🔥 [J-Tube Fire Pit: Multi-Physics Engineering Example](J-TUBE-FIREPIT-MULTIPHYSICS.md)
 
 **Status:** Design Document
@@ -37,6 +71,45 @@ A complete multi-physics modeling example showing how Kairo's operator graph par
 
 ---
 
+### 🚀 [Kerbal Space Program: Multi-Domain Orbital Simulation Example](KERBAL-SPACE-PROGRAM-SIMULATION.md)
+
+**Status:** Design Document
+**Domains:** OrbitalMechanics, Aerodynamics, RocketEquation, PartsAssembly, PhysicsIntegration, FailureMechanics
+**Complexity:** Advanced
+
+Demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynamics, rocket staging, part assembly) and become a framework for aerospace simulations.
+
+**What This Demonstrates:**
+- Real-time multi-domain physics (orbits, aero, propulsion, structures)
+- Part-based assembly system using operator graphs
+- GPU-accelerated physics integration
+- Level-of-detail physics switching (patched conics ↔ N-body)
+- Cross-domain integration (Geometry/TiaCAD → Physics → Audio → Visualization)
+- Educational platform for orbital mechanics and aerospace engineering
+
+**Key Insight:** KSP's entire gameplay loop maps perfectly onto Kairo's domain architecture — proving Kairo can handle **real-time game physics** and **aerospace simulation**.
+
+**Use Cases:**
+- Spaceflight simulation games (KSP-like)
+- Aerospace education (teaching orbital mechanics)
+- Mission planning tools (trajectory optimization, launch windows)
+- Satellite constellation design (Starlink, etc.)
+- Research simulations (spacecraft dynamics)
+
+**Unique Features:**
+- Integration with J-tube combustion domain for realistic engine modeling
+- AudioDomain integration for engine sounds and aerodynamic noise
+- Procedural planet generation using NoiseDomain
+- Part geometry from TiaCAD
+
+**Related Documentation:**
+- [SPEC-PHYSICS-DOMAINS.md](../SPEC-PHYSICS-DOMAINS.md) — Physics operator specifications
+- [ADR-002: Cross-Domain Architectural Patterns](../ADR/002-cross-domain-architectural-patterns.md) — Reference systems and anchors
+- [SPEC-GEOMETRY.md](../SPEC-GEOMETRY.md) — TiaCAD integration for part geometry
+- [EXAMPLES/J-TUBE-FIREPIT-MULTIPHYSICS.md](./J-TUBE-FIREPIT-MULTIPHYSICS.md) — Combustion domain for engines
+
+---
+
 ## Example Categories
 
 ### 🎨 Audio/Visual Examples
@@ -47,6 +120,8 @@ A complete multi-physics modeling example showing how Kairo's operator graph par
 
 ### 🔬 Physics Simulations
 - **J-Tube Fire Pit** (current) — Multi-physics thermal-fluid system
+- **Racing AI Pipeline** (current) — Racing car dynamics with neural control
+- **Kerbal Space Program Physics** (current) — Orbital mechanics, aerodynamics, rocket staging
 
 *Coming soon...*
 - N-body gravity simulation with Barnes-Hut optimization
@@ -55,6 +130,7 @@ A complete multi-physics modeling example showing how Kairo's operator graph par
 
 ### 🏗️ Engineering Design
 - **J-Tube Fire Pit** (current) — Parametric design with optimization
+- **Kerbal Space Program** (current) — Rocket design and mission planning
 
 *Coming soon...*
 - Muffler design (exhaust flow and acoustics)
@@ -68,6 +144,8 @@ A complete multi-physics modeling example showing how Kairo's operator graph par
 - PDE-based pricing (finite difference methods)
 
 ### 🤖 ML/Neural
+- **Racing AI Pipeline** (current) — Genetic algorithm + neural network evolution
+
 *Coming soon...*
 - Neural fields (NeRF-style)
 - Fourier Neural Operators for PDE solving
