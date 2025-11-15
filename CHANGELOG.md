@@ -10,6 +10,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - 2025-11-15
 
 ### Added
+
+- **Circuit/Electrical Engineering Domain** ⭐ (PR #43)
+  - **New Specifications**:
+    - `docs/ADR/003-circuit-modeling-domain.md`: Complete design rationale for circuit modeling domain
+    - `docs/SPEC-CIRCUIT.md`: Full circuit domain specification with 4-layer operator hierarchy
+  - **Example Circuits**:
+    - `examples/circuit/01_rc_filter.kairo`: RC filter with frequency response
+    - `examples/circuit/02_opamp_amplifier.kairo`: Nonlinear op-amp modeling
+    - `examples/circuit/03_guitar_pedal.kairo`: Circuit → Audio integration (Tube Screamer)
+    - `examples/circuit/04_pcb_trace_inductance.kairo`: Geometry → Circuit parasitic extraction
+    - `examples/circuit/05_unified_example.kairo`: Complete multi-domain integration
+    - `examples/circuit/README.md`: Comprehensive circuit examples documentation
+  - **Key Capabilities**: Typed operator graphs (R → C → Op-Amp), multi-domain integration (Circuit ↔ Audio, Geometry, Physics), reference-based composition, type + unit safety
+  - **Domain Position**: Core domain 1.8 in DOMAIN_ARCHITECTURE.md
+  - **Impact**: Establishes Kairo as the only tool that unifies circuit simulation, PCB layout, analog audio modeling, and multi-physics coupling
+
+- **Fluid Dynamics & Acoustics Domains** ⭐ (PR #44)
+  - **New Use Cases**:
+    - `docs/USE_CASES/2-stroke-muffler-modeling.md`: Complete multi-domain 2-stroke exhaust system modeling
+  - **Domain Additions**:
+    - FluidDynamics domain: Compressible 1D flow, incompressible flow, thermodynamic coupling, engine-specific operators
+    - Acoustics domain: 1D waveguide simulation, FDTD acoustics, Helmholtz resonators, perforated pipes, radiation impedance
+  - **Cross-Domain Integration**: FluidDynamics → Acoustics → Audio → Geometry coupling
+  - **Updated**: `EXAMPLE_PORTFOLIO_PLAN.md` with FluidDynamics & Acoustics examples
+  - **Impact**: Demonstrates Kairo's unique value in unifying multi-domain operator graphs for problems requiring 6+ domains
+
+- **Instrument Modeling & Timbre Extraction Domain** ⭐ (PR #45)
+  - **New Specifications**:
+    - `docs/SPEC-TIMBRE-EXTRACTION.md`: Complete specification with 35 operators across analysis, synthesis, and modeling
+    - `docs/ADR/003-instrument-modeling-domain.md`: Architectural decision record for instrument modeling
+  - **Key Capabilities**: Record acoustic guitar → extract timbre → synthesize new notes, MIDI instrument creation, timbre morphing, luthier analysis tools
+  - **Domain Position**: Layer 7 domain in operator registry
+  - **Updated**: `docs/LEARNINGS/OPERATOR_REGISTRY_EXPANSION.md` and `docs/DOMAIN_ARCHITECTURE.md` (section 2.7)
+  - **Impact**: Enables one of the "holy grails" of audio DSP - converting recordings into reusable synthesis models
+
+- **Audio Time Alignment Operators** (PR #46)
+  - **New Operator Subcategories** (Layer 5: Audio/DSP):
+    - Measurement operators: sine_sweep, impulse_train, mls_sequence, white_noise_burst
+    - Analysis operators: impulse_response_extractor, ir_peak_detect, cross_correlation, group_delay, phase_difference
+    - Alignment operators: delay_designer, crossover_phase_aligner, allpass_delay, delay_compensation
+    - Export operators: export_delays (miniDSP, JSON, CSV)
+  - **New Reference Types**: ImpulseResponseRef, DelayMapRef
+  - **Updated**: `docs/LEARNINGS/TIME_ALIGNMENT_OPERATORS.md`
+  - **Impact**: Solves critical pro audio problem (car audio, studio monitors) with measurement → analysis → design workflow
+
+- **Multi-Physics Engineering Modeling** ⭐ (PR #47)
+  - **New Specifications**:
+    - `docs/SPEC-PHYSICS-DOMAINS.md`: Four new physics domains (FluidNetwork, ThermalODE, FluidJet, CombustionLight)
+    - `docs/EXAMPLES/J-TUBE-FIREPIT-MULTIPHYSICS.md`: Complete J-tube fire pit multi-physics modeling example
+    - `docs/EXAMPLES/README.md`: Comprehensive guide to Kairo examples and case studies
+  - **Key Capabilities**: Geometry → Fluid → Thermal → Combustion pipeline, validates operator graph paradigm for engineering physics
+  - **Updated**: `docs/DOMAIN_ARCHITECTURE.md` with Next-Wave physics domains
+  - **Impact**: Proves Kairo can model thermal-fluid systems, combustion, and multi-physics engineering problems
+
+- **Optimization Domain & Algorithms** ⭐ (PR #48)
+  - **New Catalog**:
+    - `docs/LEARNINGS/OPTIMIZATION_ALGORITHMS_CATALOG.md`: Complete catalog of 16 optimization algorithms across 5 categories
+  - **Algorithm Categories**:
+    - Evolutionary/Population-Based: GA, DE, CMA-ES, PSO
+    - Local Numerical: Gradient Descent, L-BFGS, Nelder-Mead
+    - Surrogate/Model-Based: Bayesian Optimization, Response Surface, Kriging
+    - Combinatorial/Discrete: Simulated Annealing, Tabu Search, Beam Search
+    - Multi-Objective: NSGA-II, SPEA2, MOPSO
+  - **Updated**: `docs/DOMAIN_ARCHITECTURE.md` (section 2.3) with algorithm summaries, operator contracts, 3-phase roadmap
+  - **Impact**: Transforms Kairo from simulation platform into design discovery platform
+
 - **TiaCAD Integration - Unified Reference & Frame Model** ⭐
   - **New Specifications**:
     - `docs/SPEC-COORDINATE-FRAMES.md`: Complete specification for coordinate frames, anchors, and reference-based composition across all domains
