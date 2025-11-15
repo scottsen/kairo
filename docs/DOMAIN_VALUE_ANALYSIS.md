@@ -580,9 +580,500 @@ This domain transforms Kairo from "interesting DSL" to "essential tool for physi
 
 ---
 
-## Conclusion
+## Humanitarian Value Framework
 
-**Kairo's competitive advantage is cross-domain integration, especially physics → acoustics → audio.**
+**Purpose:** Evaluate domains based on their value to humanity, not just commercial potential.
+
+While commercial viability is important for sustainability, we must also consider how each domain contributes to human flourishing, knowledge, creativity, and well-being. This section complements the market-focused analysis above with a humanitarian lens.
+
+### Evaluation Framework
+
+Each domain is evaluated across 6 humanitarian dimensions (1-5 scale):
+
+1. **Accessibility & Democratization** - Does this make powerful tools available to people who couldn't afford them before?
+2. **Educational Impact** - Does this help people learn, understand the world, and develop skills?
+3. **Scientific Advancement** - Does this enable research and discovery that benefits humanity?
+4. **Creative Expression** - Does this enable new forms of human creativity and cultural development?
+5. **Environmental Sustainability** - Does this help us build more sustainable solutions?
+6. **Health & Well-being** - Does this directly improve quality of life or enable better healthcare?
+
+**Scoring:**
+- 🟢 5 = Transformative humanitarian impact
+- 🟢 4 = Significant humanitarian value
+- 🟡 3 = Moderate humanitarian benefit
+- 🟠 2 = Limited humanitarian impact
+- 🔴 1 = Minimal humanitarian value
+
+---
+
+## Humanitarian Assessment by Domain
+
+### Acoustics Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 5 | Replaces $50K+ acoustic modeling tools; enables small makers and developing-world artisans |
+| **Educational Impact** | 🟢 5 | Students can learn acoustics through experimentation impossible in traditional tools |
+| **Scientific Advancement** | 🟢 4 | Enables acoustic research without expensive commercial licenses |
+| **Creative Expression** | 🟢 5 | Empowers instrument builders, musicians to create new sonic possibilities |
+| **Environmental Sustainability** | 🟡 3 | Virtual prototyping reduces waste from physical iterations |
+| **Health & Well-being** | 🟡 3 | Better acoustic design → quieter spaces, reduced noise pollution |
+
+**Total: 25/30**
+
+**Humanitarian Impact Statement:**
+
+Acoustics democratizes what was once the domain of well-funded labs and corporations. A lutherie student in Vietnam can now design and optimize guitar bodies without traveling to an expensive acoustic testing facility. Music educators can demonstrate wave physics with real, audible results. Indigenous instrument makers can preserve and evolve traditional designs using modern understanding of acoustics, without expensive consultants.
+
+**Specific Examples:**
+- **Education:** Physics students hear the direct relationship between geometry and sound
+- **Artisan empowerment:** Small-scale violin makers in rural areas optimize designs
+- **Cultural preservation:** Traditional instrument builders can model and preserve heritage designs
+- **Accessibility:** Deaf/hard-of-hearing individuals can visualize sound through coupled visual representations
+
+---
+
+### Audio Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 5 | Professional audio tools democratized; no expensive DAW licenses needed |
+| **Educational Impact** | 🟢 5 | Learn DSP, synthesis, audio engineering through experimentation |
+| **Scientific Advancement** | 🟢 4 | Enables audio research, psychoacoustics experiments |
+| **Creative Expression** | 🟢 5 | Musicians, sound artists can create without financial barriers |
+| **Environmental Sustainability** | 🔴 1 | Minimal environmental impact |
+| **Health & Well-being** | 🟡 3 | Music therapy, accessibility tools (sonification for visually impaired) |
+
+**Total: 23/30**
+
+**Humanitarian Impact Statement:**
+
+Audio production has enormous barriers to entry - expensive software, hardware, education. Kairo's open audio domain means a talented teenager in Nigeria can learn synthesis and create professional-quality music without pirating software or saving for years. Music therapy practitioners can create custom therapeutic soundscapes. Researchers studying sound perception can run experiments without grants for commercial tools.
+
+**Specific Examples:**
+- **Economic mobility:** Aspiring musicians in low-income areas can develop skills and create music
+- **Therapy:** Music therapists create personalized therapeutic audio without expensive synthesis licenses
+- **Accessibility:** Create sonification tools for visually impaired users (data → sound)
+- **Education:** Community music schools teach synthesis/DSP without software costs
+
+---
+
+### Field Domain (Physics Simulation)
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 5 | Replaces $10K-100K CFD/FEM tools (COMSOL, ANSYS); enables students, small makers |
+| **Educational Impact** | 🟢 5 | Students can learn physics through simulation previously requiring expensive licenses |
+| **Scientific Advancement** | 🟢 5 | Researchers in developing countries can do computational physics |
+| **Creative Expression** | 🟡 3 | Artists can create physics-based generative art |
+| **Environmental Sustainability** | 🟢 4 | Design more efficient systems (heat exchangers, ventilation) without waste |
+| **Health & Well-being** | 🟡 3 | Better medical device design, thermal comfort studies |
+
+**Total: 25/30**
+
+**Humanitarian Impact Statement:**
+
+Commercial physics simulation tools cost more than many universities' annual budgets in developing countries. Kairo makes computational fluid dynamics and thermal analysis accessible to anyone with a computer. A civil engineering student in Kenya can simulate building ventilation for passive cooling. Researchers in Bangladesh can model flood dynamics. Small manufacturers can optimize heat dissipation in solar electronics.
+
+**Specific Examples:**
+- **Climate adaptation:** Engineers in developing countries model passive cooling for buildings
+- **Water resources:** Simulate water flow for irrigation, flood prevention
+- **Medical devices:** Makers can design low-cost medical equipment with thermal management
+- **Education:** Students learn physics through hands-on simulation, not just textbooks
+- **Appropriate technology:** Design efficient cookstoves, water heaters, solar systems
+
+---
+
+### Agent Domain (Particle Systems)
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 4 | Enables simulation work previously requiring specialized tools |
+| **Educational Impact** | 🟢 5 | Teach complex systems, ecology, social dynamics through visualization |
+| **Scientific Advancement** | 🟢 5 | Ecology, epidemiology, social science research without commercial licenses |
+| **Creative Expression** | 🟢 4 | Generative artists, game developers create emergent behaviors |
+| **Environmental Sustainability** | 🟢 4 | Model ecosystems, pollution dispersion, wildlife behavior |
+| **Health & Well-being** | 🟢 4 | Epidemiology (disease spread), crowd safety, urban planning |
+
+**Total: 26/30**
+
+**Humanitarian Impact Statement:**
+
+Agent-based modeling is crucial for understanding complex systems - from disease spread to ecological collapse. Commercial tools like NetLogo are good but limited. Kairo enables public health researchers to model disease transmission in refugee camps, ecologists to study wildlife corridors, urban planners to simulate pedestrian safety in informal settlements.
+
+**Specific Examples:**
+- **Public health:** Model disease spread and intervention strategies in underserved communities
+- **Ecology:** Researchers study endangered species without expensive field equipment
+- **Urban planning:** Simulate pedestrian flow in dense informal settlements for safety
+- **Education:** Students learn complexity science, emergence, systems thinking
+- **Agriculture:** Model pest dynamics, pollinator behavior for sustainable farming
+
+---
+
+### Chemistry Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 5 | Molecular modeling tools (GROMACS, etc.) democratized for education |
+| **Educational Impact** | 🟢 5 | Students visualize molecules, reactions impossible in poor schools |
+| **Scientific Advancement** | 🟢 4 | Drug discovery, materials research in resource-limited settings |
+| **Creative Expression** | 🟠 2 | Limited creative applications |
+| **Environmental Sustainability** | 🟢 5 | Design catalysts for carbon capture, sustainable materials, clean energy |
+| **Health & Well-being** | 🟢 5 | Drug design, toxicity testing, medical chemistry |
+
+**Total: 26/30**
+
+**Humanitarian Impact Statement:**
+
+Chemistry simulation is critical for understanding everything from drug interactions to climate solutions, but commercial tools are prohibitively expensive. Kairo enables chemistry students in underfunded schools to visualize molecular dynamics. Researchers in Cuba or Iran (under sanctions) can pursue materials science for solar cells. Community organizations can model air pollution chemistry to advocate for environmental justice.
+
+**Specific Examples:**
+- **Drug access:** Researchers in developing countries study drug formulations, generics
+- **Education:** Students see molecules move, react - transformative for chemistry education
+- **Environmental justice:** Communities model local air pollution chemistry to demand change
+- **Sustainable materials:** Researchers design biodegradable polymers, green catalysts
+- **Water treatment:** Design low-cost water purification materials through simulation
+
+---
+
+### Procedural Generation Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 4 | Game dev/generative art without expensive tools (Houdini $2K-4K) |
+| **Educational Impact** | 🟢 4 | Teach algorithms, mathematics through visual/creative output |
+| **Scientific Advancement** | 🟡 3 | Useful for some research applications (terrain modeling) |
+| **Creative Expression** | 🟢 5 | Artists, game developers, designers create without barriers |
+| **Environmental Sustainability** | 🟠 2 | Virtual prototyping reduces physical models |
+| **Health & Well-being** | 🔴 1 | Minimal direct health impact |
+
+**Total: 19/30**
+
+**Humanitarian Impact Statement:**
+
+Procedural generation democratizes creative tools that were once restricted to studios with expensive licenses. Young game developers in Southeast Asia can create rich game worlds. Artists can explore generative art without learning multiple expensive tools. Educators can teach computational thinking through creative, visual output that engages students.
+
+**Specific Examples:**
+- **Economic opportunity:** Indie game developers build games without expensive tool licenses
+- **Education:** Students learn algorithms through procedural art, see math come alive
+- **Cultural expression:** Artists create computationally-generated cultural works
+- **Architecture:** Students explore parametric design for affordable housing solutions
+
+---
+
+### Circuit Simulation Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 5 | SPICE simulation + PCB design democratized; enables makers, students |
+| **Educational Impact** | 🟢 5 | Learn electronics hands-on without expensive lab equipment |
+| **Scientific Advancement** | 🟡 3 | Enables some electronics research |
+| **Creative Expression** | 🟢 4 | Musicians build custom instruments, pedals; artists create interactive electronics |
+| **Environmental Sustainability** | 🟢 4 | Design efficient power systems, reduce prototyping waste |
+| **Health & Well-being** | 🟡 3 | Medical device design, assistive technology |
+
+**Total: 24/30**
+
+**Humanitarian Impact Statement:**
+
+Electronics education is hampered by expensive lab equipment and software. Kairo enables students anywhere to learn circuit design through simulation before building physical circuits (saving money on components). Makers in hackerspaces can design open-source medical devices. Musicians can create custom electronic instruments. Solar technicians can design charge controllers for off-grid communities.
+
+**Specific Examples:**
+- **Appropriate technology:** Design solar charge controllers, LED drivers for off-grid communities
+- **Medical devices:** Open-source medical equipment (pulse oximeters, ECG monitors)
+- **Education:** Students learn electronics without expensive oscilloscopes and lab equipment
+- **Assistive technology:** Design custom electronic aids for disabilities
+- **Repair culture:** Understand and repair electronics, reducing e-waste
+
+---
+
+### Emergence Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 4 | Complex systems modeling without expensive specialized tools |
+| **Educational Impact** | 🟢 5 | Teach complex systems, emergence, life sciences through visualization |
+| **Scientific Advancement** | 🟢 4 | Ecology, social science, complexity research |
+| **Creative Expression** | 🟢 5 | Generative artists explore cellular automata, L-systems, emergence |
+| **Environmental Sustainability** | 🟡 3 | Model ecosystems, understand environmental dynamics |
+| **Health & Well-being** | 🟡 3 | Epidemiology, understanding biological systems |
+
+**Total: 24/30**
+
+**Humanitarian Impact Statement:**
+
+Understanding complex emergent systems - from forest ecosystems to disease spread to traffic flow - is crucial for solving global challenges. Kairo makes these simulations accessible to students, researchers, and communities without expensive commercial tools. Students can explore the beauty of emergence and complexity. Researchers can model social dynamics, ecological systems, urban planning scenarios.
+
+**Specific Examples:**
+- **Education:** Students learn biology, ecology, complexity through visual, interactive simulation
+- **Urban planning:** Model traffic, pedestrian dynamics for safer cities
+- **Ecology:** Simulate ecosystem dynamics, conservation strategies
+- **Social science:** Model social segregation, cooperation, cultural dynamics
+- **Art:** Create beautiful emergent generative art, explore algorithmic creativity
+
+---
+
+### Visual Domain
+
+| Dimension | Score | Humanitarian Value |
+|-----------|-------|-------------------|
+| **Accessibility & Democratization** | 🟢 4 | Visualization tools democratized |
+| **Educational Impact** | 🟢 5 | Make abstract concepts visible - critical for learning |
+| **Scientific Advancement** | 🟢 4 | Essential for understanding simulation results, communication |
+| **Creative Expression** | 🟢 5 | Artists create visual works without expensive render engines |
+| **Environmental Sustainability** | 🔴 1 | Minimal environmental impact |
+| **Health & Well-being** | 🟠 2 | Medical visualization, accessibility for visually impaired (tactile rendering) |
+
+**Total: 21/30**
+
+**Humanitarian Impact Statement:**
+
+Visualization makes the invisible visible - from physics fields to molecular motion to data patterns. Students can see concepts that would otherwise remain abstract. Researchers can communicate findings visually. Artists can create computational art. Educators can make STEM engaging and accessible to visual learners.
+
+**Specific Examples:**
+- **Education:** Abstract physics, math, chemistry becomes visible and understandable
+- **Science communication:** Researchers share findings with communities through visualization
+- **Art:** Computational artists create without expensive rendering tools
+- **Accessibility:** Generate tactile 3D prints for visually impaired to "see" data
+
+---
+
+## Humanitarian Value Prioritization
+
+### Tier 1: Transformative Humanitarian Impact (25-26/30)
+
+**Domains with the highest value to humanity:**
+
+1. **Agent Domain (26/30)** - Epidemiology, ecology, social science, education
+2. **Chemistry Domain (26/30)** - Drug discovery, environmental solutions, education
+3. **Field Domain (25/30)** - Climate adaptation, water resources, appropriate technology
+4. **Acoustics Domain (25/30)** - Artisan empowerment, cultural preservation, education
+
+**Why These Matter Most:**
+
+These domains address fundamental human needs:
+- **Health:** Epidemiology, drug design, medical devices
+- **Survival:** Water resources, climate adaptation, sustainable materials
+- **Education:** Making invisible concepts visible and accessible
+- **Economic opportunity:** Empowering makers, artisans, researchers in resource-limited settings
+- **Environmental sustainability:** Climate solutions, ecosystem modeling, efficient design
+
+---
+
+### Tier 2: Significant Humanitarian Value (23-24/30)
+
+**Domains with strong humanitarian benefits:**
+
+1. **Circuit Simulation (24/30)** - Appropriate technology, education, medical devices
+2. **Emergence Domain (24/30)** - Education, ecology, social understanding
+3. **Audio Domain (23/30)** - Creative expression, economic mobility, accessibility
+
+**Humanitarian Value:**
+
+These domains primarily enable:
+- **Economic mobility:** Skills development without financial barriers
+- **Education:** Hands-on learning that would otherwise require expensive equipment
+- **Creative expression:** Cultural development, artistic innovation
+- **Appropriate technology:** Solutions designed for local contexts
+
+---
+
+### Tier 3: Moderate Humanitarian Value (19-21/30)
+
+**Domains with targeted humanitarian benefits:**
+
+1. **Visual Domain (21/30)** - Education, science communication, accessibility
+2. **Procedural Generation (19/30)** - Creative expression, education
+
+**Humanitarian Value:**
+
+These domains are important for:
+- **Making STEM accessible:** Visual learning, engagement
+- **Creative democratization:** Art and game development without expensive tools
+- **Communication:** Sharing knowledge visually
+
+---
+
+## Humanitarian Strategic Insights
+
+### Insight 1: Accessibility is a Multiplier
+
+**The most humanitarian domains democratize expensive tools:**
+- Field domain replaces $10K-100K COMSOL/ANSYS licenses
+- Acoustics replaces $50K+ acoustic modeling tools
+- Chemistry replaces expensive molecular dynamics software
+- Circuit simulation replaces SPICE + PCB tool licenses
+
+**Impact:** A single open-source tool can enable thousands of students, researchers, and makers who were previously locked out.
+
+---
+
+### Insight 2: Education Transforms Lives
+
+**Every domain scores high on educational impact:**
+- Physics students see heat flow, fluid dynamics in real-time
+- Chemistry students watch molecules interact
+- Electronics students design circuits without expensive lab equipment
+- Biology students model ecosystems and emergence
+
+**Impact:** Education is the pathway out of poverty and the foundation of innovation. Tools that enable learning have multigenerational humanitarian impact.
+
+---
+
+### Insight 3: The Global South Matters
+
+**Most underserved communities are in developing countries:**
+- Universities without budgets for commercial software
+- Makers and artisans without access to design tools
+- Researchers under sanctions or in resource-limited settings
+- Students in underfunded schools
+
+**Kairo's open-source nature means global accessibility by default.**
+
+---
+
+### Insight 4: Environmental Solutions Are Urgent
+
+**Domains that enable sustainability deserve priority:**
+- **Field domain:** Design efficient thermal systems, passive cooling, renewable energy
+- **Chemistry domain:** Catalysts for carbon capture, biodegradable materials, clean energy
+- **Agent domain:** Model ecosystems, understand environmental dynamics
+
+**Impact:** Climate change disproportionately harms the world's most vulnerable people. Tools that enable environmental solutions have enormous humanitarian value.
+
+---
+
+### Insight 5: Health is Universal
+
+**Domains that enable health applications deserve support:**
+- **Chemistry domain:** Drug discovery, toxicity testing
+- **Agent domain:** Epidemiology, disease modeling
+- **Circuit simulation:** Medical device design
+- **Field domain:** Medical device thermal management
+
+**Impact:** Health is a fundamental human right. Tools that enable medical research and device design can save lives.
+
+---
+
+## Reframing Success: Beyond Commercial Metrics
+
+### Commercial Success Metric:
+> "If you're designing a guitar and want to hear how it sounds before building it, you use Kairo."
+
+### Humanitarian Success Metric:
+> **"A physics student in Kenya designs a passive cooling system for their school using Kairo's field operators. A lutherie student in Vietnam optimizes guitar acoustics without traveling to an expensive testing facility. A public health researcher in Brazil models disease transmission in a favela to advocate for better healthcare. An artisan in India preserves traditional instrument designs through acoustic modeling."**
+
+**This is transformative humanitarian impact.**
+
+---
+
+## Recommendations: Humanitarian Lens
+
+### 1. Prioritize Educational Documentation
+
+**Action:** For each domain, create:
+- Beginner tutorials aimed at students with limited resources
+- Classroom examples for educators
+- Low-cost hardware integration guides (Raspberry Pi, etc.)
+
+**Impact:** Lower barriers to entry → more lives changed
+
+---
+
+### 2. Partner with Educational Institutions in the Global South
+
+**Action:**
+- Reach out to universities in developing countries
+- Provide Kairo workshops and training
+- Highlight use cases relevant to local challenges (climate adaptation, water resources, etc.)
+
+**Impact:** Direct humanitarian benefit + community growth
+
+---
+
+### 3. Highlight Appropriate Technology Use Cases
+
+**Action:**
+- Document examples: solar charge controllers, passive cooling, water systems
+- Partner with appropriate technology organizations
+- Create case studies of Kairo enabling solutions for resource-limited contexts
+
+**Impact:** Position Kairo as a tool for global development
+
+---
+
+### 4. Support Open Science and Reproducibility
+
+**Action:**
+- Make deterministic execution and reproducibility a core selling point for research
+- Partner with academic journals on reproducible research initiatives
+- Provide examples of research workflows
+
+**Impact:** Enable better science, particularly in underfunded research institutions
+
+---
+
+### 5. Emphasize Sustainability Applications
+
+**Action:**
+- Create examples: thermal efficiency optimization, renewable energy systems, material sustainability
+- Partner with environmental organizations
+- Highlight carbon savings from virtual prototyping
+
+**Impact:** Address climate crisis, align with global priorities
+
+---
+
+## Balancing Commercial and Humanitarian Goals
+
+**Both commercial success and humanitarian impact matter:**
+
+✅ **Commercial success** ensures:
+- Sustainability (developers can work on Kairo full-time)
+- Resources for continued development
+- Professional-grade quality and support
+
+✅ **Humanitarian impact** ensures:
+- Alignment with human values
+- Global accessibility and inclusion
+- Meaningful contribution to human flourishing
+
+**The ideal strategy:**
+1. **Commercial markets (Tier 1):** Instrument builders, game audio, creative professionals
+   - These users can pay for support, training, custom development
+   - Revenue sustains the project
+
+2. **Humanitarian applications (Always free):** Education, research, appropriate technology
+   - Students, researchers, makers in resource-limited settings get full access
+   - Humanitarian impact is the purpose, not the business model
+
+**Precedent:** Many successful open-source projects (Linux, Python, Blender) balance commercial adoption with humanitarian mission.
+
+---
+
+## Conclusion: Dual Bottom Line
+
+**Kairo can succeed on two bottom lines:**
+
+### Commercial Bottom Line
+> "Kairo is the platform for physics-driven creative computation. For problems that span physics, acoustics, and audio, nothing else comes close."
+
+### Humanitarian Bottom Line
+> "Kairo democratizes tools that were once locked behind expensive licenses, enabling students, researchers, artisans, and makers worldwide to learn, create, discover, and solve problems that matter to their communities."
+
+**What success looks like:**
+- ✅ Instrument builders in wealthy countries pay for Kairo support → sustainability
+- ✅ Students in Kenya learn physics through Kairo → humanitarian impact
+- ✅ Game audio professionals use Kairo for production → commercial validation
+- ✅ Public health researchers in Brazil model epidemics → lives saved
+- ✅ Artisans in Vietnam preserve traditional instruments → cultural preservation
+- ✅ Researchers worldwide publish reproducible science → knowledge advancement
+
+**Both matter. Both are possible. Both should guide our decisions.**
+
+---
+
+## Conclusion
 
 **Winning Strategy:**
 1. ✅ Double down on acoustics as flagship domain
