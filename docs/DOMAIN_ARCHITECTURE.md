@@ -1957,6 +1957,320 @@ assert energy_before ≈ energy_after  # (if no absorption)
 
 ---
 
+### 2.11 Emergence Domain (Complex Systems & Artificial Life)
+
+**Purpose**: Unified simulation of emergent systems including Cellular Automata, Agent-Based Models, Reaction-Diffusion, L-Systems, and Swarm Intelligence.
+
+**Why Critical**: Transforms Kairo from **"simulate physics"** to **"create artificial life and complex systems"**. Emergent systems are foundational for:
+- **Creative coding** (generative art, procedural generation)
+- **Biological modeling** (morphogenesis, ecology, evolution)
+- **Optimization** (swarm intelligence, stigmergy)
+- **Procedural content** (trees, textures, networks)
+
+**Status**: 🔲 Proposed (v0.10-v1.0)
+
+**Reference**: See **[ADR-004](ADR/004-emergence-domain.md)**, **[SPEC-EMERGENCE-DOMAIN.md](SPEC-EMERGENCE-DOMAIN.md)**, and **[LEARNINGS/EMERGENCE_OPERATORS_CATALOG.md](LEARNINGS/EMERGENCE_OPERATORS_CATALOG.md)** for complete specifications.
+
+---
+
+#### Sub-Domains
+
+**1. Cellular Automata (CA)**
+
+Grid-based evolution with local rules:
+
+| Operator | Description |
+|----------|-------------|
+| `ca.create` | Initialize CA grid (2D/3D) |
+| `ca.step` | Evolve one generation |
+| `ca.rule_preset` | Common rules (Life, Brian's Brain, Wireworld, Rule 30/110) |
+| `ca.lenia` | Continuous CA (smooth life-like organisms) |
+| `ca.to_field` | Convert to continuous field |
+
+**Use Cases:**
+- Texture generation (biological, electronic patterns)
+- Physics approximation (lattice-gas hydrodynamics)
+- Electronic circuits (Wireworld)
+- Procedural modeling
+
+**2. Agent-Based Models (ABM)**
+
+Particle systems with behavioral rules:
+
+| Operator | Description |
+|----------|-------------|
+| `agent.create` | Spawn agent population |
+| `agent.boids` | Flocking behavior (Reynolds boids) |
+| `agent.vicsek` | Active matter physics |
+| `agent.schelling` | Segregation dynamics |
+| `agent.predator_prey` | Ecology simulation |
+| `agent.to_field` | Rasterize to grid (particle-in-cell) |
+| `agent.from_field` | Sample field at agent positions |
+
+**Use Cases:**
+- Flocking/swarming animation
+- Crowd simulation
+- Ecological modeling
+- Social dynamics research
+- Active matter physics
+
+**3. Reaction-Diffusion (RD)**
+
+Continuous pattern-forming PDEs:
+
+| Operator | Description |
+|----------|-------------|
+| `rd.gray_scott` | Gray-Scott RD system |
+| `rd.turing` | Turing pattern generator |
+| `rd.to_geometry` | Extract isosurface (Marching Cubes) |
+
+**Use Cases:**
+- Biological patterns (spots, stripes, waves)
+- Texture generation
+- Chemical simulation (Belousov-Zhabotinsky)
+- Procedural design
+
+**4. L-Systems (Lindenmayer Systems)**
+
+Recursive growth and morphogenesis:
+
+| Operator | Description |
+|----------|-------------|
+| `lsys.create` | Define L-system grammar |
+| `lsys.evolve` | Evolve string n generations |
+| `lsys.to_geometry` | Turtle graphics → 3D geometry |
+| `lsys.preset` | Common systems (trees, fractals) |
+
+**Use Cases:**
+- Tree/plant generation
+- Fractal structures
+- Coral-like forms
+- Vascular systems
+- Procedural architecture
+
+**5. Swarm Intelligence**
+
+Stigmergic optimization and network formation:
+
+| Operator | Description |
+|----------|-------------|
+| `swarm.ants` | Ant Colony Optimization (ACO) |
+| `swarm.slime_mold` | Physarum network optimization |
+| `swarm.firefly` | Firefly algorithm |
+
+**Use Cases:**
+- Pathfinding (ACO)
+- Network generation (slime mold)
+- Distributed optimization
+- Routing algorithms
+
+---
+
+#### Cross-Domain Integration
+
+**Emergence → Geometry (Pattern → Surface)**
+```kairo
+// Reaction-diffusion → 3D surface
+(u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
+let heightmap = v
+let surface = geom.displace(plane, heightmap, scale=20mm)
+```
+
+**Emergence → Physics (Network → Structure)**
+```kairo
+// Slime mold network → structural optimization
+let network = swarm.slime_mold(field, food_sources=anchors)
+let structure = geom.from_network(network, diameter=5mm)
+let stress = physics.stress_test(structure, load=100N)
+```
+
+**Emergence → Acoustics (Swarm → Scattering)**
+```kairo
+// Boids → acoustic scatterers
+let positions = agent.positions(boids)
+let wave = acoustic.propagate_with_scatterers(source, scatterers=positions)
+```
+
+**Emergence → Audio (Sonification)**
+```kairo
+// Agent density → audio frequency
+let density = agent.to_field(boids, property="density")
+let freq = 200Hz + density.mean() * 800Hz
+out audio = osc.sine(freq)
+```
+
+**Emergence → Optimization (Evolutionary Design)**
+```kairo
+// Optimize CA parameters for structural strength
+let result = opt.nsga2(
+    objectives = [strength_fn, lightness_fn],
+    params = [("ca_seed", "int"), ("ca_steps", "int")],
+    ...
+)
+```
+
+---
+
+#### Dependencies
+
+- **FieldDomain** — CA/RD operate on grids
+- **IntegratorsDomain** — Agent dynamics (RK4, Verlet)
+- **StochasticDomain** — Mutations, noise, initialization
+- **GeometryDomain** — Pattern → surface conversion
+- **PhysicsDomain** — Agent → rigid body, structure testing
+- **AcousticsDomain** — Swarm → scattering
+- **OptimizationDomain** — Swarm algorithms (PSO, ACO)
+
+---
+
+#### Unique Capabilities (vs. NetLogo, Golly, Processing)
+
+**Existing tools:**
+- **NetLogo:** ABM only, no cross-domain integration
+- **Golly:** CA only, standalone application
+- **Processing/p5.js:** Visual scripting, ad-hoc implementations
+- **MATLAB/Python:** Fragmented libraries
+
+**Kairo EmergenceDomain:**
+1. ✅ **Unified platform** — CA + ABM + RD + L-systems + Swarms in one system
+2. ✅ **Cross-domain integration** — Seamless composition with Geometry, Physics, Audio, Optimization
+3. ✅ **GPU acceleration** — All operators designed for parallel execution
+4. ✅ **Deterministic** — Strict/repro profiles for reproducible science
+5. ✅ **Type + unit safety** — Physical units tracked
+6. ✅ **MLIR compilation** — JIT to CPU/GPU
+
+**No competitor offers this.**
+
+---
+
+#### Example Applications
+
+**1. Biological Morphogenesis → 3D Printing**
+```kairo
+// RD pattern → geometry → stress test → STL export
+(u, v) = rd.gray_scott(u, v, f=0.055, k=0.062)
+let surface = geom.displace(plane, v, scale=20mm)
+let stress = physics.stress_test(surface, load=100N)
+io.export_stl(surface, "organic_structure.stl")
+```
+
+**2. Slime Mold Network → PCB Routing**
+```kairo
+// Optimize PCB traces using slime mold
+let network = swarm.slime_mold(field, food_sources=component_positions)
+let traces = circuit.from_network(network, width=0.2mm)
+let parasitics = circuit.extract_parasitics(traces)
+```
+
+**3. Boids → Acoustic Scattering → Audio**
+```kairo
+// Swarm scatters sound waves
+let positions = agent.positions(boids)
+let wave = acoustic.propagate_with_scatterers(source, scatterers=positions)
+out audio = acoustic.to_audio(wave, mic_position=vec3(10, 0, 0))
+```
+
+**4. CA Lattice → Structural Optimization**
+```kairo
+// Optimize CA-generated lattice for strength/weight
+let result = opt.nsga2(
+    objectives = [maximize_strength, minimize_mass],
+    design_fn = |params| ca_to_lattice_to_stress(params)
+)
+```
+
+**5. L-System Trees → Wind Physics**
+```kairo
+// Generate tree, simulate wind forces
+let tree = lsys.to_geometry(tree_lsys.evolve(5))
+let branches = physics.rigid_bodies(tree.branches)
+let wind_forces = fluid.drag_force(wind_field, branches)
+```
+
+---
+
+#### Implementation Roadmap
+
+**Phase 1: Core Infrastructure (v0.10)**
+- [ ] CAGrid2D/3D types, Agents<A> container
+- [ ] Spatial indexing (grid, k-d tree)
+
+**Phase 2: CA Operators (v0.10)**
+- [ ] ca.create, ca.step, ca.rule_preset (9 presets)
+- [ ] ca.lenia, ca.to_field
+
+**Phase 3: ABM Operators (v0.10)**
+- [ ] agent.create, agent.boids, agent.vicsek
+- [ ] agent.to_field, agent.from_field
+
+**Phase 4: RD Operators (v0.11)**
+- [ ] rd.gray_scott, rd.turing
+- [ ] rd.to_geometry (marching cubes)
+
+**Phase 5: L-Systems (v0.11)**
+- [ ] lsys.create, lsys.evolve, lsys.to_geometry
+
+**Phase 6: Swarm Intelligence (v1.0)**
+- [ ] swarm.ants, swarm.slime_mold
+- [ ] Integration with OptimizationDomain
+
+**Phase 7: Cross-Domain Examples (v1.0)**
+- [ ] 10+ examples spanning all integration patterns
+
+---
+
+#### Testing Strategy
+
+**Determinism Tests:**
+```kairo
+// CA must be bit-exact
+let ca1 = ca.create(128, 128, seed=42)
+let ca2 = ca.create(128, 128, seed=42)
+assert_eq!(ca1, ca2)
+```
+
+**Conservation Tests:**
+```kairo
+// Boids: momentum conservation
+let p_before = agent.total_momentum(boids)
+boids = agent.boids(boids, dt=0.1s)
+let p_after = agent.total_momentum(boids)
+assert_approx_eq!(p_before, p_after)
+```
+
+**Pattern Recognition Tests:**
+```kairo
+// Life: glider moves diagonally
+let glider = ca.load_pattern("glider")
+let evolved = ca.step_n(glider, rule=life_rule, steps=4)
+assert_eq!(ca.find_pattern(evolved, "glider"), vec2(1, 1))
+```
+
+---
+
+#### Documentation
+
+- **[SPEC-EMERGENCE-DOMAIN.md](SPEC-EMERGENCE-DOMAIN.md)** — Complete domain specification
+- **[ADR-004](ADR/004-emergence-domain.md)** — Architectural decision record
+- **[LEARNINGS/EMERGENCE_OPERATORS_CATALOG.md](LEARNINGS/EMERGENCE_OPERATORS_CATALOG.md)** — Full operator catalog (45 operators)
+- **[EXAMPLES/EMERGENCE-CROSS-DOMAIN.md](EXAMPLES/EMERGENCE-CROSS-DOMAIN.md)** — 5 complete integration examples
+
+---
+
+#### Why This is a Perfect Fit for Kairo
+
+**Emergent systems are fundamentally graph-friendly:**
+- Local rules → composable operators
+- Embarrassingly parallel → GPU acceleration
+- Deterministic (with fixed seeds) → reproducible science
+- Cross-domain potential → Geometry, Physics, Audio, Optimization
+
+**The killer feature:** No existing tool unifies emergence + physics + audio + geometry in one deterministic, GPU-accelerated platform.
+
+This makes Kairo the **universal platform for complex systems research and creative coding**.
+
+---
+
 ## 3. Advanced Domains (FUTURE EXPANSION)
 
 These are "Version 2+" ideas — realistic but not urgent. They represent specialized use cases that extend Kairo into new application areas.
@@ -2087,6 +2401,7 @@ Here is the likely full spectrum of domains Kairo will eventually want:
 | I/O & Storage | 🔲 Planned | P1 |
 | Fluid Dynamics | 🔲 Planned | P1 |
 | Acoustics | 🔲 Planned | P1 |
+| **Emergence (CA, ABM, RD, L-Systems)** | **🔲 Proposed** | **P1** |
 
 ### 3. Advanced Future — v1.1+
 | Domain | Status | Priority |
