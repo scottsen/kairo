@@ -8,6 +8,9 @@ from .visual import visual, Visual, VisualOperations
 from . import integrators
 from . import io_storage
 from . import sparse_linalg
+from .flappy import flappy, Bird, Pipe, GameState, FlappyOperations
+from .neural import neural, DenseLayer, MLP, NeuralOperations
+from .genetic import genetic, Individual, Population, GeneticOperations
 
 # Procedural graphics domains (NEW)
 from .noise import noise, NoiseField2D, NoiseField3D, NoiseOperations
@@ -24,6 +27,9 @@ __all__ = [
     "integrators",
     "io_storage",
     "sparse_linalg",
+    "flappy", "Bird", "Pipe", "GameState", "FlappyOperations",
+    "neural", "DenseLayer", "MLP", "NeuralOperations",
+    "genetic", "Individual", "Population", "GeneticOperations",
 
     # Procedural graphics domains
     "noise", "NoiseField2D", "NoiseField3D", "NoiseOperations",
