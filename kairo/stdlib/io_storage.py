@@ -411,17 +411,21 @@ def save_hdf5(
     with h5py.File(path, 'w') as f:
         if isinstance(data, dict):
             for name, arr in data.items():
-                f.create_dataset(
-                    name, data=arr,
-                    compression=compression,
-                    compression_opts=compression_opts
-                )
+                # Build kwargs conditionally
+                kwargs = {}
+                if compression is not None:
+                    kwargs['compression'] = compression
+                    if compression_opts is not None:
+                        kwargs['compression_opts'] = compression_opts
+                f.create_dataset(name, data=arr, **kwargs)
         else:
-            f.create_dataset(
-                'data', data=data,
-                compression=compression,
-                compression_opts=compression_opts
-            )
+            # Build kwargs conditionally
+            kwargs = {}
+            if compression is not None:
+                kwargs['compression'] = compression
+                if compression_opts is not None:
+                    kwargs['compression_opts'] = compression_opts
+            f.create_dataset('data', data=data, **kwargs)
 
 
 # ============================================================================
