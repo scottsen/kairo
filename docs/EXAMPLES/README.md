@@ -6,6 +6,40 @@ This directory contains comprehensive examples and case studies demonstrating Ka
 
 ## Examples
 
+### 🏎️ [Racing AI Training Pipeline: Neural Evolution Example](RACING-AI-PIPELINE.md)
+
+**Status:** Design Document
+**Domains:** Physics (Racing), Neural Network, Genetic Algorithm, Rendering, Telemetry, Recording
+**Complexity:** Advanced
+**Hardware:** GPU-optimized (RTX 3060 12GB target)
+
+A complete racing AI training pipeline demonstrating how Kairo's unified operator model enables seamless integration of physics simulation, neural network inference, genetic algorithms, and real-time visualization — all in one composable graph.
+
+**What This Demonstrates:**
+- Multi-domain composition (Physics + NN + GA + Rendering + Telemetry + Recording)
+- GPU-accelerated parallel evaluation (64+ agents simultaneously)
+- Genetic algorithm operators for neural network evolution
+- Real-time visualization and debugging
+- Deterministic training with perfect reproducibility
+- 10-100× performance vs traditional Unity + Python approaches
+
+**Key Insight:** This is **one of Kairo's strongest use cases** because it merges traditionally-separate technologies (game engine physics, ML frameworks, custom GA code) into a single clean pipeline.
+
+**Use Cases:**
+- Autonomous racing AI
+- Self-driving car simulation
+- Drone flight controllers
+- Robot navigation
+- Game AI (any physics-based agent control)
+- Reinforcement learning benchmarks
+
+**Related Documentation:**
+- [LEARNINGS/GENETIC_ALGORITHM_OPERATORS.md](../LEARNINGS/GENETIC_ALGORITHM_OPERATORS.md) — GA operator catalog
+- [SPEC-OPERATOR-REGISTRY.md](../SPEC-OPERATOR-REGISTRY.md) — Operator metadata format
+- [ADR-002: Cross-Domain Architectural Patterns](../ADR/002-cross-domain-architectural-patterns.md) — Unified patterns
+
+---
+
 ### 🔥 [J-Tube Fire Pit: Multi-Physics Engineering Example](J-TUBE-FIREPIT-MULTIPHYSICS.md)
 
 **Status:** Design Document
@@ -86,6 +120,7 @@ Demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynam
 
 ### 🔬 Physics Simulations
 - **J-Tube Fire Pit** (current) — Multi-physics thermal-fluid system
+- **Racing AI Pipeline** (current) — Racing car dynamics with neural control
 - **Kerbal Space Program Physics** (current) — Orbital mechanics, aerodynamics, rocket staging
 
 *Coming soon...*
@@ -109,6 +144,8 @@ Demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynam
 - PDE-based pricing (finite difference methods)
 
 ### 🤖 ML/Neural
+- **Racing AI Pipeline** (current) — Genetic algorithm + neural network evolution
+
 *Coming soon...*
 - Neural fields (NeRF-style)
 - Fourier Neural Operators for PDE solving
