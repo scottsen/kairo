@@ -211,25 +211,344 @@ These domains naturally emerge once you have a computational kernel that is dete
 
 ### 2.1 Geometry & Mesh Processing
 
-**Purpose**: Operations on meshes, surfaces, and volumetric data.
+**Purpose**: Declarative geometric modeling, mesh processing, and spatial composition.
 
-**Why Needed**: As soon as you have fields, users ask for meshes. Essential for physics, 3D modeling, volume rendering, robotics.
+**Why Needed**: Essential for 3D modeling, CAD, robotics, physics simulation, 3D printing, computational geometry, and any domain requiring spatial reasoning.
 
-**Status**: 🔲 Planned (v0.9+)
+**Status**: 🚧 In Progress (v0.9+) — **Inspired by TiaCAD v3.x**
 
-**Operators**:
-- `mesh.sample` — Sample values at mesh vertices
-- `mesh.laplacian` — Mesh Laplacian operator
-- `mesh.extrude` — Extrude mesh faces
-- `mesh.subdivide` — Mesh subdivision (Catmull-Clark, Loop)
-- `mesh.simplify` — Mesh simplification (edge collapse)
-- `mesh.adjacency` — Compute adjacency graph
-- `mesh.to_field` — Rasterize mesh to field
-- `field.to_mesh` — Extract isosurface (Marching Cubes)
+**Key Innovation from TiaCAD**: Reference-based composition via **anchors** replaces hierarchical assemblies, making geometric composition declarative, robust, and refactor-safe.
 
-**Dependencies**: Fields, Graph (for adjacency), Sparse Linear Algebra
+---
 
-**Use Cases**: 3D printing, CFD on unstructured grids, level-set methods
+#### Core Concepts (from TiaCAD)
+
+**1. Coordinate Frames & Anchors**
+
+Every geometric object lives in a coordinate frame and provides auto-generated anchors:
+
+- **Frame** — Local coordinate system (origin, basis, scale)
+- **Anchor** — Named reference point (`.center`, `.face_top`, `.edge_left`, etc.)
+- **Placement** — Declarative composition: map anchor to anchor (not hierarchical nesting)
+
+**Example:**
+```kairo
+let base = geom.box(50mm, 30mm, 5mm)
+let pillar = geom.cylinder(radius=5mm, height=50mm)
+
+# Place pillar on top of base (declarative!)
+let tower = mesh.place(
+    pillar,
+    anchor = pillar.anchor("bottom"),
+    at = base.anchor("face_top")
+)
+```
+
+**Contrast with hierarchical composition:**
+- ❌ Traditional: `parent.add_child(child)` → hidden state, mutation, brittle
+- ✅ TiaCAD model: `place(object, anchor, at=target)` → declarative, pure, robust
+
+**See**: `docs/SPEC-COORDINATE-FRAMES.md` for full specification
+
+---
+
+#### Operator Families
+
+**2. Primitives (3D Solids)**
+
+```kairo
+geom.box(width, height, depth)
+geom.sphere(radius)
+geom.cylinder(radius, height)
+geom.cone(radius_bottom, radius_top, height)
+geom.torus(major_radius, minor_radius)
+```
+
+- All primitives auto-generate anchors (`.center`, `.face_{...}`, `.edge_{...}`)
+- Deterministic (strict profile)
+
+---
+
+**3. Sketch Operations (2D → 2D)**
+
+2D planar constructions (on XY plane):
+
+```kairo
+sketch.rectangle(width, height)
+sketch.circle(radius)
+sketch.polygon(points)
+sketch.regular_polygon(n_sides, radius)
+
+# Boolean ops on sketches
+sketch.union(s1, s2, ...)
+sketch.difference(s1, s2)
+sketch.offset(sketch, distance)
+```
+
+---
+
+**4. Extrusion & Revolution (2D → 3D)**
+
+```kairo
+extrude(sketch, height)
+revolve(sketch, axis="z", angle=360deg)
+loft(sketches, ruled=false)
+sweep(profile, path, twist=0deg)
+```
+
+**Example:**
+```kairo
+# Create vase by revolution
+let profile = sketch.polygon([(0,0), (10,0), (8,20), (5,25)])
+let vase = revolve(profile, axis="y", angle=360deg)
+```
+
+---
+
+**5. Boolean Operations (3D)**
+
+```kairo
+geom.union(s1, s2, ...)
+geom.difference(s1, s2)
+geom.intersection(s1, s2)
+
+# Operator overloading
+let result = solid_A + solid_B  # Union
+let cut = solid_A - solid_B     # Difference
+```
+
+**Determinism**: Strict (within floating precision)
+
+---
+
+**6. Pattern Operations**
+
+```kairo
+pattern.linear(object, direction, count, spacing)
+pattern.circular(object, axis, count, angle=360deg)
+pattern.grid(object, rows, cols, spacing_x, spacing_y)
+```
+
+**Example (bolt hole pattern):**
+```kairo
+let hole = geom.cylinder(radius=3mm, height=10mm)
+let bolts = pattern.circular(hole, axis="z", count=6)
+```
+
+---
+
+**7. Finishing Operations**
+
+```kairo
+geom.fillet(solid, edges, radius)    # Round edges
+geom.chamfer(solid, edges, distance)  # Bevel edges
+geom.shell(solid, faces, thickness)   # Hollow out
+```
+
+**Example:**
+```kairo
+let box = geom.box(20mm, 20mm, 10mm)
+let rounded = geom.fillet(box, edges=.edges(">Z"), radius=2mm)
+```
+
+---
+
+**8. Mesh Operations (Discrete Geometry)**
+
+```kairo
+mesh.from_solid(solid, tolerance=0.01mm)
+mesh.subdivide(mesh, method="catmull-clark", iterations=1)
+mesh.laplacian(mesh) -> SparseMatrix
+mesh.sample(mesh, field: Field<T>) -> Mesh<T>
+mesh.normals(mesh) -> Mesh<Vec3>
+mesh.to_field(mesh, resolution) -> Field
+field.to_mesh(field, isovalue) -> Mesh  # Marching cubes
+```
+
+---
+
+**9. Measurement & Query**
+
+```kairo
+geom.measure.volume(solid) -> f64
+geom.measure.area(face) -> f64
+geom.measure.bounds(object) -> BoundingBox
+geom.measure.center_of_mass(solid) -> Vec3
+geom.measure.distance(obj_a, obj_b) -> f64
+```
+
+---
+
+**10. Transformations (with Explicit Origins)**
+
+**TiaCAD principle**: All rotations/scales must specify an explicit origin (no implicit frame).
+
+```kairo
+# ✅ Explicit origin (required!)
+let rotated = transform.rotate(
+    mesh,
+    angle = 45 deg,
+    origin = mesh.anchor("center")
+)
+
+# ❌ Implicit origin (compiler error!)
+let bad = transform.rotate(mesh, 45 deg)  # ERROR: origin required
+```
+
+**Transform operators:**
+```kairo
+transform.translate(object, offset)
+transform.rotate(object, angle, axis, origin)
+transform.scale(object, factor, origin)
+transform.mirror(object, plane)
+transform.affine(object, matrix)
+
+# Coordinate conversions
+transform.to_coord(field, coord_type="polar|spherical|cylindrical")
+```
+
+**See**: `docs/SPEC-TRANSFORM.md` Section 7 (Spatial Transformations)
+
+---
+
+#### Dependencies
+
+- **Transform Dialect** — Spatial transformations, coordinate conversions
+- **Fields** — For discretizations, SDF representations
+- **Graph** — For mesh topology, adjacency
+- **Sparse Linear Algebra** — For mesh Laplacian, PDE solvers
+- **Type System** — Units (mm, m, deg, rad), frame types
+
+---
+
+#### Cross-Domain Integration
+
+**Geometry → Fields (CFD, Heat Transfer)**
+```kairo
+let solid = geom.sphere(10mm)
+let sdf = field.from_solid(solid, bounds=..., resolution=(100,100,100))
+let temperature = field.solve_heat(domain=sdf, ...)
+```
+
+**Geometry → Physics (Collision, Dynamics)**
+```kairo
+let body = physics.rigid_body(
+    shape = geom.box(10mm, 10mm, 10mm),
+    mass = 1.0 kg
+)
+```
+
+**Geometry → Visuals (Rendering)**
+```kairo
+let rendered = visual.render(
+    solid,
+    camera_frame = camera.frame(),
+    material = material.metal(roughness=0.2)
+)
+```
+
+---
+
+#### Backend Abstraction
+
+Geometry operations are backend-neutral. Lowering varies by backend:
+
+| Backend | Status | Capabilities |
+|---------|--------|--------------|
+| **CadQuery** | Planned | Full 3D CAD (OpenCASCADE-based) |
+| **CGAL** | Future | Robust booleans, mesh processing |
+| **OpenCASCADE** | Future | Industrial CAD kernel |
+| **GPU SDF** | Research | Implicit surfaces (GPU-friendly) |
+
+**Backend capabilities (operator registry):**
+```yaml
+operator:
+  name: geom.boolean.union
+  backend_caps:
+    cadquery: supported
+    cgal: supported
+    gpu_sdf: supported (implicit conversion)
+```
+
+---
+
+#### Use Cases
+
+- **3D Printing** — Parametric part design, STL export
+- **CAD** — Mechanical design, assemblies
+- **Robotics** — Robot kinematic chains, collision geometry
+- **CFD** — Mesh generation for fluid simulation
+- **Physics** — Collision shapes, rigid body dynamics
+- **Level-Set Methods** — Implicit surface evolution
+- **Computational Geometry** — Voronoi, convex hulls, mesh analysis
+
+---
+
+#### Testing Strategy
+
+**1. Determinism Tests**
+```kairo
+# Primitives are bit-exact
+assert_eq!(geom.box(10mm, 10mm, 10mm), geom.box(10mm, 10mm, 10mm))
+
+# Anchors are deterministic
+assert_eq!(box.anchor("face_top"), box.anchor("face_top"))
+```
+
+**2. Measurement Tests**
+```kairo
+let cube = geom.box(10mm, 10mm, 10mm)
+assert_approx_eq!(geom.measure.volume(cube), 1000.0 mm³, tol=1e-9)
+```
+
+**3. Transform Tests (Explicit Origins)**
+```kairo
+# Rotation around center preserves center position
+let rotated = transform.rotate(box, 45deg, origin=.center)
+assert_vec_eq!(rotated.anchor("center").position(), box.anchor("center").position())
+```
+
+**4. Backend Equivalence**
+```kairo
+@backend(cadquery)
+let result_cq = geom.box(...) + geom.sphere(...)
+
+@backend(cgal)
+let result_cgal = geom.box(...) + geom.sphere(...)
+
+assert_solid_equivalent!(result_cq, result_cgal, tol=1e-6)
+```
+
+---
+
+#### Documentation
+
+- **`docs/SPEC-GEOMETRY.md`** — Full geometry domain specification
+- **`docs/SPEC-COORDINATE-FRAMES.md`** — Frame/anchor system
+- **`docs/SPEC-TRANSFORM.md`** — Section 7 (Spatial Transformations)
+- **`docs/SPEC-OPERATOR-REGISTRY.md`** — Layer 6b (Geometry operators)
+
+---
+
+#### Summary: Why TiaCAD Matters to Kairo
+
+TiaCAD's lessons apply **beyond geometry**:
+
+1. **Anchors** — Unify references across domains (geometry, audio, physics, agents)
+2. **Reference-based composition** — Replace hierarchies with declarative placement
+3. **Explicit origins** — Prevent transform bugs, improve clarity
+4. **Deterministic transforms** — Pure functions, no hidden state
+5. **Backend abstraction** — Semantic operators, multiple lowering targets
+6. **Parametric modeling** — Parts are pure functions (parameters → geometry)
+
+**Key insight**: Anchors work for:
+- **Geometry** — `.face_top`, `.edge_left`
+- **Audio** — `.onset`, `.beat`, `.peak`
+- **Physics** — `.center_of_mass`, `.joint`
+- **Agents** — `.sensor`, `.waypoint`
+- **Fields** — `.boundary_north`, `.gradient_max`
+
+This unification makes Kairo's multi-domain vision coherent and practical.
 
 ---
 
