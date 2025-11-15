@@ -2246,6 +2246,7 @@ This document will evolve as new domains are designed, prototyped, and integrate
 - **SPEC-COORDINATE-FRAMES.md** — Unified frame and anchor system
 - **SPEC-GEOMETRY.md** — Geometry domain specification (TiaCAD patterns)
 - **SPEC-TIMBRE-EXTRACTION.md** — Timbre extraction and instrument modeling specification
+- **SPEC-PHYSICS-DOMAINS.md** — Physics domains for engineering modeling (FluidNetwork, ThermalODE, FluidJet, CombustionLight)
 
 ### Architectural Decision Records
 - **ADR/001-unified-reference-model.md** — Decision on unified reference system
@@ -2255,6 +2256,10 @@ This document will evolve as new domains are designed, prototyped, and integrate
 ### Implementation Guides
 - **GUIDES/DOMAIN_IMPLEMENTATION_GUIDE.md** — Step-by-step domain implementation guide
 - **LEARNINGS/OPERATOR_REGISTRY_EXPANSION.md** — Detailed operator catalogs for 8 priority domains (including InstrumentModeling)
+
+### Examples & Case Studies
+- **EXAMPLES/J-TUBE-FIREPIT-MULTIPHYSICS.md** — J-tube fire pit as multi-physics design example (validates physics domains)
+- **EXAMPLES/README.md** — Comprehensive guide to Kairo examples and case studies
 
 ---
 
