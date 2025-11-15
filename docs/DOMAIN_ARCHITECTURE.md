@@ -191,15 +191,20 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 ---
 
-### 1.7 Visual / Fractal Dialect
+### 1.7 Visual / Scene Dialect
 
-**Purpose**: Fractal iteration, palette mapping, geometric warping, 2D/3D field rendering.
+**Purpose**: Scene graph + animation system for mathematical visualization, fractal iteration, palette mapping, geometric warping, 2D/3D field rendering. Provides 3Blue1Brown-style composable math visualization capabilities.
 
-**Why Essential**: Creative visuals, procedural art, and scientific visualization all need efficient rendering.
+**Why Essential**: Explanatory graphics, mathematical animations, creative visuals, procedural art, and scientific visualization all need efficient rendering with composable scene management.
 
-**Status**: ⚙️ In progress (visual stdlib with colorization, rendering primitives)
+**Status**: ⚙️ In progress (visual stdlib with colorization, rendering primitives; scene graph + timeline architecture designed)
 
-**Operators**:
+**Core Components**:
+- **SceneDomain** — Scene graph, MObjects, camera system
+- **TimelineDomain** — Keyframe animation, easing, composition
+- **Rendering** — Fractal iteration, palette mapping, compositing
+
+**Key Operators** (Rendering Primitives):
 - `fractal.mandelbrot` — Mandelbrot set iteration
 - `fractal.julia` — Julia set iteration
 - `fractal.ifs` — Iterated function system
@@ -209,7 +214,16 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 - `render.layers` — Composite multiple layers with blend modes
 - `filter.blur` / `filter.sharpen` — Post-processing filters
 
-**Dependencies**: Fields (for scalar/vector data), Image/Vision (for filtering)
+**Key Operators** (Scene Graph):
+- `scene.create` / `scene.add` / `scene.remove` — Scene management
+- `geo.curve` / `geo.surface` / `geo.vector_field` — Geometry creation
+- `anim.move` / `anim.rotate` / `anim.fade` — Basic animations
+- `anim.morph` / `anim.write_equation` — Math-specific animations
+- `camera.pan` / `camera.zoom` / `camera.orbit` — Camera control
+
+**Dependencies**: Fields (for scalar/vector data), Image/Vision (for filtering), Palette, Noise, Video
+
+**Documentation**: See [domains/visual-scene-domain.md](domains/visual-scene-domain.md) for comprehensive architecture and [domains/visual-domain-quickref.md](domains/visual-domain-quickref.md) for quick reference
 
 ---
 
@@ -347,6 +361,120 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 Circuits are fundamentally **typed operator graphs** (resistor → capacitor → op-amp → speaker), which matches Kairo's operator registry architecture exactly. Circuit simulation requires **multi-domain physics** (ODEs, linear systems, nonlinear solvers, EM fields, thermal), which Kairo's unified kernel provides. PCB layout is **geometry with electrical constraints**, perfectly suited for Kairo's geometry + circuit integration. Analog audio modeling is **circuit simulation + DSP**, which Kairo unifies seamlessly.
 
 **No existing tool can compete** with Kairo's unified circuit + PCB + audio + EM + thermal architecture. This is Kairo's **killer app** for the EE and analog audio communities.
+
+---
+
+### 1.9 Video & Audio Encoding Dialect
+
+**Purpose**: Video encoding, audio/video filtering, sync correction, transcoding, and ffmpeg-style multimedia pipelines.
+
+**Why Essential**: Video processing is fundamentally stream-based, operator-based, filter-based, parameterizable, batchable, GPU-accelerable, and graph-representable. **This is literally Kairo's native shape.** ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs — video fits Kairo as naturally as audio, perhaps **more naturally** than any other domain.
+
+**Status**: 🔲 Planned (SPEC-VIDEO-AUDIO-ENCODING.md)
+
+**Key Insight**: Video processing pipelines are **typed operator DAGs** with **temporal constraints** (sync, frame rate, time alignment).
+
+```
+Kairo = operator DAG on structured data
+Video = operator DAG on AV streams
+```
+
+**Subdomains**:
+
+**VideoDomain** — Structural operations on video streams
+- Decoding/encoding: `video.decode()`, `video.encode()`
+- Transformation: `video.scale()`, `video.crop()`, `video.fps()`, `video.rotate()`
+- Composition: `video.concat()`, `video.overlay()`, `video.blend()`
+- Conversion: `video.to_audio()`, `video.from_frames()`, `video.color_convert()`
+
+**AudioFilterDomain** — Audio processing for multimedia
+- Loudness: `audio.normalize()`, `audio.loudnorm()` (EBU R128), `audio.measure_loudness()`
+- Dynamics: `audio.compress()`, `audio.limiter()`, `audio.gate()`
+- Timing: `audio.delay()`, `audio.trim()`, `audio.fade_in()`, `audio.fade_out()`
+- EQ: `audio.equalize()`, `audio.bass_boost()`, `audio.treble_boost()`
+
+**FilterDomain** — Visual filters (ffmpeg `-vf` equivalents)
+- Spatial: `filter.blur()`, `filter.sharpen()`, `filter.unsharp()`, `filter.denoise()`
+- Color: `filter.brightness()`, `filter.contrast()`, `filter.saturation()`, `filter.colorgrade()`
+- Temporal: `filter.time_blend()`, `filter.deflicker()`, `filter.stabilize()`
+- Quality: `filter.deband()`, `filter.deinterlace()`, `filter.upscale()`
+
+**CodecDomain** — Codec configuration as typed operators
+- Video: `codec.h264()`, `codec.h265()`, `codec.av1()`, `codec.prores()`
+- Image: `codec.jpeg()`, `codec.png()`, `codec.webp()`, `codec.jpegxl()`
+- Audio: `codec.aac()`, `codec.opus()`, `codec.flac()`
+- GPU: `codec.h264_nvenc()`, `codec.h265_nvenc()`, `codec.h264_qsv()`
+
+**SyncDomain** — Audio/video synchronization (Kairo's sweet spot)
+- Offset detection: `sync.detect_constant_offset()`, `sync.detect_drift()`
+- Correction: `sync.apply_offset()`, `sync.timewarp()`, `sync.resample_with_drift_compensation()`
+- Event alignment: `vision.detect_flash()`, `audio.detect_clap()`, `sync.align_events()`
+- Lip-sync: `vision.detect_mouth_open()`, `audio.envelope()`, `sync.align_signals()`
+
+**BatchDomain** — Parallel batch processing
+- `batch.apply_to_files()` — Apply pipeline to file pattern
+- `batch.parallel()` — Parallel execution with N workers
+- `batch.map()` — Map function over file list
+
+**Example Pipeline** (ffmpeg equivalent):
+```kairo
+# ffmpeg -i input.mp4 -vf "scale=1920:-1, unsharp" -c:v libx264 -crf 18 output.mp4
+pipeline:
+  - input = video.decode("input.mp4")
+  - scaled = video.scale(input, width=1920, height=-1)
+  - sharpened = filter.unsharp(scaled, amount=1.5)
+  - codec = codec.h264(crf=18, preset="fast")
+  - video.encode(sharpened, codec, "output.mp4")
+```
+
+**Cross-Domain Integration**:
+- **Video ↔ Audio**: `video.to_audio()`, `video.add_audio()`
+- **Video ↔ Vision**: `video.to_frames()`, `vision.detect_objects()`, `vision.draw_bboxes()`
+- **Video ↔ Geometry**: Render 3D scenes to video frames
+- **Video ↔ Fields**: Overlay fluid simulations on video
+
+**Why This Matters**:
+
+Kairo becomes the only platform that unifies audio synthesis, video encoding, sync correction, field simulation, agent systems, geometry, circuit modeling, and optimization — all with the same type system, scheduler, and MLIR compilation.
+
+**Unique Capabilities**:
+- ✅ **Cleaner than ffmpeg** — Typed operators, composable pipelines
+- ✅ **More powerful than ffmpeg** — GPU-aware, cross-domain integration, AI upscaling
+- ✅ **More deterministic than ffmpeg** — Same code → same output, always
+- ✅ **More accessible than DaVinci Resolve** — Scripted, batchable, version-controllable
+
+**Magic Operator**: `video.fix()` — One-liner to detect sync issues, denoise, stabilize, color correct, loudness normalize, upscale, and encode (auto-magic like DaVinci Resolve, but scripted and deterministic).
+
+**Dependencies**:
+- **Transform** (FFT for cross-correlation sync detection)
+- **Audio** (existing Kairo.Audio domain for DSP)
+- **Visual** (frame rendering and export)
+- **Stochastic** (for noise modeling in denoise)
+- **Image/Vision** (for flash detection, object tracking) [future]
+
+**Backend Strategy**:
+
+Kairo doesn't reimplement ffmpeg — it **orchestrates** ffmpeg as a backend:
+
+```
+Kairo Pipeline → Graph IR → Backend Compiler → ffmpeg command
+```
+
+Advantages: Leverage ffmpeg's 20+ years of development, add type safety, enable composability, ensure determinism, optimize filter graphs, auto-select GPU codecs.
+
+Alternative backends: GStreamer, custom C++, GPU compute shaders, hardware APIs (NVENC, VAAPI, VideoToolbox).
+
+**References**:
+- `SPEC-VIDEO-AUDIO-ENCODING.md` — Complete video/audio encoding specification
+- ffmpeg, DaVinci Resolve, Audacity (reference implementations)
+- EBU R128 loudness standard
+- NVENC, QuickSync, AMF (GPU acceleration APIs)
+
+**Why This is a Perfect Fit for Kairo**:
+
+Video processing already behaves like Kairo's operator DAG architecture. ffmpeg filter graphs map one-to-one to Kairo pipelines. Audio/video sync leverages Kairo's existing strength in time-domain signal processing. Batch processing exploits Kairo's deterministic execution model. GPU acceleration fits naturally into Kairo's MLIR compilation pipeline.
+
+**Video belongs in Kairo.** This is a huge new capability slice that fits perfectly with Kairo's core architecture.
 
 ---
 
@@ -2271,6 +2399,458 @@ This makes Kairo the **universal platform for complex systems research and creat
 
 ---
 
+### 2.12 Procedural Generation Domain (SpeedTree-Inspired Universal Synthesis)
+
+**Purpose**: Unified procedural synthesis of complex structures including trees, terrains, cities, organic forms, fractals, and materials through rule-based, noise-driven, and grammar-based generation.
+
+**Why Critical**: Transforms Kairo from **"simulate existing systems"** to **"synthesize new worlds"**. This domain enables:
+- **Game development** (forests, terrains, cities — rival SpeedTree, Houdini)
+- **Film/VFX** (environment generation at scale)
+- **Architecture** (parametric design, procedural buildings)
+- **Creative coding** (generative art, organic structures)
+- **3D printing** (procedural organic geometries)
+
+**SpeedTree Inspiration**: SpeedTree is the industry-standard vegetation tool ($$$), but it's limited to trees and offline workflows. **Kairo can exceed SpeedTree** by adding:
+- **True physics-based growth** (light, gravity, structural optimization)
+- **Cross-domain integration** (trees + wind + acoustics + terrain + ecology)
+- **GPU real-time generation** (100k+ instances)
+- **General-purpose synthesis** (not just trees — also terrains, cities, materials, fractals)
+
+**Status**: 🔲 Proposed (v0.11-v1.0)
+
+**Reference**: See **[ADR-005](ADR/005-procedural-generation-domain.md)**, **[SPEC-PROCEDURAL-GENERATION-DOMAIN.md](SPEC-PROCEDURAL-GENERATION-DOMAIN.md)**, and **[LEARNINGS/PROCEDURAL_OPERATORS_CATALOG.md](LEARNINGS/PROCEDURAL_OPERATORS_CATALOG.md)** for complete specifications.
+
+---
+
+#### Sub-Domains
+
+**1. Generative Grammars (Extended L-Systems)**
+
+Rule-based hierarchical structure generation:
+
+| Operator | Description |
+|----------|-------------|
+| `lsystem.define` | Define L-system grammar |
+| `lsystem.expand` | Expand grammar n iterations |
+| `lsystem.parametric` | Context-sensitive rules (parameter evolution) |
+| `lsystem.stochastic` | Probabilistic rules (variation) |
+| `lsystem.preset` | Common grammars (koch_curve, fractal_tree, realistic_tree) |
+
+**Use Cases:**
+- Tree/plant generation
+- Fractal structures
+- Architectural grammars
+- Recursive growth systems
+
+**Note**: EmergenceDomain includes basic L-systems for string rewriting. ProceduralDomain **extends** this with production-quality tree generation (meshing, foliage, wind, physics integration).
+
+---
+
+**2. Branching and Tree Structures**
+
+Algorithms for realistic tree generation beyond simple grammars:
+
+| Operator | Description |
+|----------|-------------|
+| `branches.from_lsystem` | Convert L-system to branch hierarchy |
+| `branches.to_splines` | Smooth branch curves (Bezier, Catmull-Rom) |
+| `branches.to_mesh` | Generate cylindrical meshes with bark texture |
+| `branches.randomize_angles` | Add noise-driven variation |
+| `branches.prune` | Remove branches by depth/length/criteria |
+| `growth.space_colonization` | Attraction-point-based growth (realistic crowns) |
+| `growth.tropism` | Directional bias (phototropism, gravitropism) |
+| `growth.gravity` | Branch bending under weight |
+| `growth.collision_avoidance` | Prevent self-intersection |
+
+**Use Cases:**
+- SpeedTree-quality trees
+- Physics-based growth simulation
+- Biomechanical tree modeling
+- Structural optimization via growth
+
+---
+
+**3. Noise and Stochastic Fields**
+
+Fundamental noise operators for variation and procedural textures:
+
+| Operator | Description |
+|----------|-------------|
+| `noise.perlin2d/3d` | Classic Perlin noise |
+| `noise.simplex2d/3d` | Simplex noise (faster, better isotropy) |
+| `noise.fbm` | Fractal Brownian Motion (multi-octave) |
+| `noise.worley` | Worley/cellular noise (Voronoi) |
+| `noise.curl3d` | Curl noise (divergence-free vector field) |
+| `noise.turbulence` | Turbulence (absolute value noise) |
+| `random.distribute` | Distribute points (uniform/poisson_disk/blue_noise) |
+
+**Use Cases:**
+- Bark displacement
+- Branch curvature variation
+- Leaf scatter patterns
+- Terrain heightfields
+- Wood grain, marble textures
+- Forest placement
+
+---
+
+**4. Foliage and Instancing**
+
+Efficient leaf distribution and GPU instancing for vast scenes:
+
+| Operator | Description |
+|----------|-------------|
+| `foliage.scatter_on_branches` | Scatter leaves on branch endpoints |
+| `foliage.align_to_normal` | Align to branch normals |
+| `instancing.create` | Create GPU instance collection |
+| `instancing.lod` | Level-of-detail management |
+| `instancing.cull` | Frustum and occlusion culling |
+
+**Use Cases:**
+- Realistic tree foliage
+- Dense forests (100k+ instances)
+- Real-time rendering optimization
+
+**Performance Target**: 100,000+ tree instances at 60 FPS
+
+---
+
+**5. Materials and Palettes**
+
+Procedural texture and color generation:
+
+| Operator | Description |
+|----------|-------------|
+| `palette.gradient` | Define color gradient |
+| `palette.map_height` | Map height to color |
+| `palette.map_curvature` | Highlight crevices, edges |
+| `material.bark` | Procedural bark texture |
+| `material.stone` | Stone textures (granite, marble, sandstone) |
+| `material.wood` | Wood grain patterns |
+| `material.pbr` | PBR material from maps |
+
+**Use Cases:**
+- Realistic tree bark
+- Autumn color gradients by height
+- Procedural rock formations
+- Material variation
+
+---
+
+**6. Terrain Generation**
+
+Heightfield-based landscapes with erosion and biomes:
+
+| Operator | Description |
+|----------|-------------|
+| `terrain.fractal` | Fractal terrain (multi-octave noise) |
+| `terrain.erode` | Hydraulic/thermal erosion simulation |
+| `terrain.biome_map` | Moisture + temperature → biome distribution |
+| `terrain.to_mesh` | Heightfield → geometry |
+| `vegetation.distribute` | Place vegetation by biome/slope/moisture |
+
+**Use Cases:**
+- Realistic terrains with valleys and rivers
+- Biome-based vegetation placement
+- Landscape ecology modeling
+- Game world generation
+
+**Critical Feature**: Erosion simulation is **essential** for realistic terrains (valleys, rivers, weathering).
+
+---
+
+**7. Wind and Animation**
+
+Dynamic tree animation and seasonal changes:
+
+| Operator | Description |
+|----------|-------------|
+| `wind.simple_sway` | Sinusoidal sway |
+| `wind.turbulent` | Noise-based turbulent wind |
+| `wind.branch_weighting` | Mass-based bending |
+| `wind.from_fluid` | Use FluidDomain wind simulation |
+| `seasonal.color_transition` | Animate seasonal colors |
+| `seasonal.leaf_fall` | Simulate autumn leaf falling |
+
+**Use Cases:**
+- Animated forests
+- Physics-accurate wind bending
+- Seasonal transitions (spring → autumn)
+- Acoustic wind interaction
+
+---
+
+**8. Architectural and Urban**
+
+Procedural cities and buildings:
+
+| Operator | Description |
+|----------|-------------|
+| `urban.road_network` | Generate road graphs (L-system/tensor/grid) |
+| `urban.lot_subdivision` | Subdivide blocks into lots |
+| `urban.procedural_building` | Generate building on lot |
+| `arch.facade` | Parametric building facades |
+| `urban.traffic_sim` | Simulate traffic flow |
+
+**Use Cases:**
+- Procedural city generation
+- Urban planning optimization
+- Traffic + acoustic simulation
+- Architectural parametric design
+
+---
+
+#### Cross-Domain Integration
+
+**Procedural → Geometry (Trees → Meshes)**
+```kairo
+// L-system → branch tree → mesh → solid geometry
+let tree_string = lsystem.expand(grammar, iterations=7)
+let branches = branches.from_lsystem(tree_string, angle=22.5deg)
+let mesh = branches.to_mesh(branches, bark_texture=material.bark())
+let solid = geom.from_mesh(mesh)  // GeometryDomain
+```
+
+**Procedural → Physics (Wind Simulation)**
+```kairo
+// Generate forest, simulate wind forces
+let forest = vegetation.distribute(terrain, species=[oak, pine], count=10000)
+let wind_field = fluid.wind(velocity=vec3(10, 0, 0))  // FluidDomain
+forest = vegetation.apply_wind(forest, wind_field)   // ProceduralDomain
+```
+
+**Procedural → Acoustics (Forest Scattering)**
+```kairo
+// Forest scatters sound waves
+let forest = vegetation.distribute(terrain, count=5000)
+let source = acoustic.point_source(position=vec3(0, 2, 0))
+let scattered = acoustic.forest_scattering(source, trees=forest, freq_range=(100Hz, 8kHz))
+out audio = acoustic.listener(scattered, position=vec3(100, 2, 0))
+```
+
+**Procedural + Physics + Geometry (Structural Optimization)**
+```kairo
+// Optimize tree growth for structural integrity
+let tree = growth.space_colonization(root, attractors, iterations=200)
+tree = growth.gravity(tree, stiffness=0.1)  // Bend under weight
+let stress = physics.stress_test(tree, wind_load=100N)  // PhysicsDomain
+tree = branches.reinforce(tree, stress_threshold=10MPa)  // Strengthen weak branches
+```
+
+**Procedural + Terrain + Ecology + Acoustics (Complete World)**
+```kairo
+// Generate world: terrain → erosion → biomes → vegetation → wind → acoustics
+let terrain = terrain.fractal(size=1000m, octaves=8, seed=42)
+terrain = terrain.erode(terrain, type="hydraulic", iterations=200)
+let biomes = terrain.biome_map(terrain, moisture_scale=150, seed=42)
+let vegetation = vegetation.distribute(terrain, biomes, species=[oak, pine], seed=42)
+let wind = fluid.wind(velocity=vec3(5, 0, 0))
+vegetation = vegetation.apply_wind(vegetation, wind)
+let acoustic_field = acoustic.forest_scattering(point_source, vegetation)
+out audio = acoustic.binaural_forest(acoustic_field, listener_pos)
+out visual = visual.render_terrain(terrain, vegetation, camera)
+```
+
+---
+
+#### Dependencies
+
+- **EmergenceDomain** — Basic L-systems (ProceduralDomain extends these)
+- **FieldDomain** — Noise functions, heightfields
+- **GeometryDomain** — Splines, meshes, solid modeling
+- **StochasticDomain** — Seeded RNG for variation
+- **PhysicsDomain** — Stress analysis, wind forces, gravity
+- **FluidDomain** — Wind simulation for realistic animation
+- **AcousticsDomain** — Forest acoustic scattering
+- **MaterialDomain** — PBR textures, procedural materials
+- **OptimizationDomain** — Structural optimization, growth tuning
+
+---
+
+#### Unique Capabilities (vs. SpeedTree, Houdini, Blender)
+
+**Existing tools:**
+- **SpeedTree:** Vegetation only, offline tool, no physics integration, expensive ($$$)
+- **Houdini:** Powerful but non-deterministic, steep learning curve, expensive
+- **Blender Geometry Nodes:** Great for modeling, not physics-integrated
+- **Unity/Unreal ProBuilder:** Game-specific, not general-purpose
+- **Substance Designer:** Materials only, not full 3D generation
+
+**Kairo ProceduralDomain:**
+1. ✅ **Trees + terrains + cities + materials** in one unified system
+2. ✅ **Cross-domain integration** — Geometry, Physics, Audio, Optimization, Fluids
+3. ✅ **GPU acceleration** — Real-time generation (100k+ instances)
+4. ✅ **Deterministic execution** — Reproducible results with seeds
+5. ✅ **MLIR-based compilation** — JIT to CPU/GPU
+6. ✅ **Type + unit safety** — Physical units tracked (m, deg, kg)
+7. ✅ **YAML declarative syntax** — Simple, human-readable
+8. ✅ **Physics-based growth** — Light, gravity, structural optimization
+9. ✅ **Open and extensible** — Not proprietary like SpeedTree
+
+**No competitor offers this.**
+
+---
+
+#### Example Applications
+
+**1. SpeedTree-Quality Birch Tree**
+```kairo
+// 20 lines of YAML → production-ready tree
+procedural:
+  - id: birch_tree
+    steps:
+      - lsystem.expand: {axiom: "A", rules: {A: "AB", B: "A[+A][-A]"}, iterations: 7}
+      - branches.from_lsystem: {angle: 22.5deg, step_size: 0.5m}
+      - branches.randomize_angles: {noise: simplex3d, amplitude: 10deg}
+      - branches.prune: {max_depth: 12}
+      - growth.tropism: {direction: vec3(0, 1, 0), weight: 0.2}  # Grow upward
+      - growth.gravity: {stiffness: 0.1}  # Bend under weight
+      - branches.to_mesh: {bark_texture: material.bark(scale=2.0)}
+      - foliage.scatter_on_branches: {density: 0.8, leaf_mesh: geom.plane(0.1m)}
+      - palette.map_height: {gradient: autumn_colors, height_range: (0m, 15m)}
+      - wind.simple_sway: {strength: 0.5, frequency: 0.5Hz}
+```
+
+**2. Realistic Terrain with Ecosystem**
+```kairo
+// Terrain → erosion → biomes → 10,000 trees
+let terrain = terrain.fractal(size=2000m, octaves=8, seed=42)
+terrain = terrain.erode(terrain, type="hydraulic", iterations=200)
+let biomes = terrain.biome_map(terrain, seed=42)
+let forest = vegetation.distribute(terrain, biomes, species=[oak, pine], count=10000)
+```
+
+**3. Physics-Based Tree Growth**
+```kairo
+// Space colonization → structural analysis → reinforcement
+let tree = growth.space_colonization(root, attractors, iterations=200)
+tree = growth.tropism(tree, direction=light_direction, weight=0.3)
+tree = growth.gravity(tree, stiffness=0.1)
+let stress = physics.stress_test(tree, wind_load=100N)
+tree = branches.reinforce(tree, stress_threshold=10MPa)
+```
+
+**4. Procedural City with Acoustics**
+```kairo
+// Roads → buildings → traffic → acoustic noise map
+let roads = urban.road_network(bounds, density=0.1, seed=42)
+let buildings = urban.procedural_building(lots, style="commercial")
+let traffic = urban.traffic_sim(roads, vehicles=1000)
+let noise_map = acoustic.city_noise(traffic, buildings)
+out audio = acoustic.binaural_city(noise_map, listener_pos)
+```
+
+**5. Autumn Forest Animation**
+```kairo
+// Seasonal colors + wind + leaf fall
+scene AutumnForest {
+    step(t: Time) {
+        let season = (t / 365days) % 1.0  // 0=spring, 0.5=autumn
+        forest = seasonal.color_transition(forest, season, palettes)
+        let (forest, falling_leaves) = seasonal.leaf_fall(forest, season)
+        forest = wind.turbulent(forest, base_vel=vec3(5, 0, 0), time=t)
+        out visual = visual.render_forest(forest, falling_leaves)
+    }
+}
+```
+
+---
+
+#### Implementation Roadmap
+
+**Phase 1: Foundation (v0.11)**
+- [ ] Spline types (Bezier, Catmull-Rom, B-spline)
+- [ ] Noise operators (perlin, simplex, fbm, worley, curl)
+- [ ] L-systems (define, expand, parametric, stochastic)
+- [ ] Branching (from_lsystem, to_mesh, randomize, prune)
+- [ ] Space colonization algorithm
+- **Deliverable:** "Kairo Trees v1" demo (basic but functional)
+
+**Phase 2: Production Quality (v0.12)**
+- [ ] Growth algorithms (tropism, gravity, collision_avoidance)
+- [ ] Foliage (scatter, instancing, LOD)
+- [ ] Materials (bark, stone, wood, PBR)
+- [ ] Terrain (fractal, erode, biome_map, vegetation.distribute)
+- **Deliverable:** "Kairo Trees v2" demo (SpeedTree-quality) + "Kairo Terrain" demo
+
+**Phase 3: Animation and Urban (v1.0)**
+- [ ] Wind (simple_sway, turbulent, from_fluid)
+- [ ] Seasonal (color_transition, leaf_fall)
+- [ ] Urban (roads, buildings, traffic, facades)
+- [ ] Cross-domain examples (10+ complete workflows)
+- **Deliverable:** "Kairo Procedural World" demo (trees + terrain + city + acoustics)
+
+---
+
+#### Testing Strategy
+
+**Determinism Tests:**
+```kairo
+// Grammar expansion must be bit-exact
+let tree1 = lsystem.expand(grammar, iterations=7, seed=42)
+let tree2 = lsystem.expand(grammar, iterations=7, seed=42)
+assert_eq!(tree1, tree2)
+
+// Noise must be deterministic
+let n1 = noise.perlin3d(position=vec3(1, 2, 3), seed=42)
+let n2 = noise.perlin3d(position=vec3(1, 2, 3), seed=42)
+assert_eq!(n1, n2)
+```
+
+**Visual Regression Tests:**
+```kairo
+// Render tree and compare to reference image
+let tree = procedural.birch_tree(seed=42)
+let rendered = visual.render(tree, camera=ref_camera)
+assert_image_similar(rendered, "ref_birch_tree.png", threshold=0.95)
+```
+
+**Performance Tests:**
+```kairo
+// 100k instances should render at 60 FPS
+let forest = instancing.create(oak_mesh, count=100000)
+let fps = visual.benchmark(forest, duration=10s)
+assert!(fps >= 60)
+```
+
+---
+
+#### Documentation
+
+- **[SPEC-PROCEDURAL-GENERATION-DOMAIN.md](SPEC-PROCEDURAL-GENERATION-DOMAIN.md)** — Complete domain specification
+- **[ADR-005](ADR/005-procedural-generation-domain.md)** — Architectural decision record
+- **[LEARNINGS/PROCEDURAL_OPERATORS_CATALOG.md](LEARNINGS/PROCEDURAL_OPERATORS_CATALOG.md)** — Full operator catalog (72 operators)
+- **[EXAMPLES/PROCEDURAL_TREES.md](EXAMPLES/PROCEDURAL_TREES.md)** — Tree generation examples (planned)
+- **[EXAMPLES/PROCEDURAL_TERRAIN.md](EXAMPLES/PROCEDURAL_TERRAIN.md)** — Terrain generation examples (planned)
+
+---
+
+#### Why This is a Perfect Fit for Kairo
+
+**SpeedTree proves the market** — It's the industry-standard vegetation tool used in AAA games and films, and it costs $$$. But it's limited to trees and offline workflows.
+
+**Kairo ProceduralDomain can be "SpeedTree+++":**
+1. **All of SpeedTree's features** (L-systems, branching, foliage, wind, LOD)
+2. **Plus terrain generation** (fractal, erosion, biomes)
+3. **Plus urban/architectural** (cities, buildings, roads)
+4. **Plus true physics integration** (structural optimization, wind simulation, gravity bending)
+5. **Plus cross-domain workflows** (trees + terrain + ecology + acoustics + optimization)
+6. **Plus GPU real-time generation** (100k+ instances)
+7. **Plus deterministic, reproducible results** (seeded RNG)
+8. **Plus open and extensible** (not proprietary)
+
+**The killer feature**: No existing tool unifies procedural generation + physics + audio + geometry + optimization in one deterministic, GPU-accelerated platform.
+
+**Market opportunity:**
+- Game studios need procedural tools → Kairo can be open alternative to expensive tools
+- Film industry needs large-scale environments → Kairo can generate massive scenes
+- Architecture firms need parametric design → Kairo offers programmable parametric workflows
+- Generative artists need creative tools → Kairo unifies art + physics + sound
+
+This makes Kairo the **universal platform for procedural content creation and world building**.
+
+---
+
 ## 3. Advanced Domains (FUTURE EXPANSION)
 
 These are "Version 2+" ideas — realistic but not urgent. They represent specialized use cases that extend Kairo into new application areas.
@@ -2385,7 +2965,7 @@ Here is the likely full spectrum of domains Kairo will eventually want:
 | Integrators | 🔲 Planned | P0 |
 | Particles | ⚙️ In Progress | P0 |
 | Audio DSP | ✅ Partial | P0 |
-| Visual / Fractal | ⚙️ In Progress | P0 |
+| Visual / Scene | ⚙️ In Progress | P0 |
 
 ### 2. Next Wave (Highly Likely) — v0.9-v1.0
 | Domain | Status | Priority |
