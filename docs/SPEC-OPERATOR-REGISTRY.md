@@ -389,7 +389,9 @@ See **[SPEC-TRANSFORM.md](SPEC-TRANSFORM.md)** for complete transform dialect sp
 
 ### Layer 6: Fractal / Visual / Geometry Operators
 
-**Fractal generation, field visualization, and geometric transforms.**
+**Fractal generation, field visualization, geometric modeling, and mesh processing.**
+
+**Extended with TiaCAD-inspired geometry operators (v0.9+)**
 
 #### 6a. Coordinate Mapping
 
@@ -398,7 +400,135 @@ See **[SPEC-TRANSFORM.md](SPEC-TRANSFORM.md)** for complete transform dialect sp
 | `fractal.map_plane` | Map complex plane coordinates |
 | `field.reparam` | Warp field coordinates |
 
-#### 6b. Iteration Functions
+#### 6b. Geometry Primitives (3D Solids)
+
+**TiaCAD-inspired declarative CAD operators**
+
+| Operator | Description | Anchors Generated |
+|----------|-------------|-------------------|
+| `geom.box` | Rectangular box (width, height, depth) | `.center`, `.face_{top,bottom,left,right,front,back}`, `.corner_{...}`, `.edge_{...}` |
+| `geom.sphere` | Sphere (radius) | `.center`, `.pole_{north,south}`, `.equator` |
+| `geom.cylinder` | Cylinder (radius, height) | `.center`, `.face_{top,bottom}`, `.axis`, `.edge_{top,bottom}` |
+| `geom.cone` | Cone (radius_bottom, radius_top, height) | `.center`, `.face_{top,bottom}`, `.apex` |
+| `geom.torus` | Torus (major_radius, minor_radius) | `.center`, `.axis` |
+
+**Determinism:** Strict
+
+#### 6c. Sketch Operations (2D → 2D)
+
+| Operator | Description |
+|----------|-------------|
+| `sketch.rectangle` | Rectangle (width, height) |
+| `sketch.circle` | Circle (radius) |
+| `sketch.polygon` | Polygon from points |
+| `sketch.regular_polygon` | Regular n-sided polygon |
+| `sketch.arc` | Circular arc (radius, start_angle, end_angle) |
+| `sketch.spline` | Spline curve from control points |
+| `sketch.union` | Boolean union of sketches |
+| `sketch.difference` | Boolean difference of sketches |
+| `sketch.offset` | Parallel offset (expand/contract) |
+
+**Determinism:** Strict
+
+#### 6d. Extrusion & Revolution (2D → 3D)
+
+| Operator | Description |
+|----------|-------------|
+| `extrude` | Extrude sketch vertically |
+| `revolve` | Revolve sketch around axis |
+| `loft` | Loft between multiple sketches |
+| `sweep` | Sweep profile along path |
+
+**Determinism:** Strict (extrude, revolve), Repro (loft, sweep - spline fitting)
+
+#### 6e. Boolean Operations (3D)
+
+| Operator | Description |
+|----------|-------------|
+| `geom.union` | Combine solids (addition) |
+| `geom.difference` | Subtract solid from another |
+| `geom.intersection` | Common volume of solids |
+| `geom.symmetric_difference` | XOR of solids |
+
+**Operator overloading supported:**
+- `solid_A + solid_B` → union
+- `solid_A - solid_B` → difference
+- `solid_A & solid_B` → intersection
+
+**Determinism:** Strict (within floating precision)
+
+#### 6f. Pattern Operations
+
+| Operator | Description |
+|----------|-------------|
+| `pattern.linear` | Linear array (direction, count, spacing) |
+| `pattern.circular` | Circular pattern (axis, count, angle) |
+| `pattern.grid` | 2D grid pattern (rows, cols, spacing) |
+| `pattern.along_path` | Distribute along curve |
+
+**Determinism:** Strict
+
+#### 6g. Finishing Operations
+
+| Operator | Description |
+|----------|-------------|
+| `geom.fillet` | Round edges (radius) |
+| `geom.chamfer` | Bevel edges (distance) |
+| `geom.shell` | Hollow out solid (thickness) |
+| `geom.draft` | Taper faces (angle, neutral_plane) |
+| `geom.offset` | Offset surface (expand/contract) |
+
+**Determinism:** Repro (iterative solvers involved)
+
+#### 6h. Mesh Operations (Discrete Geometry)
+
+| Operator | Description |
+|----------|-------------|
+| `mesh.from_solid` | Tessellate solid to triangle mesh |
+| `mesh.subdivide` | Mesh subdivision (Catmull-Clark, Loop) |
+| `mesh.laplacian` | Compute mesh Laplacian matrix |
+| `mesh.sample` | Sample field at mesh vertices |
+| `mesh.normals` | Compute vertex/face normals |
+| `mesh.simplify` | Decimate mesh (edge collapse) |
+| `mesh.smooth` | Laplacian smoothing |
+| `mesh.to_field` | Rasterize mesh to field |
+| `field.to_mesh` | Extract isosurface (Marching Cubes) |
+
+**Dependencies:** Sparse Linear Algebra (for Laplacian), Fields (for rasterization)
+
+**Determinism:** Repro (tessellation, interpolation)
+
+#### 6i. Measurement & Query
+
+| Operator | Description | Returns |
+|----------|-------------|---------|
+| `geom.measure.volume` | Compute solid volume | `f64[m³]` |
+| `geom.measure.area` | Compute face area | `f64[m²]` |
+| `geom.measure.length` | Compute edge/wire length | `f64[m]` |
+| `geom.measure.bounds` | Compute bounding box | `BoundingBox` |
+| `geom.measure.center_of_mass` | Compute COM | `Vec3[m]` |
+| `geom.measure.normal` | Compute face normal | `Vec3` (unit vector) |
+| `geom.measure.distance` | Distance between objects | `f64[m]` |
+
+**Determinism:** Strict
+
+#### 6j. Anchor Operations (TiaCAD Concept)
+
+| Operator | Description |
+|----------|-------------|
+| `anchor.create` | Define custom anchor on object |
+| `anchor.resolve` | Query anchor by name/pattern |
+| `anchor.position` | Get anchor position (Vec3) |
+| `anchor.orientation` | Get anchor orientation (Mat3) |
+| `anchor.frame` | Get anchor's coordinate frame |
+| `object.place` | Place object using anchor alignment |
+| `object.align` | Align multiple objects along axis |
+
+**See:** `docs/SPEC-COORDINATE-FRAMES.md` for full anchor system specification
+
+**Determinism:** Strict
+
+#### 6k. Fractal Iteration Functions
 
 | Operator | Fractal Type |
 |----------|--------------|
@@ -406,7 +536,7 @@ See **[SPEC-TRANSFORM.md](SPEC-TRANSFORM.md)** for complete transform dialect sp
 | `fractal.julia` | Julia set |
 | `fractal.escape_time` | Escape-time algorithm |
 
-#### 6c. Palette / Color Transforms
+#### 6l. Palette / Color Transforms
 
 | Operator | Description |
 |----------|-------------|
@@ -469,11 +599,11 @@ See **[SPEC-TRANSFORM.md](SPEC-TRANSFORM.md)** for complete transform dialect sp
 | Layer | Operator Types | Examples |
 |-------|----------------|----------|
 | **1. Core** | cast, domain, rate, shape | `cast`, `rate.change` |
-| **2. Transforms** | FFT-family, reparam, spectral | `fft`, `laplacian.spectral` |
+| **2. Transforms** | FFT-family, reparam, spectral, affine | `fft`, `transform.rotate`, `transform.to_coord` |
 | **3. Stochastic** | RNG, processes, Monte Carlo | `rng.normal`, `mc.path` |
 | **4. Physics/Fields** | integrators, PDEs, grids | `integrate.verlet`, `field.laplacian` |
 | **5. Audio** | filters, oscillators, FX | `lpf`, `reverb` |
-| **6. Fractals/Visuals** | iteration, palette, mapping | `fractal.mandelbrot` |
+| **6. Fractals/Visuals/Geometry** | iteration, palette, mapping, CAD, mesh | `fractal.mandelbrot`, `geom.box`, `mesh.laplacian`, `anchor.resolve` |
 | **7. Finance** | models, payoffs, pricing | `model.heston`, `price.mc` |
 
 ---
