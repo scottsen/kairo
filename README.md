@@ -494,12 +494,21 @@ Kairo's domain architecture has been massively expanded in November 2025, establ
 
 Kairo's unified multi-domain architecture addresses fundamental problems across professional fields:
 
-### Engineering & Design
-**Current Pain**: CAD → FEA → CFD → optimization requires manual data export/import, incompatible formats, weeks of iteration
-**Kairo Solution**: Geometry → Physics → Optimization in one deterministic pipeline
-- **Aerospace**: Optimize wing geometry based on CFD results and structural constraints
+### Education & Academia
+**Current Pain**: MATLAB costs $2,450/seat, reproducibility crisis in research, students learn 5 different tools for physics + audio + visualization
+**Kairo Solution**: Free, open, integrated platform for computational education and research
+- **Replace MATLAB**: One tool for physics simulation, data analysis, and visualization
+- **Reproducible Research**: Deterministic execution ensures papers are reproducible
+- **Cross-domain Learning**: Students learn multi-physics thinking, not isolated tools
+- **Zero Cost**: Enable universities worldwide, especially in resource-limited settings
+
+### Digital Twins & Enterprise
+**Current Pain**: Building digital twins requires coupling 5+ commercial tools (thermal + structural + fluid + acoustics), costing $500K+ in licenses
+**Kairo Solution**: Unified multi-physics platform for product development and optimization
 - **Automotive**: Couple exhaust acoustics + fluid dynamics + thermal analysis for muffler design
-- **HVAC**: Model airflow + thermal + acoustic performance in building ventilation systems
+- **Aerospace**: Optimize geometry based on coupled CFD + structural + thermal analysis
+- **Product Development**: Design → simulate → optimize in one deterministic pipeline
+- **Cost Savings**: Replace five $100K licenses with one integrated platform
 
 ### Audio Production & Lutherie
 **Current Pain**: Physical modeling requires separate tools for mechanics, acoustics, and DSP
@@ -522,16 +531,9 @@ Kairo's unified multi-domain architecture addresses fundamental problems across 
 - Procedural geometry generation driven by audio analysis
 - Deterministic generative art: same seed = identical output every time
 
-### Finance & Risk Analysis
-**Current Pain**: Monte Carlo in R + optimization in Python + visualization in Tableau = integration hell
-**Kairo Solution**: Stochastic processes + optimization + real-time analytics
-- GPU-accelerated Monte Carlo with 100x speedup
-- Optimize portfolio with multi-objective algorithms (NSGA-II, CMA-ES)
-- Deterministic backtesting: reproducible risk analysis
-
 **Key Insight**: These fields don't need *separate tools* — they need *integrated domains*. Kairo is the only platform that unifies them with a single type system, scheduler, and compiler.
 
-> 💼 **Professional Impact Analysis**: See [docs/reference/professional-domains.md](docs/reference/professional-domains.md) for detailed value proposition across 10+ professional fields
+> 📊 **Strategic Analysis**: See [docs/DOMAIN_VALUE_ANALYSIS.md](docs/DOMAIN_VALUE_ANALYSIS.md) for comprehensive domain assessment and market strategy
 
 ---
 
@@ -551,8 +553,8 @@ Kairo's unified multi-domain architecture addresses fundamental problems across 
 - **[Language Specification](SPECIFICATION.md)** — Complete Kairo language reference
 - **[Audio Specification](AUDIO_SPECIFICATION.md)** — Kairo.Audio compositional DSL
 
-**Professional Applications**
-- **[Professional Domains](docs/reference/professional-domains.md)** ⭐ — Value proposition across engineering, science, finance, creative fields
+**Strategic & Professional Applications**
+- **[Domain Value Analysis](docs/DOMAIN_VALUE_ANALYSIS.md)** ⭐ — Comprehensive strategic analysis and market positioning
 - **[Use Cases](docs/use-cases/)** — Real-world applications (2-stroke muffler, chemistry framework)
 - **[Examples](docs/examples/)** — Working examples (multi-physics, emergence, cross-domain)
 
