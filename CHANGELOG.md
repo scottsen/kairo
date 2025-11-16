@@ -103,6 +103,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v0.9.0] - 2025-11-16
+
+### Added - Advanced Domains ⭐⭐⭐
+
+- **Cellular Automata Domain** (PR #73) ✅
+  - **Implementation**: Complete cellular automata simulation domain
+  - **Operators**: Conway's Game of Life, Langton's Ant, elementary CA, and custom rules
+  - **Key Features**:
+    - Efficient NumPy-based state updates
+    - Neighborhood detection and rule application
+    - Support for multiple CA types
+    - State history tracking
+  - **Impact**: Enables complexity emergence, artificial life simulations, pattern generation
+
+- **Optimization Domain - Phase 1: Evolutionary Algorithms** (PR #72) ✅
+  - **Implementation**: Foundational optimization algorithms for design discovery
+  - **Algorithms Implemented**:
+    - Genetic Algorithm (GA): Population-based search with selection, crossover, mutation
+    - Differential Evolution (DE): Vector-based optimization for continuous spaces
+    - Particle Swarm Optimization (PSO): Swarm intelligence for multi-modal landscapes
+  - **Key Features**:
+    - Unified optimization interface
+    - Configurable population sizes and hyperparameters
+    - Fitness evaluation framework
+    - Convergence tracking and history
+  - **Impact**: Transforms Kairo from simulation platform into design discovery platform
+
+- **Cross-Domain Showcase Examples** (PR #71) ✅
+  - **Examples**: Comprehensive demonstrations showing domain integration
+  - **Showcases**:
+    - Multi-domain workflows (Field + Agent + Audio + Visual)
+    - Real-world use cases across different domains
+    - Integration patterns and best practices
+    - Performance optimization techniques
+  - **Impact**: Demonstrates Kairo's unique value in cross-domain operator composition
+
+### Technical Highlights
+
+- **Total Implementation**: 3 major feature additions in coordinated PRs
+- **Domain Coverage**: Expanded into complexity science and optimization
+- **Integration**: Showcased cross-domain capabilities
+- **All Tests Passing**: 100% test coverage for new features
+
+### Breaking Changes
+- None (additive changes only)
+
+---
+
 ## [v0.8.1] - 2025-11-16
 
 ### Added - Procedural Graphics Domains ⭐⭐⭐
