@@ -21,6 +21,8 @@ from enum import Enum
 import heapq
 from collections import deque, defaultdict
 
+from kairo.core.operator import operator, OpCategory
+
 
 class GraphType(Enum):
     """Graph type enumeration"""
@@ -82,6 +84,13 @@ class GraphOperations:
     """Graph and network analysis operations"""
 
     @staticmethod
+    @operator(
+        domain="graph",
+        category=OpCategory.CONSTRUCT,
+        signature="(num_nodes: int, graph_type: GraphType) -> Graph",
+        deterministic=True,
+        doc="Create an empty graph with specified number of nodes"
+    )
     def create_empty(num_nodes: int, graph_type: GraphType = GraphType.UNDIRECTED) -> Graph:
         """Create an empty graph with specified number of nodes
 
@@ -99,6 +108,13 @@ class GraphOperations:
         )
 
     @staticmethod
+    @operator(
+        domain="graph",
+        category=OpCategory.TRANSFORM,
+        signature="(graph: Graph, node1: int, node2: int, weight: float) -> Graph",
+        deterministic=True,
+        doc="Add an edge to the graph"
+    )
     def add_edge(graph: Graph, node1: int, node2: int, weight: float = 1.0) -> Graph:
         """Add an edge to the graph
 
@@ -197,6 +213,13 @@ class GraphOperations:
         return matrix
 
     @staticmethod
+    @operator(
+        domain="graph",
+        category=OpCategory.QUERY,
+        signature="(graph: Graph, start: int) -> Tuple[Dict[int, float], Dict[int, Optional[int]]]",
+        deterministic=True,
+        doc="Dijkstra's shortest path algorithm"
+    )
     def dijkstra(graph: Graph, start: int) -> Tuple[Dict[int, float], Dict[int, Optional[int]]]:
         """Dijkstra's shortest path algorithm
 
@@ -233,6 +256,13 @@ class GraphOperations:
         return distances, predecessors
 
     @staticmethod
+    @operator(
+        domain="graph",
+        category=OpCategory.QUERY,
+        signature="(graph: Graph, start: int, end: int) -> Tuple[List[int], float]",
+        deterministic=True,
+        doc="Find shortest path between two nodes"
+    )
     def shortest_path(graph: Graph, start: int, end: int) -> Tuple[List[int], float]:
         """Find shortest path between two nodes
 
@@ -262,6 +292,13 @@ class GraphOperations:
         return path, distances[end]
 
     @staticmethod
+    @operator(
+        domain="graph",
+        category=OpCategory.QUERY,
+        signature="(graph: Graph, start: int) -> Dict[int, int]",
+        deterministic=True,
+        doc="Breadth-first search traversal"
+    )
     def bfs(graph: Graph, start: int) -> Dict[int, int]:
         """Breadth-first search
 
@@ -692,3 +729,24 @@ class GraphOperations:
 
 # Export singleton instance for DSL access
 graph = GraphOperations()
+
+# Export operators for domain registry discovery
+create_empty = GraphOperations.create_empty
+add_edge = GraphOperations.add_edge
+remove_edge = GraphOperations.remove_edge
+from_adjacency_matrix = GraphOperations.from_adjacency_matrix
+to_adjacency_matrix = GraphOperations.to_adjacency_matrix
+dijkstra = GraphOperations.dijkstra
+shortest_path = GraphOperations.shortest_path
+bfs = GraphOperations.bfs
+dfs = GraphOperations.dfs
+connected_components = GraphOperations.connected_components
+degree_centrality = GraphOperations.degree_centrality
+betweenness_centrality = GraphOperations.betweenness_centrality
+pagerank = GraphOperations.pagerank
+clustering_coefficient = GraphOperations.clustering_coefficient
+minimum_spanning_tree = GraphOperations.minimum_spanning_tree
+topological_sort = GraphOperations.topological_sort
+max_flow = GraphOperations.max_flow
+random_graph = GraphOperations.random_graph
+grid_graph = GraphOperations.grid_graph
