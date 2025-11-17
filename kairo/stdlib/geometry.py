@@ -1,23 +1,30 @@
 """Geometry Domain for 2D/3D geometric primitives and spatial operations.
 
 This module provides geometric primitives, coordinate transformations,
-and spatial queries for computational geometry in Kairo.
+spatial queries, and advanced computational geometry algorithms for Kairo.
 
 Features:
-- 2D/3D geometric primitives (point, line, circle, rectangle, polygon)
+- 2D/3D geometric primitives (point, line, circle, rectangle, polygon, box, sphere, mesh)
 - Coordinate system conversions (Cartesian, polar, spherical)
 - Frame-aware transformations (translate, rotate, scale, transform)
 - Spatial queries (distance, intersection, containment, closest point)
-- Geometric properties (area, perimeter, centroid, bounding box)
+- Geometric properties (area, perimeter, centroid, bounding box, volume, surface area)
+- Advanced algorithms (convex hull, Delaunay triangulation, Voronoi diagrams, mesh booleans)
+- Field domain integration (spatial field sampling and region queries)
+- Rigidbody domain integration (collision shape conversion)
 
 Architecture:
-- Layer 1: Primitive construction (point, line, circle, rectangle, polygon)
+- Layer 1: Primitive construction (point, line, circle, rectangle, polygon, box3d, sphere, mesh)
 - Layer 2: Transformations (translate, rotate, scale, transform)
 - Layer 3: Spatial queries (distance, intersection, contains)
-- Layer 4: Coordinate conversions and advanced operations
+- Layer 4: Coordinate conversions
+- Layer 5: Geometric properties (area, perimeter, centroid, bounding box)
+- Layer 6: Advanced algorithms (convex hull, Delaunay, Voronoi, mesh booleans)
+- Layer 7: Field domain integration (field sampling, region queries)
+- Layer 8: Rigidbody domain integration (collision shapes)
 """
 
-from typing import Tuple, Optional, Union
+from typing import Tuple, Optional, Union, List, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
 import numpy as np
@@ -283,6 +290,186 @@ class BoundingBox:
         return f"BoundingBox({self.min_point} to {self.max_point})"
 
 
+@dataclass
+class Box3D:
+    """3D axis-aligned box.
+
+    Attributes:
+        center: Center point
+        width: Box width (x dimension)
+        height: Box height (y dimension)
+        depth: Box depth (z dimension)
+        rotation: Rotation as Euler angles (rx, ry, rz) in radians
+    """
+
+    center: Point3D
+    width: float
+    height: float
+    depth: float
+    rotation: np.ndarray = None
+
+    def __post_init__(self):
+        """Initialize rotation to zero if not provided."""
+        if self.rotation is None:
+            self.rotation = np.zeros(3)
+
+    @property
+    def volume(self) -> float:
+        """Calculate box volume."""
+        return self.width * self.height * self.depth
+
+    @property
+    def surface_area(self) -> float:
+        """Calculate box surface area."""
+        return 2 * (self.width * self.height + self.width * self.depth + self.height * self.depth)
+
+    def get_vertices(self) -> np.ndarray:
+        """Get box vertices in world space.
+
+        Returns:
+            Array of 8 vertices [8, 3]
+        """
+        hw, hh, hd = self.width / 2, self.height / 2, self.depth / 2
+
+        # Local vertices (centered at origin)
+        local_verts = np.array([
+            [-hw, -hh, -hd], [hw, -hh, -hd], [hw, hh, -hd], [-hw, hh, -hd],
+            [-hw, -hh, hd], [hw, -hh, hd], [hw, hh, hd], [-hw, hh, hd]
+        ])
+
+        # Apply rotation if needed (simplified - full rotation matrix would be better)
+        if np.any(self.rotation != 0):
+            # Apply Euler rotations (XYZ order)
+            rx, ry, rz = self.rotation
+
+            # Rotation around X
+            if rx != 0:
+                Rx = np.array([
+                    [1, 0, 0],
+                    [0, np.cos(rx), -np.sin(rx)],
+                    [0, np.sin(rx), np.cos(rx)]
+                ])
+                local_verts = local_verts @ Rx.T
+
+            # Rotation around Y
+            if ry != 0:
+                Ry = np.array([
+                    [np.cos(ry), 0, np.sin(ry)],
+                    [0, 1, 0],
+                    [-np.sin(ry), 0, np.cos(ry)]
+                ])
+                local_verts = local_verts @ Ry.T
+
+            # Rotation around Z
+            if rz != 0:
+                Rz = np.array([
+                    [np.cos(rz), -np.sin(rz), 0],
+                    [np.sin(rz), np.cos(rz), 0],
+                    [0, 0, 1]
+                ])
+                local_verts = local_verts @ Rz.T
+
+        # Translate to center
+        return local_verts + np.array([self.center.x, self.center.y, self.center.z])
+
+    def __repr__(self) -> str:
+        return f"Box3D(center={self.center}, w={self.width:.3f}, h={self.height:.3f}, d={self.depth:.3f})"
+
+
+@dataclass
+class Sphere:
+    """3D sphere defined by center and radius.
+
+    Attributes:
+        center: Center point
+        radius: Sphere radius
+    """
+
+    center: Point3D
+    radius: float
+
+    @property
+    def volume(self) -> float:
+        """Calculate sphere volume."""
+        return (4.0 / 3.0) * np.pi * self.radius ** 3
+
+    @property
+    def surface_area(self) -> float:
+        """Calculate sphere surface area."""
+        return 4 * np.pi * self.radius ** 2
+
+    def __repr__(self) -> str:
+        return f"Sphere(center={self.center}, radius={self.radius:.3f})"
+
+
+@dataclass
+class Mesh:
+    """3D triangular mesh defined by vertices and faces.
+
+    Attributes:
+        vertices: Array of vertices [N, 3]
+        faces: Array of face indices [M, 3] (triangles)
+        normals: Optional array of vertex normals [N, 3]
+    """
+
+    vertices: np.ndarray  # Shape: [N, 3]
+    faces: np.ndarray  # Shape: [M, 3]
+    normals: Optional[np.ndarray] = None  # Shape: [N, 3]
+
+    def __post_init__(self):
+        """Validate mesh data."""
+        if self.vertices.ndim != 2 or self.vertices.shape[1] != 3:
+            raise ValueError(f"Vertices must have shape [N, 3], got {self.vertices.shape}")
+
+        if self.faces.ndim != 2 or self.faces.shape[1] != 3:
+            raise ValueError(f"Faces must have shape [M, 3], got {self.faces.shape}")
+
+        if self.normals is not None:
+            if self.normals.shape != self.vertices.shape:
+                raise ValueError(f"Normals shape {self.normals.shape} must match vertices shape {self.vertices.shape}")
+
+    @property
+    def num_vertices(self) -> int:
+        """Get number of vertices."""
+        return len(self.vertices)
+
+    @property
+    def num_faces(self) -> int:
+        """Get number of faces."""
+        return len(self.faces)
+
+    def compute_normals(self) -> np.ndarray:
+        """Compute vertex normals from face normals.
+
+        Returns:
+            Array of vertex normals [N, 3]
+        """
+        vertex_normals = np.zeros_like(self.vertices)
+
+        # Compute face normals and accumulate to vertices
+        for face in self.faces:
+            v0, v1, v2 = self.vertices[face]
+            # Cross product of two edges
+            edge1 = v1 - v0
+            edge2 = v2 - v0
+            face_normal = np.cross(edge1, edge2)
+
+            # Accumulate to vertices
+            vertex_normals[face[0]] += face_normal
+            vertex_normals[face[1]] += face_normal
+            vertex_normals[face[2]] += face_normal
+
+        # Normalize
+        norms = np.linalg.norm(vertex_normals, axis=1, keepdims=True)
+        norms = np.where(norms == 0, 1, norms)  # Avoid division by zero
+        vertex_normals = vertex_normals / norms
+
+        return vertex_normals
+
+    def __repr__(self) -> str:
+        return f"Mesh(vertices={self.num_vertices}, faces={self.num_faces})"
+
+
 # ============================================================================
 # LAYER 1: PRIMITIVE CONSTRUCTION
 # ============================================================================
@@ -497,6 +684,110 @@ def regular_polygon(center: Point2D, radius: float, num_sides: int) -> Polygon:
     vertices[:, 1] = center.y + radius * np.sin(angles)
 
     return Polygon(vertices=vertices)
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.CONSTRUCT,
+    signature="(center: Point3D, width: float, height: float, depth: float, rotation: ndarray) -> Box3D",
+    deterministic=True,
+    doc="Create a 3D box",
+)
+def box3d(center: Point3D, width: float, height: float, depth: float, rotation: Optional[np.ndarray] = None) -> Box3D:
+    """Create a 3D box from center, dimensions, and rotation.
+
+    Args:
+        center: Center point
+        width: Box width (x dimension, must be positive)
+        height: Box height (y dimension, must be positive)
+        depth: Box depth (z dimension, must be positive)
+        rotation: Rotation as Euler angles [rx, ry, rz] in radians (default: no rotation)
+
+    Returns:
+        Box3D instance
+
+    Example:
+        box = box3d(
+            center=point3d(0.0, 0.0, 0.0),
+            width=2.0,
+            height=3.0,
+            depth=4.0,
+            rotation=np.array([0, 0, np.pi/4])
+        )
+    """
+    if width <= 0 or height <= 0 or depth <= 0:
+        raise ValueError(f"Dimensions must be positive, got {width}x{height}x{depth}")
+
+    if rotation is None:
+        rotation = np.zeros(3)
+
+    return Box3D(center=center, width=width, height=height, depth=depth, rotation=rotation)
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.CONSTRUCT,
+    signature="(center: Point3D, radius: float) -> Sphere",
+    deterministic=True,
+    doc="Create a 3D sphere",
+)
+def sphere(center: Point3D, radius: float) -> Sphere:
+    """Create a 3D sphere from center point and radius.
+
+    Args:
+        center: Center point
+        radius: Sphere radius (must be positive)
+
+    Returns:
+        Sphere instance
+
+    Example:
+        s = sphere(
+            center=point3d(0.0, 0.0, 0.0),
+            radius=5.0
+        )
+    """
+    if radius <= 0:
+        raise ValueError(f"Radius must be positive, got {radius}")
+
+    return Sphere(center=center, radius=radius)
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.CONSTRUCT,
+    signature="(vertices: ndarray, faces: ndarray, normals: Optional[ndarray]) -> Mesh",
+    deterministic=True,
+    doc="Create a triangular mesh",
+)
+def mesh(vertices: np.ndarray, faces: np.ndarray, normals: Optional[np.ndarray] = None) -> Mesh:
+    """Create a triangular mesh from vertices and faces.
+
+    Args:
+        vertices: Array of vertices with shape [N, 3]
+        faces: Array of face indices with shape [M, 3] (triangular faces)
+        normals: Optional array of vertex normals with shape [N, 3]
+
+    Returns:
+        Mesh instance
+
+    Example:
+        # Simple tetrahedron
+        verts = np.array([
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.5, 1.0, 0.0],
+            [0.5, 0.5, 1.0]
+        ])
+        faces = np.array([
+            [0, 1, 2],
+            [0, 1, 3],
+            [1, 2, 3],
+            [2, 0, 3]
+        ])
+        m = mesh(vertices=verts, faces=faces)
+    """
+    return Mesh(vertices=vertices, faces=faces, normals=normals)
 
 
 # ============================================================================
@@ -1442,6 +1733,506 @@ def bounding_box(shape: Union[Circle, Rectangle, Polygon]) -> BoundingBox:
 
 
 # ============================================================================
+# LAYER 6: ADVANCED ALGORITHMS
+# ============================================================================
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.QUERY,
+    signature="(points: ndarray, dim: int) -> Union[Polygon, Mesh]",
+    deterministic=True,
+    doc="Compute convex hull of points",
+)
+def convex_hull(points: np.ndarray, dim: int = 2) -> Union[Polygon, Mesh]:
+    """Compute convex hull of a set of points.
+
+    Uses scipy.spatial.ConvexHull for robust computation.
+
+    Args:
+        points: Array of points with shape [N, 2] for 2D or [N, 3] for 3D
+        dim: Dimension (2 for 2D, 3 for 3D)
+
+    Returns:
+        Polygon for 2D hull, Mesh for 3D hull
+
+    Example:
+        # 2D convex hull
+        points = np.random.rand(100, 2)
+        hull = convex_hull(points, dim=2)
+
+        # 3D convex hull
+        points_3d = np.random.rand(100, 3)
+        hull_3d = convex_hull(points_3d, dim=3)
+    """
+    try:
+        from scipy.spatial import ConvexHull as ScipyConvexHull
+    except ImportError:
+        raise ImportError("scipy is required for convex_hull. Install with: pip install scipy")
+
+    points = np.asarray(points)
+
+    if dim == 2:
+        if points.ndim != 2 or points.shape[1] != 2:
+            raise ValueError(f"For 2D hull, points must have shape [N, 2], got {points.shape}")
+
+        hull = ScipyConvexHull(points)
+        # Extract vertices in order
+        hull_vertices = points[hull.vertices]
+        return Polygon(vertices=hull_vertices)
+
+    elif dim == 3:
+        if points.ndim != 2 or points.shape[1] != 3:
+            raise ValueError(f"For 3D hull, points must have shape [N, 3], got {points.shape}")
+
+        hull = ScipyConvexHull(points)
+        return Mesh(vertices=points, faces=hull.simplices.astype(np.int32))
+
+    else:
+        raise ValueError(f"Dimension must be 2 or 3, got {dim}")
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.QUERY,
+    signature="(points: ndarray) -> Mesh",
+    deterministic=True,
+    doc="Compute Delaunay triangulation of 2D points",
+)
+def delaunay_triangulation(points: np.ndarray) -> Mesh:
+    """Compute Delaunay triangulation of 2D points.
+
+    Uses scipy.spatial.Delaunay for robust computation.
+
+    Args:
+        points: Array of 2D points with shape [N, 2]
+
+    Returns:
+        Mesh with triangulated faces (embedded in 3D with z=0)
+
+    Example:
+        points = np.random.rand(100, 2)
+        tri = delaunay_triangulation(points)
+    """
+    try:
+        from scipy.spatial import Delaunay
+    except ImportError:
+        raise ImportError("scipy is required for delaunay_triangulation. Install with: pip install scipy")
+
+    points = np.asarray(points)
+
+    if points.ndim != 2 or points.shape[1] != 2:
+        raise ValueError(f"Points must have shape [N, 2], got {points.shape}")
+
+    # Compute Delaunay triangulation
+    tri = Delaunay(points)
+
+    # Convert to 3D vertices (z=0)
+    vertices_3d = np.zeros((len(points), 3))
+    vertices_3d[:, :2] = points
+
+    return Mesh(vertices=vertices_3d, faces=tri.simplices.astype(np.int32))
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.QUERY,
+    signature="(points: ndarray) -> Tuple[ndarray, ndarray, ndarray]",
+    deterministic=True,
+    doc="Compute Voronoi diagram of 2D points",
+)
+def voronoi(points: np.ndarray) -> Tuple[np.ndarray, np.ndarray, List[List[int]]]:
+    """Compute Voronoi diagram of 2D points.
+
+    Uses scipy.spatial.Voronoi for robust computation.
+
+    Args:
+        points: Array of 2D points with shape [N, 2]
+
+    Returns:
+        Tuple of (vertices, ridge_points, ridge_vertices) where:
+        - vertices: Voronoi vertices [M, 2]
+        - ridge_points: Indices of input points forming each ridge [K, 2]
+        - ridge_vertices: Indices of Voronoi vertices forming each ridge (list of lists)
+
+    Example:
+        points = np.random.rand(50, 2)
+        vertices, ridge_points, ridge_vertices = voronoi(points)
+    """
+    try:
+        from scipy.spatial import Voronoi as ScipyVoronoi
+    except ImportError:
+        raise ImportError("scipy is required for voronoi. Install with: pip install scipy")
+
+    points = np.asarray(points)
+
+    if points.ndim != 2 or points.shape[1] != 2:
+        raise ValueError(f"Points must have shape [N, 2], got {points.shape}")
+
+    vor = ScipyVoronoi(points)
+
+    return (vor.vertices, vor.ridge_points, vor.ridge_vertices)
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.COMPOSE,
+    signature="(mesh_a: Mesh, mesh_b: Mesh) -> Mesh",
+    deterministic=True,
+    doc="Compute union of two meshes (boolean operation)",
+)
+def mesh_union(mesh_a: Mesh, mesh_b: Mesh) -> Mesh:
+    """Compute union of two meshes using boolean operations.
+
+    Note: This is a placeholder implementation that requires an external
+    library like trimesh or PyMesh for robust mesh boolean operations.
+    For MVP, this simply combines the meshes without intersection handling.
+
+    Args:
+        mesh_a: First mesh
+        mesh_b: Second mesh
+
+    Returns:
+        Union mesh
+
+    Example:
+        box = box3d(point3d(0, 0, 0), 1, 1, 1)
+        sphere_mesh = sphere(point3d(0.5, 0.5, 0.5), 0.7)
+        # Note: would need mesh conversion for sphere
+        # union = mesh_union(box_mesh, sphere_mesh)
+    """
+    # Simple implementation: combine vertices and faces
+    # Offset face indices for second mesh
+    combined_vertices = np.vstack([mesh_a.vertices, mesh_b.vertices])
+    offset_faces_b = mesh_b.faces + len(mesh_a.vertices)
+    combined_faces = np.vstack([mesh_a.faces, offset_faces_b])
+
+    # Combine normals if both have them
+    combined_normals = None
+    if mesh_a.normals is not None and mesh_b.normals is not None:
+        combined_normals = np.vstack([mesh_a.normals, mesh_b.normals])
+
+    return Mesh(vertices=combined_vertices, faces=combined_faces, normals=combined_normals)
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.COMPOSE,
+    signature="(mesh_a: Mesh, mesh_b: Mesh) -> Mesh",
+    deterministic=True,
+    doc="Compute intersection of two meshes (boolean operation)",
+)
+def mesh_intersection(mesh_a: Mesh, mesh_b: Mesh) -> Mesh:
+    """Compute intersection of two meshes using boolean operations.
+
+    Note: This requires external libraries like trimesh for robust implementation.
+    This is a placeholder that raises NotImplementedError.
+
+    Args:
+        mesh_a: First mesh
+        mesh_b: Second mesh
+
+    Returns:
+        Intersection mesh
+
+    Raises:
+        NotImplementedError: Robust mesh intersection requires external libraries
+    """
+    raise NotImplementedError(
+        "Mesh intersection requires external libraries like trimesh. "
+        "Install with: pip install trimesh"
+    )
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.COMPOSE,
+    signature="(mesh_a: Mesh, mesh_b: Mesh) -> Mesh",
+    deterministic=True,
+    doc="Compute difference of two meshes (boolean operation)",
+)
+def mesh_difference(mesh_a: Mesh, mesh_b: Mesh) -> Mesh:
+    """Compute difference of two meshes (A - B) using boolean operations.
+
+    Note: This requires external libraries like trimesh for robust implementation.
+    This is a placeholder that raises NotImplementedError.
+
+    Args:
+        mesh_a: First mesh
+        mesh_b: Second mesh
+
+    Returns:
+        Difference mesh (A - B)
+
+    Raises:
+        NotImplementedError: Robust mesh difference requires external libraries
+    """
+    raise NotImplementedError(
+        "Mesh difference requires external libraries like trimesh. "
+        "Install with: pip install trimesh"
+    )
+
+
+# ============================================================================
+# LAYER 7: FIELD DOMAIN INTEGRATION
+# ============================================================================
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.QUERY,
+    signature="(field: Any, point: Union[Point2D, Point3D]) -> float",
+    deterministic=True,
+    doc="Sample field value at a geometric point",
+)
+def sample_field_at_point(field: Any, point: Union[Point2D, Point3D]) -> float:
+    """Sample a field value at a geometric point.
+
+    Integrates with the field domain to query spatial fields at geometric locations.
+
+    Args:
+        field: Field2D object from field domain
+        point: Point2D or Point3D to sample at
+
+    Returns:
+        Interpolated field value at point
+
+    Example:
+        from kairo.stdlib.field import Field2D
+        import numpy as np
+
+        # Create a field
+        data = np.random.rand(100, 100)
+        field = Field2D(data, dx=0.1, dy=0.1)
+
+        # Sample at a point
+        value = sample_field_at_point(field, point2d(5.0, 5.0))
+    """
+    # Import field module to avoid circular dependency
+    try:
+        from kairo.stdlib.field import Field2D
+    except ImportError:
+        raise ImportError("Field domain is required for field sampling")
+
+    if not isinstance(field, Field2D):
+        raise TypeError(f"Expected Field2D, got {type(field)}")
+
+    # Convert point to grid coordinates
+    if isinstance(point, Point2D):
+        # Map point to grid indices
+        x_idx = point.x / field.dx
+        y_idx = point.y / field.dy
+
+        # Clamp to field bounds
+        x_idx = np.clip(x_idx, 0, field.width - 1)
+        y_idx = np.clip(y_idx, 0, field.height - 1)
+
+        # Bilinear interpolation
+        x0, x1 = int(np.floor(x_idx)), int(np.ceil(x_idx))
+        y0, y1 = int(np.floor(y_idx)), int(np.ceil(y_idx))
+
+        # Handle edge case where point is exactly on boundary
+        if x0 == x1:
+            x1 = min(x0 + 1, field.width - 1)
+        if y0 == y1:
+            y1 = min(y0 + 1, field.height - 1)
+
+        # Interpolation weights
+        wx = x_idx - x0
+        wy = y_idx - y0
+
+        # Bilinear interpolation
+        v00 = field.data[y0, x0] if field.data.ndim == 2 else field.data[y0, x0, 0]
+        v10 = field.data[y0, x1] if field.data.ndim == 2 else field.data[y0, x1, 0]
+        v01 = field.data[y1, x0] if field.data.ndim == 2 else field.data[y1, x0, 0]
+        v11 = field.data[y1, x1] if field.data.ndim == 2 else field.data[y1, x1, 0]
+
+        value = (1 - wx) * (1 - wy) * v00 + wx * (1 - wy) * v10 + (1 - wx) * wy * v01 + wx * wy * v11
+
+        return float(value)
+
+    else:
+        raise NotImplementedError("3D field sampling not yet implemented")
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.QUERY,
+    signature="(field: Any, shape: Union[Circle, Rectangle, Polygon]) -> ndarray",
+    deterministic=True,
+    doc="Query field values within a geometric region",
+)
+def query_field_in_region(field: Any, shape: Union[Circle, Rectangle, Polygon]) -> np.ndarray:
+    """Query all field values within a geometric region.
+
+    Args:
+        field: Field2D object from field domain
+        shape: Geometric shape defining the query region
+
+    Returns:
+        Array of (x, y, value) tuples for points inside the shape
+
+    Example:
+        # Query field values inside a circle
+        circ = circle(center=point2d(5.0, 5.0), radius=2.0)
+        values = query_field_in_region(field, circ)
+    """
+    try:
+        from kairo.stdlib.field import Field2D
+    except ImportError:
+        raise ImportError("Field domain is required for field queries")
+
+    if not isinstance(field, Field2D):
+        raise TypeError(f"Expected Field2D, got {type(field)}")
+
+    # Get bounding box of shape
+    bbox = bounding_box(shape)
+
+    # Convert bounding box to grid coordinates
+    x_min = int(np.floor(bbox.min_point.x / field.dx))
+    x_max = int(np.ceil(bbox.max_point.x / field.dx))
+    y_min = int(np.floor(bbox.min_point.y / field.dy))
+    y_max = int(np.ceil(bbox.max_point.y / field.dy))
+
+    # Clamp to field bounds
+    x_min = max(0, x_min)
+    x_max = min(field.width, x_max)
+    y_min = max(0, y_min)
+    y_max = min(field.height, y_max)
+
+    # Collect values inside shape
+    results = []
+
+    for y in range(y_min, y_max):
+        for x in range(x_min, x_max):
+            # Convert grid coordinate to world coordinate
+            world_x = x * field.dx
+            world_y = y * field.dy
+            point = Point2D(x=world_x, y=world_y)
+
+            # Check if point is inside shape
+            is_inside = False
+            if isinstance(shape, Circle):
+                is_inside = contains_circle_point(shape, point)
+            elif isinstance(shape, Rectangle):
+                is_inside = contains_rectangle_point(shape, point)
+            elif isinstance(shape, Polygon):
+                is_inside = contains_polygon_point(shape, point)
+
+            if is_inside:
+                value = field.data[y, x] if field.data.ndim == 2 else field.data[y, x, 0]
+                results.append([world_x, world_y, float(value)])
+
+    return np.array(results) if results else np.empty((0, 3))
+
+
+# ============================================================================
+# LAYER 8: RIGIDBODY DOMAIN INTEGRATION
+# ============================================================================
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.TRANSFORM,
+    signature="(shape: Union[Circle, Rectangle, Polygon, Box3D, Sphere]) -> Dict",
+    deterministic=True,
+    doc="Convert geometric shape to rigidbody collision shape parameters",
+)
+def shape_to_rigidbody(shape: Union[Circle, Rectangle, Polygon, Box3D, Sphere]) -> Dict[str, Any]:
+    """Convert a geometric shape to rigidbody collision shape parameters.
+
+    Integrates with the rigidbody domain to create physics collision shapes
+    from geometric primitives.
+
+    Args:
+        shape: Geometric shape (Circle, Rectangle, Polygon, Box3D, or Sphere)
+
+    Returns:
+        Dictionary with 'shape_type' and 'shape_params' for rigidbody creation
+
+    Example:
+        from kairo.stdlib.rigidbody import RigidBody2D, ShapeType
+
+        # Create geometric circle
+        circ = circle(center=point2d(0, 0), radius=5.0)
+
+        # Convert to rigidbody shape
+        shape_data = shape_to_rigidbody(circ)
+
+        # Create rigidbody with this shape
+        body = RigidBody2D(
+            position=np.array([0.0, 0.0]),
+            mass=1.0,
+            shape_type=shape_data['shape_type'],
+            shape_params=shape_data['shape_params']
+        )
+    """
+    try:
+        from kairo.stdlib.rigidbody import ShapeType
+    except ImportError:
+        raise ImportError("Rigidbody domain is required for shape conversion")
+
+    if isinstance(shape, Circle):
+        return {"shape_type": ShapeType.CIRCLE, "shape_params": {"radius": shape.radius}}
+
+    elif isinstance(shape, Rectangle):
+        return {
+            "shape_type": ShapeType.BOX,
+            "shape_params": {"width": shape.width, "height": shape.height, "rotation": shape.rotation},
+        }
+
+    elif isinstance(shape, Polygon):
+        return {"shape_type": ShapeType.POLYGON, "shape_params": {"vertices": shape.vertices.copy()}}
+
+    elif isinstance(shape, (Box3D, Sphere)):
+        raise NotImplementedError("3D rigidbody shapes not yet supported in 2D rigidbody domain")
+
+    else:
+        raise TypeError(f"Cannot convert {type(shape)} to rigidbody shape")
+
+
+@operator(
+    domain="geometry",
+    category=OpCategory.CONSTRUCT,
+    signature="(mesh: Mesh) -> Mesh",
+    deterministic=True,
+    doc="Generate collision mesh from high-poly mesh",
+)
+def collision_mesh(mesh: Mesh, target_faces: int = 100) -> Mesh:
+    """Generate a simplified collision mesh from a high-polygon mesh.
+
+    Creates a lower-polygon version suitable for physics collision detection.
+
+    Note: This is a placeholder. Robust mesh simplification requires external
+    libraries like trimesh or Open3D.
+
+    Args:
+        mesh: High-polygon input mesh
+        target_faces: Target number of faces for collision mesh
+
+    Returns:
+        Simplified collision mesh
+
+    Example:
+        # High-poly mesh
+        high_poly = mesh(vertices=..., faces=...)
+
+        # Generate collision mesh
+        collision = collision_mesh(high_poly, target_faces=50)
+    """
+    # Simple implementation: compute convex hull as collision mesh
+    # This is a safe, conservative collision shape
+    hull_mesh = convex_hull(mesh.vertices, dim=3)
+
+    # If hull has fewer faces than target, return it
+    if isinstance(hull_mesh, Mesh) and hull_mesh.num_faces <= target_faces:
+        return hull_mesh
+
+    # Otherwise, return convex hull (proper decimation requires external libraries)
+    return hull_mesh if isinstance(hull_mesh, Mesh) else mesh
+
+
+# ============================================================================
 # EXPORTS (for registry discovery)
 # ============================================================================
 
@@ -1455,6 +2246,9 @@ __all__ = [
     "Rectangle",
     "Polygon",
     "BoundingBox",
+    "Box3D",
+    "Sphere",
+    "Mesh",
     "CoordinateFrame",
     # Construction
     "point2d",
@@ -1464,6 +2258,9 @@ __all__ = [
     "rectangle",
     "polygon",
     "regular_polygon",
+    "box3d",
+    "sphere",
+    "mesh",
     # Transformations
     "translate_point2d",
     "translate_circle",
@@ -1496,4 +2293,17 @@ __all__ = [
     "perimeter",
     "centroid",
     "bounding_box",
+    # Advanced algorithms
+    "convex_hull",
+    "delaunay_triangulation",
+    "voronoi",
+    "mesh_union",
+    "mesh_intersection",
+    "mesh_difference",
+    # Field integration
+    "sample_field_at_point",
+    "query_field_in_region",
+    # Rigidbody integration
+    "shape_to_rigidbody",
+    "collision_mesh",
 ]
