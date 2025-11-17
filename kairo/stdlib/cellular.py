@@ -18,7 +18,7 @@ Supports multiple CA types:
 from typing import Tuple, Optional, Callable, Union
 import numpy as np
 from dataclasses import dataclass
-from ..decorator import operator
+from kairo.core.operator import operator, OpCategory
 
 
 class CellularField2D:
@@ -114,7 +114,13 @@ class CellularOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Union[Tuple[int, int], int], states: int, fill_value: int) -> Union[CellularField2D, CellularField1D]",
+        deterministic=True,
+        doc="Allocate a new cellular field"
+    )
     def alloc(shape: Union[Tuple[int, int], int], states: int = 2,
               fill_value: int = 0) -> Union[CellularField2D, CellularField1D]:
         """Allocate a new cellular field.
@@ -138,7 +144,13 @@ class CellularOperations:
             return CellularField1D(data, states)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Union[Tuple[int, int], int], states: int, density: float, seed: Optional[int]) -> Union[CellularField2D, CellularField1D]",
+        deterministic=False,
+        doc="Initialize field with random states"
+    )
     def random_init(shape: Union[Tuple[int, int], int], states: int = 2,
                    density: float = 0.5, seed: Optional[int] = None) -> Union[CellularField2D, CellularField1D]:
         """Initialize field with random states.
@@ -165,7 +177,13 @@ class CellularOperations:
             return CellularField1D(data, states)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.QUERY,
+        signature="(field: CellularField2D, state: int) -> ndarray",
+        deterministic=True,
+        doc="Count neighbors using Moore neighborhood (8 neighbors)"
+    )
     def count_neighbors_moore(field: CellularField2D, state: int = 1) -> np.ndarray:
         """Count neighbors using Moore neighborhood (8 neighbors).
 
@@ -196,7 +214,13 @@ class CellularOperations:
         return counts
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.QUERY,
+        signature="(field: CellularField2D, state: int) -> ndarray",
+        deterministic=True,
+        doc="Count neighbors using von Neumann neighborhood (4 neighbors)"
+    )
     def count_neighbors_von_neumann(field: CellularField2D, state: int = 1) -> np.ndarray:
         """Count neighbors using von Neumann neighborhood (4 neighbors).
 
@@ -219,7 +243,13 @@ class CellularOperations:
         return counts
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.TRANSFORM,
+        signature="(field: CellularField2D, rule: CARule) -> CellularField2D",
+        deterministic=True,
+        doc="Apply a cellular automaton rule to advance one generation"
+    )
     def apply_rule(field: CellularField2D, rule: CARule) -> CellularField2D:
         """Apply a cellular automaton rule to advance one generation.
 
@@ -261,7 +291,13 @@ class CellularOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.TRANSFORM,
+        signature="(field: CellularField1D, rule_number: int) -> CellularField1D",
+        deterministic=True,
+        doc="Apply a Wolfram Elementary CA rule"
+    )
     def apply_wolfram_rule(field: CellularField1D, rule_number: int) -> CellularField1D:
         """Apply a Wolfram Elementary CA rule.
 
@@ -306,7 +342,13 @@ class CellularOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Union[CellularField2D, CellularField1D], rule: Union[CARule, int]) -> Union[CellularField2D, CellularField1D]",
+        deterministic=True,
+        doc="Advance CA by one generation"
+    )
     def step(field: Union[CellularField2D, CellularField1D],
              rule: Union[CARule, int]) -> Union[CellularField2D, CellularField1D]:
         """Advance CA by one generation.
@@ -326,7 +368,13 @@ class CellularOperations:
             raise ValueError("Invalid field/rule combination")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Union[CellularField2D, CellularField1D], rule: Union[CARule, int], steps: int) -> Union[CellularField2D, CellularField1D]",
+        deterministic=True,
+        doc="Evolve CA for multiple generations"
+    )
     def evolve(field: Union[CellularField2D, CellularField1D],
               rule: Union[CARule, int],
               steps: int) -> Union[CellularField2D, CellularField1D]:
@@ -349,7 +397,13 @@ class CellularOperations:
         return current
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.QUERY,
+        signature="(field: Union[CellularField2D, CellularField1D], rule: Union[CARule, int], steps: int) -> list",
+        deterministic=True,
+        doc="Generate evolution history"
+    )
     def history(field: Union[CellularField2D, CellularField1D],
                rule: Union[CARule, int],
                steps: int) -> list:
@@ -376,7 +430,13 @@ class CellularOperations:
         return states
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.QUERY,
+        signature="(field: CellularField2D) -> dict",
+        deterministic=True,
+        doc="Analyze pattern properties"
+    )
     def analyze_pattern(field: CellularField2D) -> dict:
         """Analyze pattern properties.
 
@@ -402,7 +462,13 @@ class CellularOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], density: float, seed: Optional[int]) -> Tuple[CellularField2D, CARule]",
+        deterministic=False,
+        doc="Create Game of Life cellular automaton"
+    )
     def game_of_life(shape: Tuple[int, int],
                      density: float = 0.3,
                      seed: Optional[int] = None) -> Tuple[CellularField2D, CARule]:
@@ -430,7 +496,13 @@ class CellularOperations:
         return field, rule
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], density: float, seed: Optional[int]) -> CellularField2D",
+        deterministic=False,
+        doc="Create Brian's Brain cellular automaton"
+    )
     def brians_brain(shape: Tuple[int, int],
                      density: float = 0.1,
                      seed: Optional[int] = None) -> CellularField2D:
@@ -453,7 +525,13 @@ class CellularOperations:
         return field
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.TRANSFORM,
+        signature="(field: CellularField2D) -> CellularField2D",
+        deterministic=True,
+        doc="Advance Brian's Brain by one generation"
+    )
     def brians_brain_step(field: CellularField2D) -> CellularField2D:
         """Advance Brian's Brain by one generation.
 
@@ -486,7 +564,13 @@ class CellularOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], density: float, seed: Optional[int]) -> Tuple[CellularField2D, CARule]",
+        deterministic=False,
+        doc="Create HighLife cellular automaton"
+    )
     def highlife(shape: Tuple[int, int],
                 density: float = 0.3,
                 seed: Optional[int] = None) -> Tuple[CellularField2D, CARule]:
@@ -510,7 +594,13 @@ class CellularOperations:
         return field, rule
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], density: float, seed: Optional[int]) -> Tuple[CellularField2D, CARule]",
+        deterministic=False,
+        doc="Create Seeds cellular automaton"
+    )
     def seeds(shape: Tuple[int, int],
              density: float = 0.1,
              seed: Optional[int] = None) -> Tuple[CellularField2D, CARule]:
@@ -534,7 +624,13 @@ class CellularOperations:
         return field, rule
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(width: int, rule_number: int, initial_state: Optional[ndarray]) -> Tuple[CellularField1D, int]",
+        deterministic=True,
+        doc="Create Wolfram Elementary Cellular Automaton"
+    )
     def wolfram_ca(width: int, rule_number: int,
                   initial_state: Optional[np.ndarray] = None) -> Tuple[CellularField1D, int]:
         """Create Wolfram Elementary Cellular Automaton.
@@ -562,7 +658,13 @@ class CellularOperations:
         return field, rule_number
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.QUERY,
+        signature="(field: Union[CellularField2D, CellularField1D]) -> ndarray",
+        deterministic=True,
+        doc="Convert cellular field to NumPy array"
+    )
     def to_array(field: Union[CellularField2D, CellularField1D]) -> np.ndarray:
         """Convert cellular field to NumPy array.
 
@@ -575,7 +677,13 @@ class CellularOperations:
         return field.data.copy()
 
     @staticmethod
-    @operator
+    @operator(
+        domain="cellular",
+        category=OpCategory.CONSTRUCT,
+        signature="(data: ndarray, states: int) -> Union[CellularField2D, CellularField1D]",
+        deterministic=True,
+        doc="Create cellular field from NumPy array"
+    )
     def from_array(data: np.ndarray, states: int = 2) -> Union[CellularField2D, CellularField1D]:
         """Create cellular field from NumPy array.
 
@@ -596,5 +704,25 @@ class CellularOperations:
 
 # Export namespace
 cellular = CellularOperations()
+
+# Export operators for domain registry discovery
+alloc = CellularOperations.alloc
+from_array = CellularOperations.from_array
+random_init = CellularOperations.random_init
+step = CellularOperations.step
+evolve = CellularOperations.evolve
+count_neighbors_moore = CellularOperations.count_neighbors_moore
+count_neighbors_von_neumann = CellularOperations.count_neighbors_von_neumann
+apply_rule = CellularOperations.apply_rule
+to_array = CellularOperations.to_array
+history = CellularOperations.history
+analyze_pattern = CellularOperations.analyze_pattern
+game_of_life = CellularOperations.game_of_life
+highlife = CellularOperations.highlife
+brians_brain = CellularOperations.brians_brain
+seeds = CellularOperations.seeds
+brians_brain_step = CellularOperations.brians_brain_step
+wolfram_ca = CellularOperations.wolfram_ca
+apply_wolfram_rule = CellularOperations.apply_wolfram_rule
 
 __all__ = ['cellular', 'CellularField2D', 'CellularField1D', 'CARule']

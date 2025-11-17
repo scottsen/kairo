@@ -333,7 +333,7 @@ class TerrainOperations:
     @staticmethod
     @operator(
         domain="terrain",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(terrain: Heightmap) -> np.ndarray",
         deterministic=True,
         doc="Calculate terrain slope at each point"
@@ -354,7 +354,7 @@ class TerrainOperations:
     @staticmethod
     @operator(
         domain="terrain",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(terrain: Heightmap) -> np.ndarray",
         deterministic=True,
         doc="Calculate terrain aspect (direction of slope)"
@@ -375,7 +375,7 @@ class TerrainOperations:
     @staticmethod
     @operator(
         domain="terrain",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(terrain: Heightmap, moisture: Optional[np.ndarray], temperature: Optional[np.ndarray]) -> BiomeMap",
         deterministic=True,
         doc="Classify terrain into biomes based on height, moisture, temperature"

@@ -17,7 +17,7 @@ Supported Methods:
 from typing import Callable, Tuple, Optional, Dict, Any
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 # Type aliases for clarity
@@ -44,6 +44,13 @@ class IntegratorResult:
 # EXPLICIT METHODS (General ODE solvers)
 # ============================================================================
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> StateVector",
+    deterministic=True,
+    doc="Forward Euler method (1st order explicit)"
+)
 def euler(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> StateVector:
     """Forward Euler method (1st order explicit).
 
@@ -76,6 +83,13 @@ def euler(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -
     return state + dt * derivative(t, state)
 
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> StateVector",
+    deterministic=True,
+    doc="Runge-Kutta 2nd order (midpoint method)"
+)
 def rk2(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> StateVector:
     """Runge-Kutta 2nd order (midpoint method).
 
@@ -103,6 +117,13 @@ def rk2(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> 
     return state + dt * k2
 
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> StateVector",
+    deterministic=True,
+    doc="Runge-Kutta 4th order (classic method)"
+)
 def rk4(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> StateVector:
     """Runge-Kutta 4th order (classic method).
 
@@ -153,6 +174,13 @@ def rk4(t: float, state: StateVector, derivative: DerivativeFunc, dt: float) -> 
 # SYMPLECTIC METHODS (For Hamiltonian systems and physics)
 # ============================================================================
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, position: StateVector, velocity: StateVector, acceleration: DerivativeFuncWithAccel, dt: float) -> Tuple[StateVector, StateVector]",
+    deterministic=True,
+    doc="Velocity Verlet method (symplectic integrator for physics)"
+)
 def verlet(
     t: float,
     position: StateVector,
@@ -217,6 +245,13 @@ def verlet(
     return position_new, velocity_new
 
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, position: StateVector, velocity: StateVector, acceleration: DerivativeFuncWithAccel, dt: float) -> Tuple[StateVector, StateVector]",
+    deterministic=True,
+    doc="Leapfrog integration (symplectic, staggered time steps)"
+)
 def leapfrog(
     t: float,
     position: StateVector,
@@ -256,6 +291,13 @@ def leapfrog(
     return verlet(t, position, velocity, acceleration, dt)
 
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, position: StateVector, velocity: StateVector, potential_gradient: Callable, dt: float, order: int) -> Tuple[StateVector, StateVector]",
+    deterministic=True,
+    doc="Symplectic split-operator method for separable Hamiltonians"
+)
 def symplectic(
     t: float,
     position: StateVector,
@@ -333,6 +375,13 @@ def symplectic(
 # ADAPTIVE METHODS (Variable timestep with error control)
 # ============================================================================
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(t: float, state: StateVector, derivative: DerivativeFunc, dt: float, tol: float) -> IntegratorResult",
+    deterministic=True,
+    doc="Dormand-Prince 5(4) adaptive step with error control"
+)
 def dormand_prince_step(
     t: float,
     state: StateVector,
@@ -422,6 +471,13 @@ def dormand_prince_step(
     return IntegratorResult(state_new, error, dt_next)
 
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(derivative: DerivativeFunc, state0: StateVector, t_span: Tuple[float, float], dt_initial: float, tol: float, method: str) -> Tuple[ndarray, ndarray]",
+    deterministic=True,
+    doc="Adaptive integration with error control over time interval"
+)
 def adaptive_integrate(
     derivative: DerivativeFunc,
     state0: StateVector,
@@ -496,6 +552,13 @@ def adaptive_integrate(
 # UTILITY FUNCTIONS
 # ============================================================================
 
+@operator(
+    domain="integrators",
+    category=OpCategory.INTEGRATE,
+    signature="(derivative: DerivativeFunc, state: StateVector, t: float, dt: float, method: str) -> StateVector",
+    deterministic=True,
+    doc="Generic integration interface with method selection"
+)
 def integrate(
     derivative: DerivativeFunc,
     state: StateVector,

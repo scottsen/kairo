@@ -20,7 +20,7 @@ Layer 3: Network constructs (MLP, parameter management)
 import numpy as np
 from typing import List, Tuple, Optional, Callable
 from dataclasses import dataclass
-from ..decorator import operator
+from kairo.core.operator import operator, OpCategory
 
 
 @dataclass
@@ -87,7 +87,13 @@ class NeuralOperations:
     # === LAYER 1: ATOMIC OPERATORS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray, weights: ndarray, biases: ndarray) -> ndarray",
+        deterministic=True,
+        doc="Linear transformation (matrix multiplication + bias)"
+    )
     def linear(x: np.ndarray, weights: np.ndarray, biases: np.ndarray) -> np.ndarray:
         """
         Layer 1: Linear transformation (matrix multiplication + bias).
@@ -107,25 +113,49 @@ class NeuralOperations:
         return np.dot(x, weights) + biases
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray) -> ndarray",
+        deterministic=True,
+        doc="Hyperbolic tangent activation"
+    )
     def tanh(x: np.ndarray) -> np.ndarray:
         """Layer 1: Hyperbolic tangent activation [-1, 1]"""
         return np.tanh(x)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray) -> ndarray",
+        deterministic=True,
+        doc="Rectified linear unit activation"
+    )
     def relu(x: np.ndarray) -> np.ndarray:
         """Layer 1: Rectified linear unit activation [0, inf)"""
         return np.maximum(0, x)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray) -> ndarray",
+        deterministic=True,
+        doc="Sigmoid activation"
+    )
     def sigmoid(x: np.ndarray) -> np.ndarray:
         """Layer 1: Sigmoid activation [0, 1]"""
         return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))  # Clip for numerical stability
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray, axis: int) -> ndarray",
+        deterministic=True,
+        doc="Softmax activation (normalized exponentials)"
+    )
     def softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
         """
         Layer 1: Softmax activation (normalized exponentials).
@@ -143,13 +173,25 @@ class NeuralOperations:
         return exp_x / np.sum(exp_x, axis=axis, keepdims=True)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray, alpha: float) -> ndarray",
+        deterministic=True,
+        doc="Leaky ReLU activation"
+    )
     def leaky_relu(x: np.ndarray, alpha: float = 0.01) -> np.ndarray:
         """Layer 1: Leaky ReLU activation"""
         return np.where(x > 0, x, alpha * x)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray, activation: str) -> ndarray",
+        deterministic=True,
+        doc="Apply named activation function"
+    )
     def apply_activation(x: np.ndarray, activation: str) -> np.ndarray:
         """
         Layer 1: Apply named activation function.
@@ -179,7 +221,13 @@ class NeuralOperations:
     # === LAYER 2: COMPOSITE OPERATORS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray, layer: DenseLayer) -> ndarray",
+        deterministic=True,
+        doc="Dense layer (linear + activation)"
+    )
     def dense(x: np.ndarray, layer: DenseLayer) -> np.ndarray:
         """
         Layer 2: Dense layer (linear + activation).
@@ -195,7 +243,13 @@ class NeuralOperations:
         return NeuralOperations.apply_activation(z, layer.activation)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(x: ndarray, network: MLP) -> ndarray",
+        deterministic=True,
+        doc="Forward pass through entire network"
+    )
     def forward(x: np.ndarray, network: MLP) -> np.ndarray:
         """
         Layer 2: Forward pass through entire network.
@@ -215,7 +269,13 @@ class NeuralOperations:
     # === LAYER 3: NETWORK CONSTRUCTS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.CONSTRUCT,
+        signature="(input_size: int, output_size: int, activation: str, init_method: str, seed: Optional[int]) -> DenseLayer",
+        deterministic=True,
+        doc="Allocate and initialize a dense layer"
+    )
     def alloc_layer(input_size: int, output_size: int,
                     activation: str = 'linear',
                     init_method: str = 'xavier',
@@ -260,7 +320,13 @@ class NeuralOperations:
         return DenseLayer(weights=weights, biases=biases, activation=activation)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.CONSTRUCT,
+        signature="(layer_sizes: List[int], activations: Optional[List[str]], init_method: str, seed: Optional[int]) -> MLP",
+        deterministic=True,
+        doc="Allocate a multi-layer perceptron"
+    )
     def alloc_mlp(layer_sizes: List[int],
                   activations: Optional[List[str]] = None,
                   init_method: str = 'xavier',
@@ -314,7 +380,13 @@ class NeuralOperations:
         )
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.QUERY,
+        signature="(network: MLP) -> ndarray",
+        deterministic=True,
+        doc="Extract all network parameters into a flat vector"
+    )
     def get_parameters(network: MLP) -> np.ndarray:
         """
         Layer 3: Extract all network parameters into a flat vector.
@@ -334,7 +406,13 @@ class NeuralOperations:
         return np.concatenate(params)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(network: MLP, params: ndarray) -> MLP",
+        deterministic=True,
+        doc="Set network parameters from a flat vector"
+    )
     def set_parameters(network: MLP, params: np.ndarray) -> MLP:
         """
         Layer 3: Set network parameters from a flat vector.
@@ -365,7 +443,13 @@ class NeuralOperations:
         return new_network
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(params: ndarray, mutation_rate: float, mutation_scale: float, seed: Optional[int]) -> ndarray",
+        deterministic=False,
+        doc="Mutate parameters with Gaussian noise"
+    )
     def mutate_parameters(params: np.ndarray, mutation_rate: float = 0.1,
                          mutation_scale: float = 0.3,
                          seed: Optional[int] = None) -> np.ndarray:
@@ -390,7 +474,13 @@ class NeuralOperations:
         return new_params
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.TRANSFORM,
+        signature="(params1: ndarray, params2: ndarray, method: str, seed: Optional[int]) -> Tuple[ndarray, ndarray]",
+        deterministic=False,
+        doc="Crossover two parameter vectors"
+    )
     def crossover_parameters(params1: np.ndarray, params2: np.ndarray,
                            method: str = 'uniform',
                            seed: Optional[int] = None) -> Tuple[np.ndarray, np.ndarray]:
@@ -434,7 +524,13 @@ class NeuralOperations:
     # === LAYER 4: PRESETS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="neural",
+        category=OpCategory.CONSTRUCT,
+        signature="(seed: Optional[int]) -> MLP",
+        deterministic=True,
+        doc="Preset MLP for Flappy Bird control"
+    )
     def flappy_bird_controller(seed: Optional[int] = None) -> MLP:
         """
         Layer 4: Preset MLP for Flappy Bird control.
@@ -516,3 +612,22 @@ def batch_flappy_bird_decisions(networks: List[MLP], observations: np.ndarray,
         output = neural.forward(observations[i:i+1], network)
         decisions[i] = output[0, 0] > threshold
     return decisions
+
+
+# Export operators for domain registry discovery
+alloc_layer = NeuralOperations.alloc_layer
+alloc_mlp = NeuralOperations.alloc_mlp
+forward = NeuralOperations.forward
+linear = NeuralOperations.linear
+relu = NeuralOperations.relu
+leaky_relu = NeuralOperations.leaky_relu
+sigmoid = NeuralOperations.sigmoid
+tanh = NeuralOperations.tanh
+softmax = NeuralOperations.softmax
+apply_activation = NeuralOperations.apply_activation
+dense = NeuralOperations.dense
+get_parameters = NeuralOperations.get_parameters
+set_parameters = NeuralOperations.set_parameters
+mutate_parameters = NeuralOperations.mutate_parameters
+crossover_parameters = NeuralOperations.crossover_parameters
+flappy_bird_controller = NeuralOperations.flappy_bird_controller

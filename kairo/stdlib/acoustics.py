@@ -11,7 +11,7 @@ from typing import Callable, Optional, Dict, Any, Tuple, Union, List
 import numpy as np
 from dataclasses import dataclass
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 # Physical constants
@@ -115,7 +115,13 @@ class AcousticsOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.CONSTRUCT,
+        signature="(geometry: PipeGeometry, discretization: float, sample_rate: int, speed_of_sound: float) -> WaveguideNetwork",
+        deterministic=True,
+        doc="Build digital waveguide from pipe geometry"
+    )
     def waveguide_from_geometry(
         geometry: PipeGeometry,
         discretization: float = 0.01,  # segment length in meters
@@ -171,7 +177,13 @@ class AcousticsOperations:
         )
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(waveguide: WaveguideNetwork, end_condition: str) -> List[ReflectionCoeff]",
+        deterministic=True,
+        doc="Compute reflection coefficients at area discontinuities"
+    )
     def reflection_coefficients(
         waveguide: WaveguideNetwork,
         end_condition: str = "open"  # "open", "closed", or "matched"
@@ -227,7 +239,13 @@ class AcousticsOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.TRANSFORM,
+        signature="(pressure_forward: ndarray, pressure_backward: ndarray, waveguide: WaveguideNetwork, reflections: List[ReflectionCoeff], excitation: Optional[ndarray], excitation_pos: int) -> Tuple[ndarray, ndarray]",
+        deterministic=True,
+        doc="Single time step of waveguide simulation"
+    )
     def waveguide_step(
         pressure_forward: np.ndarray,
         pressure_backward: np.ndarray,
@@ -301,7 +319,13 @@ class AcousticsOperations:
         return p_fwd_new, p_bwd_new
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(pressure_forward: ndarray, pressure_backward: ndarray) -> ndarray",
+        deterministic=True,
+        doc="Compute total pressure from bidirectional waves"
+    )
     def total_pressure(
         pressure_forward: np.ndarray,
         pressure_backward: np.ndarray
@@ -324,7 +348,13 @@ class AcousticsOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(volume: float, neck_length: float, neck_area: float, speed_of_sound: float) -> float",
+        deterministic=True,
+        doc="Compute resonant frequency of Helmholtz resonator"
+    )
     def helmholtz_frequency(
         volume: float,  # m³
         neck_length: float,  # m
@@ -357,7 +387,13 @@ class AcousticsOperations:
         return f_res
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(frequency: float, volume: float, neck_length: float, neck_area: float, damping: float, speed_of_sound: float, air_density: float) -> complex",
+        deterministic=True,
+        doc="Compute acoustic impedance of Helmholtz resonator"
+    )
     def helmholtz_impedance(
         frequency: float,  # Hz
         volume: float,  # m³
@@ -406,7 +442,13 @@ class AcousticsOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(diameter: float, frequency: float, speed_of_sound: float, air_density: float) -> complex",
+        deterministic=True,
+        doc="Radiation impedance for unflanged circular pipe"
+    )
     def radiation_impedance_unflanged(
         diameter: float,  # meters
         frequency: float,  # Hz
@@ -451,7 +493,13 @@ class AcousticsOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(waveguide: WaveguideNetwork, reflections: List[ReflectionCoeff], freq_range: Tuple[float, float], resolution: float, excitation_pos: int, measurement_pos: int) -> FrequencyResponse",
+        deterministic=True,
+        doc="Compute acoustic transfer function (input → output)"
+    )
     def transfer_function(
         waveguide: WaveguideNetwork,
         reflections: List[ReflectionCoeff],
@@ -544,7 +592,13 @@ class AcousticsOperations:
         )
 
     @staticmethod
-    @operator
+    @operator(
+        domain="acoustics",
+        category=OpCategory.QUERY,
+        signature="(frequency_response: FrequencyResponse, threshold_db: float) -> ndarray",
+        deterministic=True,
+        doc="Find resonant frequencies (peaks in transfer function)"
+    )
     def resonant_frequencies(
         frequency_response: FrequencyResponse,
         threshold_db: float = -3.0
@@ -618,3 +672,15 @@ def create_expansion_chamber(
         (total_length, outlet_diameter)
     ]
     return PipeGeometry(diameter=inlet_diameter, length=total_length, segments=segments)
+
+
+# Export operators for domain registry discovery
+waveguide_from_geometry = AcousticsOperations.waveguide_from_geometry
+reflection_coefficients = AcousticsOperations.reflection_coefficients
+waveguide_step = AcousticsOperations.waveguide_step
+total_pressure = AcousticsOperations.total_pressure
+helmholtz_frequency = AcousticsOperations.helmholtz_frequency
+helmholtz_impedance = AcousticsOperations.helmholtz_impedance
+radiation_impedance_unflanged = AcousticsOperations.radiation_impedance_unflanged
+transfer_function = AcousticsOperations.transfer_function
+resonant_frequencies = AcousticsOperations.resonant_frequencies
