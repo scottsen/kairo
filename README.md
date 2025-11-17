@@ -228,6 +228,32 @@ speed = dist / time               # OK: f32 [m/s]
 x = dist + time                   # ERROR: m + s is invalid
 ```
 
+### Domain Imports (USE Statement)
+
+**✅ NEW in v0.10.0** - Import domain-specific operators into your program:
+
+```kairo
+use field, audio, rigidbody
+
+@state temp : Field2D<f32> = zeros((256, 256))
+@state sound : AudioBuffer = silence(duration=1.0)
+
+flow(dt=0.01) {
+    # Field operations
+    temp = diffuse(temp, rate=0.1, dt)
+
+    # Audio operations
+    sound = sine_wave(freq=440.0, duration=dt)
+}
+```
+
+**Features:**
+- Import operators from 23 available domains (field, audio, agents, graph, signal, etc.)
+- Comma-separated syntax: `use domain1, domain2, domain3`
+- Makes 374+ operators available to your program
+- Type checking and unit validation across domains
+- See [LEVEL_3_TYPE_SYSTEM.md](LEVEL_3_TYPE_SYSTEM.md) for cross-domain type safety
+
 ---
 
 ## Four Dialects
@@ -626,7 +652,7 @@ See `examples/` directory for more!
 ### 🚧 Deprecated (Legacy, Maintained for Compatibility)
 - **MLIR text IR generation** (legacy text-based, not real MLIR bindings)
 - Optimization passes (basic constant folding, DCE stubs)
-- Will be removed in v0.8.0+ after v0.7.0 transition complete
+- Scheduled for removal in future versions
 
 ### 📋 Planned (Future Phases)
 - **Geometry Domain (v0.9+)** ⭐ **Architecture Complete**:
@@ -643,9 +669,9 @@ See `examples/` directory for more!
 - **GPU Acceleration** - Via MLIR GPU dialect (planned Phase 3-4)
 - **Advanced Optimization** - Auto-vectorization, fusion, polyhedral optimization
 
-**Current Milestone**: v0.7.4 - Real MLIR Integration Complete (All 6 Phases)
-**Next Milestone**: v0.8.0 - Production hardening and performance optimization
-**Future Milestone**: v0.9.0 - Geometry Domain Implementation
+**Current Version**: v0.10.0 - Level 2 & 3 Integration Complete (23 domains, 374 operators, USE statement, type system)
+**Next Focus**: Production hardening, performance optimization, geometry domain
+**Long-term Vision**: GPU acceleration, JIT compilation, advanced optimizations
 
 ---
 
