@@ -103,6 +103,35 @@ The addition of these 5 domains creates powerful new cross-domain workflows:
 - **StateMachine → Agents**: Complex agent AI behaviors
 - **Vision → Fields**: Edge detection for field boundary conditions
 
+### Project Evolution - Morphogen Rename Preparation
+
+**Commit**: `2e8c864` - Prepare for Morphogen rename and Philbrick integration
+
+This release includes preparation for the project's upcoming rename from Kairo to Morphogen, establishing the connection with sister hardware project Philbrick.
+
+- **MORPHOGEN_RENAME_PREP.md** (437 lines)
+  - Comprehensive rename execution checklist
+  - User migration strategy and communication plan
+  - Philbrick integration roadmap (4 phases)
+  - Risk mitigation and timeline (target: 2025-12-15)
+
+- **Sister Project Link**: README now references Philbrick
+  - Philbrick: Modular analog computing hardware platform
+  - Shared primitives: sum, integrate, nonlinearity, events
+  - Unified philosophy: computation = composition
+
+- **Bridge Documentation**: `docs/philbrick-bridge/`
+  - Overview of Morphogen ↔ Philbrick connection (184 lines)
+  - Software/hardware integration vision
+
+- **Background**:
+  - Decision documented in ADR-011 (wuluje-1116 session)
+  - Morphogen: Named after Turing's morphogenesis work (1952)
+  - Philbrick: Named after George A. Philbrick's modular analog computing (1952)
+  - Historical grounding for educational/research positioning
+
+**Next Steps**: Execute rename checklist when ready, tag as v0.11.0 "The Morphogen Rename"
+
 ---
 
 ## [v0.8.0] - 2025-11-15
