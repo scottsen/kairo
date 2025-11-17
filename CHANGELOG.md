@@ -52,12 +52,13 @@ A comprehensive 10-month roadmap to bring all 23 domains through 5 levels of com
 
 **Current Status:**
 - ✅ Level 1: 23/23 domains (DONE)
-- 🚧 Level 2: 2/23 domains (IN PROGRESS - registry complete, graph + signal integrated)
+- 🚧 Level 2: 3/23 domains (IN PROGRESS - registry complete, graph + signal + statemachine integrated)
   - ✅ Domain registry system implemented
   - ✅ @operator decorator system complete
   - ✅ Graph domain: 19/19 operators integrated
   - ✅ Signal domain: 20/20 operators integrated
-  - ⏭️ Next: 21 domains remaining
+  - ✅ StateMachine domain: 15/15 operators integrated
+  - ⏭️ Next: 20 domains remaining
 - ❌ Level 3: 0/23 domains (Blocker: type checker doesn't enforce units)
 - ❌ Level 4: 0/23 domains (Blocker: multirate scheduler not fully implemented)
 - ⚠️ Level 5: 4/23 domains (field, agent, audio, temporal have MLIR support)
@@ -198,6 +199,66 @@ This integration validates the systematic approach:
 - `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
 - Create operator syntax bindings
 - Integration testing across all domains
+
+---
+
+### Added - Level 2: StateMachine Domain Integration
+
+**Date:** 2025-11-17
+**Timeline:** Month 3-4, Week 1 of 8
+
+Following the systematic approach established with graph and signal domains, the statemachine domain is now fully integrated into the domain registry system.
+
+**StateMachine Domain - Fully Integrated:**
+
+The statemachine domain is now the third fully-integrated domain, continuing the methodical completion of all 23 domains.
+
+- **15 operators** all decorated and discoverable:
+  - **5 CONSTRUCT**: `create`, `create_sequence`, `create_selector`, `create_action`, `create_condition`
+  - **6 TRANSFORM**: `add_state`, `add_transition`, `start`, `update`, `send_event`, `execute_behavior`
+  - **4 QUERY**: `get_state_name`, `is_in_state`, `get_valid_transitions`, `to_graphviz`
+
+- All operators have complete metadata:
+  - Domain: "statemachine"
+  - Category: Semantic grouping (CONSTRUCT/TRANSFORM/QUERY)
+  - Signature: Type information for future type checking
+  - Deterministic: FSM construction/queries are deterministic; operations with callbacks are non-deterministic
+
+**Implementation Details:**
+
+- Added `from kairo.core.operator import operator, OpCategory` import
+- Applied `@operator` decorator to all 15 methods in `StateMachineOperations` class
+- Categorized operators by function:
+  - CONSTRUCT: Creating state machines and behavior tree nodes
+  - TRANSFORM: Modifying state machines, triggering transitions, executing behaviors
+  - QUERY: Reading state machine information, visualization
+- Marked callback-dependent operations (start, update, send_event, execute_behavior) as non-deterministic
+- Exported all operators at module level for registry discovery
+
+**Module-Level Exports:**
+
+All 15 operators are exported at module level in `kairo/stdlib/statemachine.py` for automatic discovery by the domain registry system:
+- FSM operators: create, add_state, add_transition, start, update, send_event, get_state_name, is_in_state, get_valid_transitions, to_graphviz
+- Behavior tree operators: create_sequence, create_selector, create_action, create_condition, execute_behavior
+
+**Integration Progress:**
+- ✅ StateMachine domain: 15/15 operators integrated (100%)
+- ✅ 3/23 domains complete (13.0%)
+- ⏭️ Next: Continue with remaining 20 domains
+
+**What This Covers:**
+
+The statemachine domain provides two complementary paradigms for behavior modeling:
+1. **Finite State Machines (FSM)**: Event-driven state transitions with guards and actions
+2. **Behavior Trees**: Hierarchical behavior composition (sequence, selector, action, condition nodes)
+
+Both are essential for game AI, UI flows, protocol implementations, and workflow systems.
+
+**Related:**
+- `kairo/stdlib/statemachine.py` - State machine and behavior tree operators with @operator decorators
+- `kairo/core/operator.py` - @operator decorator system
+- `kairo/core/domain_registry.py` - Central domain registry
+- `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
 
 ---
 
