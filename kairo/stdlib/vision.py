@@ -146,7 +146,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img: ImageGray) -> EdgeMap",
         deterministic=True,
         doc="Sobel edge detection"
@@ -182,7 +182,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img: ImageGray) -> ImageGray",
         deterministic=True,
         doc="Laplacian edge detection"
@@ -207,7 +207,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img: ImageGray, low_threshold: float, high_threshold: float) -> ImageGray",
         deterministic=True,
         doc="Canny edge detection (simplified)"
@@ -277,7 +277,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img: ImageGray, k: float, threshold: float) -> List[Keypoint]",
         deterministic=True,
         doc="Harris corner detection"
@@ -457,7 +457,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img: ImageGray, min_area: float) -> List[Contour]",
         deterministic=True,
         doc="Find contours in binary image (simplified)"
@@ -514,7 +514,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img: ImageGray, template: ImageGray) -> np.ndarray",
         deterministic=True,
         doc="Template matching using normalized cross-correlation"
@@ -551,7 +551,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(edges: ImageGray, threshold: int) -> List[Tuple[float, float]]",
         deterministic=True,
         doc="Hough transform for line detection (simplified)"
@@ -602,7 +602,7 @@ class VisionOperations:
     @staticmethod
     @operator(
         domain="vision",
-        category=OpCategory.ANALYSIS,
+        category=OpCategory.QUERY,
         signature="(img1: ImageGray, img2: ImageGray, window_size: int) -> Tuple[np.ndarray, np.ndarray]",
         deterministic=True,
         doc="Lucas-Kanade optical flow (simplified)"

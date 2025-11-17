@@ -11,7 +11,7 @@ semantics ensuring same seed = same output.
 from typing import Callable, Optional, Dict, Any, Tuple, Union
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 # Default audio parameters
@@ -76,7 +76,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(freq: float, phase: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate sine wave oscillator"
+    )
     def sine(freq: float = 440.0, phase: float = 0.0, duration: float = 1.0,
              sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate sine wave oscillator.
@@ -100,7 +106,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(freq: float, duration: float, blep: bool, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate sawtooth wave oscillator"
+    )
     def saw(freq: float = 440.0, duration: float = 1.0, blep: bool = True,
             sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate sawtooth wave oscillator.
@@ -140,7 +152,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(freq: float, pwm: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate square wave oscillator"
+    )
     def square(freq: float = 440.0, pwm: float = 0.5, duration: float = 1.0,
                sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate square wave oscillator.
@@ -162,7 +180,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(freq: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate triangle wave oscillator"
+    )
     def triangle(freq: float = 440.0, duration: float = 1.0,
                  sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate triangle wave oscillator.
@@ -186,7 +210,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(noise_type: str, seed: int, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=False,
+        doc="Generate noise oscillator"
+    )
     def noise(noise_type: str = "white", seed: int = 0, duration: float = 1.0,
               sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate noise oscillator.
@@ -231,7 +261,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(rate: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate impulse train"
+    )
     def impulse(rate: float = 1.0, duration: float = 1.0,
                 sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate impulse train.
@@ -259,7 +295,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, cutoff: float, q: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply lowpass filter"
+    )
     def lowpass(signal: AudioBuffer, cutoff: float = 2000.0, q: float = 0.707) -> AudioBuffer:
         """Apply lowpass filter.
 
@@ -281,7 +323,13 @@ class AudioOperations:
         return AudioBuffer(data=filtered, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, cutoff: float, q: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply highpass filter"
+    )
     def highpass(signal: AudioBuffer, cutoff: float = 120.0, q: float = 0.707) -> AudioBuffer:
         """Apply highpass filter.
 
@@ -299,7 +347,13 @@ class AudioOperations:
         return AudioBuffer(data=filtered, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, center: float, q: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply bandpass filter"
+    )
     def bandpass(signal: AudioBuffer, center: float = 1000.0, q: float = 1.0) -> AudioBuffer:
         """Apply bandpass filter.
 
@@ -317,7 +371,13 @@ class AudioOperations:
         return AudioBuffer(data=filtered, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, center: float, q: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply notch (band-stop) filter"
+    )
     def notch(signal: AudioBuffer, center: float = 1000.0, q: float = 1.0) -> AudioBuffer:
         """Apply notch (band-stop) filter.
 
@@ -335,7 +395,13 @@ class AudioOperations:
         return AudioBuffer(data=filtered, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, bass: float, mid: float, treble: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply 3-band equalizer"
+    )
     def eq3(signal: AudioBuffer, bass: float = 0.0, mid: float = 0.0,
             treble: float = 0.0) -> AudioBuffer:
         """Apply 3-band equalizer.
@@ -380,7 +446,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(attack: float, decay: float, sustain: float, release: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate ADSR envelope"
+    )
     def adsr(attack: float = 0.005, decay: float = 0.08, sustain: float = 0.7,
              release: float = 0.2, duration: float = 1.0,
              sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
@@ -442,7 +514,13 @@ class AudioOperations:
         return AudioBuffer(data=envelope, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(attack: float, release: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate AR (Attack-Release) envelope"
+    )
     def ar(attack: float = 0.005, release: float = 0.3, duration: float = 1.0,
            sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate AR (Attack-Release) envelope.
@@ -480,7 +558,13 @@ class AudioOperations:
         return AudioBuffer(data=envelope, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(time_constant: float, duration: float, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Generate exponential decay envelope"
+    )
     def envexp(time_constant: float = 0.05, duration: float = 1.0,
                sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Generate exponential decay envelope.
@@ -503,7 +587,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, time: float, feedback: float, mix: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply delay effect"
+    )
     def delay(signal: AudioBuffer, time: float = 0.3, feedback: float = 0.3,
               mix: float = 0.25) -> AudioBuffer:
         """Apply delay effect.
@@ -539,7 +629,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, mix: float, size: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply reverb effect (Schroeder reverberator)"
+    )
     def reverb(signal: AudioBuffer, mix: float = 0.12, size: float = 0.8) -> AudioBuffer:
         """Apply reverb effect (Schroeder reverberator).
 
@@ -589,7 +685,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, rate: float, depth: float, mix: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply chorus effect"
+    )
     def chorus(signal: AudioBuffer, rate: float = 0.3, depth: float = 0.008,
                mix: float = 0.25) -> AudioBuffer:
         """Apply chorus effect.
@@ -626,7 +728,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, rate: float, depth: float, feedback: float, mix: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply flanger effect"
+    )
     def flanger(signal: AudioBuffer, rate: float = 0.2, depth: float = 0.003,
                 feedback: float = 0.25, mix: float = 0.5) -> AudioBuffer:
         """Apply flanger effect.
@@ -663,7 +771,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, amount: float, shape: str) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply distortion/drive"
+    )
     def drive(signal: AudioBuffer, amount: float = 0.5, shape: str = "tanh") -> AudioBuffer:
         """Apply distortion/drive.
 
@@ -698,7 +812,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, threshold: float, release: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply limiter/compressor"
+    )
     def limiter(signal: AudioBuffer, threshold: float = -1.0,
                 release: float = 0.05) -> AudioBuffer:
         """Apply limiter/compressor.
@@ -743,7 +863,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(*signals: AudioBuffer) -> AudioBuffer",
+        deterministic=True,
+        doc="Mix multiple audio signals with gain compensation"
+    )
     def mix(*signals: AudioBuffer) -> AudioBuffer:
         """Mix multiple audio signals with gain compensation.
 
@@ -780,7 +906,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, amount_db: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply gain in dB"
+    )
     def gain(signal: AudioBuffer, amount_db: float) -> AudioBuffer:
         """Apply gain in dB.
 
@@ -795,7 +927,13 @@ class AudioOperations:
         return AudioBuffer(data=signal.data * gain_lin, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, position: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Pan mono signal to stereo"
+    )
     def pan(signal: AudioBuffer, position: float = 0.0) -> AudioBuffer:
         """Pan mono signal to stereo.
 
@@ -820,7 +958,13 @@ class AudioOperations:
         return AudioBuffer(data=stereo, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, limit: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Hard clip signal"
+    )
     def clip(signal: AudioBuffer, limit: float = 0.98) -> AudioBuffer:
         """Hard clip signal.
 
@@ -835,7 +979,13 @@ class AudioOperations:
         return AudioBuffer(data=clipped, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, target: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Normalize signal to target peak level"
+    )
     def normalize(signal: AudioBuffer, target: float = 0.98) -> AudioBuffer:
         """Normalize signal to target peak level.
 
@@ -853,7 +1003,13 @@ class AudioOperations:
         return signal.copy()
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(db: float) -> float",
+        deterministic=True,
+        doc="Convert decibels to linear gain"
+    )
     def db2lin(db: float) -> float:
         """Convert decibels to linear gain.
 
@@ -866,7 +1022,13 @@ class AudioOperations:
         return 10.0 ** (db / 20.0)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(linear: float) -> float",
+        deterministic=True,
+        doc="Convert linear gain to decibels"
+    )
     def lin2db(linear: float) -> float:
         """Convert linear gain to decibels.
 
@@ -883,7 +1045,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(excitation: AudioBuffer, freq: float, t60: float, damping: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Karplus-Strong string physical model"
+    )
     def string(excitation: AudioBuffer, freq: float, t60: float = 1.5,
                damping: float = 0.3) -> AudioBuffer:
         """Karplus-Strong string physical model.
@@ -936,7 +1104,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=excitation.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(excitation: AudioBuffer, frequencies: list, decays: list, amplitudes: Optional[list]) -> AudioBuffer",
+        deterministic=True,
+        doc="Modal synthesis (resonant body)"
+    )
     def modal(excitation: AudioBuffer, frequencies: list, decays: list,
               amplitudes: Optional[list] = None) -> AudioBuffer:
         """Modal synthesis (resonant body).
@@ -1149,7 +1323,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(buffer: AudioBuffer, blocking: bool) -> None",
+        deterministic=False,
+        doc="Play audio buffer in real-time"
+    )
     def play(buffer: AudioBuffer, blocking: bool = True) -> None:
         """Play audio buffer in real-time.
 
@@ -1187,7 +1367,13 @@ class AudioOperations:
         sd.play(data, samplerate=buffer.sample_rate, blocking=blocking)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(buffer: AudioBuffer, path: str, format: str) -> None",
+        deterministic=True,
+        doc="Save audio buffer to file"
+    )
     def save(buffer: AudioBuffer, path: str, format: str = "auto") -> None:
         """Save audio buffer to file.
 
@@ -1273,7 +1459,13 @@ class AudioOperations:
         print(f"Saved audio to: {path}")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(path: str) -> AudioBuffer",
+        deterministic=True,
+        doc="Load audio buffer from file"
+    )
     def load(path: str) -> AudioBuffer:
         """Load audio buffer from file.
 
@@ -1333,7 +1525,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.CONSTRUCT,
+        signature="(duration: float, sample_rate: int, channels: int) -> AudioBuffer",
+        deterministic=False,
+        doc="Record audio from microphone"
+    )
     def record(duration: float, sample_rate: int = DEFAULT_SAMPLE_RATE,
                channels: int = 1) -> AudioBuffer:
         """Record audio from microphone.
@@ -1390,7 +1588,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, start: float, end: Optional[float]) -> AudioBuffer",
+        deterministic=True,
+        doc="Extract a portion of an audio buffer"
+    )
     def slice(signal: AudioBuffer, start: float = 0.0, end: Optional[float] = None) -> AudioBuffer:
         """Extract a portion of an audio buffer.
 
@@ -1417,7 +1621,13 @@ class AudioOperations:
                          sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(*signals: AudioBuffer) -> AudioBuffer",
+        deterministic=True,
+        doc="Concatenate multiple audio buffers"
+    )
     def concat(*signals: AudioBuffer) -> AudioBuffer:
         """Concatenate multiple audio buffers.
 
@@ -1445,7 +1655,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, new_sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Resample audio buffer to a different sample rate"
+    )
     def resample(signal: AudioBuffer, new_sample_rate: int) -> AudioBuffer:
         """Resample audio buffer to a different sample rate.
 
@@ -1482,7 +1698,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=new_sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer) -> AudioBuffer",
+        deterministic=True,
+        doc="Reverse an audio buffer"
+    )
     def reverse(signal: AudioBuffer) -> AudioBuffer:
         """Reverse an audio buffer.
 
@@ -1499,7 +1721,13 @@ class AudioOperations:
         return AudioBuffer(data=signal.data[::-1].copy(), sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, duration: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply fade-in to audio buffer"
+    )
     def fade_in(signal: AudioBuffer, duration: float = 0.05) -> AudioBuffer:
         """Apply fade-in envelope.
 
@@ -1530,7 +1758,13 @@ class AudioOperations:
         return AudioBuffer(data=data, sample_rate=signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, duration: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply fade-out to audio buffer"
+    )
     def fade_out(signal: AudioBuffer, duration: float = 0.05) -> AudioBuffer:
         """Apply fade-out envelope.
 
@@ -1565,7 +1799,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer) -> Tuple[ndarray, ndarray]",
+        deterministic=True,
+        doc="Compute FFT of audio buffer"
+    )
     def fft(signal: AudioBuffer) -> Tuple[np.ndarray, np.ndarray]:
         """Compute Fast Fourier Transform.
 
@@ -1592,7 +1832,13 @@ class AudioOperations:
         return freqs, spectrum
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(spectrum: ndarray, sample_rate: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Compute inverse FFT to audio buffer"
+    )
     def ifft(spectrum: np.ndarray, sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Compute Inverse Fast Fourier Transform.
 
@@ -1613,7 +1859,13 @@ class AudioOperations:
         return AudioBuffer(data=data.real, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, window_size: int, hop_size: Optional[int], window: str) -> ndarray",
+        deterministic=True,
+        doc="Compute Short-Time Fourier Transform"
+    )
     def stft(signal: AudioBuffer, window_size: int = 2048,
              hop_size: int = 512) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Compute Short-Time Fourier Transform.
@@ -1665,7 +1917,13 @@ class AudioOperations:
         return times, freqs, stft_matrix
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(stft_matrix: ndarray, hop_size: int, window_size: int) -> AudioBuffer",
+        deterministic=True,
+        doc="Compute inverse STFT to audio buffer"
+    )
     def istft(stft_matrix: np.ndarray, hop_size: int = 512,
               sample_rate: int = DEFAULT_SAMPLE_RATE) -> AudioBuffer:
         """Compute Inverse Short-Time Fourier Transform.
@@ -1714,7 +1972,13 @@ class AudioOperations:
         return AudioBuffer(data=output, sample_rate=sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer) -> Tuple[ndarray, ndarray]",
+        deterministic=True,
+        doc="Compute magnitude spectrum"
+    )
     def spectrum(signal: AudioBuffer) -> Tuple[np.ndarray, np.ndarray]:
         """Get magnitude spectrum.
 
@@ -1733,7 +1997,13 @@ class AudioOperations:
         return freqs, magnitudes
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer) -> Tuple[ndarray, ndarray]",
+        deterministic=True,
+        doc="Compute phase spectrum"
+    )
     def phase_spectrum(signal: AudioBuffer) -> Tuple[np.ndarray, np.ndarray]:
         """Get phase spectrum.
 
@@ -1756,7 +2026,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer) -> float",
+        deterministic=True,
+        doc="Compute spectral centroid"
+    )
     def spectral_centroid(signal: AudioBuffer) -> float:
         """Calculate spectral centroid (brightness measure).
 
@@ -1781,7 +2057,13 @@ class AudioOperations:
         return float(centroid)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer, threshold: float) -> float",
+        deterministic=True,
+        doc="Compute spectral rolloff frequency"
+    )
     def spectral_rolloff(signal: AudioBuffer, threshold: float = 0.85) -> float:
         """Calculate spectral rolloff frequency.
 
@@ -1814,7 +2096,13 @@ class AudioOperations:
             return float(freqs[-1])
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer, hop_size: int) -> ndarray",
+        deterministic=True,
+        doc="Compute spectral flux over time"
+    )
     def spectral_flux(signal: AudioBuffer, hop_size: int = 512) -> np.ndarray:
         """Calculate spectral flux (change in spectrum over time).
 
@@ -1849,7 +2137,13 @@ class AudioOperations:
         return flux
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer, num_peaks: int, threshold_db: float) -> Tuple[ndarray, ndarray]",
+        deterministic=True,
+        doc="Find spectral peaks"
+    )
     def spectral_peaks(signal: AudioBuffer, num_peaks: int = 5,
                        min_freq: float = 20.0) -> Tuple[np.ndarray, np.ndarray]:
         """Find spectral peaks (dominant frequencies).
@@ -1896,7 +2190,13 @@ class AudioOperations:
         return peak_freqs, peak_mags
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer) -> float",
+        deterministic=True,
+        doc="Compute RMS level"
+    )
     def rms(signal: AudioBuffer) -> float:
         """Calculate RMS (Root Mean Square) level.
 
@@ -1922,7 +2222,13 @@ class AudioOperations:
         return float(rms_val)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.QUERY,
+        signature="(signal: AudioBuffer) -> int",
+        deterministic=True,
+        doc="Count zero crossings"
+    )
     def zero_crossings(signal: AudioBuffer) -> int:
         """Count zero crossings (sign changes).
 
@@ -1953,7 +2259,13 @@ class AudioOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, threshold_db: float, attack: float, release: float) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply spectral noise gate"
+    )
     def spectral_gate(signal: AudioBuffer, threshold_db: float = -40.0,
                       window_size: int = 2048, hop_size: int = 512) -> AudioBuffer:
         """Apply spectral noise gate.
@@ -1997,7 +2309,13 @@ class AudioOperations:
         return AudioOperations.istft(stft_gated, hop_size, signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, freq_mask: ndarray) -> AudioBuffer",
+        deterministic=True,
+        doc="Apply spectral filtering with frequency mask"
+    )
     def spectral_filter(signal: AudioBuffer, freq_mask: np.ndarray) -> AudioBuffer:
         """Apply arbitrary frequency-domain filter.
 
@@ -2027,7 +2345,13 @@ class AudioOperations:
         return AudioOperations.ifft(spectrum_filtered, signal.sample_rate)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="audio",
+        category=OpCategory.TRANSFORM,
+        signature="(signal: AudioBuffer, impulse: AudioBuffer) -> AudioBuffer",
+        deterministic=True,
+        doc="Convolve signal with impulse response"
+    )
     def convolution(signal: AudioBuffer, impulse: AudioBuffer) -> AudioBuffer:
         """Apply convolution (for reverb, filtering, etc.).
 
@@ -2078,3 +2402,59 @@ class AudioOperations:
 
 # Create singleton instance for use as 'audio' namespace
 audio = AudioOperations()
+
+# Export operators for domain registry discovery
+sine = AudioOperations.sine
+saw = AudioOperations.saw
+square = AudioOperations.square
+triangle = AudioOperations.triangle
+noise = AudioOperations.noise
+impulse = AudioOperations.impulse
+lowpass = AudioOperations.lowpass
+highpass = AudioOperations.highpass
+bandpass = AudioOperations.bandpass
+notch = AudioOperations.notch
+eq3 = AudioOperations.eq3
+adsr = AudioOperations.adsr
+ar = AudioOperations.ar
+envexp = AudioOperations.envexp
+delay = AudioOperations.delay
+reverb = AudioOperations.reverb
+chorus = AudioOperations.chorus
+flanger = AudioOperations.flanger
+drive = AudioOperations.drive
+limiter = AudioOperations.limiter
+mix = AudioOperations.mix
+gain = AudioOperations.gain
+pan = AudioOperations.pan
+clip = AudioOperations.clip
+normalize = AudioOperations.normalize
+db2lin = AudioOperations.db2lin
+lin2db = AudioOperations.lin2db
+string = AudioOperations.string
+modal = AudioOperations.modal
+play = AudioOperations.play
+save = AudioOperations.save
+load = AudioOperations.load
+record = AudioOperations.record
+slice = AudioOperations.slice
+concat = AudioOperations.concat
+resample = AudioOperations.resample
+reverse = AudioOperations.reverse
+fade_in = AudioOperations.fade_in
+fade_out = AudioOperations.fade_out
+fft = AudioOperations.fft
+ifft = AudioOperations.ifft
+stft = AudioOperations.stft
+istft = AudioOperations.istft
+spectrum = AudioOperations.spectrum
+phase_spectrum = AudioOperations.phase_spectrum
+spectral_centroid = AudioOperations.spectral_centroid
+spectral_rolloff = AudioOperations.spectral_rolloff
+spectral_flux = AudioOperations.spectral_flux
+spectral_peaks = AudioOperations.spectral_peaks
+rms = AudioOperations.rms
+zero_crossings = AudioOperations.zero_crossings
+spectral_gate = AudioOperations.spectral_gate
+spectral_filter = AudioOperations.spectral_filter
+convolution = AudioOperations.convolution

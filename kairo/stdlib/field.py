@@ -7,7 +7,7 @@ for the MVP, including advection, diffusion, projection, and boundary conditions
 from typing import Callable, Optional, Tuple, Union
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 class Field2D:
@@ -51,7 +51,13 @@ class FieldOperations:
     """Namespace for field operations (accessed as 'field' in DSL)."""
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], dtype: type, fill_value: float, dx: float, dy: float) -> Field2D",
+        deterministic=True,
+        doc="Allocate a new field"
+    )
     def alloc(shape: Tuple[int, int], dtype: type = np.float32,
               fill_value: float = 0.0, dx: float = 1.0, dy: float = 1.0) -> Field2D:
         """Allocate a new field.
@@ -70,7 +76,13 @@ class FieldOperations:
         return Field2D(data, dx, dy)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, velocity: Field2D, dt: float, method: str) -> Field2D",
+        deterministic=True,
+        doc="Advect field by velocity field"
+    )
     def advect(field: Field2D, velocity: Field2D, dt: float,
                method: str = "semi_lagrangian") -> Field2D:
         """Advect field by velocity field.
@@ -143,7 +155,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, rate: float, dt: float, method: str, iterations: int) -> Field2D",
+        deterministic=True,
+        doc="Diffuse field using implicit solver"
+    )
     def diffuse(field: Field2D, rate: float, dt: float,
                 method: str = "jacobi", iterations: int = 20) -> Field2D:
         """Diffuse field using implicit solver.
@@ -184,7 +202,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D) -> Field2D",
+        deterministic=True,
+        doc="Compute Laplacian of field using 5-point stencil"
+    )
     def laplacian(field: Field2D) -> Field2D:
         """Compute Laplacian of field using 5-point stencil.
 
@@ -236,7 +260,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(velocity: Field2D, method: str, iterations: int, tolerance: float) -> Field2D",
+        deterministic=True,
+        doc="Make velocity field divergence-free (pressure projection)"
+    )
     def project(velocity: Field2D, method: str = "jacobi",
                 iterations: int = 20, tolerance: float = 1e-4) -> Field2D:
         """Make velocity field divergence-free (pressure projection).
@@ -298,7 +328,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field_a: Field2D, field_b: Field2D, operation: Union[str, Callable]) -> Field2D",
+        deterministic=True,
+        doc="Combine two fields element-wise"
+    )
     def combine(field_a: Field2D, field_b: Field2D,
                 operation: Union[str, Callable] = "add") -> Field2D:
         """Combine two fields element-wise.
@@ -336,7 +372,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, func: Union[str, Callable]) -> Field2D",
+        deterministic=True,
+        doc="Apply function to each element of field"
+    )
     def map(field: Field2D, func: Union[str, Callable]) -> Field2D:
         """Apply function to each element of field.
 
@@ -371,7 +413,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, spec: str) -> Field2D",
+        deterministic=True,
+        doc="Apply boundary conditions"
+    )
     def boundary(field: Field2D, spec: str = "reflect") -> Field2D:
         """Apply boundary conditions.
 
@@ -404,7 +452,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], seed: int, low: float, high: float) -> Field2D",
+        deterministic=False,
+        doc="Create field with random values"
+    )
     def random(shape: Tuple[int, int], seed: int = 0,
                low: float = 0.0, high: float = 1.0) -> Field2D:
         """Create field with random values.
@@ -427,7 +481,13 @@ class FieldOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.QUERY,
+        signature="(field: Field2D) -> Tuple[Field2D, Field2D]",
+        deterministic=True,
+        doc="Compute gradient of scalar field"
+    )
     def gradient(field: Field2D) -> Tuple[Field2D, Field2D]:
         """Compute gradient of scalar field.
 
@@ -448,7 +508,13 @@ class FieldOperations:
         return Field2D(grad_x, field.dx, field.dy), Field2D(grad_y, field.dx, field.dy)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.QUERY,
+        signature="(velocity: Field2D) -> Field2D",
+        deterministic=True,
+        doc="Compute divergence of vector field"
+    )
     def divergence(velocity: Field2D) -> Field2D:
         """Compute divergence of vector field.
 
@@ -479,7 +545,13 @@ class FieldOperations:
         return Field2D(div, velocity.dx, velocity.dy)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.QUERY,
+        signature="(velocity: Field2D) -> Field2D",
+        deterministic=True,
+        doc="Compute curl (vorticity) of 2D vector field"
+    )
     def curl(velocity: Field2D) -> Field2D:
         """Compute curl (vorticity) of 2D vector field.
 
@@ -510,7 +582,13 @@ class FieldOperations:
         return Field2D(curl_z, velocity.dx, velocity.dy)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, iterations: int, method: str) -> Field2D",
+        deterministic=True,
+        doc="Smooth field using filtering"
+    )
     def smooth(field: Field2D, iterations: int = 1, method: str = "gaussian") -> Field2D:
         """Smooth field using filtering.
 
@@ -549,7 +627,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, target_min: float, target_max: float) -> Field2D",
+        deterministic=True,
+        doc="Normalize field values to target range"
+    )
     def normalize(field: Field2D, target_min: float = 0.0, target_max: float = 1.0) -> Field2D:
         """Normalize field values to target range.
 
@@ -580,7 +664,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, threshold_value: float, low_value: float, high_value: float) -> Field2D",
+        deterministic=True,
+        doc="Threshold field values"
+    )
     def threshold(field: Field2D, threshold_value: float,
                  low_value: float = 0.0, high_value: float = 1.0) -> Field2D:
         """Threshold field values.
@@ -602,7 +692,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.QUERY,
+        signature="(field: Field2D, positions: ndarray, method: str) -> ndarray",
+        deterministic=True,
+        doc="Sample field at arbitrary positions"
+    )
     def sample(field: Field2D, positions: np.ndarray, method: str = "bilinear") -> np.ndarray:
         """Sample field at arbitrary positions.
 
@@ -651,7 +747,13 @@ class FieldOperations:
             return sampled.reshape(*original_shape, field.data.shape[2])
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, min_value: float, max_value: float) -> Field2D",
+        deterministic=True,
+        doc="Clamp field values to range"
+    )
     def clamp(field: Field2D, min_value: float, max_value: float) -> Field2D:
         """Clamp field values to range.
 
@@ -668,7 +770,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D) -> Field2D",
+        deterministic=True,
+        doc="Compute absolute value of field"
+    )
     def abs(field: Field2D) -> Field2D:
         """Compute absolute value of field.
 
@@ -683,7 +791,13 @@ class FieldOperations:
         return result
 
     @staticmethod
-    @operator
+    @operator(
+        domain="field",
+        category=OpCategory.QUERY,
+        signature="(velocity: Field2D) -> Field2D",
+        deterministic=True,
+        doc="Compute magnitude of vector field"
+    )
     def magnitude(velocity: Field2D) -> Field2D:
         """Compute magnitude of vector field.
 
@@ -709,3 +823,24 @@ class FieldOperations:
 
 # Create singleton instance for use as 'field' namespace
 field = FieldOperations()
+
+# Export operators for domain registry discovery
+alloc = FieldOperations.alloc
+random = FieldOperations.random
+map = FieldOperations.map
+combine = FieldOperations.combine
+threshold = FieldOperations.threshold
+clamp = FieldOperations.clamp
+normalize = FieldOperations.normalize
+abs = FieldOperations.abs
+magnitude = FieldOperations.magnitude
+gradient = FieldOperations.gradient
+divergence = FieldOperations.divergence
+curl = FieldOperations.curl
+laplacian = FieldOperations.laplacian
+smooth = FieldOperations.smooth
+diffuse = FieldOperations.diffuse
+advect = FieldOperations.advect
+project = FieldOperations.project
+boundary = FieldOperations.boundary
+sample = FieldOperations.sample

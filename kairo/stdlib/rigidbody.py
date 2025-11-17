@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 # ============================================================================
@@ -143,6 +143,13 @@ class PhysicsWorld2D:
 # LAYER 1: ATOMIC OPERATORS (Core Physics)
 # ============================================================================
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.CONSTRUCT,
+    signature="(position: ndarray, radius: float, mass: float, restitution: float, friction: float) -> RigidBody2D",
+    deterministic=True,
+    doc="Create a circular rigid body"
+)
 def create_circle_body(
     position: np.ndarray,
     radius: float,
@@ -183,6 +190,13 @@ def create_circle_body(
     )
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.CONSTRUCT,
+    signature="(position: ndarray, width: float, height: float, mass: float, restitution: float, friction: float) -> RigidBody2D",
+    deterministic=True,
+    doc="Create a rectangular rigid body"
+)
 def create_box_body(
     position: np.ndarray,
     width: float,
@@ -226,6 +240,13 @@ def create_box_body(
     )
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.TRANSFORM,
+    signature="(body: RigidBody2D, force: ndarray, point: Optional[ndarray]) -> RigidBody2D",
+    deterministic=True,
+    doc="Apply force to a rigid body (accumulates until integration step)"
+)
 def apply_force(body: RigidBody2D, force: np.ndarray, point: Optional[np.ndarray] = None) -> RigidBody2D:
     """Apply force to a rigid body (accumulates until integration step).
 
@@ -259,6 +280,13 @@ def apply_force(body: RigidBody2D, force: np.ndarray, point: Optional[np.ndarray
     return body
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.TRANSFORM,
+    signature="(body: RigidBody2D, impulse: ndarray, point: Optional[ndarray]) -> RigidBody2D",
+    deterministic=True,
+    doc="Apply instantaneous impulse to a rigid body"
+)
 def apply_impulse(body: RigidBody2D, impulse: np.ndarray, point: Optional[np.ndarray] = None) -> RigidBody2D:
     """Apply instantaneous impulse to a rigid body.
 
@@ -288,6 +316,13 @@ def apply_impulse(body: RigidBody2D, impulse: np.ndarray, point: Optional[np.nda
     return body
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.TRANSFORM,
+    signature="(body: RigidBody2D) -> RigidBody2D",
+    deterministic=True,
+    doc="Clear accumulated forces and torques (call after integration)"
+)
 def clear_forces(body: RigidBody2D) -> RigidBody2D:
     """Clear accumulated forces and torques (call after integration).
 
@@ -302,6 +337,13 @@ def clear_forces(body: RigidBody2D) -> RigidBody2D:
     return body
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.INTEGRATE,
+    signature="(body: RigidBody2D, dt: float, damping: float) -> RigidBody2D",
+    deterministic=True,
+    doc="Integrate rigid body motion using semi-implicit Euler"
+)
 def integrate_body(body: RigidBody2D, dt: float, damping: float = 0.99) -> RigidBody2D:
     """Integrate rigid body motion using semi-implicit Euler.
 
@@ -347,6 +389,13 @@ def integrate_body(body: RigidBody2D, dt: float, damping: float = 0.99) -> Rigid
 # LAYER 2: COLLISION DETECTION
 # ============================================================================
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.QUERY,
+    signature="(body_a: RigidBody2D, body_b: RigidBody2D) -> Optional[Contact]",
+    deterministic=True,
+    doc="Detect collision between two circles"
+)
 def detect_circle_circle_collision(
     body_a: RigidBody2D,
     body_b: RigidBody2D
@@ -393,6 +442,13 @@ def detect_circle_circle_collision(
     )
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.QUERY,
+    signature="(world: PhysicsWorld2D) -> List[Contact]",
+    deterministic=True,
+    doc="Detect all collisions in the world (broad phase + narrow phase)"
+)
 def detect_collisions(world: PhysicsWorld2D) -> List[Contact]:
     """Detect all collisions in the world (broad phase + narrow phase).
 
@@ -424,6 +480,13 @@ def detect_collisions(world: PhysicsWorld2D) -> List[Contact]:
 # LAYER 3: COLLISION RESPONSE & WORLD SIMULATION
 # ============================================================================
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.TRANSFORM,
+    signature="(body_a: RigidBody2D, body_b: RigidBody2D, contact: Contact) -> Tuple[RigidBody2D, RigidBody2D]",
+    deterministic=True,
+    doc="Resolve collision with impulse-based response"
+)
 def resolve_collision(
     body_a: RigidBody2D,
     body_b: RigidBody2D,
@@ -519,6 +582,13 @@ def resolve_collision(
     return body_a, body_b
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.INTEGRATE,
+    signature="(world: PhysicsWorld2D, dt: Optional[float]) -> PhysicsWorld2D",
+    deterministic=True,
+    doc="Step the physics world forward by one timestep"
+)
 def step_world(world: PhysicsWorld2D, dt: Optional[float] = None) -> PhysicsWorld2D:
     """Step the physics world forward by one timestep.
 
@@ -579,6 +649,13 @@ def step_world(world: PhysicsWorld2D, dt: Optional[float] = None) -> PhysicsWorl
 # UTILITY FUNCTIONS
 # ============================================================================
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.QUERY,
+    signature="(body: RigidBody2D) -> Optional[ndarray]",
+    deterministic=True,
+    doc="Get vertices of a body in world space (for rendering)"
+)
 def get_body_vertices(body: RigidBody2D) -> Optional[np.ndarray]:
     """Get vertices of a body in world space (for rendering).
 
@@ -612,6 +689,13 @@ def get_body_vertices(body: RigidBody2D) -> Optional[np.ndarray]:
     return None
 
 
+@operator(
+    domain="rigidbody",
+    category=OpCategory.QUERY,
+    signature="(world: PhysicsWorld2D, origin: ndarray, direction: ndarray, max_distance: float) -> Optional[Tuple[RigidBody2D, ndarray, float]]",
+    deterministic=True,
+    doc="Cast a ray and find the first body hit"
+)
 def raycast(
     world: PhysicsWorld2D,
     origin: np.ndarray,

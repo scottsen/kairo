@@ -7,7 +7,7 @@ PNG output, and interactive real-time display for the MVP.
 from typing import Optional, Union, Callable, Tuple
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 import time
 
 
@@ -86,7 +86,13 @@ class VisualOperations:
     }
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.TRANSFORM,
+        signature="(field: Field2D, palette: str, vmin: Optional[float], vmax: Optional[float]) -> Visual",
+        deterministic=True,
+        doc="Map scalar field to colors using a palette"
+    )
     def colorize(field, palette: str = "grayscale",
                  vmin: Optional[float] = None,
                  vmax: Optional[float] = None) -> Visual:
@@ -153,7 +159,13 @@ class VisualOperations:
         return Visual(rgb)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.TRANSFORM,
+        signature="(visual: Visual, path: str, format: str) -> None",
+        deterministic=True,
+        doc="Save visual to file"
+    )
     def output(visual: Visual, path: str, format: str = "auto") -> None:
         """Save visual to file.
 
@@ -224,7 +236,13 @@ class VisualOperations:
         return np.clip(srgb, 0.0, 1.0)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.TRANSFORM,
+        signature="(frame_generator: Callable, title: str, target_fps: int, scale: int) -> None",
+        deterministic=True,
+        doc="Display simulation in real-time interactive window"
+    )
     def display(frame_generator: Callable[[], Optional[Visual]],
                 title: str = "Creative Computation DSL",
                 target_fps: int = 30,
@@ -392,7 +410,13 @@ class VisualOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.TRANSFORM,
+        signature="(agents: Agents, width: int, height: int, position_property: str, color_property: Optional[str], size_property: Optional[str], alpha_property: Optional[str], rotation_property: Optional[str], color: tuple, size: float, alpha: float, palette: str, background: tuple, bounds: Optional[Tuple], blend_mode: str, trail: bool, trail_length: int, trail_alpha: float) -> Visual",
+        deterministic=True,
+        doc="Render agents as points or circles with particle effects support"
+    )
     def agents(agents, width: int = 512, height: int = 512,
                position_property: str = 'pos',
                color_property: Optional[str] = None,
@@ -645,7 +669,13 @@ class VisualOperations:
         return Visual(img)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.CONSTRUCT,
+        signature="(visual: Optional[Visual], width: int, height: int, background: tuple) -> Visual",
+        deterministic=True,
+        doc="Create a visual layer for composition"
+    )
     def layer(visual: Optional[Visual] = None, width: int = 512, height: int = 512,
               background: tuple = (0.0, 0.0, 0.0)) -> Visual:
         """Create a visual layer for composition.
@@ -677,7 +707,13 @@ class VisualOperations:
             return Visual(img)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.TRANSFORM,
+        signature="(*layers: Visual, mode: str, opacity: Optional[Union[float, list]]) -> Visual",
+        deterministic=True,
+        doc="Composite multiple visual layers"
+    )
     def composite(*layers: Visual, mode: str = "over",
                   opacity: Optional[Union[float, list]] = None) -> Visual:
         """Composite multiple visual layers.
@@ -762,7 +798,13 @@ class VisualOperations:
         return Visual(result)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="visual",
+        category=OpCategory.TRANSFORM,
+        signature="(frames: Union[list, Callable], path: str, fps: int, format: str, max_frames: Optional[int]) -> None",
+        deterministic=True,
+        doc="Export animation sequence to video file"
+    )
     def video(frames: Union[list, Callable[[], Optional[Visual]]],
               path: str,
               fps: int = 30,
@@ -888,3 +930,12 @@ class VisualOperations:
 
 # Create singleton instance for use as 'visual' namespace
 visual = VisualOperations()
+
+# Export operators for domain registry discovery
+layer = VisualOperations.layer
+colorize = VisualOperations.colorize
+composite = VisualOperations.composite
+agents = VisualOperations.agents
+display = VisualOperations.display
+output = VisualOperations.output
+video = VisualOperations.video

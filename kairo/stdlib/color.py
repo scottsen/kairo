@@ -19,7 +19,7 @@ Supports multiple color representations:
 from typing import Tuple, Union, List
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 class ColorOperations:
@@ -30,7 +30,13 @@ class ColorOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Convert RGB to HSV color space"
+    )
     def rgb_to_hsv(rgb: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Convert RGB to HSV color space.
 
@@ -87,7 +93,13 @@ class ColorOperations:
         return hsv
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(hsv: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Convert HSV to RGB color space"
+    )
     def hsv_to_rgb(hsv: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Convert HSV to RGB color space.
 
@@ -151,7 +163,13 @@ class ColorOperations:
         return rgb
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Convert RGB to HSL color space"
+    )
     def rgb_to_hsl(rgb: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Convert RGB to HSL color space.
 
@@ -203,7 +221,13 @@ class ColorOperations:
         return hsl
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(hsl: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Convert HSL to RGB color space"
+    )
     def hsl_to_rgb(hsl: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Convert HSL to RGB color space.
 
@@ -263,7 +287,13 @@ class ColorOperations:
         return rgb
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(hex_color: str) -> Tuple[float, float, float]",
+        deterministic=True,
+        doc="Convert hex color string to RGB"
+    )
     def hex_to_rgb(hex_color: str) -> Tuple[float, float, float]:
         """Convert hex color string to RGB.
 
@@ -289,7 +319,13 @@ class ColorOperations:
         return (r, g, b)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(rgb: Tuple[float, float, float]) -> str",
+        deterministic=True,
+        doc="Convert RGB to hex color string"
+    )
     def rgb_to_hex(rgb: Tuple[float, float, float]) -> str:
         """Convert RGB to hex color string.
 
@@ -311,7 +347,13 @@ class ColorOperations:
         return f"#{r_int:02X}{g_int:02X}{b_int:02X}"
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.QUERY,
+        signature="(kelvin: Union[float, ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Convert color temperature (Kelvin) to RGB"
+    )
     def temperature_to_rgb(kelvin: Union[float, np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Convert color temperature (Kelvin) to RGB.
 
@@ -370,7 +412,13 @@ class ColorOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(color_a: Union[Tuple[float, float, float], ndarray], color_b: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Add two colors (clamped to [0, 1])"
+    )
     def add(color_a: Union[Tuple[float, float, float], np.ndarray],
             color_b: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Add two colors (clamped to [0, 1]).
@@ -387,7 +435,13 @@ class ColorOperations:
         return np.clip(a + b, 0, 1)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(color_a: Union[Tuple[float, float, float], ndarray], color_b: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Multiply two colors element-wise"
+    )
     def multiply(color_a: Union[Tuple[float, float, float], np.ndarray],
                  color_b: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Multiply two colors element-wise.
@@ -404,7 +458,13 @@ class ColorOperations:
         return a * b
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(color_a: Union[Tuple[float, float, float], ndarray], color_b: Union[Tuple[float, float, float], ndarray], t: Union[float, ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Linear interpolation between two colors"
+    )
     def mix(color_a: Union[Tuple[float, float, float], np.ndarray],
             color_b: Union[Tuple[float, float, float], np.ndarray],
             t: Union[float, np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
@@ -428,7 +488,13 @@ class ColorOperations:
         return a * (1 - t) + b * t
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray], factor: float) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Adjust color brightness"
+    )
     def brightness(rgb: Union[Tuple[float, float, float], np.ndarray],
                    factor: float) -> Union[Tuple[float, float, float], np.ndarray]:
         """Adjust color brightness.
@@ -444,7 +510,13 @@ class ColorOperations:
         return np.clip(rgb * factor, 0, 1)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray], factor: float) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Adjust color saturation"
+    )
     def saturate(rgb: Union[Tuple[float, float, float], np.ndarray],
                  factor: float) -> Union[Tuple[float, float, float], np.ndarray]:
         """Adjust color saturation.
@@ -468,7 +540,13 @@ class ColorOperations:
         return ColorOperations.hsv_to_rgb(hsv)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray], gamma: float) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Apply gamma correction to color"
+    )
     def gamma_correct(rgb: Union[Tuple[float, float, float], np.ndarray],
                       gamma: float = 2.2) -> Union[Tuple[float, float, float], np.ndarray]:
         """Apply gamma correction to color.
@@ -492,7 +570,13 @@ class ColorOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(base: Union[Tuple[float, float, float], ndarray], blend: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Overlay blend mode"
+    )
     def blend_overlay(base: Union[Tuple[float, float, float], np.ndarray],
                      blend: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Overlay blend mode.
@@ -516,7 +600,13 @@ class ColorOperations:
         return np.clip(result, 0, 1)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(base: Union[Tuple[float, float, float], ndarray], blend: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Screen blend mode (inverted multiply)"
+    )
     def blend_screen(base: Union[Tuple[float, float, float], np.ndarray],
                     blend: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Screen blend mode (inverted multiply).
@@ -534,7 +624,13 @@ class ColorOperations:
         return 1 - (1 - base) * (1 - blend)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(base: Union[Tuple[float, float, float], ndarray], blend: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Multiply blend mode"
+    )
     def blend_multiply(base: Union[Tuple[float, float, float], np.ndarray],
                       blend: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Multiply blend mode.
@@ -549,7 +645,13 @@ class ColorOperations:
         return ColorOperations.multiply(base, blend)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(base: Union[Tuple[float, float, float], ndarray], blend: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Difference blend mode"
+    )
     def blend_difference(base: Union[Tuple[float, float, float], np.ndarray],
                         blend: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Difference blend mode.
@@ -567,7 +669,13 @@ class ColorOperations:
         return np.abs(base - blend)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(base: Union[Tuple[float, float, float], ndarray], blend: Union[Tuple[float, float, float], ndarray]) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Soft light blend mode (gentle overlay)"
+    )
     def blend_soft_light(base: Union[Tuple[float, float, float], np.ndarray],
                         blend: Union[Tuple[float, float, float], np.ndarray]) -> Union[Tuple[float, float, float], np.ndarray]:
         """Soft light blend mode (gentle overlay).
@@ -593,7 +701,13 @@ class ColorOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray], levels: int) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Posterize color (reduce to N discrete levels)"
+    )
     def posterize(rgb: Union[Tuple[float, float, float], np.ndarray],
                   levels: int) -> Union[Tuple[float, float, float], np.ndarray]:
         """Posterize color (reduce to N discrete levels).
@@ -616,7 +730,13 @@ class ColorOperations:
         return np.clip(quantized, 0, 1)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="color",
+        category=OpCategory.TRANSFORM,
+        signature="(rgb: Union[Tuple[float, float, float], ndarray], threshold_value: float) -> Union[Tuple[float, float, float], ndarray]",
+        deterministic=True,
+        doc="Threshold color to black or white"
+    )
     def threshold(rgb: Union[Tuple[float, float, float], np.ndarray],
                   threshold_value: float = 0.5) -> Union[Tuple[float, float, float], np.ndarray]:
         """Threshold color to black or white.
@@ -644,3 +764,25 @@ class ColorOperations:
 
 # Create singleton instance for use as 'color' namespace
 color = ColorOperations()
+
+# Export operators for domain registry discovery
+rgb_to_hsv = ColorOperations.rgb_to_hsv
+hsv_to_rgb = ColorOperations.hsv_to_rgb
+rgb_to_hsl = ColorOperations.rgb_to_hsl
+hsl_to_rgb = ColorOperations.hsl_to_rgb
+rgb_to_hex = ColorOperations.rgb_to_hex
+hex_to_rgb = ColorOperations.hex_to_rgb
+mix = ColorOperations.mix
+add = ColorOperations.add
+multiply = ColorOperations.multiply
+brightness = ColorOperations.brightness
+saturate = ColorOperations.saturate
+gamma_correct = ColorOperations.gamma_correct
+temperature_to_rgb = ColorOperations.temperature_to_rgb
+threshold = ColorOperations.threshold
+posterize = ColorOperations.posterize
+blend_multiply = ColorOperations.blend_multiply
+blend_screen = ColorOperations.blend_screen
+blend_overlay = ColorOperations.blend_overlay
+blend_soft_light = ColorOperations.blend_soft_light
+blend_difference = ColorOperations.blend_difference

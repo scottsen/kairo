@@ -20,7 +20,7 @@ Layer 3: Evolution constructs (GA loop, island models)
 
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 from typing import List, Tuple, Optional, Callable
 from dataclasses import dataclass
 
@@ -102,7 +102,13 @@ class GeneticOperations:
     # === LAYER 1: ATOMIC OPERATORS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.CONSTRUCT,
+        signature="(genome_size: int, seed: Optional[int]) -> Individual",
+        deterministic=False,
+        doc="Allocate a random individual"
+    )
     def alloc_individual(genome_size: int, seed: Optional[int] = None) -> Individual:
         """
         Layer 1: Allocate a random individual.
@@ -121,7 +127,13 @@ class GeneticOperations:
         return Individual(genome=genome, fitness=0.0, age=0)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.CONSTRUCT,
+        signature="(pop_size: int, genome_size: int, seed: Optional[int]) -> Population",
+        deterministic=False,
+        doc="Allocate a random population"
+    )
     def alloc_population(pop_size: int, genome_size: int,
                         seed: Optional[int] = None) -> Population:
         """
@@ -145,7 +157,13 @@ class GeneticOperations:
         return Population(individuals=individuals, generation=0)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(population: Population, fitness_fn: Callable[[ndarray], float]) -> Population",
+        deterministic=True,
+        doc="Evaluate fitness for all individuals"
+    )
     def evaluate_fitness(population: Population,
                         fitness_fn: Callable[[np.ndarray], float]) -> Population:
         """
@@ -164,7 +182,13 @@ class GeneticOperations:
         return new_pop
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(population: Population) -> Population",
+        deterministic=True,
+        doc="Sort population by fitness (descending)"
+    )
     def rank_population(population: Population) -> Population:
         """
         Layer 1: Sort population by fitness (descending).
@@ -182,7 +206,13 @@ class GeneticOperations:
         return new_pop
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.QUERY,
+        signature="(population: Population, tournament_size: int, seed: Optional[int]) -> Individual",
+        deterministic=False,
+        doc="Select individual via tournament selection"
+    )
     def tournament_selection(population: Population, tournament_size: int = 3,
                            seed: Optional[int] = None) -> Individual:
         """
@@ -206,7 +236,13 @@ class GeneticOperations:
         return winner.copy()
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.QUERY,
+        signature="(population: Population, seed: Optional[int]) -> Individual",
+        deterministic=False,
+        doc="Select individual via fitness-proportional roulette selection"
+    )
     def roulette_selection(population: Population,
                           seed: Optional[int] = None) -> Individual:
         """
@@ -240,7 +276,13 @@ class GeneticOperations:
         return population.individuals[idx].copy()
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.QUERY,
+        signature="(population: Population, n_elite: int) -> List[Individual]",
+        deterministic=True,
+        doc="Select top N individuals (elitism)"
+    )
     def elitism_select(population: Population, n_elite: int) -> List[Individual]:
         """
         Layer 1: Select top N individuals (elitism).
@@ -258,7 +300,13 @@ class GeneticOperations:
         return [ind.copy() for ind in population.individuals[:n_elite]]
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(genome: ndarray, mutation_rate: float, mutation_scale: float, seed: Optional[int]) -> ndarray",
+        deterministic=False,
+        doc="Mutate genome with Gaussian noise"
+    )
     def mutate(genome: np.ndarray, mutation_rate: float = 0.1,
               mutation_scale: float = 0.3,
               seed: Optional[int] = None) -> np.ndarray:
@@ -283,7 +331,13 @@ class GeneticOperations:
         return new_genome
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(genome1: ndarray, genome2: ndarray, seed: Optional[int]) -> Tuple[ndarray, ndarray]",
+        deterministic=False,
+        doc="Uniform crossover (each gene randomly from parent1 or parent2)"
+    )
     def crossover_uniform(genome1: np.ndarray, genome2: np.ndarray,
                          seed: Optional[int] = None) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -306,7 +360,13 @@ class GeneticOperations:
         return offspring1, offspring2
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(genome1: ndarray, genome2: ndarray, seed: Optional[int]) -> Tuple[ndarray, ndarray]",
+        deterministic=False,
+        doc="Single-point crossover"
+    )
     def crossover_single_point(genome1: np.ndarray, genome2: np.ndarray,
                               seed: Optional[int] = None) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -329,7 +389,13 @@ class GeneticOperations:
         return offspring1, offspring2
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(genome1: ndarray, genome2: ndarray, alpha: float) -> Tuple[ndarray, ndarray]",
+        deterministic=True,
+        doc="Blend crossover (weighted average)"
+    )
     def crossover_blend(genome1: np.ndarray, genome2: np.ndarray,
                        alpha: float = 0.5) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -350,7 +416,13 @@ class GeneticOperations:
     # === LAYER 2: COMPOSITE OPERATORS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(parent1: Individual, parent2: Individual, crossover_method: str, mutation_rate: float, mutation_scale: float, seed: Optional[int]) -> Tuple[Individual, Individual]",
+        deterministic=False,
+        doc="Breed two parents to produce two offspring"
+    )
     def breed(parent1: Individual, parent2: Individual,
              crossover_method: str = 'uniform',
              mutation_rate: float = 0.1,
@@ -400,7 +472,13 @@ class GeneticOperations:
         return offspring1, offspring2
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(population: Population, fitness_fn: Callable[[ndarray], float], n_elite: int, selection_method: str, crossover_method: str, mutation_rate: float, mutation_scale: float, seed: Optional[int]) -> Population",
+        deterministic=False,
+        doc="Evolve population for one generation"
+    )
     def evolve_generation(population: Population,
                          fitness_fn: Callable[[np.ndarray], float],
                          n_elite: int = 4,
@@ -499,7 +577,13 @@ class GeneticOperations:
     # === LAYER 3: EVOLUTION CONSTRUCTS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.TRANSFORM,
+        signature="(population: Population, fitness_fn: Callable[[ndarray], float], n_generations: int, callback: Optional[Callable[[Population], None]]) -> Population",
+        deterministic=True,
+        doc="Run complete evolutionary algorithm"
+    )
     def run_evolution(population: Population,
                      fitness_fn: Callable[[np.ndarray], float],
                      n_generations: int = 100,
@@ -529,7 +613,13 @@ class GeneticOperations:
         return population
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.QUERY,
+        signature="(population: Population) -> Individual",
+        deterministic=True,
+        doc="Get the best individual from population"
+    )
     def get_best_individual(population: Population) -> Individual:
         """
         Layer 3: Get the best individual from population.
@@ -545,7 +635,13 @@ class GeneticOperations:
         return max(population.individuals, key=lambda x: x.fitness).copy()
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.QUERY,
+        signature="(population: Population) -> float",
+        deterministic=True,
+        doc="Compute genetic diversity of population"
+    )
     def get_diversity(population: Population) -> float:
         """
         Layer 3: Compute genetic diversity of population.
@@ -574,7 +670,13 @@ class GeneticOperations:
     # === LAYER 4: PRESETS ===
 
     @staticmethod
-    @operator
+    @operator(
+        domain="genetic",
+        category=OpCategory.CONSTRUCT,
+        signature="(pop_size: int, genome_size: int, seed: Optional[int]) -> Population",
+        deterministic=False,
+        doc="Preset population for Flappy Bird neural controller evolution"
+    )
     def flappy_bird_evolution(pop_size: int = 128,
                              genome_size: int = 73,  # [4,8,1] MLP = 32+8+8+1 = 73 params
                              seed: Optional[int] = None) -> Population:
@@ -620,3 +722,23 @@ def parallel_fitness_evaluation(population: Population,
         ind.fitness = fitness
 
     return new_pop
+
+
+# Export operators for domain registry discovery
+alloc_individual = GeneticOperations.alloc_individual
+alloc_population = GeneticOperations.alloc_population
+mutate = GeneticOperations.mutate
+crossover_single_point = GeneticOperations.crossover_single_point
+crossover_uniform = GeneticOperations.crossover_uniform
+crossover_blend = GeneticOperations.crossover_blend
+breed = GeneticOperations.breed
+roulette_selection = GeneticOperations.roulette_selection
+tournament_selection = GeneticOperations.tournament_selection
+elitism_select = GeneticOperations.elitism_select
+rank_population = GeneticOperations.rank_population
+get_best_individual = GeneticOperations.get_best_individual
+get_diversity = GeneticOperations.get_diversity
+evolve_generation = GeneticOperations.evolve_generation
+run_evolution = GeneticOperations.run_evolution
+evaluate_fitness = GeneticOperations.evaluate_fitness
+flappy_bird_evolution = GeneticOperations.flappy_bird_evolution

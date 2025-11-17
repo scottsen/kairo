@@ -19,7 +19,7 @@ Supports multiple palette types:
 from typing import List, Tuple, Optional, Union
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 class Palette:
@@ -95,7 +95,13 @@ class PaletteOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(colors: List[Tuple[float, float, float]], name: str) -> Palette",
+        deterministic=True,
+        doc="Create palette from list of RGB colors"
+    )
     def from_colors(colors: List[Tuple[float, float, float]], name: str = "custom") -> Palette:
         """Create palette from list of RGB colors.
 
@@ -113,7 +119,13 @@ class PaletteOperations:
         return Palette(colors_array, name)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(stops: List[Tuple[float, Tuple[float, float, float]]], resolution: int, name: str) -> Palette",
+        deterministic=True,
+        doc="Create palette from color gradient stops"
+    )
     def from_gradient(stops: List[Tuple[float, Tuple[float, float, float]]],
                      resolution: int = 256,
                      name: str = "gradient") -> Palette:
@@ -167,7 +179,13 @@ class PaletteOperations:
         return Palette(colors, name)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create greyscale palette"
+    )
     def greyscale(resolution: int = 256) -> Palette:
         """Create greyscale palette.
 
@@ -182,7 +200,13 @@ class PaletteOperations:
         return Palette(colors, "greyscale")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create rainbow palette (HSV hue sweep)"
+    )
     def rainbow(resolution: int = 256) -> Palette:
         """Create rainbow palette (HSV hue sweep).
 
@@ -220,7 +244,13 @@ class PaletteOperations:
         return Palette(colors, "rainbow")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create HSV color wheel palette"
+    )
     def hsv_wheel(resolution: int = 256) -> Palette:
         """Create HSV color wheel palette.
 
@@ -239,7 +269,13 @@ class PaletteOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create Inferno colormap"
+    )
     def inferno(resolution: int = 256) -> Palette:
         """Create Inferno colormap.
 
@@ -264,7 +300,13 @@ class PaletteOperations:
         return PaletteOperations.from_gradient(stops, resolution, "inferno")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create Viridis colormap"
+    )
     def viridis(resolution: int = 256) -> Palette:
         """Create Viridis colormap.
 
@@ -288,7 +330,13 @@ class PaletteOperations:
         return PaletteOperations.from_gradient(stops, resolution, "viridis")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create Plasma colormap"
+    )
     def plasma(resolution: int = 256) -> Palette:
         """Create Plasma colormap.
 
@@ -312,7 +360,13 @@ class PaletteOperations:
         return PaletteOperations.from_gradient(stops, resolution, "plasma")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create Magma colormap"
+    )
     def magma(resolution: int = 256) -> Palette:
         """Create Magma colormap.
 
@@ -340,7 +394,13 @@ class PaletteOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(a: Tuple[float, float, float], b: Tuple[float, float, float], c: Tuple[float, float, float], d: Tuple[float, float, float], resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create palette using Inigo Quilez's cosine gradient formula"
+    )
     def cosine(a: Tuple[float, float, float] = (0.5, 0.5, 0.5),
                b: Tuple[float, float, float] = (0.5, 0.5, 0.5),
                c: Tuple[float, float, float] = (1.0, 1.0, 1.0),
@@ -388,7 +448,13 @@ class PaletteOperations:
         return Palette(colors, "cosine")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create fire palette"
+    )
     def fire(resolution: int = 256) -> Palette:
         """Create fire palette (black → red → orange → yellow → white).
 
@@ -408,7 +474,13 @@ class PaletteOperations:
         return PaletteOperations.from_gradient(stops, resolution, "fire")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.CONSTRUCT,
+        signature="(resolution: int) -> Palette",
+        deterministic=True,
+        doc="Create ice palette"
+    )
     def ice(resolution: int = 256) -> Palette:
         """Create ice palette (black → blue → cyan → white).
 
@@ -431,7 +503,13 @@ class PaletteOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette, amount: float) -> Palette",
+        deterministic=True,
+        doc="Shift palette colors cyclically"
+    )
     def shift(pal: Palette, amount: float) -> Palette:
         """Shift palette colors cyclically.
 
@@ -450,7 +528,13 @@ class PaletteOperations:
         return Palette(colors, f"{pal.name}_shifted")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette, speed: float, time: float) -> Palette",
+        deterministic=True,
+        doc="Cycle palette colors over time"
+    )
     def cycle(pal: Palette, speed: float, time: float) -> Palette:
         """Cycle palette colors over time.
 
@@ -468,7 +552,13 @@ class PaletteOperations:
         return PaletteOperations.shift(pal, amount)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette) -> Palette",
+        deterministic=True,
+        doc="Flip palette (reverse color order)"
+    )
     def flip(pal: Palette) -> Palette:
         """Flip palette (reverse color order).
 
@@ -482,7 +572,13 @@ class PaletteOperations:
         return Palette(colors, f"{pal.name}_flipped")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette) -> Palette",
+        deterministic=True,
+        doc="Reverse palette (alias for flip)"
+    )
     def reverse(pal: Palette) -> Palette:
         """Reverse palette (alias for flip).
 
@@ -495,7 +591,13 @@ class PaletteOperations:
         return PaletteOperations.flip(pal)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal_a: Palette, pal_b: Palette, t: float) -> Palette",
+        deterministic=True,
+        doc="Interpolate between two palettes"
+    )
     def lerp(pal_a: Palette, pal_b: Palette, t: float) -> Palette:
         """Interpolate between two palettes.
 
@@ -519,7 +621,13 @@ class PaletteOperations:
         return Palette(colors, f"lerp_{pal_a.name}_{pal_b.name}")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette, factor: float) -> Palette",
+        deterministic=True,
+        doc="Adjust palette saturation"
+    )
     def saturate(pal: Palette, factor: float) -> Palette:
         """Adjust palette saturation.
 
@@ -585,7 +693,13 @@ class PaletteOperations:
         return Palette(colors, f"{pal.name}_saturated")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette, factor: float) -> Palette",
+        deterministic=True,
+        doc="Adjust palette brightness"
+    )
     def brightness(pal: Palette, factor: float) -> Palette:
         """Adjust palette brightness.
 
@@ -604,7 +718,13 @@ class PaletteOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette, field: ndarray, vmin: Optional[float], vmax: Optional[float]) -> ndarray",
+        deterministic=True,
+        doc="Map scalar field to RGB using palette"
+    )
     def map(pal: Palette, field: np.ndarray, vmin: Optional[float] = None,
             vmax: Optional[float] = None) -> np.ndarray:
         """Map scalar field to RGB using palette.
@@ -637,7 +757,13 @@ class PaletteOperations:
         return pal.sample(normalized)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="palette",
+        category=OpCategory.TRANSFORM,
+        signature="(pal: Palette, field: ndarray, frequency: float) -> ndarray",
+        deterministic=True,
+        doc="Map scalar field to palette with cyclic wrapping"
+    )
     def map_cyclic(pal: Palette, field: np.ndarray, frequency: float = 1.0) -> np.ndarray:
         """Map scalar field to palette with cyclic wrapping.
 
@@ -658,3 +784,26 @@ class PaletteOperations:
 
 # Create singleton instance for use as 'palette' namespace
 palette = PaletteOperations()
+
+# Export operators for domain registry discovery
+from_colors = PaletteOperations.from_colors
+from_gradient = PaletteOperations.from_gradient
+lerp = PaletteOperations.lerp
+map = PaletteOperations.map
+map_cyclic = PaletteOperations.map_cyclic
+reverse = PaletteOperations.reverse
+flip = PaletteOperations.flip
+shift = PaletteOperations.shift
+cycle = PaletteOperations.cycle
+brightness = PaletteOperations.brightness
+saturate = PaletteOperations.saturate
+cosine = PaletteOperations.cosine
+greyscale = PaletteOperations.greyscale
+rainbow = PaletteOperations.rainbow
+viridis = PaletteOperations.viridis
+plasma = PaletteOperations.plasma
+inferno = PaletteOperations.inferno
+magma = PaletteOperations.magma
+fire = PaletteOperations.fire
+ice = PaletteOperations.ice
+hsv_wheel = PaletteOperations.hsv_wheel

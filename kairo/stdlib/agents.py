@@ -8,7 +8,7 @@ force calculations, and field-agent coupling.
 from typing import Callable, Optional, Dict, Any, Tuple, Union
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 
 
 class Agents:
@@ -146,7 +146,13 @@ class AgentOperations:
     """Namespace for agent operations (accessed as 'agents' in DSL)."""
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.CONSTRUCT,
+        signature="(count: int, properties: Dict[str, Any]) -> Agents",
+        deterministic=True,
+        doc="Allocate a new agent collection"
+    )
     def alloc(count: int, properties: Dict[str, Any], **kwargs) -> Agents:
         """Allocate a new agent collection.
 
@@ -203,7 +209,13 @@ class AgentOperations:
         return Agents(count=count, properties=processed_props)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_obj: Agents, property_name: str, func: Callable) -> ndarray",
+        deterministic=True,
+        doc="Apply function to each agent's property"
+    )
     def map(agents_obj: Agents, property_name: str, func: Callable) -> np.ndarray:
         """Apply function to each agent's property.
 
@@ -234,7 +246,13 @@ class AgentOperations:
             raise TypeError(f"Expected callable, got {type(func)}")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_obj: Agents, property_name: str, condition: Callable) -> Agents",
+        deterministic=True,
+        doc="Keep only agents matching condition"
+    )
     def filter(agents_obj: Agents, property_name: str, condition: Callable) -> Agents:
         """Keep only agents matching condition.
 
@@ -266,7 +284,13 @@ class AgentOperations:
         return new_agents
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.QUERY,
+        signature="(agents_obj: Agents, property_name: str, operation: str, initial: Optional[Any]) -> Any",
+        deterministic=True,
+        doc="Reduce agents to single value"
+    )
     def reduce(agents_obj: Agents, property_name: str,
                operation: str = "sum", initial: Optional[Any] = None) -> Any:
         """Reduce agents to single value.
@@ -300,7 +324,13 @@ class AgentOperations:
             raise ValueError(f"Unknown reduction operation: {operation}")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.QUERY,
+        signature="(agents_obj: Agents, radius: float, force_func: Callable, position_property: str, mass_property: Optional[str], use_spatial_hashing: bool) -> ndarray",
+        deterministic=True,
+        doc="Compute forces between nearby agents"
+    )
     def compute_pairwise_forces(
         agents_obj: Agents,
         radius: float,
@@ -481,7 +511,13 @@ class AgentOperations:
         return forces
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.QUERY,
+        signature="(agents_obj: Agents, field: Field2D, position_property: str) -> ndarray",
+        deterministic=True,
+        doc="Sample field values at agent positions"
+    )
     def sample_field(agents_obj: Agents, field, position_property: str = 'pos') -> np.ndarray:
         """Sample field values at agent positions.
 
@@ -552,7 +588,13 @@ class AgentOperations:
     # ========================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.CONSTRUCT,
+        signature="(count: int, position: Union[ndarray, Callable], velocity: Optional[Union[ndarray, Callable]], lifetime: Optional[Union[float, Tuple[float, float]]], properties: Optional[Dict[str, Any]], emission_shape: str, emission_radius: float, seed: Optional[int]) -> Agents",
+        deterministic=False,
+        doc="Emit new particles from a source"
+    )
     def emit(count: int, position: Union[np.ndarray, Callable],
              velocity: Optional[Union[np.ndarray, Callable]] = None,
              lifetime: Optional[Union[float, Tuple[float, float]]] = None,
@@ -716,7 +758,13 @@ class AgentOperations:
         return AgentOperations.alloc(count=count, properties=particle_props)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_obj: Agents, dt: float, age_property: str, lifetime_property: str) -> Agents",
+        deterministic=True,
+        doc="Age particles and remove dead ones"
+    )
     def age_particles(agents_obj: Agents, dt: float = 1.0,
                      age_property: str = 'age',
                      lifetime_property: str = 'lifetime') -> Agents:
@@ -756,7 +804,13 @@ class AgentOperations:
         return new_agents
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.QUERY,
+        signature="(agents_obj: Agents, age_property: str, lifetime_property: str, fade_in: float, fade_out: float) -> ndarray",
+        deterministic=True,
+        doc="Calculate alpha transparency for particles based on age"
+    )
     def get_particle_alpha(agents_obj: Agents,
                           age_property: str = 'age',
                           lifetime_property: str = 'lifetime',
@@ -800,7 +854,13 @@ class AgentOperations:
         return alpha
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_obj: Agents, force: Union[ndarray, Callable], velocity_property: str, mass_property: Optional[str], dt: float) -> Agents",
+        deterministic=True,
+        doc="Apply force to particles (F = ma)"
+    )
     def apply_force(agents_obj: Agents, force: Union[np.ndarray, Callable],
                    velocity_property: str = 'vel',
                    mass_property: Optional[str] = None,
@@ -863,7 +923,13 @@ class AgentOperations:
         return agents_obj.update(velocity_property, new_velocities)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_obj: Agents, position_property: str, velocity_property: str, dt: float) -> Agents",
+        deterministic=True,
+        doc="Integrate particle positions using Euler integration"
+    )
     def integrate(agents_obj: Agents,
                  position_property: str = 'pos',
                  velocity_property: str = 'vel',
@@ -891,7 +957,13 @@ class AgentOperations:
         return agents_obj.update(position_property, new_positions)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_obj: Agents, position_property: str, trail_length: int) -> Agents",
+        deterministic=True,
+        doc="Update particle trail history"
+    )
     def update_trail(agents_obj: Agents,
                     position_property: str = 'pos',
                     trail_length: int = 10) -> Agents:
@@ -932,7 +1004,13 @@ class AgentOperations:
         return new_agents
 
     @staticmethod
-    @operator
+    @operator(
+        domain="agents",
+        category=OpCategory.TRANSFORM,
+        signature="(agents_list: list) -> Agents",
+        deterministic=True,
+        doc="Merge multiple agent collections into one"
+    )
     def merge(agents_list: list) -> Agents:
         """Merge multiple agent collections into one.
 
@@ -1182,3 +1260,18 @@ agents = AgentOperations()
 
 # Create singleton for particle behaviors
 particle_behaviors = ParticleBehaviors()
+
+# Export operators for domain registry discovery
+alloc = AgentOperations.alloc
+map = AgentOperations.map
+filter = AgentOperations.filter
+reduce = AgentOperations.reduce
+compute_pairwise_forces = AgentOperations.compute_pairwise_forces
+sample_field = AgentOperations.sample_field
+emit = AgentOperations.emit
+age_particles = AgentOperations.age_particles
+get_particle_alpha = AgentOperations.get_particle_alpha
+apply_force = AgentOperations.apply_force
+integrate = AgentOperations.integrate
+update_trail = AgentOperations.update_trail
+merge = AgentOperations.merge

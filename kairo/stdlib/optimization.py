@@ -23,7 +23,7 @@ import numpy as np
 from typing import List, Tuple, Optional, Callable, Union, Dict, Any
 from dataclasses import dataclass, field
 from enum import Enum
-from ..decorator import operator
+from kairo.core.operator import operator, OpCategory
 
 
 # ============================================================================
@@ -837,7 +837,13 @@ class Optimizer:
 # Convenience Functions
 # ============================================================================
 
-@operator
+@operator(
+    domain="optimization",
+    category=OpCategory.TRANSFORM,
+    signature="(objective_fn: Callable, bounds: Optional[List[Tuple[float, float]]], initial: Optional[ndarray], method: str, **kwargs) -> OptimizationResult",
+    deterministic=False,
+    doc="Minimize an objective function using specified optimization method"
+)
 def minimize(objective_fn, bounds=None, initial=None, method='auto', **kwargs):
     """
     Convenience function for minimization.
@@ -846,25 +852,49 @@ def minimize(objective_fn, bounds=None, initial=None, method='auto', **kwargs):
     return Optimizer.minimize(objective_fn, bounds, initial, method, **kwargs)
 
 
-@operator
+@operator(
+    domain="optimization",
+    category=OpCategory.TRANSFORM,
+    signature="(objective_fn: Callable, bounds: List[Tuple[float, float]], **kwargs) -> OptimizationResult",
+    deterministic=False,
+    doc="Run Differential Evolution optimization"
+)
 def differential_evolution(objective_fn, bounds, **kwargs):
     """Convenience function for DE optimization."""
     return DifferentialEvolution.optimize(objective_fn, bounds, **kwargs)
 
 
-@operator
+@operator(
+    domain="optimization",
+    category=OpCategory.TRANSFORM,
+    signature="(objective_fn: Callable, initial_mean: ndarray, **kwargs) -> OptimizationResult",
+    deterministic=False,
+    doc="Run CMA-ES optimization"
+)
 def cmaes(objective_fn, initial_mean, **kwargs):
     """Convenience function for CMA-ES optimization."""
     return CMAES.optimize(objective_fn, initial_mean, **kwargs)
 
 
-@operator
+@operator(
+    domain="optimization",
+    category=OpCategory.TRANSFORM,
+    signature="(objective_fn: Callable, bounds: List[Tuple[float, float]], **kwargs) -> OptimizationResult",
+    deterministic=False,
+    doc="Run Particle Swarm Optimization"
+)
 def particle_swarm(objective_fn, bounds, **kwargs):
     """Convenience function for PSO optimization."""
     return ParticleSwarmOptimization.optimize(objective_fn, bounds, **kwargs)
 
 
-@operator
+@operator(
+    domain="optimization",
+    category=OpCategory.TRANSFORM,
+    signature="(objective_fn: Callable, initial: ndarray, **kwargs) -> OptimizationResult",
+    deterministic=False,
+    doc="Run Nelder-Mead simplex optimization"
+)
 def nelder_mead(objective_fn, initial, **kwargs):
     """Convenience function for Nelder-Mead optimization."""
     return NelderMead.optimize(objective_fn, initial, **kwargs)

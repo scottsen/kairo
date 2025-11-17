@@ -20,7 +20,7 @@ Supports:
 from typing import Tuple, Optional, Union, Callable
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 from scipy import ndimage
 
 
@@ -74,7 +74,13 @@ class ImageOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.CONSTRUCT,
+        signature="(width: int, height: int, channels: int, fill_value: float) -> Image",
+        deterministic=True,
+        doc="Create blank image"
+    )
     def blank(width: int, height: int, channels: int = 3,
              fill_value: float = 0.0) -> Image:
         """Create blank image.
@@ -92,7 +98,13 @@ class ImageOperations:
         return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.CONSTRUCT,
+        signature="(r: float, g: float, b: float, width: int, height: int) -> Image",
+        deterministic=True,
+        doc="Create solid color RGB image"
+    )
     def rgb(r: float, g: float, b: float, width: int, height: int) -> Image:
         """Create solid color RGB image.
 
@@ -113,7 +125,13 @@ class ImageOperations:
         return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.CONSTRUCT,
+        signature="(field: ndarray, palette: Optional[object]) -> Image",
+        deterministic=True,
+        doc="Create image from scalar field"
+    )
     def from_field(field: np.ndarray, palette: Optional[object] = None) -> Image:
         """Create image from scalar field.
 
@@ -153,7 +171,13 @@ class ImageOperations:
         return Image(rgb)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.CONSTRUCT,
+        signature="(r_channel: ndarray, g_channel: ndarray, b_channel: ndarray, a_channel: Optional[ndarray]) -> Image",
+        deterministic=True,
+        doc="Compose image from separate channel arrays"
+    )
     def compose(r_channel: np.ndarray, g_channel: np.ndarray, b_channel: np.ndarray,
                 a_channel: Optional[np.ndarray] = None) -> Image:
         """Compose image from separate channel arrays.
@@ -197,7 +221,13 @@ class ImageOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, factor: float, method: str) -> Image",
+        deterministic=True,
+        doc="Scale image by factor"
+    )
     def scale(img: Image, factor: float, method: str = "bilinear") -> Image:
         """Scale image by factor.
 
@@ -227,7 +257,13 @@ class ImageOperations:
         return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, angle: float, reshape: bool) -> Image",
+        deterministic=True,
+        doc="Rotate image by angle (degrees)"
+    )
     def rotate(img: Image, angle: float, reshape: bool = False) -> Image:
         """Rotate image by angle (degrees).
 
@@ -251,7 +287,13 @@ class ImageOperations:
             return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, displacement_field: Tuple[ndarray, ndarray]) -> Image",
+        deterministic=True,
+        doc="Warp image using displacement field"
+    )
     def warp(img: Image, displacement_field: Tuple[np.ndarray, np.ndarray]) -> Image:
         """Warp image using displacement field.
 
@@ -294,7 +336,13 @@ class ImageOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, sigma: float) -> Image",
+        deterministic=True,
+        doc="Apply Gaussian blur"
+    )
     def blur(img: Image, sigma: float = 1.0) -> Image:
         """Apply Gaussian blur.
 
@@ -313,7 +361,13 @@ class ImageOperations:
         return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, strength: float) -> Image",
+        deterministic=True,
+        doc="Sharpen image using unsharp mask"
+    )
     def sharpen(img: Image, strength: float = 1.0) -> Image:
         """Sharpen image using unsharp mask.
 
@@ -331,7 +385,13 @@ class ImageOperations:
         return Image(np.clip(data, 0, 1))
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.QUERY,
+        signature="(img: Image, method: str) -> Image",
+        deterministic=True,
+        doc="Detect edges in image"
+    )
     def edge_detect(img: Image, method: str = "sobel") -> Image:
         """Detect edges in image.
 
@@ -366,7 +426,13 @@ class ImageOperations:
         return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, iterations: int) -> Image",
+        deterministic=True,
+        doc="Morphological erosion"
+    )
     def erode(img: Image, iterations: int = 1) -> Image:
         """Morphological erosion.
 
@@ -387,7 +453,13 @@ class ImageOperations:
         return Image(data)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, iterations: int) -> Image",
+        deterministic=True,
+        doc="Morphological dilation"
+    )
     def dilate(img: Image, iterations: int = 1) -> Image:
         """Morphological dilation.
 
@@ -412,7 +484,13 @@ class ImageOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img_a: Image, img_b: Image, mode: str, opacity: float) -> Image",
+        deterministic=True,
+        doc="Blend two images using blend mode"
+    )
     def blend(img_a: Image, img_b: Image, mode: str = "normal", opacity: float = 1.0) -> Image:
         """Blend two images using blend mode.
 
@@ -467,7 +545,13 @@ class ImageOperations:
         return Image(np.clip(result, 0, 1))
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, overlay_img: Image, mask: Optional[ndarray]) -> Image",
+        deterministic=True,
+        doc="Overlay image with optional mask"
+    )
     def overlay(img: Image, overlay_img: Image, mask: Optional[np.ndarray] = None) -> Image:
         """Overlay image with optional mask.
 
@@ -498,7 +582,13 @@ class ImageOperations:
         return Image(np.clip(result, 0, 1))
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(background: Image, foreground: Image) -> Image",
+        deterministic=True,
+        doc="Alpha composite foreground over background"
+    )
     def alpha_composite(background: Image, foreground: Image) -> Image:
         """Alpha composite foreground over background.
 
@@ -543,7 +633,13 @@ class ImageOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, palette: object, channel: str) -> Image",
+        deterministic=True,
+        doc="Apply palette to image based on channel"
+    )
     def apply_palette(img: Image, palette: object, channel: str = "luminance") -> Image:
         """Apply palette to image based on channel.
 
@@ -590,7 +686,13 @@ class ImageOperations:
         return Image(rgb)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.CONSTRUCT,
+        signature="(heightfield: ndarray, strength: float) -> Image",
+        deterministic=True,
+        doc="Generate normal map from height field"
+    )
     def normal_map_from_heightfield(heightfield: np.ndarray, strength: float = 1.0) -> Image:
         """Generate normal map from height field.
 
@@ -633,7 +735,13 @@ class ImageOperations:
         return Image(np.clip(data, 0, 1))
 
     @staticmethod
-    @operator
+    @operator(
+        domain="image",
+        category=OpCategory.TRANSFORM,
+        signature="(img: Image, gradient_palette: object) -> Image",
+        deterministic=True,
+        doc="Apply gradient map (like Photoshop gradient map)"
+    )
     def gradient_map(img: Image, gradient_palette: object) -> Image:
         """Apply gradient map (like Photoshop gradient map).
 
@@ -649,3 +757,23 @@ class ImageOperations:
 
 # Create singleton instance for use as 'image' namespace
 image = ImageOperations()
+
+# Export operators for domain registry discovery
+blank = ImageOperations.blank
+rgb = ImageOperations.rgb
+from_field = ImageOperations.from_field
+scale = ImageOperations.scale
+rotate = ImageOperations.rotate
+blur = ImageOperations.blur
+sharpen = ImageOperations.sharpen
+edge_detect = ImageOperations.edge_detect
+dilate = ImageOperations.dilate
+erode = ImageOperations.erode
+blend = ImageOperations.blend
+compose = ImageOperations.compose
+overlay = ImageOperations.overlay
+alpha_composite = ImageOperations.alpha_composite
+warp = ImageOperations.warp
+apply_palette = ImageOperations.apply_palette
+gradient_map = ImageOperations.gradient_map
+normal_map_from_heightfield = ImageOperations.normal_map_from_heightfield

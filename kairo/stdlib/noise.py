@@ -19,7 +19,7 @@ Supports multiple noise algorithms:
 
 from typing import Tuple, Optional, Callable
 import numpy as np
-from ..decorator import operator
+from kairo.core.operator import operator, OpCategory
 
 
 class NoiseField2D:
@@ -110,7 +110,13 @@ class NoiseOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, persistence: float, lacunarity: float, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate 2D Perlin noise"
+    )
     def perlin2d(shape: Tuple[int, int],
                  scale: float = 1.0,
                  octaves: int = 1,
@@ -192,7 +198,13 @@ class NoiseOperations:
         return NoiseField2D(result, scale)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, persistence: float, lacunarity: float, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate 2D Simplex noise"
+    )
     def simplex2d(shape: Tuple[int, int],
                   scale: float = 1.0,
                   octaves: int = 1,
@@ -223,7 +235,13 @@ class NoiseOperations:
         return NoiseOperations.perlin2d(shape, scale, octaves, persistence, lacunarity, seed)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, persistence: float, lacunarity: float, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate 2D value noise"
+    )
     def value2d(shape: Tuple[int, int],
                 scale: float = 1.0,
                 octaves: int = 1,
@@ -294,7 +312,13 @@ class NoiseOperations:
         return NoiseField2D(result, scale)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], num_points: int, distance_metric: str, feature: str, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate 2D Worley (Voronoi/cellular) noise"
+    )
     def worley(shape: Tuple[int, int],
                num_points: int = 20,
                distance_metric: str = "euclidean",
@@ -368,7 +392,13 @@ class NoiseOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, persistence: float, lacunarity: float, noise_type: str, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate Fractional Brownian Motion (fBm)"
+    )
     def fbm(shape: Tuple[int, int],
             scale: float = 1.0,
             octaves: int = 6,
@@ -406,7 +436,13 @@ class NoiseOperations:
             raise ValueError(f"Unknown noise type: {noise_type}")
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, persistence: float, lacunarity: float, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate ridged multifractal noise"
+    )
     def ridged_fbm(shape: Tuple[int, int],
                    scale: float = 1.0,
                    octaves: int = 6,
@@ -442,7 +478,13 @@ class NoiseOperations:
         return NoiseField2D(result, scale)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, persistence: float, lacunarity: float, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate turbulence noise"
+    )
     def turbulence(shape: Tuple[int, int],
                    scale: float = 1.0,
                    octaves: int = 6,
@@ -477,7 +519,13 @@ class NoiseOperations:
         return NoiseField2D(result, scale)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, turbulence_power: float, seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate marble-like patterns"
+    )
     def marble(shape: Tuple[int, int],
                scale: float = 1.0,
                turbulence_power: float = 5.0,
@@ -514,7 +562,13 @@ class NoiseOperations:
     # ============================================================================
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, seed: int) -> Tuple[NoiseField2D, NoiseField2D]",
+        deterministic=True,
+        doc="Generate 2D vector field using noise"
+    )
     def vector_field(shape: Tuple[int, int],
                      scale: float = 1.0,
                      octaves: int = 4,
@@ -543,7 +597,13 @@ class NoiseOperations:
         return vx, vy
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], scale: float, octaves: int, seed: int) -> Tuple[NoiseField2D, NoiseField2D]",
+        deterministic=True,
+        doc="Generate gradient field from noise"
+    )
     def gradient_field(shape: Tuple[int, int],
                        scale: float = 1.0,
                        octaves: int = 4,
@@ -570,7 +630,13 @@ class NoiseOperations:
         return NoiseField2D(grad_x, scale), NoiseField2D(grad_y, scale)
 
     @staticmethod
-    @operator
+    @operator(
+        domain="noise",
+        category=OpCategory.CONSTRUCT,
+        signature="(shape: Tuple[int, int], seed: int) -> NoiseField2D",
+        deterministic=True,
+        doc="Generate plasma effect using diamond-square algorithm"
+    )
     def plasma(shape: Tuple[int, int],
                seed: int = 0) -> NoiseField2D:
         """Generate plasma effect using diamond-square algorithm.
@@ -645,3 +711,16 @@ class NoiseOperations:
 
 # Create singleton instance for use as 'noise' namespace
 noise = NoiseOperations()
+
+# Export operators for domain registry discovery
+value2d = NoiseOperations.value2d
+perlin2d = NoiseOperations.perlin2d
+simplex2d = NoiseOperations.simplex2d
+worley = NoiseOperations.worley
+fbm = NoiseOperations.fbm
+ridged_fbm = NoiseOperations.ridged_fbm
+turbulence = NoiseOperations.turbulence
+marble = NoiseOperations.marble
+plasma = NoiseOperations.plasma
+vector_field = NoiseOperations.vector_field
+gradient_field = NoiseOperations.gradient_field

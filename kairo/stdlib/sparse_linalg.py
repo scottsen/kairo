@@ -13,7 +13,7 @@ Supported Operations:
 from typing import Optional, Tuple, Callable, Union
 import numpy as np
 
-from kairo.core.operators import operator
+from kairo.core.operator import operator, OpCategory
 from scipy import sparse
 from scipy.sparse import linalg as sp_linalg
 
@@ -22,6 +22,13 @@ from scipy.sparse import linalg as sp_linalg
 # SPARSE MATRIX CREATION
 # ============================================================================
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(data: Union[ndarray, Tuple], shape: Optional[Tuple[int, int]]) -> csr_matrix",
+    deterministic=True,
+    doc="Create CSR (Compressed Sparse Row) matrix"
+)
 def csr_matrix(
     data: Union[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]],
     shape: Optional[Tuple[int, int]] = None
@@ -59,6 +66,13 @@ def csr_matrix(
         return sparse.csr_matrix(data)
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(data: Union[ndarray, Tuple], shape: Optional[Tuple[int, int]]) -> csc_matrix",
+    deterministic=True,
+    doc="Create CSC (Compressed Sparse Column) matrix"
+)
 def csc_matrix(
     data: Union[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]],
     shape: Optional[Tuple[int, int]] = None
@@ -85,6 +99,13 @@ def csc_matrix(
         return sparse.csc_matrix(data)
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(data: Union[ndarray, Tuple], shape: Optional[Tuple[int, int]]) -> coo_matrix",
+    deterministic=True,
+    doc="Create COO (Coordinate) matrix"
+)
 def coo_matrix(
     data: Union[np.ndarray, Tuple[np.ndarray, np.ndarray, np.ndarray]],
     shape: Optional[Tuple[int, int]] = None
@@ -114,6 +135,13 @@ def coo_matrix(
 # ITERATIVE SOLVERS
 # ============================================================================
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.TRANSFORM,
+    signature="(A: spmatrix, b: ndarray, x0: Optional[ndarray], tol: float, maxiter: Optional[int]) -> Tuple[ndarray, int, float]",
+    deterministic=True,
+    doc="Solve Ax=b using Conjugate Gradient method"
+)
 def solve_cg(
     A: sparse.spmatrix,
     b: np.ndarray,
@@ -167,6 +195,13 @@ def solve_cg(
     return result, iterations, residual
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.TRANSFORM,
+    signature="(A: spmatrix, b: ndarray, x0: Optional[ndarray], tol: float, maxiter: Optional[int]) -> Tuple[ndarray, int, float]",
+    deterministic=True,
+    doc="Solve Ax=b using BiCGSTAB (Biconjugate Gradient Stabilized)"
+)
 def solve_bicgstab(
     A: sparse.spmatrix,
     b: np.ndarray,
@@ -218,6 +253,13 @@ def solve_bicgstab(
     return result, iterations, residual
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.TRANSFORM,
+    signature="(A: spmatrix, b: ndarray, x0: Optional[ndarray], tol: float, restart: int, maxiter: Optional[int]) -> Tuple[ndarray, int, float]",
+    deterministic=True,
+    doc="Solve Ax=b using GMRES (Generalized Minimal Residual)"
+)
 def solve_gmres(
     A: sparse.spmatrix,
     b: np.ndarray,
@@ -273,6 +315,13 @@ def solve_gmres(
     return result, iterations, residual
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.TRANSFORM,
+    signature="(A: spmatrix, b: ndarray, method: str, **kwargs) -> ndarray",
+    deterministic=True,
+    doc="Generic sparse solver with automatic method selection"
+)
 def solve_sparse(
     A: sparse.spmatrix,
     b: np.ndarray,
@@ -323,6 +372,13 @@ def solve_sparse(
 # SPARSE FACTORIZATIONS
 # ============================================================================
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.TRANSFORM,
+    signature="(A: spmatrix) -> LinearOperator",
+    deterministic=True,
+    doc="Compute incomplete Cholesky factorization (preconditioner)"
+)
 def incomplete_cholesky(A: sparse.spmatrix) -> sparse.linalg.LinearOperator:
     """Compute incomplete Cholesky factorization (preconditioner).
 
@@ -350,6 +406,13 @@ def incomplete_cholesky(A: sparse.spmatrix) -> sparse.linalg.LinearOperator:
         return incomplete_lu(A)
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.TRANSFORM,
+    signature="(A: spmatrix) -> LinearOperator",
+    deterministic=True,
+    doc="Compute incomplete LU factorization (preconditioner)"
+)
 def incomplete_lu(A: sparse.spmatrix) -> sparse.linalg.LinearOperator:
     """Compute incomplete LU factorization (preconditioner).
 
@@ -374,6 +437,13 @@ def incomplete_lu(A: sparse.spmatrix) -> sparse.linalg.LinearOperator:
 # DISCRETE OPERATORS
 # ============================================================================
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(n: int, bc: str) -> csr_matrix",
+    deterministic=True,
+    doc="Create 1D Laplacian operator (discrete second derivative)"
+)
 def laplacian_1d(n: int, bc: str = "dirichlet") -> sparse.csr_matrix:
     """Create 1D Laplacian operator (discrete second derivative).
 
@@ -419,6 +489,13 @@ def laplacian_1d(n: int, bc: str = "dirichlet") -> sparse.csr_matrix:
     return L
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(nx: int, ny: int, bc: str) -> csr_matrix",
+    deterministic=True,
+    doc="Create 2D Laplacian operator (discrete Laplacian)"
+)
 def laplacian_2d(nx: int, ny: int, bc: str = "dirichlet") -> sparse.csr_matrix:
     """Create 2D Laplacian operator (discrete Laplacian).
 
@@ -498,6 +575,13 @@ def laplacian_2d(nx: int, ny: int, bc: str = "dirichlet") -> sparse.csr_matrix:
     return L
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(nx: int, ny: int) -> Tuple[csr_matrix, csr_matrix]",
+    deterministic=True,
+    doc="Create 2D gradient operators (discrete gradient)"
+)
 def gradient_2d(nx: int, ny: int) -> Tuple[sparse.csr_matrix, sparse.csr_matrix]:
     """Create 2D gradient operators (discrete gradient).
 
@@ -535,6 +619,13 @@ def gradient_2d(nx: int, ny: int) -> Tuple[sparse.csr_matrix, sparse.csr_matrix]
     return Gx, Gy
 
 
+@operator(
+    domain="sparse_linalg",
+    category=OpCategory.CONSTRUCT,
+    signature="(nx: int, ny: int) -> csr_matrix",
+    deterministic=True,
+    doc="Create 2D divergence operator (discrete divergence)"
+)
 def divergence_2d(nx: int, ny: int) -> sparse.csr_matrix:
     """Create 2D divergence operator (discrete divergence).
 
