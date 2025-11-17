@@ -1,18 +1,22 @@
-# Kairo Naming Conventions
+# Morphogen & Philbrick Naming Conventions
 
 **Quick Reference for Contributors**
 
-This document provides quick lookup for naming patterns across Kairo. For detailed rationale, see [ADR-010](../adr/010-ecosystem-branding-naming-strategy.md).
+This document provides quick lookup for naming patterns across Morphogen (digital platform) and Philbrick (analog platform).
+
+**For detailed rationale, see:**
+- [ADR-011: Project Renaming - Morphogen & Philbrick](../adr/011-project-renaming-morphogen-philbrick.md)
+- [ADR-010: Ecosystem Branding & Naming Strategy](../adr/010-ecosystem-branding-naming-strategy.md)
 
 ---
 
-## Three-Layer Architecture
+## Morphogen Architecture (Digital Platform)
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Layer 1: User Surfaces                     │
-│  Kairo.Audio, RiffStack                     │
-│  Pattern: Kairo.X (capitalized)             │
+│  Morphogen.Audio, RiffStack                 │
+│  Pattern: Morphogen.X (capitalized)         │
 └─────────────────────────────────────────────┘
                     │
 ┌─────────────────────────────────────────────┐
@@ -23,8 +27,28 @@ This document provides quick lookup for naming patterns across Kairo. For detail
                     │
 ┌─────────────────────────────────────────────┐
 │  Layer 3: Kernel (Internal)                 │
-│  Stream, Field, scheduler, transform...     │
-│  Pattern: kairo.internal namespace          │
+│  Wiener Scheduler, Shannon Protocol...      │
+│  Pattern: morphogen.internal namespace      │
+└─────────────────────────────────────────────┘
+```
+
+## Philbrick Architecture (Analog Platform)
+
+```
+┌─────────────────────────────────────────────┐
+│  Moog Surface (Musical Interface)           │
+│  Performance controls, expression           │
+└─────────────────────────────────────────────┘
+                    │
+┌─────────────────────────────────────────────┐
+│  Philbricks (Modules)                       │
+│  Sum, Integrate, Nonlinearity, Events       │
+│  Pattern: Function-named blocks             │
+└─────────────────────────────────────────────┘
+                    │
+┌─────────────────────────────────────────────┐
+│  Substrate (DeForest Layer, Black Layer)    │
+│  48V power, feedback control, Shannon Bus   │
 └─────────────────────────────────────────────┘
 ```
 
@@ -79,24 +103,28 @@ When adding a new domain library:
 
 ## Import Patterns
 
-### For Users (Kairo Language)
-```kairo
+### For Users (Morphogen Language)
+```morphogen
 use field, agent, audio
 ```
 
 ### For Python (Library Usage)
 ```python
 # Beginner
-from kairo.stdlib import field, agent, audio
+from morphogen.stdlib import field, agent, audio
 
 # Intermediate
-from kairo import Stream, Field          # Core types
-from kairo.stdlib import field, audio    # Domains
+from morphogen import Stream, Field          # Core types
+from morphogen.stdlib import field, audio    # Domains
 
-# Advanced
-from kairo.internal import scheduler, transform
-from kairo.stdlib import field, audio
+# Advanced (Kernel access)
+from morphogen.internal import scheduler, transform
+from morphogen.stdlib import field, audio
 ```
+
+**Pantheon Layer Names:**
+- `morphogen.internal.scheduler` → **Wiener Scheduler** (Norbert Wiener - cybernetics)
+- `morphogen.internal.protocol` → **Shannon Protocol** (Claude Shannon - information theory)
 
 ---
 
@@ -160,15 +188,27 @@ kairo/stdlib/
 
 ## User Surface Naming
 
-**Pattern:** `Kairo.X` for DSL surfaces
+### Morphogen (Digital Platform)
+
+**Pattern:** `Morphogen.X` for DSL surfaces
 
 ```
-Kairo.Audio      # Compositional audio DSL
-Kairo.Physics    # Physics simulation DSL (future)
-Kairo.Visual     # Visual composition DSL (future)
+Morphogen.Audio      # Compositional audio DSL
+Morphogen.Physics    # Physics simulation DSL (future)
+Morphogen.Visual     # Visual composition DSL (future)
 ```
 
 **Not a DSL?** Use separate brand (like RiffStack) or integrate as domain library.
+
+### Philbrick (Analog Platform)
+
+**Pattern:** Descriptive + "Philbrick"
+
+```
+Philbrick Rack       # Complete system
+Philbricks           # Individual modules
+Moog Surface         # Musical control interface
+```
 
 ---
 

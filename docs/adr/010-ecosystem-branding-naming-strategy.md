@@ -1,18 +1,42 @@
 # ADR-010: Ecosystem Branding & Naming Strategy
 
-**Status:** Proposed
+**Status:** Accepted (Domain Layer Naming) / Superseded (Project Naming - see ADR-011)
 **Date:** 2025-11-17
 **Authors:** Architecture Review
-**Decision:** Establish consistent naming conventions across Kairo's layered architecture
+**Decision:** Establish consistent naming conventions across platform's layered architecture
+**Related:** [ADR-011: Project Renaming - Morphogen & Philbrick](011-project-renaming-morphogen-philbrick.md)
+
+---
+
+## Note: Project Naming Decision
+
+**This ADR originally proposed naming conventions for "Kairo" but the project has been renamed.**
+
+**See [ADR-011](011-project-renaming-morphogen-philbrick.md) for:**
+- Digital platform: **Kairo → Morphogen** (honors Turing's morphogenesis)
+- Analog platform: **Philbrick** (honors George A. Philbrick)
+- Modules: **Philbricks** (composable function blocks)
+
+**This ADR (010) remains valid for:**
+- Domain library naming rules (single-word lowercase)
+- Layer 3 kernel namespace (`morphogen.internal`)
+- Domain renames (rigidbody→rigid, sparse_linalg→linalg, etc.)
+
+**Update all references below:**
+- "Kairo" → "Morphogen" (for digital platform)
+- Add "Philbrick" (for analog platform)
+
+---
 
 ---
 
 ## Context
 
-Kairo has evolved from a single-domain DSL (Creative Computation DSL) into a multi-domain platform with:
+Morphogen (formerly Kairo) has evolved from a single-domain DSL (Creative Computation DSL) into a multi-domain platform with:
 - 23+ domain libraries (field, agent, audio, visual, rigid body, graph, signal, etc.)
 - Multiple abstraction layers (kernel, domains, frontends)
-- Two user-facing surfaces (Kairo.Audio, RiffStack)
+- Two user-facing surfaces (Morphogen.Audio, RiffStack)
+- Sister project: Philbrick (analog modular computation platform)
 - Growing ecosystem of cross-domain capabilities
 
 As the platform scales, inconsistent naming creates friction:
@@ -27,6 +51,8 @@ This ADR establishes a coherent naming strategy that:
 3. Guides contributors adding new domains
 4. Creates professional, memorable branding
 
+**Note:** Project-level naming (Morphogen, Philbrick) is covered in ADR-011.
+
 ---
 
 ## Investigation
@@ -36,7 +62,7 @@ This ADR establishes a coherent naming strategy that:
 #### What Exists (November 2025)
 
 **User-Facing Surfaces:**
-- `Kairo.Audio` - Compositional audio DSL ✅ (working well)
+- `Morphogen.Audio` - Compositional audio DSL ✅ (formerly Kairo.Audio)
 - `RiffStack` - Live performance environment ✅ (separate brand, working)
 
 **Domain Libraries (kairo/stdlib/):**
@@ -81,7 +107,7 @@ From ARCHITECTURE.md, ECOSYSTEM_MAP.md, and related docs:
 **Three Clear Layers:**
 1. **Kernel** - Types, scheduler, transforms, registry, MLIR (foundation)
 2. **Domain Libraries** - field, agent, audio, physics, etc. (optional capabilities)
-3. **User Surfaces** - Kairo.Audio, RiffStack, future DSLs (human-friendly)
+3. **User Surfaces** - Morphogen.Audio, RiffStack, future DSLs (human-friendly)
 
 **Key Insight:** Naming should make layer membership obvious.
 
@@ -112,22 +138,24 @@ From ARCHITECTURE.md, ECOSYSTEM_MAP.md, and related docs:
 
 #### Layer 1: Platform & User Surfaces
 
-**Pattern:** `Kairo.X` for user-facing DSLs
+**Pattern:** `Morphogen.X` for user-facing DSLs (updated from Kairo per ADR-011)
 
 ```
-Kairo                    # Platform brand
-├── Kairo.Audio          # Compositional audio DSL (implemented)
-├── Kairo.Physics        # Future: Physics simulation DSL
-├── Kairo.Visual         # Future: Visual composition DSL
+Morphogen                # Platform brand (formerly Kairo)
+├── Morphogen.Audio      # Compositional audio DSL (implemented)
+├── Morphogen.Physics    # Future: Physics simulation DSL
+├── Morphogen.Visual     # Future: Visual composition DSL
 └── RiffStack            # Performance environment (separate brand)
 ```
 
 **Rules:**
-- Platform name is always capitalized: `Kairo`
-- User surfaces use dot-notation: `Kairo.X`
+- Platform name is always capitalized: `Morphogen`
+- User surfaces use dot-notation: `Morphogen.X`
 - RiffStack remains separate brand (dual-surface strategy)
 
 **Rationale:** Clear signal that this is a "language" or "environment", not a library.
+
+**Note:** See ADR-011 for why "Morphogen" (Turing's morphogenesis) was chosen.
 
 ---
 
@@ -209,15 +237,15 @@ integrator   # Time integrators (renamed from integrators)
 
 #### Layer 3: Kernel (Internal)
 
-**Pattern:** `kairo.internal` namespace for kernel primitives
+**Pattern:** `morphogen.internal` namespace for kernel primitives (updated from kairo per ADR-011)
 
 **Proposed Structure:**
 ```python
-kairo/
+morphogen/
 ├── __init__.py              # Top-level exports
 ├── internal/                # Kernel implementation
 │   ├── types.py            # Stream, Field, Evt, Agents
-│   ├── scheduler.py        # Multirate scheduler
+│   ├── scheduler.py        # Wiener Scheduler (multirate scheduling)
 │   ├── transform.py        # Transform dialect
 │   ├── registry.py         # Operator registry
 │   ├── profiles.py         # Determinism profiles
@@ -230,7 +258,7 @@ kairo/
 │   ├── dialects/
 │   └── passes/
 └── frontends/               # DSL surfaces
-    ├── audio/              # Kairo.Audio
+    ├── audio/              # Morphogen.Audio
     └── riffstack/          # RiffStack
 ```
 
@@ -238,20 +266,20 @@ kairo/
 
 **Beginner (Domain-level only):**
 ```python
-from kairo.stdlib import field, agent, audio
+from morphogen.stdlib import field, agent, audio
 # Never sees "internal"
 ```
 
 **Intermediate (Types + Domains):**
 ```python
-from kairo import Stream, Field           # Exported at top level
-from kairo.stdlib import field, audio
+from morphogen import Stream, Field       # Exported at top level
+from morphogen.stdlib import field, audio
 ```
 
 **Advanced (Kernel access):**
 ```python
-from kairo.internal import scheduler, transform, registry
-from kairo.stdlib import field, audio
+from morphogen.internal import scheduler, transform, registry
+from morphogen.stdlib import field, audio
 ```
 
 **Rationale:**
