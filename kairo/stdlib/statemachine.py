@@ -19,6 +19,8 @@ from typing import Dict, List, Set, Tuple, Optional, Callable, Any
 from enum import Enum
 from collections import defaultdict
 
+from kairo.core.operator import operator, OpCategory
+
 
 class TransitionType(Enum):
     """Transition types"""
@@ -142,6 +144,13 @@ class StateMachineOperations:
     """State machine operations"""
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.CONSTRUCT,
+        signature="(name: str, initial_state: str) -> StateMachine",
+        deterministic=True,
+        doc="Create a new state machine"
+    )
     def create(name: str, initial_state: str) -> StateMachine:
         """Create a new state machine
 
@@ -159,6 +168,13 @@ class StateMachineOperations:
         )
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.TRANSFORM,
+        signature="(fsm: StateMachine, state: State) -> StateMachine",
+        deterministic=True,
+        doc="Add a state to the machine"
+    )
     def add_state(fsm: StateMachine, state: State) -> StateMachine:
         """Add a state to the machine
 
@@ -174,6 +190,13 @@ class StateMachineOperations:
         return result
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.TRANSFORM,
+        signature="(fsm: StateMachine, transition: Transition) -> StateMachine",
+        deterministic=True,
+        doc="Add a transition to the machine"
+    )
     def add_transition(fsm: StateMachine, transition: Transition) -> StateMachine:
         """Add a transition to the machine
 
@@ -189,6 +212,13 @@ class StateMachineOperations:
         return result
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.TRANSFORM,
+        signature="(fsm: StateMachine) -> StateMachine",
+        deterministic=False,  # May call user callbacks
+        doc="Start the state machine (enter initial state)"
+    )
     def start(fsm: StateMachine) -> StateMachine:
         """Start the state machine (enter initial state)
 
@@ -211,6 +241,13 @@ class StateMachineOperations:
         return result
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.TRANSFORM,
+        signature="(fsm: StateMachine, dt: float) -> StateMachine",
+        deterministic=False,  # May trigger transitions with callbacks
+        doc="Update state machine (check automatic transitions and timeouts)"
+    )
     def update(fsm: StateMachine, dt: float) -> StateMachine:
         """Update state machine (check automatic transitions and timeouts)
 
@@ -264,6 +301,13 @@ class StateMachineOperations:
         return result
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.TRANSFORM,
+        signature="(fsm: StateMachine, event: str) -> StateMachine",
+        deterministic=False,  # May trigger transitions with callbacks
+        doc="Send an event to the state machine"
+    )
     def send_event(fsm: StateMachine, event: str) -> StateMachine:
         """Send an event to the state machine
 
@@ -334,6 +378,13 @@ class StateMachineOperations:
         return fsm
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.QUERY,
+        signature="(fsm: StateMachine) -> Optional[str]",
+        deterministic=True,
+        doc="Get current state name"
+    )
     def get_state_name(fsm: StateMachine) -> Optional[str]:
         """Get current state name
 
@@ -346,6 +397,13 @@ class StateMachineOperations:
         return fsm.current_state
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.QUERY,
+        signature="(fsm: StateMachine, state_name: str) -> bool",
+        deterministic=True,
+        doc="Check if machine is in given state"
+    )
     def is_in_state(fsm: StateMachine, state_name: str) -> bool:
         """Check if machine is in given state
 
@@ -359,6 +417,13 @@ class StateMachineOperations:
         return fsm.current_state == state_name
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.QUERY,
+        signature="(fsm: StateMachine) -> List[Transition]",
+        deterministic=True,
+        doc="Get all valid transitions from current state"
+    )
     def get_valid_transitions(fsm: StateMachine) -> List[Transition]:
         """Get all valid transitions from current state
 
@@ -377,6 +442,13 @@ class StateMachineOperations:
         ]
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.QUERY,
+        signature="(fsm: StateMachine) -> str",
+        deterministic=True,
+        doc="Convert state machine to Graphviz DOT format"
+    )
     def to_graphviz(fsm: StateMachine) -> str:
         """Convert state machine to Graphviz DOT format
 
@@ -413,6 +485,13 @@ class StateMachineOperations:
     # Behavior Tree Operations
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.CONSTRUCT,
+        signature="(name: str, children: List[BehaviorNode]) -> BehaviorNode",
+        deterministic=True,
+        doc="Create a sequence node (succeeds if all children succeed)"
+    )
     def create_sequence(name: str, children: List[BehaviorNode]) -> BehaviorNode:
         """Create a sequence node (succeeds if all children succeed)
 
@@ -426,6 +505,13 @@ class StateMachineOperations:
         return BehaviorNode(name=name, node_type='sequence', children=children)
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.CONSTRUCT,
+        signature="(name: str, children: List[BehaviorNode]) -> BehaviorNode",
+        deterministic=True,
+        doc="Create a selector node (succeeds if any child succeeds)"
+    )
     def create_selector(name: str, children: List[BehaviorNode]) -> BehaviorNode:
         """Create a selector node (succeeds if any child succeeds)
 
@@ -439,6 +525,13 @@ class StateMachineOperations:
         return BehaviorNode(name=name, node_type='selector', children=children)
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.CONSTRUCT,
+        signature="(name: str, action: Callable) -> BehaviorNode",
+        deterministic=True,
+        doc="Create an action node"
+    )
     def create_action(name: str, action: Callable) -> BehaviorNode:
         """Create an action node
 
@@ -452,6 +545,13 @@ class StateMachineOperations:
         return BehaviorNode(name=name, node_type='action', action=action)
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.CONSTRUCT,
+        signature="(name: str, condition: Callable) -> BehaviorNode",
+        deterministic=True,
+        doc="Create a condition node"
+    )
     def create_condition(name: str, condition: Callable) -> BehaviorNode:
         """Create a condition node
 
@@ -465,6 +565,13 @@ class StateMachineOperations:
         return BehaviorNode(name=name, node_type='condition', condition=condition)
 
     @staticmethod
+    @operator(
+        domain="statemachine",
+        category=OpCategory.TRANSFORM,
+        signature="(node: BehaviorNode, context: Dict[str, Any]) -> BehaviorStatus",
+        deterministic=False,  # May execute user actions
+        doc="Execute a behavior tree node"
+    )
     def execute_behavior(node: BehaviorNode, context: Dict[str, Any]) -> BehaviorStatus:
         """Execute a behavior tree node
 
@@ -523,3 +630,23 @@ class StateMachineOperations:
 
 # Export singleton instance for DSL access
 statemachine = StateMachineOperations()
+
+# Export all operators for registry discovery
+# FSM operators
+create = StateMachineOperations.create
+add_state = StateMachineOperations.add_state
+add_transition = StateMachineOperations.add_transition
+start = StateMachineOperations.start
+update = StateMachineOperations.update
+send_event = StateMachineOperations.send_event
+get_state_name = StateMachineOperations.get_state_name
+is_in_state = StateMachineOperations.is_in_state
+get_valid_transitions = StateMachineOperations.get_valid_transitions
+to_graphviz = StateMachineOperations.to_graphviz
+
+# Behavior tree operators
+create_sequence = StateMachineOperations.create_sequence
+create_selector = StateMachineOperations.create_selector
+create_action = StateMachineOperations.create_action
+create_condition = StateMachineOperations.create_condition
+execute_behavior = StateMachineOperations.execute_behavior
