@@ -216,6 +216,7 @@ def register_stdlib_domains() -> None:
         ("palette", "kairo.stdlib.palette", "Color palette generation"),
         ("genetic", "kairo.stdlib.genetic", "Genetic algorithms"),
         ("temporal", "kairo.stdlib.temporal", "Temporal logic and scheduling"),
+        ("geometry", "kairo.stdlib.geometry", "2D/3D geometry, spatial operations, and mesh processing"),
     ]
 
     for name, module_path, description in domains:
