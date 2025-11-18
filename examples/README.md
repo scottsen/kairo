@@ -9,6 +9,7 @@ This directory contains comprehensive examples demonstrating Kairo's capabilitie
 - [Beginner Examples](#tier-1-beginner-examples-) - Start here!
 - [Intermediate Examples](#tier-2-intermediate-examples-) - Real simulations
 - [Advanced Examples](#advanced-examples-) - Complex multi-domain systems
+- [Cross-Domain Geometry](#cross-domain-geometry-examples-) - NEW! Geometry integration showcase
 - [Python Integration](#python-integration-examples) - Runtime and tools
 - [MLIR Development](#mlir-development-phase-examples) - Compiler internals
 - [How to Run](#running-examples)
@@ -197,6 +198,132 @@ kairo run examples/v0_3_1_velocity_calculation.kairo
 
 **Demonstrates:** Vector fields, gradient operators
 **Lines:** 22
+
+---
+
+## Cross-Domain Geometry Examples 🔷
+
+Showcasing the new geometry domain with cross-domain integration. These examples demonstrate how geometry operations combine with physics, fields, agents, and procedural generation.
+
+### `20_bouncing_spheres.kairo`
+Physics simulation with 3D geometry collision detection.
+
+```bash
+kairo run examples/20_bouncing_spheres.kairo
+```
+
+**Demonstrates:** geometry + rigidbody integration, 3D primitives (sphere, box3d), bounding boxes, collision detection
+**Visual:** Spheres bouncing inside a 3D box with realistic physics
+**Runtime:** ~10 seconds
+**Lines:** 216
+
+**Cross-domain features:**
+- `use geometry, rigidbody, visual` multi-domain imports
+- `sphere()` and `box3d()` 3D primitives
+- `bounding_box()` for collision bounds
+- Physics-driven geometric transformations
+
+---
+
+### `21_voronoi_heat.kairo`
+Heat diffusion across Voronoi cells with geometric field sampling.
+
+```bash
+kairo run examples/21_voronoi_heat.kairo
+```
+
+**Demonstrates:** geometry + field integration, Voronoi diagrams, spatial field queries, distance calculations
+**Visual:** Colorful Voronoi pattern with heat diffusing between cells
+**Runtime:** ~8 seconds
+**Lines:** 153
+
+**Geometric operations:**
+- Voronoi cell generation from seed points
+- Euclidean distance calculations
+- Spatial field initialization based on geometric regions
+
+---
+
+### `22_delaunay_terrain.kairo`
+Procedural terrain generation using Delaunay triangulation and Perlin noise.
+
+```bash
+kairo run examples/22_delaunay_terrain.kairo
+```
+
+**Demonstrates:** geometry + noise + field integration, Delaunay triangulation, mesh generation, noise sampling
+**Visual:** Animated low-poly terrain with triangular facets colored by height
+**Runtime:** ~10 seconds
+**Lines:** 142
+
+**Advanced features:**
+- Delaunay triangulation for terrain mesh
+- Perlin noise for natural height variation
+- Animated noise for evolving landscapes
+- Height-based coloring (water → land → mountains)
+
+---
+
+### `23_geometry_patrol.kairo`
+Agent navigation with convex hull patrol routes and obstacle avoidance.
+
+```bash
+kairo run examples/23_geometry_patrol.kairo
+```
+
+**Demonstrates:** geometry + agent + field integration, convex hull, spatial queries, collision detection
+**Visual:** Agents patrolling a polygon with influence fields and obstacle avoidance
+**Runtime:** ~15 seconds
+**Lines:** 254
+
+**Navigation features:**
+- Convex hull patrol route generation
+- Point-in-polygon containment testing
+- Distance to line segment calculations
+- Circle-based obstacle collision detection
+- Agent influence field visualization
+
+---
+
+### `24_mesh_morphing.kairo`
+Advanced 3D mesh operations with subdivision and shape interpolation.
+
+```bash
+kairo run examples/24_mesh_morphing.kairo
+```
+
+**Demonstrates:** 3D mesh operations, subdivision surfaces, collision meshes, volume calculations, transformations
+**Visual:** 3D shape morphing from box to sphere with smooth rotation
+**Runtime:** ~20 seconds
+**Lines:** 143
+
+**Advanced mesh operations:**
+- `collision_mesh()` generation for physics
+- `volume()` calculations
+- Mesh subdivision for smooth surfaces
+- 3D rotation transformations
+- Shape interpolation and morphing
+
+---
+
+### `25_convex_hull_art.kairo`
+Real-time convex hull computation with dynamic point clouds.
+
+```bash
+kairo run examples/25_convex_hull_art.kairo
+```
+
+**Demonstrates:** convex hull algorithm, dynamic geometry, point containment, coordinate transformations
+**Visual:** Mesmerizing animation of orbiting points with their convex hull boundary
+**Runtime:** ~15 seconds
+**Lines:** 298
+
+**Computational geometry:**
+- `convex_hull()` real-time computation
+- Cartesian ↔ polar coordinate transformations
+- Point-in-polygon ray casting algorithm
+- Distance to polygon edge calculations
+- Gradient fill based on geometric containment
 
 ---
 
