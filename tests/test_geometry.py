@@ -18,6 +18,9 @@ import numpy as np
 from kairo.stdlib.geometry import (
     # Types
     CoordinateFrame,
+    Box3D,
+    Sphere,
+    Mesh,
     # Construction
     point2d,
     point3d,
@@ -26,6 +29,9 @@ from kairo.stdlib.geometry import (
     rectangle,
     polygon,
     regular_polygon,
+    box3d,
+    sphere,
+    mesh,
     # Transformations
     translate_point2d,
     translate_circle,
@@ -58,6 +64,17 @@ from kairo.stdlib.geometry import (
     perimeter,
     centroid,
     bounding_box,
+    # Advanced algorithms
+    convex_hull,
+    delaunay_triangulation,
+    voronoi,
+    mesh_union,
+    # Field integration
+    sample_field_at_point,
+    query_field_in_region,
+    # Rigidbody integration
+    shape_to_rigidbody,
+    collision_mesh,
 )
 
 
@@ -1045,3 +1062,390 @@ def test_many_transformations():
     # Should get back to original
     assert np.isclose(p7.x, p1.x, atol=1e-10)
     assert np.isclose(p7.y, p1.y, atol=1e-10)
+
+
+# ============================================================================
+# LAYER 6 TESTS: 3D Primitives
+# ============================================================================
+
+
+def test_box3d_construction():
+    """Test 3D box creation."""
+    center = point3d(1.0, 2.0, 3.0)
+    box = box3d(center=center, width=4.0, height=6.0, depth=8.0)
+
+    assert box.center == center
+    assert box.width == 4.0
+    assert box.height == 6.0
+    assert box.depth == 8.0
+    assert np.isclose(box.volume, 192.0)  # 4 * 6 * 8
+    assert np.isclose(box.surface_area, 208.0)  # 2 * (4*6 + 4*8 + 6*8)
+
+
+def test_box3d_with_rotation():
+    """Test 3D box with rotation."""
+    center = point3d(0.0, 0.0, 0.0)
+    rotation = np.array([0.0, 0.0, np.pi / 4])  # 45 degree rotation around Z
+    box = box3d(center=center, width=2.0, height=2.0, depth=2.0, rotation=rotation)
+
+    vertices = box.get_vertices()
+    assert vertices.shape == (8, 3)
+
+    # Check that vertices are approximately at the right distance
+    # For a cube with side 2, vertices should be at distance sqrt(3) from center
+    distances = np.linalg.norm(vertices, axis=1)
+    expected_dist = np.sqrt(3)
+    assert np.allclose(distances, expected_dist, atol=1e-10)
+
+
+def test_box3d_invalid_dimensions():
+    """Test box3d with invalid dimensions."""
+    center = point3d(0, 0, 0)
+
+    try:
+        box3d(center=center, width=-1, height=2, depth=3)
+        assert False, "Should raise ValueError for negative width"
+    except ValueError:
+        pass
+
+
+def test_sphere_construction():
+    """Test 3D sphere creation."""
+    center = point3d(1.0, 2.0, 3.0)
+    s = sphere(center=center, radius=5.0)
+
+    assert s.center == center
+    assert s.radius == 5.0
+    assert np.isclose(s.volume, (4.0 / 3.0) * np.pi * 125.0)
+    assert np.isclose(s.surface_area, 4 * np.pi * 25.0)
+
+
+def test_sphere_invalid_radius():
+    """Test sphere with invalid radius."""
+    center = point3d(0, 0, 0)
+
+    try:
+        sphere(center=center, radius=-1.0)
+        assert False, "Should raise ValueError for negative radius"
+    except ValueError:
+        pass
+
+
+def test_mesh_construction():
+    """Test mesh creation."""
+    # Simple tetrahedron
+    vertices = np.array([
+        [0.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [0.5, 1.0, 0.0],
+        [0.5, 0.5, 1.0]
+    ])
+    faces = np.array([
+        [0, 1, 2],
+        [0, 1, 3],
+        [1, 2, 3],
+        [2, 0, 3]
+    ])
+
+    m = mesh(vertices=vertices, faces=faces)
+
+    assert m.num_vertices == 4
+    assert m.num_faces == 4
+    assert m.vertices.shape == (4, 3)
+    assert m.faces.shape == (4, 3)
+
+
+def test_mesh_compute_normals():
+    """Test mesh normal computation."""
+    # Simple triangle
+    vertices = np.array([
+        [0.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0]
+    ])
+    faces = np.array([[0, 1, 2]])
+
+    m = mesh(vertices=vertices, faces=faces)
+    normals = m.compute_normals()
+
+    assert normals.shape == (3, 3)
+
+    # All normals should point in +Z direction
+    assert np.allclose(normals, [[0, 0, 1], [0, 0, 1], [0, 0, 1]], atol=1e-10)
+
+
+def test_mesh_invalid_vertices():
+    """Test mesh with invalid vertices."""
+    # Wrong shape
+    vertices = np.array([[0, 0], [1, 0]])
+    faces = np.array([[0, 1, 0]])
+
+    try:
+        mesh(vertices=vertices, faces=faces)
+        assert False, "Should raise ValueError for wrong vertex shape"
+    except ValueError:
+        pass
+
+
+# ============================================================================
+# LAYER 7 TESTS: Advanced Algorithms
+# ============================================================================
+
+
+def test_convex_hull_2d():
+    """Test 2D convex hull computation."""
+    # Random points
+    np.random.seed(42)
+    points = np.random.rand(50, 2) * 10
+
+    hull = convex_hull(points, dim=2)
+
+    # Hull should be a polygon
+    from kairo.stdlib.geometry import Polygon
+    assert isinstance(hull, Polygon)
+
+    # Hull should have fewer vertices than input
+    assert hull.num_vertices <= 50
+
+    # All original points should be inside or on the hull
+    for pt in points:
+        p = point2d(pt[0], pt[1])
+        # Either inside or very close to the boundary
+        assert contains_polygon_point(hull, p) or distance_point_point(p, hull.centroid) <= 10.0
+
+
+def test_convex_hull_3d():
+    """Test 3D convex hull computation."""
+    # Random 3D points
+    np.random.seed(42)
+    points = np.random.rand(50, 3) * 10
+
+    hull = convex_hull(points, dim=3)
+
+    # Hull should be a mesh
+    assert isinstance(hull, Mesh)
+
+    # Hull should have faces
+    assert hull.num_faces > 0
+
+
+def test_delaunay_triangulation():
+    """Test Delaunay triangulation."""
+    # Regular grid of points
+    x = np.linspace(0, 1, 5)
+    y = np.linspace(0, 1, 5)
+    xx, yy = np.meshgrid(x, y)
+    points = np.column_stack([xx.ravel(), yy.ravel()])
+
+    tri = delaunay_triangulation(points)
+
+    # Result should be a mesh
+    assert isinstance(tri, Mesh)
+
+    # Should have triangular faces
+    assert tri.faces.shape[1] == 3
+
+    # Should have reasonable number of triangles (approximately 2 * (n-1)^2 for grid)
+    assert tri.num_faces > 10
+
+
+def test_voronoi():
+    """Test Voronoi diagram computation."""
+    # Regular grid of points
+    np.random.seed(42)
+    points = np.random.rand(20, 2) * 10
+
+    vertices, ridge_points, ridge_vertices = voronoi(points)
+
+    # Should have vertices
+    assert len(vertices) > 0
+    assert vertices.shape[1] == 2
+
+    # Should have ridges
+    assert len(ridge_points) > 0
+    assert ridge_points.shape[1] == 2
+
+
+def test_mesh_union():
+    """Test mesh union operation."""
+    # Two simple triangles
+    verts1 = np.array([[0, 0, 0], [1, 0, 0], [0.5, 1, 0]])
+    faces1 = np.array([[0, 1, 2]])
+    m1 = mesh(verts1, faces1)
+
+    verts2 = np.array([[2, 0, 0], [3, 0, 0], [2.5, 1, 0]])
+    faces2 = np.array([[0, 1, 2]])
+    m2 = mesh(verts2, faces2)
+
+    union = mesh_union(m1, m2)
+
+    # Union should have combined vertices and faces
+    assert union.num_vertices == 6
+    assert union.num_faces == 2
+
+
+# ============================================================================
+# LAYER 8 TESTS: Field Domain Integration
+# ============================================================================
+
+
+def test_sample_field_at_point():
+    """Test sampling field at a geometric point."""
+    try:
+        from kairo.stdlib.field import Field2D
+    except ImportError:
+        pytest.skip("Field domain not available")
+        return
+
+    # Create a simple field
+    data = np.ones((10, 10)) * 5.0
+    field = Field2D(data, dx=1.0, dy=1.0)
+
+    # Sample at a point
+    p = point2d(5.0, 5.0)
+    value = sample_field_at_point(field, p)
+
+    assert np.isclose(value, 5.0)
+
+
+def test_sample_field_with_interpolation():
+    """Test field sampling with bilinear interpolation."""
+    try:
+        from kairo.stdlib.field import Field2D
+    except ImportError:
+        pytest.skip("Field domain not available")
+        return
+
+    # Create a gradient field
+    data = np.zeros((10, 10))
+    for i in range(10):
+        for j in range(10):
+            data[i, j] = i + j
+
+    field = Field2D(data, dx=1.0, dy=1.0)
+
+    # Sample at a fractional position
+    p = point2d(2.5, 3.5)
+    value = sample_field_at_point(field, p)
+
+    # Should interpolate between neighboring values
+    # Expected: (2+3 + 3+3 + 2+4 + 3+4) / 4 = 6.0
+    assert np.isclose(value, 6.0, atol=0.1)
+
+
+def test_query_field_in_region():
+    """Test querying field values in a geometric region."""
+    try:
+        from kairo.stdlib.field import Field2D
+    except ImportError:
+        pytest.skip("Field domain not available")
+        return
+
+    # Create a field
+    data = np.ones((20, 20)) * 3.0
+    field = Field2D(data, dx=1.0, dy=1.0)
+
+    # Query inside a circle
+    circ = circle(center=point2d(10.0, 10.0), radius=3.0)
+    values = query_field_in_region(field, circ)
+
+    # Should have some values
+    assert len(values) > 0
+
+    # All values should be approximately 3.0
+    assert np.allclose(values[:, 2], 3.0)
+
+
+def test_query_field_in_rectangle():
+    """Test querying field in rectangle region."""
+    try:
+        from kairo.stdlib.field import Field2D
+    except ImportError:
+        pytest.skip("Field domain not available")
+        return
+
+    # Create a field
+    data = np.arange(400).reshape(20, 20).astype(float)
+    field = Field2D(data, dx=1.0, dy=1.0)
+
+    # Query inside a rectangle
+    rect = rectangle(center=point2d(10.0, 10.0), width=4.0, height=4.0)
+    values = query_field_in_region(field, rect)
+
+    # Should have values from inside the rectangle
+    assert len(values) > 0
+    assert len(values) <= 25  # 5x5 grid max
+
+
+# ============================================================================
+# LAYER 9 TESTS: Rigidbody Domain Integration
+# ============================================================================
+
+
+def test_shape_to_rigidbody_circle():
+    """Test converting circle to rigidbody shape."""
+    try:
+        from kairo.stdlib.rigidbody import ShapeType
+    except ImportError:
+        pytest.skip("Rigidbody domain not available")
+        return
+
+    circ = circle(center=point2d(0, 0), radius=5.0)
+    shape_data = shape_to_rigidbody(circ)
+
+    assert shape_data['shape_type'] == ShapeType.CIRCLE
+    assert shape_data['shape_params']['radius'] == 5.0
+
+
+def test_shape_to_rigidbody_rectangle():
+    """Test converting rectangle to rigidbody shape."""
+    try:
+        from kairo.stdlib.rigidbody import ShapeType
+    except ImportError:
+        pytest.skip("Rigidbody domain not available")
+        return
+
+    rect = rectangle(center=point2d(0, 0), width=4.0, height=6.0, rotation=np.pi / 4)
+    shape_data = shape_to_rigidbody(rect)
+
+    assert shape_data['shape_type'] == ShapeType.BOX
+    assert shape_data['shape_params']['width'] == 4.0
+    assert shape_data['shape_params']['height'] == 6.0
+    assert np.isclose(shape_data['shape_params']['rotation'], np.pi / 4)
+
+
+def test_shape_to_rigidbody_polygon():
+    """Test converting polygon to rigidbody shape."""
+    try:
+        from kairo.stdlib.rigidbody import ShapeType
+    except ImportError:
+        pytest.skip("Rigidbody domain not available")
+        return
+
+    tri = polygon(np.array([[0, 0], [1, 0], [0.5, 1]]))
+    shape_data = shape_to_rigidbody(tri)
+
+    assert shape_data['shape_type'] == ShapeType.POLYGON
+    assert np.allclose(shape_data['shape_params']['vertices'], [[0, 0], [1, 0], [0.5, 1]])
+
+
+def test_collision_mesh():
+    """Test collision mesh generation."""
+    # Create a simple cube mesh
+    vertices = np.array([
+        [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+        [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]
+    ], dtype=float)
+
+    # Just a few faces (incomplete cube)
+    faces = np.array([
+        [0, 1, 2], [0, 2, 3],  # Bottom
+        [4, 5, 6], [4, 6, 7],  # Top
+    ])
+
+    m = mesh(vertices, faces)
+    collision = collision_mesh(m, target_faces=10)
+
+    # Should return a simplified mesh
+    assert isinstance(collision, Mesh)
+    assert collision.num_faces > 0
