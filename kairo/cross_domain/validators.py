@@ -406,8 +406,8 @@ def validate_type_with_units(
         - Physical unit compatibility
         - Rate compatibility (for stream types)
     """
-    # Check basic type compatibility
-    if not source_type.is_compatible_with(target_type):
+    # Check if base type categories match (ScalarType, VectorType, StreamType, etc.)
+    if type(source_type).__name__ != type(target_type).__name__:
         raise CrossDomainTypeError(
             source_domain,
             target_domain,
@@ -436,6 +436,14 @@ def validate_type_with_units(
             target_domain,
             source_type.sample_rate,
             target_type.sample_rate
+        )
+
+    # Finally check general compatibility (after units/rates are validated)
+    if not source_type.is_compatible_with(target_type):
+        raise CrossDomainTypeError(
+            source_domain,
+            target_domain,
+            f"Incompatible types: {type(source_type).__name__} vs {type(target_type).__name__}"
         )
 
     return True
