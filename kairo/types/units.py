@@ -138,6 +138,12 @@ class Unit:
 
     def __mul__(self, other: 'Unit') -> 'Unit':
         """Multiply two units."""
+        # Handle dimensionless multiplication to avoid "1*m" symbols
+        if self.symbol == "1":
+            return other
+        if other.symbol == "1":
+            return self
+
         return Unit(
             name=f"{self.name}·{other.name}",
             symbol=f"{self.symbol}*{other.symbol}",

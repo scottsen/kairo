@@ -233,17 +233,21 @@ def validate_rate_compatibility(
         Rate mismatch: audio → control requires explicit conversion.
         Use 'audio_to_control()' operator.
     """
+    # Compare by value to handle multiple Rate enum definitions
+    source_val = source.value if hasattr(source, 'value') else source
+    target_val = target.value if hasattr(target, 'value') else target
+
     # Check basic rate compatibility
-    if source != target:
+    if source_val != target_val:
         operator = recommend_conversion_operator(source, target)
         msg = (
-            f"Rate mismatch: {source.value} → {target.value} requires explicit conversion.\n"
+            f"Rate mismatch: {source_val} → {target_val} requires explicit conversion.\n"
             f"Use '{operator}()' operator."
         )
         return (False, msg)
 
-    # For audio, check sample rate compatibility
-    if source == Rate.AUDIO and source_sample_rate is not None and target_sample_rate is not None:
+    # For audio, check sample rate compatibility (compare by value to handle different enum instances)
+    if source_val == "audio" and source_sample_rate is not None and target_sample_rate is not None:
         if not check_sample_rate_compatibility(source_sample_rate, target_sample_rate):
             msg = (
                 f"Audio sample rate mismatch: {source_sample_rate}Hz → {target_sample_rate}Hz.\n"

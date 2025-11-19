@@ -2267,7 +2267,7 @@ def collision_mesh(mesh: Mesh, target_faces: int = 100) -> Mesh:
     libraries like trimesh or Open3D.
 
     Args:
-        mesh: High-polygon input mesh
+        mesh: High-polygon input mesh (or Box3D primitive)
         target_faces: Target number of faces for collision mesh
 
     Returns:
@@ -2280,9 +2280,17 @@ def collision_mesh(mesh: Mesh, target_faces: int = 100) -> Mesh:
         # Generate collision mesh
         collision = collision_mesh(high_poly, target_faces=50)
     """
+    # Handle Box3D primitives by converting to vertices
+    if isinstance(mesh, Box3D):
+        vertices = mesh.get_vertices()
+    elif hasattr(mesh, 'vertices'):
+        vertices = mesh.vertices
+    else:
+        raise TypeError(f"Expected Mesh or Box3D, got {type(mesh)}")
+
     # Simple implementation: compute convex hull as collision mesh
     # This is a safe, conservative collision shape
-    hull_mesh = convex_hull(mesh.vertices, dim=3)
+    hull_mesh = convex_hull(vertices, dim=3)
 
     # If hull has fewer faces than target, return it
     if isinstance(hull_mesh, Mesh) and hull_mesh.num_faces <= target_faces:
