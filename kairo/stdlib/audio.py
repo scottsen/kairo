@@ -1074,6 +1074,7 @@ class AudioOperations:
             exc = audio.lowpass(exc, cutoff=6000.0)
             string_sound = audio.string(exc, freq=220.0, t60=1.5)
         """
+        # Handle invalid frequencies
         if freq <= 0:
             return excitation.copy()
 
@@ -1091,7 +1092,9 @@ class AudioOperations:
         delay_line = np.zeros(delay_samples)
 
         # Calculate feedback gain for desired T60
-        feedback = 0.996 ** (1.0 / (t60 * freq))
+        # T60 is time to decay to -60dB (amplitude factor of 0.001)
+        # feedback^N = 0.001 where N = t60 * freq (number of delay line cycles in t60 seconds)
+        feedback = 0.001 ** (1.0 / (t60 * freq))
 
         for i in range(output_samples):
             # Read from delay line
@@ -1104,11 +1107,16 @@ class AudioOperations:
                 output[i] = delayed
 
             # Lowpass filter for damping (averaging filter)
+            # Filter the output (excitation + delayed) before feedback
             if damping > 0:
-                filtered = (delayed + delay_line[-1]) * 0.5
-                filtered = delayed * (1.0 - damping) + filtered * damping
+                # Simple averaging filter for damping
+                if i > 0:
+                    filtered = (output[i] + output[i-1]) * 0.5
+                else:
+                    filtered = output[i]
+                filtered = output[i] * (1.0 - damping) + filtered * damping
             else:
-                filtered = delayed
+                filtered = output[i]
 
             # Write to delay line
             delay_line = np.roll(delay_line, -1)

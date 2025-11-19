@@ -31,8 +31,8 @@ class TestKarplusStrong:
 
     def test_string_decay(self):
         """Test string decay over time."""
-        # Impulse excitation
-        exc = audio.impulse(rate=100.0, duration=0.001)
+        # Impulse excitation (need longer duration to see decay)
+        exc = audio.impulse(rate=100.0, duration=0.1)
 
         # String with fast decay
         fast_decay = audio.string(exc, freq=220.0, t60=0.1, damping=0.5)
@@ -44,8 +44,8 @@ class TestKarplusStrong:
         fast_energy = np.sum(fast_decay.data[2000:4000] ** 2)
         slow_energy = np.sum(slow_decay.data[2000:4000] ** 2)
 
-        # Note: with such short excitation, energy might be very low
-        # Just check they're different
+        # Fast decay should have less energy in late samples
+        # Note: with different t60 values, the outputs should be different
         assert not np.allclose(fast_decay.data, slow_decay.data)
 
     def test_string_damping(self):

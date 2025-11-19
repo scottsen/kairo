@@ -153,10 +153,10 @@ class TestNeighborCounting:
 
         counts = cellular.count_neighbors_moore(small_field_2d, state=1)
 
-        # Center cell (2, 2) has 3 neighbors
-        assert counts[2, 2] == 2  # Left and right neighbors
-        assert counts[1, 2] == 2  # Cell above center
-        assert counts[2, 1] == 2  # Left cell
+        # Center cell (2, 2) has 3 neighbors (above, left, and right)
+        assert counts[2, 2] == 3  # Three neighbors (above, left, right)
+        assert counts[1, 2] == 3  # Cell above center has 3 neighbors below
+        assert counts[2, 1] == 2  # Left cell has 2 neighbors (center and right)
 
     def test_von_neumann_neighbors(self):
         """Test von Neumann neighborhood (4 neighbors)."""
@@ -313,7 +313,8 @@ class TestWolframCA:
 
     def test_rule_90_sierpinski(self):
         """Test Rule 90 produces symmetric pattern."""
-        field, rule = cellular.wolfram_ca(64, rule_number=90)
+        # Use odd width for perfect symmetry with single centered cell
+        field, rule = cellular.wolfram_ca(65, rule_number=90)
 
         history = cellular.history(field, rule, steps=32)
 
@@ -343,8 +344,9 @@ class TestWolframCA:
 
     def test_wolfram_rule_validation(self):
         """Test that invalid rule numbers raise error."""
+        field = CellularField1D(np.zeros(10, dtype=np.int32), 2)
+
         with pytest.raises(ValueError):
-            field = cellular.CellularField1D(np.zeros(10, dtype=np.int32), 2)
             cellular.apply_wolfram_rule(field, 256)
 
         with pytest.raises(ValueError):
