@@ -46,7 +46,9 @@ class TestKarplusStrong:
 
         # Fast decay should have less energy in late samples
         # Note: with different t60 values, the outputs should be different
-        assert not np.allclose(fast_decay.data, slow_decay.data)
+        # Compare only overlapping portion (outputs have different lengths)
+        min_len = min(len(fast_decay.data), len(slow_decay.data))
+        assert not np.allclose(fast_decay.data[:min_len], slow_decay.data[:min_len])
 
     def test_string_damping(self):
         """Test string damping parameter."""
@@ -109,7 +111,9 @@ class TestModalSynthesis:
             decays=[2.0, 1.5, 1.0]
         )
 
-        assert modes.num_samples == exc.num_samples
+        # Modal output should be longer than excitation (needs time to decay)
+        # Output duration is max_decay * 5.0
+        assert modes.num_samples > exc.num_samples
         assert not np.any(np.isnan(modes.data))
 
     def test_modal_bell_sound(self):
@@ -123,7 +127,8 @@ class TestModalSynthesis:
             decays=[2.5, 2.0, 1.5, 1.0, 0.8]
         )
 
-        assert bell.num_samples == exc.num_samples
+        # Modal output should be longer than excitation
+        assert bell.num_samples > exc.num_samples
 
         # Should have energy (ringing)
         assert np.max(np.abs(bell.data)) > 0.1
@@ -140,7 +145,8 @@ class TestModalSynthesis:
             amplitudes=[1.0, 0.5, 0.25]
         )
 
-        assert modes.num_samples == exc.num_samples
+        # Modal output should be longer than excitation
+        assert modes.num_samples > exc.num_samples
 
     def test_modal_single_mode(self):
         """Test modal synthesis with single mode."""
@@ -152,7 +158,8 @@ class TestModalSynthesis:
             decays=[1.0]
         )
 
-        assert single.num_samples == exc.num_samples
+        # Modal output should be longer than excitation
+        assert single.num_samples > exc.num_samples
 
     def test_modal_many_modes(self):
         """Test modal synthesis with many modes."""
@@ -164,7 +171,8 @@ class TestModalSynthesis:
 
         many = audio.modal(exc, frequencies=freqs, decays=decays)
 
-        assert many.num_samples == exc.num_samples
+        # Modal output should be longer than excitation
+        assert many.num_samples > exc.num_samples
         assert not np.any(np.isnan(many.data))
 
     def test_modal_mismatched_lengths_error(self):

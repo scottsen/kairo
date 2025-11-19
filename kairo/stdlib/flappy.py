@@ -260,8 +260,10 @@ class FlappyOperations:
         if np.any(wrap_mask):
             # Find rightmost pipe position
             max_x = np.max(new_state.pipe_x)
-            # Wrap pipes to the right with spacing
-            new_state.pipe_x[wrap_mask] = max_x + 0.4
+            # If max_x is negative (all pipes off-screen), wrap to right edge
+            # Otherwise wrap to max_x + spacing
+            wrap_position = max(1.2, max_x + 0.4)
+            new_state.pipe_x[wrap_mask] = wrap_position
             # Randomize gap positions for wrapped pipes
             new_state.pipe_gap_y[wrap_mask] = np.random.uniform(0.3, 0.7, np.sum(wrap_mask)).astype(np.float32)
 
