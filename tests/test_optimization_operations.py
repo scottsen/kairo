@@ -572,7 +572,9 @@ class TestOptimizerInterface:
                 seed=42
             )
             assert result.best_fitness < 1.0
-            assert method in result.metadata['algorithm'].lower()
+            # Normalize for comparison (handle "CMA-ES" vs "cmaes")
+            algo_name = result.metadata['algorithm'].lower().replace('-', '')
+            assert method.replace('-', '') in algo_name
 
     def test_convenience_functions(self, benchmark_funcs):
         """Test convenience wrapper functions."""
