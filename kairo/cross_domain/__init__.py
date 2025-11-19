@@ -75,3 +75,7 @@ __all__ = [
     'find_transform_path',
     'auto_compose',
 ]
+
+# Register cross-domain transforms
+CrossDomainRegistry.register('fluid', 'acoustics', FluidToAcousticsInterface)
+CrossDomainRegistry.register('acoustics', 'audio', AcousticsToAudioInterface)

@@ -1186,7 +1186,7 @@ class FluidToAcousticsInterface(DomainInterface):
             # Propagate (diffusion as wave approximation)
             acoustic = field.diffuse(
                 acoustic,
-                diffusion_coeff=self.diffusion_coeff,
+                rate=self.diffusion_coeff,
                 dt=self.fluid_dt
             )
 
