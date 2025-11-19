@@ -35,7 +35,7 @@ const COLD_TEMP : f32 = 250.0     # Cold sink temperature [K]
 const AMBIENT_TEMP : f32 = 300.0  # Initial/ambient temperature [K]
 
 # Temperature field with initial conditions
-@state temp : Field2D<f32> = zeros((256, 256))
+@state temp : Field2D<f32> = field.alloc((256, 256), fill_value=0.0)
 
 # Initialize with ambient temperature
 fn init_temperature() {

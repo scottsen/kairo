@@ -38,8 +38,8 @@ const F : f32 = 0.060        # Feed rate
 const K : f32 = 0.062        # Kill rate
 
 # State fields: U and V chemical concentrations
-@state u : Field2D<f32> = ones((256, 256))
-@state v : Field2D<f32> = zeros((256, 256))
+@state u : Field2D<f32> = field.alloc((256, 256), fill_value=1.0)
+@state v : Field2D<f32> = field.alloc((256, 256), fill_value=0.0)
 
 # Initialize with small random perturbation in center
 fn init_perturbation() {

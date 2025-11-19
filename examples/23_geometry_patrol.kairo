@@ -67,7 +67,7 @@ const obstacles : [[f32; 3]; 3] = [
 const NUM_OBSTACLES : i32 = 3
 
 # Allocate influence field
-@state influence_field : Field2D<f32> = zeros((GRID_SIZE, GRID_SIZE))
+@state influence_field : Field2D<f32> = field.alloc((GRID_SIZE, GRID_SIZE), fill_value=0.0)
 
 # Helper: Calculate distance between two points
 fn distance(x1: f32, y1: f32, x2: f32, y2: f32) -> f32 {

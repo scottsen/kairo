@@ -28,11 +28,11 @@ use field, visual
 const NUM_WALKERS : i32 = 500
 
 # Density field to accumulate walker positions
-@state density : Field2D<f32> = zeros((128, 128))
+@state density : Field2D<f32> = field.alloc((128, 128), fill_value=0.0)
 
 # Walker positions (initialized at center)
-@state walker_x : Field1D<f32> = ones((NUM_WALKERS,)) * 64.0
-@state walker_y : Field1D<f32> = ones((NUM_WALKERS,)) * 64.0
+@state walker_x : Field1D<f32> = field.alloc((NUM_WALKERS,), fill_value=1.0) * 64.0
+@state walker_y : Field1D<f32> = field.alloc((NUM_WALKERS,), fill_value=1.0) * 64.0
 
 # Random seed for reproducibility
 @state seed : i32 = 42
@@ -40,8 +40,8 @@ const NUM_WALKERS : i32 = 500
 # Initialize walkers at center
 fn init_walkers() {
     # All walkers start at the center
-    walker_x = ones((NUM_WALKERS,)) * 64.0
-    walker_y = ones((NUM_WALKERS,)) * 64.0
+    walker_x = field.alloc((NUM_WALKERS,), fill_value=1.0) * 64.0
+    walker_y = field.alloc((NUM_WALKERS,), fill_value=1.0) * 64.0
 }
 
 init_walkers()

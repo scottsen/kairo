@@ -44,7 +44,7 @@ flow(dt=0.05, steps=200) {
 
     # Create circular field using map with coordinates
     # Lambda receives (value, x, y) and returns new value
-    field = zeros((GRID_SIZE, GRID_SIZE)).map(|value, x, y| {
+    field = field.alloc((GRID_SIZE, GRID_SIZE), fill_value=0.0).map(|value, x, y| {
         # Calculate distance from center
         dx = x - cx
         dy = y - cy

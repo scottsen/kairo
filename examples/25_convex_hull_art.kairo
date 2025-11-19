@@ -73,7 +73,7 @@ const radius_factors : [f32; 12] = [
 @state hull_size : i32 = 0
 
 # Visualization field
-@state visual_field : Field2D<f32> = zeros((GRID_SIZE, GRID_SIZE))
+@state visual_field : Field2D<f32> = field.alloc((GRID_SIZE, GRID_SIZE), fill_value=0.0)
 
 # Update point positions based on circular motion
 fn update_points() {

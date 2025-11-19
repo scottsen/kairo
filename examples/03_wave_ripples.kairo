@@ -35,8 +35,8 @@ const INIT_AMPLITUDE : f32 = 1.0  # Initial disturbance strength
 # State: two fields for wave equation
 # u: displacement field
 # v: velocity field (du/dt)
-@state u : Field2D<f32> = zeros((128, 128))
-@state v : Field2D<f32> = zeros((128, 128))
+@state u : Field2D<f32> = field.alloc((128, 128), fill_value=0.0)
+@state v : Field2D<f32> = field.alloc((128, 128), fill_value=0.0)
 
 # Initialize with central disturbance
 fn init_wave() {

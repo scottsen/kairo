@@ -14,9 +14,14 @@ from kairo.stdlib.field import field, Field2D
 from kairo.stdlib.visual import visual
 
 
-@pytest.mark.skip(reason="Portfolio examples use outdated syntax (zeros instead of field.alloc) - need updating")
+@pytest.mark.skip(reason="Portfolio examples need runtime compatibility fixes (field.map, function syntax)")
 class TestPortfolioExamples:
-    """Test portfolio examples parse and execute correctly."""
+    """Test portfolio examples parse and execute correctly.
+
+    Partially updated: Allocation syntax updated (zeros/ones → field.alloc), but
+    examples still use other outdated syntax (field.map, function definitions) that
+    requires runtime updates.
+    """
 
     @pytest.fixture
     def examples_dir(self):

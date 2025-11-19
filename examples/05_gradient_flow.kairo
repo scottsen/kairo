@@ -27,10 +27,10 @@ use field, visual
 const ROTATION_SPEED : f32 = 1.5
 
 # Scalar field to advect (starts as horizontal gradient)
-@state color_field : Field2D<f32> = zeros((128, 128))
+@state color_field : Field2D<f32> = field.alloc((128, 128), fill_value=0.0)
 
 # Velocity field (2-channel: vx, vy)
-@state velocity : Field2D<Vec2> = zeros((128, 128))
+@state velocity : Field2D<Vec2> = field.alloc((128, 128), fill_value=0.0)
 
 # Initialize color field with gradient
 fn init_gradient() {
