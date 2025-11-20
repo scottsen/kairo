@@ -622,7 +622,7 @@ See `examples/` directory for more!
 ## Project Status
 
 **Version**: 0.10.0
-**Status**: Active Development - 23 Computational Domains ✅
+**Status**: Active Development - 26 Computational Domains ✅
 
 ### ✅ Production-Ready
 - Language specification (comprehensive)
@@ -637,7 +637,7 @@ See `examples/` directory for more!
 - **Visual extensions** (agent rendering, layer composition, video export) ⭐ NEW in v0.6.0!
 - **Visualization** (PNG/JPEG export, interactive display, MP4/GIF video)
 - Documentation (comprehensive and accurate)
-- Test suite (580+ tests: 247 original + 85 agent + 184 audio + 64+ I/O tests)
+- Test suite (900+ tests across 55 test files covering all domains and components)
 
 ### ✅ Complete (v0.7.0 - Real MLIR Integration)
 - **MLIR Python Bindings Integration** - All 6 Phases Complete (Nov 14-15, 2025)
