@@ -17,7 +17,7 @@ Examples:
 5. Combined field + temporal + agent workflows
 """
 
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
 
 if not MLIR_AVAILABLE:
     print("MLIR Python bindings not available. Skipping examples.")
@@ -25,8 +25,8 @@ if not MLIR_AVAILABLE:
 
 from mlir import ir
 from mlir.dialects import arith, func
-from kairo.mlir.compiler_v2 import MLIRCompilerV2
-from kairo.mlir.dialects.agent import AgentDialect
+from morphogen.mlir.compiler_v2 import MLIRCompilerV2
+from morphogen.mlir.dialects.agent import AgentDialect
 
 
 def example1_basic_agent_spawn():
@@ -364,7 +364,7 @@ def example6_agent_field_integration():
                 ip = ir.InsertionPoint(func_op.entry_block)
 
                 # Import field dialect
-                from kairo.mlir.dialects.field import FieldDialect
+                from morphogen.mlir.dialects.field import FieldDialect
 
                 # Create a field
                 width = arith.ConstantOp(ir.IndexType.get(), 128).result
@@ -439,7 +439,7 @@ def example7_temporal_agent_evolution():
                 ip = ir.InsertionPoint(func_op.entry_block)
 
                 # Import temporal dialect
-                from kairo.mlir.dialects.temporal import TemporalDialect
+                from morphogen.mlir.dialects.temporal import TemporalDialect
 
                 # Create temporal flow
                 dt = arith.ConstantOp(f32, 0.1).result

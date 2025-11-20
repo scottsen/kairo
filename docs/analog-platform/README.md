@@ -16,7 +16,7 @@ We're building a platform where:
 - **Simple primitives** (sum, integrate, nonlinearity, events) compose into infinite complexity
 - **Analog and digital** coexist seamlessly through clean abstractions
 - **Modules are substrate-agnostic** - could be op-amps, DSP chips, neural accelerators, or future exotic tech
-- **Computation becomes composition** - same philosophy as Kairo, but in hardware
+- **Computation becomes composition** - same philosophy as Morphogen, but in hardware
 
 ---
 
@@ -25,7 +25,7 @@ We're building a platform where:
 ### Start Here
 1. **[00-VISION.md](00-VISION.md)** - The big picture, philosophy, and why this matters
    - Core insights and principles
-   - Relationship to Kairo (your software project)
+   - Relationship to Morphogen (your software project)
    - The endgame use case
 
 ### Deep Dives
@@ -56,7 +56,7 @@ We're building a platform where:
    - Anti-pattern: don't overbuild
 
 5. **[06-KAIRO-BRIDGE.md](06-KAIRO-BRIDGE.md)** - How hardware and software mirror each other
-   - Layer-by-layer mapping Kairo ↔ Analog Platform
+   - Layer-by-layer mapping Morphogen ↔ Analog Platform
    - Where digital struggles, analog shines
    - Where analog struggles, digital shines
    - The hybrid sweet spot
@@ -100,9 +100,9 @@ A "module" can be **anything** that obeys the interface:
 
 **The abstraction makes them interchangeable.**
 
-### 5. Kairo and This Platform Are Mirrors
+### 5. Morphogen and This Platform Are Mirrors
 
-| Aspect | Kairo (Software) | Analog Platform (Hardware) |
+| Aspect | Morphogen (Software) | Analog Platform (Hardware) |
 |--------|-----------------|---------------------------|
 | Purpose | Digital simulation of continuous phenomena | Physical embodiment of continuous dynamics |
 | Primitives | Streams, fields, transforms | Sum, integrate, nonlinearity, events |
@@ -191,7 +191,7 @@ A "module" can be **anything** that obeys the interface:
    - Substrate-agnostic modules
 
 3. **Software ↔ Hardware bridge**
-   - Kairo designs/simulates
+   - Morphogen designs/simulates
    - Hardware embodies
    - Bidirectional workflow
 
@@ -223,10 +223,10 @@ A "module" can be **anything** that obeys the interface:
 - [ ] Developer documentation
 - [ ] First third-party modules
 
-### Phase 3: Kairo Integration
-- [ ] Map Kairo operators → hardware primitives
-- [ ] Prototype Kairo → firmware compilation
-- [ ] Bidirectional testing (Kairo validates hardware)
+### Phase 3: Morphogen Integration
+- [ ] Map Morphogen operators → hardware primitives
+- [ ] Prototype Morphogen → firmware compilation
+- [ ] Bidirectional testing (Morphogen validates hardware)
 - [ ] Shared descriptor language
 
 ### Phase 4: Advanced Modules
@@ -246,7 +246,7 @@ A "module" can be **anything** that obeys the interface:
 
 ## Related Projects
 
-- **Kairo** - Your unified digital computation kernel (in this repo)
+- **Morphogen** - Your unified digital computation kernel (in this repo)
 - **Eurorack** - Modular synthesis standard (analog-only, cable-heavy)
 - **Neuromorphic Computing** - Research field for brain-inspired analog compute
 - **Analog ML Accelerators** - Mythic AI, IBM RRAM, etc.
@@ -255,7 +255,7 @@ A "module" can be **anything** that obeys the interface:
 
 ## The Elevator Pitch
 
-> **"We're building the first modular analog/digital hybrid computing platform - a universal substrate where guitar pedals, neural accelerators, DSP blocks, and analog circuits seamlessly compose into emergent systems. It's Eurorack meets Kairo meets Philbrick, with modern tech and accessible dev boards."**
+> **"We're building the first modular analog/digital hybrid computing platform - a universal substrate where guitar pedals, neural accelerators, DSP blocks, and analog circuits seamlessly compose into emergent systems. It's Eurorack meets Morphogen meets Philbrick, with modern tech and accessible dev boards."**
 
 Or shorter:
 
@@ -272,7 +272,7 @@ Key areas for input:
 - Protocol specification
 - Reference module designs
 - Dev board BOM optimization
-- Kairo integration strategy
+- Morphogen integration strategy
 
 ---
 
@@ -288,4 +288,4 @@ Key areas for input:
 
 ---
 
-*"The universe computes in analog. We model it in Kairo. We embody it in hardware. This is the full circle."*
+*"The universe computes in analog. We model it in Morphogen. We embody it in hardware. This is the full circle."*

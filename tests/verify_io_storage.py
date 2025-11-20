@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.io_storage import (
+from morphogen.stdlib.io_storage import (
     load_image, save_image,
     load_audio, save_audio,
     load_json, save_json,

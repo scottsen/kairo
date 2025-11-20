@@ -9,7 +9,7 @@
 
 ## Context
 
-Ambient music represents a perfect convergence of Kairo's core capabilities:
+Ambient music represents a perfect convergence of Morphogen's core capabilities:
 - **Procedural generation** (slow-evolving textures, parameter drift)
 - **Cellular automata & emergence** (generative sequencing, modulation)
 - **DSP & spectral processing** (granular synthesis, spectral blur)
@@ -19,13 +19,13 @@ Ambient music represents a perfect convergence of Kairo's core capabilities:
 Ambient music is fundamentally:
 - **Generative** — Evolves over long timeframes (hours) via simple rules
 - **Procedural** — Parameter-driven transformation, not performance
-- **Compositional** — Layered modular synthesis (like Kairo operators)
+- **Compositional** — Layered modular synthesis (like Morphogen operators)
 - **Simulation-friendly** — Time-evolving fields, agent-like soundscapes
 - **GPU-accelerable** — Parallel grain synthesis, convolution, spectral ops
 
 **No existing tool unifies these capabilities:**
 
-| Tool | Strengths | Kairo Advantage |
+| Tool | Strengths | Morphogen Advantage |
 |------|-----------|-----------------|
 | **Max/MSP, Pure Data** | Visual patching | No GPU, no CA, no physics coupling |
 | **SuperCollider** | Procedural synthesis | No GPU, complex syntax, no cross-domain |
@@ -33,15 +33,15 @@ Ambient music is fundamentally:
 | **DAWs (Ableton, FL Studio)** | Production workflows | Linear timelines, not declarative |
 | **Eno-style tools (Bloom, Reflection)** | Generative UX | Closed systems, limited extensibility |
 
-**Kairo can become the first unified platform for ambient/generative audio** that bridges DSP, cellular automata, spectral geometry, physics, and GPU compute.
+**Morphogen can become the first unified platform for ambient/generative audio** that bridges DSP, cellular automata, spectral geometry, physics, and GPU compute.
 
 ---
 
 ## Decision
 
-We will expand Kairo's audio capabilities with **four new specialized domains** for ambient and generative music:
+We will expand Morphogen's audio capabilities with **four new specialized domains** for ambient and generative music:
 
-### 1. **Kairo.Spectral** (Frequency-Domain Audio)
+### 1. **Morphogen.Spectral** (Frequency-Domain Audio)
 High-level operators for spectral manipulation beyond basic FFT/STFT:
 - Spectral blurring, morphing, crossfading
 - Harmonic nebulae (distributed harmonics)
@@ -50,7 +50,7 @@ High-level operators for spectral manipulation beyond basic FFT/STFT:
 - Pitch-shifting drones
 - Spectral freeze effects
 
-### 2. **Kairo.Ambience** (High-Level Generative Music)
+### 2. **Morphogen.Ambience** (High-Level Generative Music)
 Domain-specific primitives for ambient composition:
 - Drone generators (harmonic pads, sub-bass, shimmer)
 - Granular clouds (dense, frozen, reverse)
@@ -59,15 +59,15 @@ Domain-specific primitives for ambient composition:
 - Stochastic triggers (Poisson processes, Brownian walks)
 - Long-form evolution engines (drift, orbit LFOs)
 
-### 3. **Kairo.Synthesis** (Modular Patching)
+### 3. **Morphogen.Synthesis** (Modular Patching)
 Modular-style DSP with declarative signal flow:
-- Oscillators, filters, envelopes (enhanced from Kairo.Audio)
+- Oscillators, filters, envelopes (enhanced from Morphogen.Audio)
 - CV/routing via compute graph (no wire spaghetti)
 - Sample-accurate block execution
 - Automatic operator fusion and GPU scheduling
 - Hybrid of Pure Data + Max/MSP + SuperCollider philosophy
 
-### 4. **Kairo.Composition** (Generative Structures)
+### 4. **Morphogen.Composition** (Generative Structures)
 High-level compositional patterns:
 - Markov chains (note sequences, parameter evolution)
 - CA-based sequencers (Game of Life → trigger events)
@@ -76,7 +76,7 @@ High-level compositional patterns:
 - Multi-hour time evolution curves
 
 **These domains will NOT:**
-- Duplicate existing Kairo.Audio operators (extends, doesn't replace)
+- Duplicate existing Morphogen.Audio operators (extends, doesn't replace)
 - Require new MLIR dialects (composes existing Transform, Audio, Agent dialects)
 - Be monolithic black boxes (exposes composable low-level primitives)
 
@@ -100,17 +100,17 @@ Layer 9: Composition (NEW) — High-level generative patterns
 
 ### New Operator Registries
 
-#### 1. `kairo.audio.spectral.*` (Spectral Domain)
+#### 1. `morphogen.audio.spectral.*` (Spectral Domain)
 
 **Core Types:**
-```kairo
+```morphogen
 type SpectralField = Field2D<complex, (freq, time)>
 type Spectrogram = Field2D<f32, (freq, time)>
 type HarmonicSeries = Field1D<f32, freq>
 ```
 
 **Operators (15 new):**
-```kairo
+```morphogen
 // Spectral manipulation
 spectral.blur(spectrogram, bandwidth=50Hz) -> Spectrogram
 spectral.morph(spec_a, spec_b, mix=0.5) -> Spectrogram
@@ -129,10 +129,10 @@ additive.resynth(harmonics: Field2D, phases: Field2D) -> Sig
 spectral.crossfade(spec_a, spec_b, curve: Env) -> Spectrogram
 ```
 
-#### 2. `kairo.ambient.*` (Ambience Domain)
+#### 2. `morphogen.ambient.*` (Ambience Domain)
 
 **Core Types:**
-```kairo
+```morphogen
 type Drone = {
   fundamental: Ctl[Hz],
   texture: Enum["smooth", "shimmer", "rough"],
@@ -150,7 +150,7 @@ type GranularCloud = {
 ```
 
 **Operators (25 new):**
-```kairo
+```morphogen
 // Drone generators
 drone.harmonic(fundamental, spread, shimmer=0.2) -> Stereo
 drone.subharmonic(root, divisions=[2,3,4,5]) -> Sig
@@ -171,17 +171,17 @@ orbit.lfo(period_hours=1, orbit_shape="ellipse") -> Ctl
 slow.random_walk(range=(-1,1), smoothing=0.8) -> Ctl
 ```
 
-#### 3. `kairo.synthesis.*` (Modular Synthesis Domain)
+#### 3. `morphogen.synthesis.*` (Modular Synthesis Domain)
 
 **Core Types:**
-```kairo
+```morphogen
 type Patch = Graph<SynthOp>  // Directed acyclic synthesis graph
 type CV = Ctl  // Control voltage (modulation signal)
 type Gate = Evt<void>  // Trigger/gate events
 ```
 
-**Operators (30 new, many enhanced from Kairo.Audio):**
-```kairo
+**Operators (30 new, many enhanced from Morphogen.Audio):**
+```morphogen
 // Enhanced oscillators
 vco(freq, waveform="saw", sync: Gate) -> Sig
 wavetable(table: Field1D, freq, morph: Ctl) -> Sig
@@ -203,10 +203,10 @@ crossfade(sig_a, sig_b, position: CV) -> Sig
 vca(sig, cv: Ctl) -> Sig  // Voltage-controlled amplifier
 ```
 
-#### 4. `kairo.composition.*` (Generative Composition Domain)
+#### 4. `morphogen.composition.*` (Generative Composition Domain)
 
 **Core Types:**
-```kairo
+```morphogen
 type MarkovMatrix = Field2D<f32, (state_from, state_to)>
 type CARule = {
   rule: Enum["life", "rule30", "lenia", ...],
@@ -216,7 +216,7 @@ type Pattern = Evt<Note>  // Musical pattern (timed notes)
 ```
 
 **Operators (20 new):**
-```kairo
+```morphogen
 // Markov sequencing
 markov.sequence(matrix, initial_state, tempo) -> Evt<Note>
 markov.parameter_walk(matrix, value_mapping) -> Ctl
@@ -245,7 +245,7 @@ swarm.density_modulation(agents: Agents, param_name) -> Ctl
 
 ### Typical Ambient Composition Flow
 
-```kairo
+```morphogen
 // Stage 1: Sound source generation
 source = noise(seed=42, type="pink") |> lpf(2kHz)
 
@@ -278,7 +278,7 @@ output = spatial |> reverb(mix=0.3, decay=reverb_decay)
 ### Cross-Domain Integration Examples
 
 **Example 1: Fluid Simulation → Granular Modulation**
-```kairo
+```morphogen
 // Fluid vorticity drives grain density
 fluid = navier_stokes.solve(...)
 vorticity = field.curl(fluid.velocity)
@@ -292,7 +292,7 @@ grains = granular.cloud(
 ```
 
 **Example 2: Mandelbrot Zoom → Spectral Evolution**
-```kairo
+```morphogen
 // Fractal depth drives harmonic spread
 mandelbrot = fractal.iterate(zoom_center, zoom_rate)
 depth = mandelbrot.escape_time.mean()
@@ -306,7 +306,7 @@ pad = drone.harmonic(
 ```
 
 **Example 3: Swarm Agents → Melody Generation**
-```kairo
+```morphogen
 // Boid positions generate melodic material
 boids = agents.boids(num=50, bounds=100, cohesion=0.5)
 notes = swarm.pitch_map(
@@ -328,11 +328,11 @@ output = spawn(notes, voice, max_voices=8)
 
 ## Rationale
 
-### Why This is a Perfect Fit for Kairo
+### Why This is a Perfect Fit for Morphogen
 
 **1. Natural Operator Composition**
 
-Ambient music is built from **layers of simple transformations** — exactly Kairo's model:
+Ambient music is built from **layers of simple transformations** — exactly Morphogen's model:
 ```
 Noise → Filter → Granular → Spectral Blur → Reverb → Spatial
 ```
@@ -341,7 +341,7 @@ Each stage = operator. GPU-accelerated. Deterministic. Composable.
 
 **2. Cross-Domain Synergy**
 
-Kairo's unique strength: **physics/CA/fractals can drive audio parameters**
+Morphogen's unique strength: **physics/CA/fractals can drive audio parameters**
 - Reaction-diffusion → filter cutoff modulation
 - Cellular automata → triggering events
 - Lenia creatures → pitch evolution
@@ -376,14 +376,14 @@ Ambient music needs **reproducible randomness** (same seed = same evolution):
 - CA sequencers → deterministic rules
 - Granular noise → Philox RNG (cross-platform bit-exact)
 
-Kairo's determinism tiers map perfectly:
+Morphogen's determinism tiers map perfectly:
 - **Strict:** Additive synthesis, Markov sequences
 - **Repro:** Spectral blur, convolution reverb
 - **Live:** Real-time CA evolution, adaptive modulation
 
 **5. Multi-Hour Evolution**
 
-Ambient tracks evolve over hours. Kairo's scheduler handles:
+Ambient tracks evolve over hours. Morphogen's scheduler handles:
 - Long-period modulators (orbit LFOs with hour-long periods)
 - Slow parameter drift (0.001 Hz modulation)
 - Deterministic long-form sequences
@@ -392,7 +392,7 @@ Ambient tracks evolve over hours. Kairo's scheduler handles:
 **6. Modular Philosophy Without Wire Spaghetti**
 
 Traditional modular synths: visual mess of patch cables
-Kairo.Synthesis: **compute graph IS the signal flow**
+Morphogen.Synthesis: **compute graph IS the signal flow**
 - Automatic dependency analysis
 - Operator fusion for efficiency
 - Type-safe connections (no CV → audio accidents)
@@ -404,7 +404,7 @@ Kairo.Synthesis: **compute graph IS the signal flow**
 
 ### Positive
 
-**1. Kairo becomes the premier ambient music platform**
+**1. Morphogen becomes the premier ambient music platform**
 - Unified DSP, CA, spectral, physics, GPU
 - No competing tool has this integration
 
@@ -565,7 +565,7 @@ Kairo.Synthesis: **compute graph IS the signal flow**
 
 ## Alternatives Considered
 
-### Alternative 1: Extend Kairo.Audio Only (No New Domains)
+### Alternative 1: Extend Morphogen.Audio Only (No New Domains)
 
 **Pros:**
 - Simpler architecture (fewer domains)
@@ -593,9 +593,9 @@ Kairo.Synthesis: **compute graph IS the signal flow**
 
 **Decision:** Rejected. Four focused domains better than one mega-domain.
 
-### Alternative 3: Pure Library (No Kairo Integration)
+### Alternative 3: Pure Library (No Morphogen Integration)
 
-Build standalone ambient music library, don't integrate with Kairo.
+Build standalone ambient music library, don't integrate with Morphogen.
 
 **Pros:**
 - Faster initial development
@@ -607,7 +607,7 @@ Build standalone ambient music library, don't integrate with Kairo.
 - No determinism guarantees
 - Duplicates existing tools (SuperCollider, Max/MSP)
 
-**Decision:** Rejected. Kairo integration is the entire value proposition.
+**Decision:** Rejected. Morphogen integration is the entire value proposition.
 
 ### Alternative 4: Focus on Preset Systems (Not Operators)
 
@@ -621,7 +621,7 @@ Provide high-level presets ("Eno Pad", "Shimmer Drone") instead of operators.
 - Not extensible (closed presets)
 - Hides composability
 - Becomes "yet another preset library"
-- Doesn't showcase Kairo's architecture
+- Doesn't showcase Morphogen's architecture
 
 **Decision:** Rejected. Operators + presets (both), operators first.
 
@@ -676,14 +676,14 @@ This decision will be considered successful if:
 - **TidalCycles** — Live-coded ambient patterns
 - **Sonic Pi** — Educational music programming
 
-**Kairo's differentiator:** None of these integrate DSP + CA + physics + GPU + determinism.
+**Morphogen's differentiator:** None of these integrate DSP + CA + physics + GPU + determinism.
 
 ---
 
 ## References
 
 ### Specifications
-- [AUDIO_SPECIFICATION.md](../../AUDIO_SPECIFICATION.md) — Kairo.Audio domain
+- [AUDIO_SPECIFICATION.md](../../AUDIO_SPECIFICATION.md) — Morphogen.Audio domain
 - [docs/specifications/emergence.md](../specifications/emergence.md) — CA, swarms, L-systems
 - [docs/specifications/procedural-generation.md](../specifications/procedural-generation.md) — Noise, fractals, terrain
 - [docs/specifications/transform.md](../specifications/transform.md) — FFT, STFT, wavelets

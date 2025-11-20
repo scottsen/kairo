@@ -10,7 +10,7 @@ Tests the DomainInterface base class and concrete implementations for:
 """
 
 import numpy as np
-from kairo.cross_domain.interface import (
+from morphogen.cross_domain.interface import (
     FieldToAgentInterface,
     AgentToFieldInterface,
     PhysicsToAudioInterface,
@@ -18,8 +18,8 @@ from kairo.cross_domain.interface import (
     AcousticsToAudioInterface,
     DomainInterface,
 )
-from kairo.cross_domain.registry import CrossDomainRegistry
-from kairo.cross_domain.validators import (
+from morphogen.cross_domain.registry import CrossDomainRegistry
+from morphogen.cross_domain.validators import (
     validate_cross_domain_flow,
     validate_field_data,
     validate_agent_positions,
@@ -276,7 +276,7 @@ def test_validators():
 
 def test_fluid_to_acoustics_coupling():
     """Test Fluid → Acoustics transform (pressure coupling)."""
-    from kairo.stdlib import field
+    from morphogen.stdlib import field
 
     # Create fluid pressure fields (time series)
     grid_size = 32
@@ -321,7 +321,7 @@ def test_fluid_to_acoustics_coupling():
 
 def test_acoustics_to_audio_sampling():
     """Test Acoustics → Audio transform (microphone sampling)."""
-    from kairo.stdlib import field
+    from morphogen.stdlib import field
 
     # Create acoustic pressure fields (time series)
     grid_size = 32
@@ -380,7 +380,7 @@ def test_acoustics_to_audio_sampling():
 
 def test_fluid_acoustics_audio_pipeline():
     """Test complete 3-domain pipeline: Fluid → Acoustics → Audio."""
-    from kairo.stdlib import field
+    from morphogen.stdlib import field
 
     # 1. Create fluid pressure fields
     grid_size = 16  # Small for fast test

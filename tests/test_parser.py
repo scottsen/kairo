@@ -1,8 +1,8 @@
 """Tests for the parser."""
 
 import pytest
-from kairo.parser.parser import parse
-from kairo.ast.nodes import *
+from morphogen.parser.parser import parse
+from morphogen.ast.nodes import *
 
 
 def test_parse_assignment():

@@ -5,8 +5,8 @@ These tests require MLIR Python bindings to be installed.
 """
 
 import pytest
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
-from kairo.mlir.dialects.field import (
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.dialects.field import (
     FieldType, FieldDialect,
     FieldCreateOp, FieldGradientOp, FieldLaplacianOp, FieldDiffuseOp
 )
@@ -373,7 +373,7 @@ class TestFieldDialectAvailability:
 
     def test_mlir_available_flag(self):
         """Test that MLIR_AVAILABLE flag is set correctly."""
-        from kairo.mlir.dialects.field import MLIR_AVAILABLE as field_mlir_available
+        from morphogen.mlir.dialects.field import MLIR_AVAILABLE as field_mlir_available
         assert isinstance(field_mlir_available, bool)
 
     @pytest.mark.skipif(MLIR_AVAILABLE, reason="Test for when MLIR is NOT installed")

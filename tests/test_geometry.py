@@ -15,7 +15,7 @@ except ImportError:
     pytest = None
 
 import numpy as np
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     # Types
     CoordinateFrame,
     Box3D,
@@ -1201,7 +1201,7 @@ def test_convex_hull_2d():
     hull = convex_hull(points, dim=2)
 
     # Hull should be a polygon
-    from kairo.stdlib.geometry import Polygon
+    from morphogen.stdlib.geometry import Polygon
     assert isinstance(hull, Polygon)
 
     # Hull should have fewer vertices than input
@@ -1292,7 +1292,7 @@ def test_mesh_union():
 def test_sample_field_at_point():
     """Test sampling field at a geometric point."""
     try:
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
     except ImportError:
         pytest.skip("Field domain not available")
         return
@@ -1311,7 +1311,7 @@ def test_sample_field_at_point():
 def test_sample_field_with_interpolation():
     """Test field sampling with bilinear interpolation."""
     try:
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
     except ImportError:
         pytest.skip("Field domain not available")
         return
@@ -1336,7 +1336,7 @@ def test_sample_field_with_interpolation():
 def test_query_field_in_region():
     """Test querying field values in a geometric region."""
     try:
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
     except ImportError:
         pytest.skip("Field domain not available")
         return
@@ -1359,7 +1359,7 @@ def test_query_field_in_region():
 def test_query_field_in_rectangle():
     """Test querying field in rectangle region."""
     try:
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
     except ImportError:
         pytest.skip("Field domain not available")
         return
@@ -1385,7 +1385,7 @@ def test_query_field_in_rectangle():
 def test_shape_to_rigidbody_circle():
     """Test converting circle to rigidbody shape."""
     try:
-        from kairo.stdlib.rigidbody import ShapeType
+        from morphogen.stdlib.rigidbody import ShapeType
     except ImportError:
         pytest.skip("Rigidbody domain not available")
         return
@@ -1400,7 +1400,7 @@ def test_shape_to_rigidbody_circle():
 def test_shape_to_rigidbody_rectangle():
     """Test converting rectangle to rigidbody shape."""
     try:
-        from kairo.stdlib.rigidbody import ShapeType
+        from morphogen.stdlib.rigidbody import ShapeType
     except ImportError:
         pytest.skip("Rigidbody domain not available")
         return
@@ -1417,7 +1417,7 @@ def test_shape_to_rigidbody_rectangle():
 def test_shape_to_rigidbody_polygon():
     """Test converting polygon to rigidbody shape."""
     try:
-        from kairo.stdlib.rigidbody import ShapeType
+        from morphogen.stdlib.rigidbody import ShapeType
     except ImportError:
         pytest.skip("Rigidbody domain not available")
         return

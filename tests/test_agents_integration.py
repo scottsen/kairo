@@ -2,9 +2,9 @@
 
 import pytest
 import numpy as np
-from kairo.runtime.runtime import Runtime
-from kairo.stdlib.agents import agents
-from kairo.stdlib.field import field
+from morphogen.runtime.runtime import Runtime
+from morphogen.stdlib.agents import agents
+from morphogen.stdlib.field import field
 
 
 class TestAgentRuntimeIntegration:

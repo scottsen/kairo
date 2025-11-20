@@ -5,9 +5,9 @@ These tests will be skipped if MLIR is not installed.
 """
 
 import pytest
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
-from kairo.mlir.compiler_v2 import MLIRCompilerV2, is_legacy_compiler
-from kairo.ast.nodes import Literal
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.compiler_v2 import MLIRCompilerV2, is_legacy_compiler
+from morphogen.ast.nodes import Literal
 
 
 @pytest.mark.skipif(not MLIR_AVAILABLE, reason="MLIR Python bindings not installed")
@@ -98,7 +98,7 @@ class TestMLIRCompilerV2:
 
     def test_compile_binary_op_not_implemented(self):
         """Test that compile_binary_op raises NotImplementedError."""
-        from kairo.ast.nodes import BinaryOp, Literal
+        from morphogen.ast.nodes import BinaryOp, Literal
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -110,7 +110,7 @@ class TestMLIRCompilerV2:
 
     def test_compile_program_not_implemented(self):
         """Test that compile_program raises NotImplementedError."""
-        from kairo.ast.nodes import Program
+        from morphogen.ast.nodes import Program
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)

@@ -2,7 +2,7 @@
 
 ## Domain Overview at a Glance
 
-The Kairo agents domain provides **sparse particle/agent simulation** with:
+The Morphogen agents domain provides **sparse particle/agent simulation** with:
 - NumPy-based backend (CPU execution)
 - MLIR dialect for future compilation
 - Flexible per-agent properties
@@ -145,8 +145,8 @@ visual.video(frames, path, fps=30) -> None
 ## Example: Simple Particle Effect (Current)
 
 ```python
-from kairo.stdlib.agents import agents
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.agents import agents
+from morphogen.stdlib.visual import visual
 import numpy as np
 
 # Create particles
@@ -254,16 +254,16 @@ for step in range(100):
 Current high-level operations that lower to memref:
 
 ```
-kairo.agent.spawn(count, pos_x, pos_y, vel_x, vel_y, state)
+morphogen.agent.spawn(count, pos_x, pos_y, vel_x, vel_y, state)
   → memref.alloc(%count, %c5) + initialization loop
 
-kairo.agent.update(agents, index, property, value)
+morphogen.agent.update(agents, index, property, value)
   → memref.store %value, %agents[%index, %property]
 
-kairo.agent.query(agents, index, property)
+morphogen.agent.query(agents, index, property)
   → memref.load %agents[%index, %property]
 
-kairo.agent.behavior(agents, behavior_type, params)
+morphogen.agent.behavior(agents, behavior_type, params)
   → scf.for loop with behavior logic
     - "move": x += vx; y += vy
     - "bounce": check bounds, reverse velocity

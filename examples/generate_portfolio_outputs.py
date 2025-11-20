@@ -11,8 +11,8 @@ import numpy as np
 # Add parent directory to path to import kairo
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
 
 
 def generate_hello_heat():

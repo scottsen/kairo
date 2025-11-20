@@ -2,7 +2,7 @@
 
 ## Overview
 
-Implemented comprehensive physical unit checking and dimensional analysis for Kairo's type system, enabling safer cross-domain composition through compile-time dimensional consistency verification.
+Implemented comprehensive physical unit checking and dimensional analysis for Morphogen's type system, enabling safer cross-domain composition through compile-time dimensional consistency verification.
 
 ## What Was Implemented
 
@@ -98,7 +98,7 @@ Implemented comprehensive physical unit checking and dimensional analysis for Ka
 ### 1. Type Safety Across Domains
 
 **Before:**
-```kairo
+```morphogen
 // No checking - runtime error likely
 let temp_field: Field2D<f32> = ...;
 struct Particle {
@@ -107,7 +107,7 @@ struct Particle {
 ```
 
 **After:**
-```kairo
+```morphogen
 // Compile-time verification
 let temp_field: Field2D<f32> [K] = ...;
 struct Particle {
@@ -119,7 +119,7 @@ struct Particle {
 ### 2. Physical Consistency Verification
 
 **Prevents Invalid Operations:**
-```kairo
+```morphogen
 let distance: f32 [m] = 10.0;
 let time: f32 [s] = 5.0;
 
@@ -128,7 +128,7 @@ let bad = distance + time;  // Type error: [m] and [s] incompatible
 ```
 
 **Enables Valid Operations:**
-```kairo
+```morphogen
 let velocity = distance / time;  // OK: f32 [m/s]
 let acceleration: f32 [m/s^2] = 9.8;
 let force = mass * acceleration;  // OK: f32 [kg*m/s^2] = [N]
@@ -155,7 +155,7 @@ let force = mass * acceleration;  // OK: f32 [kg*m/s^2] = [N]
 
 The type checker automatically tracks units through operations:
 
-```kairo
+```morphogen
 let length: f32 [m] = 10.0;
 let width: f32 [m] = 5.0;
 let time: f32 [s] = 2.0;
@@ -169,7 +169,7 @@ let volume = area * length;    // Inferred: f32 [m^3]
 
 Compatible units are automatically recognized:
 
-```kairo
+```morphogen
 // All length units are compatible
 let d1: f32 [m] = 1000.0;
 let d2: f32 [km] = 1.0;
@@ -252,14 +252,14 @@ result = kilometer.convert_to(meter, 5.0)
 ## Usage Examples
 
 ### Simple Type Declaration
-```kairo
+```morphogen
 let temperature: f32 [K] = 273.15;
 let pressure: f32 [Pa] = 101325.0;
 let velocity: Vec2<f32> [m/s] = Vec2(10.0, 0.0);
 ```
 
 ### Cross-Domain Composition
-```kairo
+```morphogen
 // Temperature field
 let temp_field: Field2D<f32> [K] = field2d(128, 128, 1.0);
 
@@ -275,7 +275,7 @@ let particles = sample_field(agents, temp_field, "temp");
 ```
 
 ### Physics Simulation
-```kairo
+```morphogen
 fn update_physics(dt: f32 [s]) {
     let mass: f32 [kg] = 1.0;
     let force: f32 [N] = 10.0;
@@ -354,4 +354,4 @@ The physical unit checking system provides:
 ✅ **Backward Compatible**: Opt-in, doesn't break existing code
 ✅ **Extensible**: Foundation for advanced features
 
-This implementation unlocks safer cross-domain composition by catching dimensional errors at compile-time, making Kairo programs more robust and correct by construction.
+This implementation unlocks safer cross-domain composition by catching dimensional errors at compile-time, making Morphogen programs more robust and correct by construction.

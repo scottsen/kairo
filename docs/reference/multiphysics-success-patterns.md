@@ -2,7 +2,7 @@
 
 **Status:** APPROVED
 **Date:** 2025-11-15
-**Authors:** Kairo Architecture Team
+**Authors:** Morphogen Architecture Team
 **Supersedes:** N/A
 **Related:** ADR-002 (Cross-Domain Architectural Patterns), ../architecture/gpu-mlir-principles.md
 
@@ -12,7 +12,7 @@
 
 Building multiphysics, GPU-accelerated, simulation-heavy frameworks is notoriously difficult. Many projects fail due to architectural decisions made early that compound over time. However, large scientific codebases, game engines, VFX pipelines, and CAD kernels have independently converged on a core set of architectural patterns that dramatically increase the odds of success.
 
-This ADR documents 12 battle-proven, highly actionable patterns directly relevant to Kairo's goals. These are not generic platitudes—these are survival requirements for a multiphysics engine, distilled from 25+ years of collective experience across game engines (Havok, Unity DOTS, Unreal), scientific computing (OpenFOAM, PyTorch), and production systems.
+This ADR documents 12 battle-proven, highly actionable patterns directly relevant to Morphogen's goals. These are not generic platitudes—these are survival requirements for a multiphysics engine, distilled from 25+ years of collective experience across game engines (Havok, Unity DOTS, Unreal), scientific computing (OpenFOAM, PyTorch), and production systems.
 
 **The Core Problem:**
 Multiphysics systems face unique challenges:
@@ -30,7 +30,7 @@ A specific set of architectural patterns that address these challenges systemati
 
 ## Decision
 
-Kairo adopts the following 12 architectural patterns as **mandatory design principles** for all simulation infrastructure:
+Morphogen adopts the following 12 architectural patterns as **mandatory design principles** for all simulation infrastructure:
 
 ---
 
@@ -69,7 +69,7 @@ class PhysicsDomain:
         return self.integrator.update(state, forces, dt)
 ```
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 - `ParticleSet`, `FieldState`, `GraphState` know how to **store** data
 - `Integrator`, `ForceModel`, `Solver` know how to **process** data
 - `Domain` exposes **operators** for combining them
@@ -104,7 +104,7 @@ pipeline:
   - check_collisions
 ```
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 Every simulation step is an explicit operator in the execution graph. This gives you:
 - **Debuggability** — Step through each operation
 - **Replayability** — Record and replay exact sequences
@@ -137,7 +137,7 @@ class DiffusionOp(Operator):
     # Same interface, same semantics, different implementation
 ```
 
-**Kairo Design:**
+**Morphogen Design:**
 ```
 Domain → Operator → Backend Selection
                   ↓
@@ -191,7 +191,7 @@ class ParticleSet:
 - Warp efficiency increases dramatically
 - Cache misses drop dramatically
 
-**Kairo Rule:**
+**Morphogen Rule:**
 **ALL** simulation state is stored in columnar format. No exceptions.
 
 **This is one of the single most important choices you can make early.**
@@ -228,7 +228,7 @@ state.field["temperature"]
 - Bounds checking (runtime safety)
 - Unit validation (physical correctness)
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 Every domain exposes state through field accessors, not raw arrays.
 
 **Result:** Raw NumPy arrays = footguns. Field accessors = safe, flexible, inspectable.
@@ -252,7 +252,7 @@ BEGIN STEP
 END STEP
 ```
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 ```python
 class SimulationScheduler:
     phases = [
@@ -317,7 +317,7 @@ class SimulationEngine:
 - Pure math is **cacheable** (memoization possible)
 - Pure math is **deterministic** (same inputs = same outputs)
 
-**Kairo Principle:**
+**Morphogen Principle:**
 Simulation operators are pure functions. Side effects only at domain boundaries.
 
 ---
@@ -333,7 +333,7 @@ Simulation operators are pure functions. Side effects only at domain boundaries.
 
 **Solution:** Force domains to declare their unit system.
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 ```python
 class PhysicsDomain:
     units = {
@@ -397,7 +397,7 @@ class HeatDomain:
         velocity = fluid_interface.get_velocity_field()  # Clean!
 ```
 
-**Kairo Domain Hierarchy:**
+**Morphogen Domain Hierarchy:**
 ```
 ┌─────────────────────────────────────┐
 │  High-Level Domains                 │
@@ -442,7 +442,7 @@ physics.simulate(mesh)   # Too expensive!
 renderer.draw(mesh)      # Overkill!
 ```
 
-**Kairo Separation:**
+**Morphogen Separation:**
 ```python
 # Simulation data (coarse, fast)
 sim_mesh = CoarseMesh(vertices=1000)
@@ -469,7 +469,7 @@ vis_field = Field3D.upsample(sim_field, target=(256, 256, 256))
 - No performance tradeoff
 - Different update rates possible
 
-**Kairo Rule:** Never assume simulation data = visualization data.
+**Morphogen Rule:** Never assume simulation data = visualization data.
 
 ---
 
@@ -484,7 +484,7 @@ vis_field = Field3D.upsample(sim_field, target=(256, 256, 256))
 - Stiff equations need special handling
 - Stability depends on physics and numerics
 
-**Kairo Requirements:**
+**Morphogen Requirements:**
 
 1. **Support Multiple Time Step Strategies:**
    ```python
@@ -579,14 +579,14 @@ vis_field = Field3D.upsample(sim_field, target=(256, 256, 256))
 - **Hyperparameter sweeps:** Compare configurations
 - **Optimization:** Genetic algorithms, gradient-free methods
 
-**Kairo Commitment:**
+**Morphogen Commitment:**
 Every simulation is reproducible bit-for-bit with a seed. No exceptions.
 
 ---
 
 ## The 3 Highest-Leverage Patterns
 
-If Kairo does only these three things right, everything else becomes easier:
+If Morphogen does only these three things right, everything else becomes easier:
 
 ### (1) Typed Operator Registry
 Cross-domain typed operators remove chaos. Every operation is:
@@ -752,4 +752,4 @@ For each new domain or major subsystem, verify:
 
 These patterns emerge from necessity. They are the distilled wisdom of thousands of engineers who built systems that survived contact with reality.
 
-Kairo doesn't have to make the same mistakes. Follow these patterns, and you **greatly increase your odds of success**.
+Morphogen doesn't have to make the same mistakes. Follow these patterns, and you **greatly increase your odds of success**.

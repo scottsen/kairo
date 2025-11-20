@@ -9,7 +9,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from kairo.stdlib.graph import GraphOperations, GraphType
+from morphogen.stdlib.graph import GraphOperations, GraphType
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np

@@ -16,8 +16,8 @@ Controls:
 """
 
 import numpy as np
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
 
 
 def create_smoke_simulation():

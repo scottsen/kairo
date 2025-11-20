@@ -1,4 +1,4 @@
-# Kairo Architecture Analysis: Three-Layer Proposal Validation
+# Morphogen Architecture Analysis: Three-Layer Proposal Validation
 
 **Date:** 2025-11-12
 **Purpose:** Validate proposed three-layer architecture against actual codebase
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This document analyzes a proposed three-layer architecture (RiffStack → Kairo.Audio → Kairo Core) against the actual Kairo codebase. **Key finding:** The proposed architecture does not match current reality. Kairo is currently a unified DSL project, and RiffStack is mentioned as a separate sibling project with no code in this repository.
+This document analyzes a proposed three-layer architecture (RiffStack → Morphogen.Audio → Morphogen Core) against the actual Morphogen codebase. **Key finding:** The proposed architecture does not match current reality. Morphogen is currently a unified DSL project, and RiffStack is mentioned as a separate sibling project with no code in this repository.
 
 **Verdict:** The ChatGPT proposal contains interesting architectural ideas but was based on incomplete/incorrect understanding of the project. Some concepts are worth considering for future evolution, but significant clarification and planning would be needed.
 
@@ -16,7 +16,7 @@ This document analyzes a proposed three-layer architecture (RiffStack → Kairo.
 
 ## Current Reality: What Actually Exists
 
-### Kairo v0.3.1 - Unified Creative Computation DSL
+### Morphogen v0.3.1 - Unified Creative Computation DSL
 
 **Status:** Active, production-ready MLIR pipeline
 
@@ -50,11 +50,11 @@ kairo/
 
 **Mentioned in README:**
 > "RiffStack - Audio-focused sibling project
-> While Kairo is a multi-domain creative computation platform, RiffStack focuses specifically on audio synthesis and live performance."
+> While Morphogen is a multi-domain creative computation platform, RiffStack focuses specifically on audio synthesis and live performance."
 
 **Reality Check:**
 - ❌ No RiffStack code in this repository
-- ❌ No import/export between RiffStack and Kairo
+- ❌ No import/export between RiffStack and Morphogen
 - ❌ No shared operator registry
 - ❌ Mentioned as separate GitHub project, not a layer
 
@@ -88,13 +88,13 @@ There's a discrepancy in the documentation:
 └─────────────┬──────────────┘
               │  (compiles to)
 ┌─────────────▼──────────────┐
-│       Kairo.Audio          │  ← Layer 2: Composition
+│       Morphogen.Audio          │  ← Layer 2: Composition
 │  "Structured composition"  │     Typed DSL (Sig, Ctl, Evt)
 │  Composer-facing           │     Scenes, modules
 └─────────────┬──────────────┘
               │  (lowers to)
 ┌─────────────▼──────────────┐
-│      Kairo Core            │  ← Layer 3: Kernel
+│      Morphogen Core            │  ← Layer 3: Kernel
 │ "Deterministic kernel"     │     MLIR/LLVM, scheduler,
 │  Implementor-facing        │     type system, profiles
 └────────────────────────────┘
@@ -106,15 +106,15 @@ There's a discrepancy in the documentation:
    - YAML-based patch format
    - RPN (Reverse Polish Notation) stack evaluation
    - Live looping, MIDI control
-   - Replace NumPy DSP with Kairo runtime
+   - Replace NumPy DSP with Morphogen runtime
 
-2. **Kairo.Audio as Semantic Layer**
+2. **Morphogen.Audio as Semantic Layer**
    - Typed streams: `Sig<T>`, `Ctl<T>`, `Evt<T>`
    - Scene-based composition
    - Import/export to RiffStack YAML
    - Profile system integration
 
-3. **Kairo Core as Kernel**
+3. **Morphogen Core as Kernel**
    - MLIR compilation pipeline
    - Deterministic scheduler
    - Profile system (live, render, strict modes)
@@ -135,7 +135,7 @@ There's a discrepancy in the documentation:
 #### 1. Layered Semantics Concept
 **Proposal:** Different layers for different user personas (performer, composer, implementor)
 
-**Reality:** Kairo already has this conceptually through:
+**Reality:** Morphogen already has this conceptually through:
 - **High-level syntax** - `.kairo` files (composer-facing)
 - **MLIR IR** - intermediate representation (compiler-facing)
 - **Runtime** - execution engine (implementation)
@@ -166,42 +166,42 @@ There's a discrepancy in the documentation:
 ### ❌ What Doesn't Match Reality
 
 #### 1. Three Separate Layers
-**Proposal:** RiffStack → Kairo.Audio → Kairo Core as distinct codebases
+**Proposal:** RiffStack → Morphogen.Audio → Morphogen Core as distinct codebases
 
 **Reality:**
-- Kairo is one unified project
-- No "Kairo.Audio" sublayer exists
+- Morphogen is one unified project
+- No "Morphogen.Audio" sublayer exists
 - No RiffStack code in this repo
 - Current architecture: Source → Parser → MLIR (not three layers)
 
 **Verdict:** ❌ Doesn't describe current system
 
 #### 2. RiffStack as Performance Frontend
-**Proposal:** YAML/RPN stack-based DSL that compiles to Kairo.Audio
+**Proposal:** YAML/RPN stack-based DSL that compiles to Morphogen.Audio
 
 **Reality:**
 - RiffStack is mentioned as separate project
 - No compilation path exists
-- No YAML patch format in Kairo
-- Signal dialect exists but isn't "Kairo.Audio"
+- No YAML patch format in Morphogen
+- Signal dialect exists but isn't "Morphogen.Audio"
 
 **Verdict:** ❌ Architectural relationship unclear/non-existent
 
-#### 3. Kairo.Audio as Intermediate DSL
+#### 3. Morphogen.Audio as Intermediate DSL
 **Proposal:** Separate typed DSL layer between RiffStack and Core
 
 **Reality:**
-- Signal dialect is part of unified Kairo language
-- No separate "Kairo.Audio" DSL
+- Signal dialect is part of unified Morphogen language
+- No separate "Morphogen.Audio" DSL
 - No intermediate graph JSON format
 
 **Verdict:** ❌ Layer doesn't exist
 
-#### 4. Replacing NumPy with Kairo Runtime
-**Proposal:** RiffStack should use Kairo runtime instead of NumPy DSP
+#### 4. Replacing NumPy with Morphogen Runtime
+**Proposal:** RiffStack should use Morphogen runtime instead of NumPy DSP
 
 **Reality:**
-- Kairo runtime IS built on NumPy (for field operations)
+- Morphogen runtime IS built on NumPy (for field operations)
 - No separate "RiffStack runtime" to replace
 - Field operations in `stdlib/field.py` use NumPy directly
 
@@ -210,7 +210,7 @@ There's a discrepancy in the documentation:
 ### ⚠️ Unclear / Context-Dependent
 
 #### 1. RiffStack Project Relationship
-**Proposal:** RiffStack compiles to Kairo
+**Proposal:** RiffStack compiles to Morphogen
 
 **Reality:** Relationship unclear from codebase
 
@@ -220,9 +220,9 @@ There's a discrepancy in the documentation:
 - Should they integrate or stay separate?
 
 #### 2. Multi-DSL Strategy
-**Proposal:** Multiple DSLs (RiffStack, Kairo.Audio, Luma, Asterion) sharing Kairo Core
+**Proposal:** Multiple DSLs (RiffStack, Morphogen.Audio, Luma, Asterion) sharing Morphogen Core
 
-**Reality:** Only one DSL (Kairo) exists
+**Reality:** Only one DSL (Morphogen) exists
 
 **Questions Needed:**
 - Is multi-DSL strategy desired?
@@ -235,7 +235,7 @@ There's a discrepancy in the documentation:
 ### Immediate Actions
 
 #### 1. Clarify Project Scope
-**Decision Needed:** Is Kairo intended to be:
+**Decision Needed:** Is Morphogen intended to be:
 - **Option A:** Single unified DSL (current state)
 - **Option B:** Compilation target for multiple DSLs (proposed state)
 
@@ -304,10 +304,10 @@ If hot-reload is desired:
    - Compilation pipeline: DSL → IR → MLIR → Runtime
    - Shared type system
 
-2. **Factor Out "Kairo Core"**
+2. **Factor Out "Morphogen Core"**
    ```
    kairo-core/        # Compilation, runtime, MLIR
-   kairo-dsl/         # Kairo language frontend
+   kairo-dsl/         # Morphogen language frontend
    riffstack/         # Audio performance frontend (if real)
    ```
 
@@ -323,7 +323,7 @@ If hot-reload is desired:
 ### What to Tell the User
 
 **Reality Check:**
-- ✅ Kairo v0.3.1 is a complete, working DSL with MLIR pipeline
+- ✅ Morphogen v0.3.1 is a complete, working DSL with MLIR pipeline
 - ❌ The "three-layer architecture" doesn't currently exist
 - ⚠️ RiffStack relationship is unclear (separate project? concept?)
 - ⚠️ Some documentation is outdated (STATUS.md)
@@ -336,15 +336,15 @@ If hot-reload is desired:
 
 **Not Applicable:**
 - RiffStack as frontend layer (doesn't exist in this repo)
-- Kairo.Audio as intermediate DSL (doesn't exist)
+- Morphogen.Audio as intermediate DSL (doesn't exist)
 - Three separate codebases (currently unified)
-- Replacing NumPy (Kairo uses NumPy internally)
+- Replacing NumPy (Morphogen uses NumPy internally)
 
 **Recommendation:**
 1. First clarify the actual vision: Single DSL or multi-DSL target?
 2. Update docs to match reality (especially STATUS.md)
 3. If multi-DSL is desired, create proper architectural plan
-4. Focus on implementing features that add value to current Kairo:
+4. Focus on implementing features that add value to current Morphogen:
    - Profile system
    - Improved hot-reload
    - Operator metadata
@@ -357,10 +357,10 @@ If hot-reload is desired:
 1. **RiffStack Status:**
    - Does RiffStack actually exist as a project?
    - If yes, where is the repository?
-   - Should it integrate with Kairo or stay separate?
+   - Should it integrate with Morphogen or stay separate?
 
 2. **Architecture Vision:**
-   - Is Kairo meant to be a single DSL?
+   - Is Morphogen meant to be a single DSL?
    - Or a compilation target for multiple DSLs?
    - Are Luma, Asterion, TIA, Eidos real projects or concepts?
 

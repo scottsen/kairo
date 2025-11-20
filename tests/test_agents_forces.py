@@ -2,8 +2,8 @@
 
 import pytest
 import numpy as np
-from kairo.stdlib.agents import agents, Agents
-from kairo.stdlib.field import field, Field2D
+from morphogen.stdlib.agents import agents, Agents
+from morphogen.stdlib.field import field, Field2D
 
 
 class TestPairwiseForcesBrute:

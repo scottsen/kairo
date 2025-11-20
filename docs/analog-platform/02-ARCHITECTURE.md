@@ -378,4 +378,4 @@ See:
 - `03-PRIMITIVES.md` - The four core operations everything builds from
 - `04-MODULES.md` - Specific module types and designs
 - `05-PROTOCOL.md` - Detailed bus protocol specification
-- `06-KAIRO-BRIDGE.md` - How this connects to Kairo
+- `06-KAIRO-BRIDGE.md` - How this connects to Morphogen

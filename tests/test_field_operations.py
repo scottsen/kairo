@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from kairo.stdlib.field import field, Field2D
+from morphogen.stdlib.field import field, Field2D
 
 
 class TestFieldAllocation:

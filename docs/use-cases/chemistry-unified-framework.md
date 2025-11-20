@@ -1,4 +1,4 @@
-# Chemistry and Chemical Engineering: The Case for Kairo
+# Chemistry and Chemical Engineering: The Case for Morphogen
 
 **Version**: 1.0
 **Date**: 2025-11-15
@@ -8,11 +8,11 @@
 
 ## Executive Summary
 
-Chemistry simulation tools are fragmented across **8 incompatible ecosystems**. Chemists and chemical engineers spend more time duct-taping brittle scripts than doing science. This is a domain crying out for a unified framework like Kairo.
+Chemistry simulation tools are fragmented across **8 incompatible ecosystems**. Chemists and chemical engineers spend more time duct-taping brittle scripts than doing science. This is a domain crying out for a unified framework like Morphogen.
 
-**Kairo can be the bridge** — the way TiaCAD unified CAD modeling and RiffStack unified DSP graphs.
+**Morphogen can be the bridge** — the way TiaCAD unified CAD modeling and RiffStack unified DSP graphs.
 
-This document identifies **7 critical problems** chemists face today and explains exactly how Kairo's operator graph paradigm uniquely solves them.
+This document identifies **7 critical problems** chemists face today and explains exactly how Morphogen's operator graph paradigm uniquely solves them.
 
 ---
 
@@ -46,11 +46,11 @@ Depending on the question, chemists must jump between:
 - Version control is a nightmare
 - Reproducibility is nearly impossible
 
-#### 🟦 What Kairo Offers
+#### 🟦 What Morphogen Offers
 
-Kairo can **unify this chaos**:
+Morphogen can **unify this chaos**:
 
-```kairo
+```morphogen
 # Single workflow: QM → MD → Kinetics → CFD → Visualization
 use molecular, quantum, kinetics, cfd, visual
 
@@ -134,13 +134,13 @@ python analyze_results.py results.csv
 - Not reproducible
 - Can't do Bayesian optimization, CMA-ES, or gradient-based methods
 
-#### 🟩 What Kairo Does
+#### 🟩 What Morphogen Does
 
 **Every reaction system becomes a parameterized simulation graph.**
 
 Then you can apply **any optimization algorithm** as a drop-in domain operator:
 
-```kairo
+```morphogen
 use optimization, kinetics, visual
 
 # Define parameterized reaction system
@@ -187,7 +187,7 @@ fn reaction_yield(temp: f32 [K], pressure: f32 [Pa], catalyst_loading: f32) -> f
 output visual.optimization_landscape(reaction_yield, best_params)
 ```
 
-**Kairo provides what chemists DO NOT HAVE TODAY:**
+**Morphogen provides what chemists DO NOT HAVE TODAY:**
 
 ✅ **Unified optimization framework** — GA, PSO, Bayesian, CMA-ES, gradient descent, differential evolution
 ✅ **Automated condition discovery** — Set it and forget it
@@ -223,11 +223,11 @@ Real chemical problems require combining:
 
 **Nothing exists that couples these cleanly** except proprietary black boxes.
 
-#### 🟧 What Kairo Enables
+#### 🟧 What Morphogen Enables
 
-Kairo can express **multiphysics as composable operator graphs**:
+Morphogen can express **multiphysics as composable operator graphs**:
 
-```kairo
+```morphogen
 use cfd, kinetics, transport, multiphase
 
 # Define fields
@@ -321,11 +321,11 @@ Chemists want to visualize:
 - **Cannot combine different domains in one view** (Can't show molecule + flow field + orbital)
 - **Animations require manual work** — Blender scripting, PyMol ray tracing, ImageMagick
 
-#### 🟩 What Kairo Provides
+#### 🟩 What Morphogen Provides
 
 **A unified visualization domain** that handles all chemistry visualization needs:
 
-```kairo
+```morphogen
 use molecular, visual, field
 
 # Molecular rendering
@@ -439,11 +439,11 @@ Real reactors have:
 
 **No existing tool handles this intermediate regime well.**
 
-#### 🟦 What Kairo Enables
+#### 🟦 What Morphogen Enables
 
-Kairo can provide **intermediate-level reaction operators**:
+Morphogen can provide **intermediate-level reaction operators**:
 
-```kairo
+```morphogen
 use kinetics, transport, catalyst
 
 # Mass-transfer-limited kinetics
@@ -515,7 +515,7 @@ flow(dt=0.01 [s]) {
 
 **This fills a major gap in current tools.**
 
-Kairo provides:
+Morphogen provides:
 
 ✅ **Mass-transfer-limited kinetics** — Not just ideal kinetics
 ✅ **Heterogeneous catalysis operators** — Langmuir-Hinshelwood, Eley-Rideal
@@ -553,11 +553,11 @@ Chemists **desperately** want to:
 - Must manually write PyTorch/TensorFlow code
 - Integration with simulation tools is painful
 
-#### 🟩 Kairo Allows ML Anywhere in the Graph
+#### 🟩 Morphogen Allows ML Anywhere in the Graph
 
 Example 1: **Neural force field instead of DFT**
 
-```kairo
+```morphogen
 use molecular, ml
 
 @state molecule : Molecule = load("protein.pdb")
@@ -579,7 +579,7 @@ flow(dt=1.0 [fs], steps=1000000) {
 
 Example 2: **Surrogate model for expensive reactor simulation**
 
-```kairo
+```morphogen
 use ml, optimization
 
 # Train surrogate model
@@ -607,7 +607,7 @@ best_params = optimize.bayesian(
 
 Example 3: **Generative model for catalyst design**
 
-```kairo
+```morphogen
 use ml, molecular
 
 # Load training data (known catalysts + activity)
@@ -638,7 +638,7 @@ for mol in new_catalysts.top(10) {
 
 Example 4: **Hybrid PDE-neural solver**
 
-```kairo
+```morphogen
 use field, ml
 
 @state temp : Field2D<f32 [K]> = initial_temp()
@@ -689,7 +689,7 @@ Academic/open-source alternatives (Cantera, DWSIM) are better but still limited:
 - No ML integration
 - Limited multiphysics
 
-#### 🟧 Kairo Gives Chemical Engineers
+#### 🟧 Morphogen Gives Chemical Engineers
 
 ✅ **Open source** — Free, auditable, extensible
 ✅ **Scriptable** — YAML-driven workflows
@@ -702,7 +702,7 @@ Academic/open-source alternatives (Cantera, DWSIM) are better but still limited:
 
 Example: **Process flowsheet simulation**
 
-```kairo
+```morphogen
 use process, optimization, visual
 
 # Define unit operations
@@ -756,9 +756,9 @@ output visual.pareto_front(best_config)
 
 ---
 
-## ⚗️ Specific Kairo Domains for Chemistry
+## ⚗️ Specific Morphogen Domains for Chemistry
 
-Based on the 7 problems above, Kairo should implement the following chemistry-specific domains:
+Based on the 7 problems above, Morphogen should implement the following chemistry-specific domains:
 
 ---
 
@@ -768,7 +768,7 @@ Based on the 7 problems above, Kairo should implement the following chemistry-sp
 
 **Operators**:
 
-```kairo
+```morphogen
 # Loading molecules
 molecule = load_smiles("CCO")  # Ethanol
 molecule = load_pdb("protein.pdb")
@@ -809,7 +809,7 @@ positions, velocities = langevin_integrator(positions, velocities, forces, temp,
 
 **Operators**:
 
-```kairo
+```morphogen
 # Arrhenius kinetics
 k = arrhenius(temp, A=1e6, Ea=50000 [J/mol])
 k = modified_arrhenius(temp, A, n, Ea)  # k = A * T^n * exp(-Ea/RT)
@@ -842,7 +842,7 @@ flux = k_L * (C_bulk - C_interface)
 
 **Operators**:
 
-```kairo
+```morphogen
 # DFT wrappers
 energy, forces = dft_calculate(molecule, method="B3LYP", basis="6-31G*", code="orca")
 energy, forces = dft_calculate(molecule, method="PBE", basis="def2-TZVP", code="psi4")
@@ -868,7 +868,7 @@ model = train_pes(training_data, architecture="SchNet", epochs=1000)
 
 **Operators**:
 
-```kairo
+```morphogen
 # Heat transfer
 q = conduction(temp_field, thermal_conductivity, area, thickness)
 q = convection(temp_surface, temp_bulk, h, area)
@@ -898,7 +898,7 @@ h = nusselt_correlation(Re, Pr, geometry)
 
 **Operators**:
 
-```kairo
+```morphogen
 # Vapor-liquid equilibrium
 y_vapor, x_liquid = vle_flash(feed, temp, pressure, thermo_model="peng_robinson")
 
@@ -919,9 +919,9 @@ droplet_size = emulsion_droplet_size(shear_rate, interfacial_tension, visc_ratio
 
 **Purpose**: Design discovery and parameter optimization.
 
-Kairo already has comprehensive optimization operators (PR #48):
+Morphogen already has comprehensive optimization operators (PR #48):
 
-```kairo
+```morphogen
 # Genetic algorithm
 best = optimize.ga(objective, bounds, population=100, generations=50)
 
@@ -945,7 +945,7 @@ pareto_front = optimize.nsga2(objectives=[f1, f2, f3], bounds)
 
 **Extensions needed**:
 
-```kairo
+```morphogen
 # Molecular rendering
 visual.molecule(molecule, style="ball_and_stick", color_by="element")
 visual.molecule(molecule, style="ribbon", color_by="secondary_structure")
@@ -971,7 +971,7 @@ visual.reaction_pathway([reactant, ts, product], energy_profile)
 
 **Extensions needed**:
 
-```kairo
+```morphogen
 # Surrogate models
 model = ml.train_surrogate(expensive_function, input_bounds, n_samples=1000)
 
@@ -988,9 +988,9 @@ next_sample = ml.active_learning(current_data, acquisition="uncertainty")
 
 ---
 
-## 🧨 Final Summary: What Kairo Makes Possible
+## 🧨 Final Summary: What Morphogen Makes Possible
 
-Kairo gives chemists + chemical engineers capabilities that **simply do not exist today**:
+Morphogen gives chemists + chemical engineers capabilities that **simply do not exist today**:
 
 ✅ **Unified, version-controlled, reproducible workflows** — No more duct-taped scripts
 ✅ **Multi-domain composability** — Molecular → reactor → process → visualization
@@ -1003,7 +1003,7 @@ Kairo gives chemists + chemical engineers capabilities that **simply do not exis
 
 **No existing chemical engineering framework offers this.**
 
-Kairo is basically:
+Morphogen is basically:
 
 > **PyTorch + OpenFOAM + GROMACS + RDKit + Matplotlib + Aspen + ML + Optimization**
 >
@@ -1015,7 +1015,7 @@ Kairo is basically:
 
 - **[ADR-006: Chemistry Domain](../adr/006-chemistry-domain.md)** — Architectural decision record
 - **[specifications/chemistry.md](../specifications/chemistry.md)** — Technical specification of chemistry operators
-- **[architecture/domain-architecture.md](../architecture/domain-architecture.md)** — How chemistry fits into Kairo's domain structure
+- **[architecture/domain-architecture.md](../architecture/domain-architecture.md)** — How chemistry fits into Morphogen's domain structure
 
 ---
 

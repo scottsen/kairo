@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Optimization Domain implements **Phase 1 evolutionary algorithms** for Kairo, transforming it from a simulation platform into a **design discovery platform**. This enables automatic parameter tuning, shape optimization, and multi-objective design exploration across all physical domains.
+The Optimization Domain implements **Phase 1 evolutionary algorithms** for Morphogen, transforming it from a simulation platform into a **design discovery platform**. This enables automatic parameter tuning, shape optimization, and multi-objective design exploration across all physical domains.
 
 ### Implemented Algorithms (Phase 1)
 
@@ -43,7 +43,7 @@ kairo/stdlib/genetic.py               # Genetic algorithm (600 lines)
 
 ### Design Principles
 
-Following Kairo's architectural patterns:
+Following Morphogen's architectural patterns:
 
 1. **Deterministic Execution** - All algorithms support fixed seeds for reproducibility
 2. **Immutable Semantics** - Results are immutable data structures
@@ -73,7 +73,7 @@ Following Kairo's architectural patterns:
 
 **Example:**
 ```python
-from kairo.stdlib.optimization import differential_evolution
+from morphogen.stdlib.optimization import differential_evolution
 
 result = differential_evolution(
     objective_fn=my_objective,
@@ -104,7 +104,7 @@ result = differential_evolution(
 
 **Example:**
 ```python
-from kairo.stdlib.optimization import cmaes
+from morphogen.stdlib.optimization import cmaes
 
 result = cmaes(
     objective_fn=my_objective,
@@ -132,7 +132,7 @@ result = cmaes(
 
 **Example:**
 ```python
-from kairo.stdlib.optimization import particle_swarm
+from morphogen.stdlib.optimization import particle_swarm
 
 result = particle_swarm(
     objective_fn=my_objective,
@@ -164,7 +164,7 @@ result = particle_swarm(
 
 **Example:**
 ```python
-from kairo.stdlib.optimization import nelder_mead
+from morphogen.stdlib.optimization import nelder_mead
 
 result = nelder_mead(
     objective_fn=my_objective,
@@ -181,7 +181,7 @@ result = nelder_mead(
 The `Optimizer` class provides algorithm auto-selection:
 
 ```python
-from kairo.stdlib.optimization import Optimizer
+from morphogen.stdlib.optimization import Optimizer
 
 # Auto-select best algorithm for problem
 result = Optimizer.minimize(
@@ -228,7 +228,7 @@ class OptimizationResult:
 Standard test functions for validation:
 
 ```python
-from kairo.stdlib.optimization import BenchmarkFunctions
+from morphogen.stdlib.optimization import BenchmarkFunctions
 
 # Simple unimodal
 sphere = BenchmarkFunctions.sphere          # min at x=0
@@ -286,7 +286,7 @@ pytest tests/test_optimization_operations.py -v
 ### Example 1: Simple Optimization
 
 ```python
-from kairo.stdlib.optimization import minimize
+from morphogen.stdlib.optimization import minimize
 import numpy as np
 
 # Define objective
@@ -308,7 +308,7 @@ print(f"Fitness:  {result.best_fitness}")
 ### Example 2: PID Controller Tuning
 
 ```python
-from kairo.stdlib.optimization import differential_evolution
+from morphogen.stdlib.optimization import differential_evolution
 
 def pid_performance(params):
     kp, ki, kd = params
@@ -334,7 +334,7 @@ print(f"Optimal PID: Kp={result.best_solution[0]:.3f}, "
 ### Example 3: High-Dimensional Fitting
 
 ```python
-from kairo.stdlib.optimization import cmaes
+from morphogen.stdlib.optimization import cmaes
 import numpy as np
 
 # Fit 20-parameter model
@@ -474,7 +474,7 @@ result = cmaes(
 - **DEAP:** Evolutionary algorithm framework
 - **PyMOO:** Multi-objective optimization
 
-### Kairo Documentation
+### Morphogen Documentation
 
 - `docs/reference/optimization-algorithms.md` - Algorithm catalog
 - `docs/guides/domain-implementation.md` - Implementation guide
@@ -484,7 +484,7 @@ result = cmaes(
 
 ## Summary
 
-The Optimization Domain Phase 1 implementation provides Kairo with:
+The Optimization Domain Phase 1 implementation provides Morphogen with:
 
 ✅ **4 production-ready algorithms** (DE, CMA-ES, PSO, Nelder-Mead)
 ✅ **Unified interface** with auto-selection
@@ -493,7 +493,7 @@ The Optimization Domain Phase 1 implementation provides Kairo with:
 ✅ **Cross-domain applications** (combustion, acoustics, motors)
 ✅ **Complete documentation** and examples
 
-This unlocks **design discovery** capabilities across all Kairo domains, enabling automatic parameter tuning, shape optimization, and multi-objective design exploration.
+This unlocks **design discovery** capabilities across all Morphogen domains, enabling automatic parameter tuning, shape optimization, and multi-objective design exploration.
 
 **Status:** Ready for production use
 **Next:** Phase 2 (Multi-objective, Bayesian Optimization, Constraints)

@@ -1,4 +1,4 @@
-# SPEC: Kairo Profile System
+# SPEC: Morphogen Profile System
 
 **Version:** 1.0 Draft
 **Status:** RFC
@@ -8,15 +8,15 @@
 
 ## Overview
 
-The **Kairo Profile System** governs determinism, precision, performance, and operator behavior across the entire execution pipeline. Profiles are the contract between user intent and kernel execution.
+The **Morphogen Profile System** governs determinism, precision, performance, and operator behavior across the entire execution pipeline. Profiles are the contract between user intent and kernel execution.
 
-**Core Principle:** Profiles must have permanent, locked-down semantics. Once defined, behavior cannot change across Kairo versions.
+**Core Principle:** Profiles must have permanent, locked-down semantics. Once defined, behavior cannot change across Morphogen versions.
 
 ---
 
 ## Three Core Profiles
 
-Kairo defines **three execution profiles** that cover the determinism-performance tradeoff space:
+Morphogen defines **three execution profiles** that cover the determinism-performance tradeoff space:
 
 | Profile | Determinism | Performance | Use Case |
 |---------|-------------|-------------|----------|
@@ -301,7 +301,7 @@ Every operator must provide **golden test vectors** for strict profile:
 
 ### Regression Testing
 
-Profile behavior must remain **stable across Kairo versions**:
+Profile behavior must remain **stable across Morphogen versions**:
 
 ```python
 def test_profile_stability():
@@ -466,7 +466,7 @@ Every operator must pass bit-exact tests:
 def test_fft_strict():
     input = np.array([1.0, 0.5, 0.25, 0.125])
     expected = load_golden("fft_golden.npy")
-    output = kairo.fft(input, window="hann", norm="ortho", profile="strict")
+    output = morphogen.fft(input, window="hann", norm="ortho", profile="strict")
     assert np.array_equal(output, expected)  # Bit-exact
 ```
 
@@ -476,8 +476,8 @@ def test_fft_strict():
 @pytest.mark.profile("repro")
 def test_fft_repro_determinism():
     input = np.random.randn(1024)
-    output1 = kairo.fft(input, profile="repro", seed=42)
-    output2 = kairo.fft(input, profile="repro", seed=42)
+    output1 = morphogen.fft(input, profile="repro", seed=42)
+    output2 = morphogen.fft(input, profile="repro", seed=42)
     assert np.allclose(output1, output2, rtol=1e-7)
 ```
 
@@ -488,7 +488,7 @@ def test_fft_repro_determinism():
 @pytest.mark.benchmark
 def test_fft_live_performance(benchmark):
     input = np.random.randn(1024)
-    result = benchmark(lambda: kairo.fft(input, profile="live"))
+    result = benchmark(lambda: morphogen.fft(input, profile="live"))
     assert result.avg_time < 0.001  # < 1ms
 ```
 
@@ -496,7 +496,7 @@ def test_fft_live_performance(benchmark):
 
 ## Summary
 
-The Kairo Profile System provides:
+The Morphogen Profile System provides:
 
 ✅ **Three determinism tiers** — strict, repro, live
 ✅ **Permanent semantics** — Locked-down behavior across versions
@@ -504,7 +504,7 @@ The Kairo Profile System provides:
 ✅ **Explicit tradeoffs** — Performance vs reproducibility
 ✅ **Validation** — Golden tests, regression tests, profile compatibility
 
-Profiles are the contract that makes Kairo both **fast** and **correct**.
+Profiles are the contract that makes Morphogen both **fast** and **correct**.
 
 ---
 

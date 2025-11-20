@@ -1,14 +1,14 @@
 # Architecture Documentation
 
-High-level architectural documentation for Kairo.
+High-level architectural documentation for Morphogen.
 
 ## Documents in This Section
 
 ### [Overview](overview.md)
-Core Kairo architecture and design principles. Start here to understand how Kairo's components fit together.
+Core Morphogen architecture and design principles. Start here to understand how Morphogen's components fit together.
 
 ### [Domain Architecture](domain-architecture.md) ⭐
-**110KB comprehensive document** covering the complete domain architecture of Kairo. This is the definitive reference for understanding:
+**110KB comprehensive document** covering the complete domain architecture of Morphogen. This is the definitive reference for understanding:
 - How domains are structured
 - Domain interaction patterns
 - Cross-domain integration
@@ -22,7 +22,7 @@ GPU execution model and MLIR integration patterns:
 - Performance considerations
 
 ### [Interactive Visualization](interactive-visualization.md)
-Kairo's approach to interactive visualization and real-time rendering.
+Morphogen's approach to interactive visualization and real-time rendering.
 
 ---
 

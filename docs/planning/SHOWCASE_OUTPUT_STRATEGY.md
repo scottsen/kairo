@@ -1,6 +1,6 @@
-# Kairo Showcase Output Strategy
+# Morphogen Showcase Output Strategy
 
-**Creating compelling outputs that demonstrate Kairo's unique value**
+**Creating compelling outputs that demonstrate Morphogen's unique value**
 
 *Created: 2025-11-16*
 *Status: Active Strategy Document*
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines the strategy for generating high-quality, compelling outputs from Kairo examples that showcase the platform's unique cross-domain capabilities.
+This document outlines the strategy for generating high-quality, compelling outputs from Morphogen examples that showcase the platform's unique cross-domain capabilities.
 
 ### Key Deliverables
 
@@ -29,7 +29,7 @@ This document outlines the strategy for generating high-quality, compelling outp
 
 **Why it's compelling**:
 - Shows bidirectional cross-domain communication (Field ↔ Agent)
-- Demonstrates THE core value proposition of Kairo
+- Demonstrates THE core value proposition of Morphogen
 - Visually interesting (vortex field with particle flow)
 - Uses the new cross-domain infrastructure (v0.9.0+)
 
@@ -131,7 +131,7 @@ print      - 3840×2160,60fps, 30s - Publication
 
 ---
 
-## What Makes Kairo Outputs Special?
+## What Makes Morphogen Outputs Special?
 
 ### 1. Cross-Domain Integration
 
@@ -229,7 +229,7 @@ Text: "You can't do this in Processing/p5.js/TouchDesigner"
 ```
 Format: MP4, 16:9, 1080p, 2-5min
 Content: Tutorial-style showcases with explanations
-Title: "How Kairo Combines Physics and Audio in Real-Time"
+Title: "How Morphogen Combines Physics and Audio in Real-Time"
 ```
 
 **GitHub README** (Developer documentation)
@@ -385,7 +385,7 @@ The goal is to create outputs that make people ask:
 
 > **"Wait, how did you do that? I didn't know that was possible!"**
 
-That's when we've successfully demonstrated Kairo's unique value: the ability to seamlessly combine domains that have never been integrated before, in a deterministic, professional-quality system.
+That's when we've successfully demonstrated Morphogen's unique value: the ability to seamlessly combine domains that have never been integrated before, in a deterministic, professional-quality system.
 
 Every output should:
 1. Show something IMPOSSIBLE in other platforms
@@ -397,6 +397,6 @@ Every output should:
 
 **Status**: Living document, update as strategy evolves
 
-**Owner**: Kairo Development Team
+**Owner**: Morphogen Development Team
 
 **Last Updated**: 2025-11-16

@@ -12,8 +12,8 @@ Tests execution of:
 
 import pytest
 import numpy as np
-from kairo.parser.parser import parse
-from kairo.runtime.runtime import Runtime, ExecutionContext
+from morphogen.parser.parser import parse
+from morphogen.runtime.runtime import Runtime, ExecutionContext
 
 
 class TestFunctionDefinitions:
@@ -318,7 +318,7 @@ p = Point {
         runtime.execute_program(program)
 
         p = runtime.context.get_variable('p')
-        from kairo.runtime.runtime import StructInstance
+        from morphogen.runtime.runtime import StructInstance
         assert isinstance(p, StructInstance)
         assert p.fields['x'] == 20.0
         assert p.fields['y'] == 25.0

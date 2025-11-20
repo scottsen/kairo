@@ -2,8 +2,8 @@
 
 import pytest
 from pathlib import Path
-from kairo.parser.parser import parse
-from kairo.runtime.runtime import Runtime
+from morphogen.parser.parser import parse
+from morphogen.runtime.runtime import Runtime
 
 
 class TestV031Examples:

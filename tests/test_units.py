@@ -3,7 +3,7 @@
 import pytest
 from fractions import Fraction
 
-from kairo.types.units import (
+from morphogen.types.units import (
     Unit,
     Dimensions,
     parse_unit,

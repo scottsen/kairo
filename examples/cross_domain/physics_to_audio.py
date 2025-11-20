@@ -21,8 +21,8 @@ from typing import List, Tuple, Dict, Any, Optional
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from kairo.stdlib import rigidbody, audio, visual, field, palette
-from kairo.stdlib.rigidbody import PhysicsWorld2D, create_circle_body, step_world
+from morphogen.stdlib import rigidbody, audio, visual, field, palette
+from morphogen.stdlib.rigidbody import PhysicsWorld2D, create_circle_body, step_world
 
 
 class CollisionEvent:

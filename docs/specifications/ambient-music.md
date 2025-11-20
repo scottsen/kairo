@@ -30,7 +30,7 @@
 
 ## Overview
 
-This specification defines four new Kairo domains for ambient and generative music:
+This specification defines four new Morphogen domains for ambient and generative music:
 
 | Domain | Purpose | Operator Count | Status |
 |--------|---------|----------------|--------|
@@ -40,9 +40,9 @@ This specification defines four new Kairo domains for ambient and generative mus
 | **Composition** | Generative pattern generation | 20 | Proposed |
 | **Total** | | **90** | |
 
-### Why Ambient Music in Kairo?
+### Why Ambient Music in Morphogen?
 
-Ambient music is a perfect match for Kairo's architecture:
+Ambient music is a perfect match for Morphogen's architecture:
 
 **Ambient music is:**
 - **Procedural** — Parameter-driven, not performance-driven
@@ -51,7 +51,7 @@ Ambient music is a perfect match for Kairo's architecture:
 - **Simulation-friendly** — Time-evolving fields, agent systems
 - **GPU-accelerable** — Parallel granular synthesis, convolution
 
-**Kairo provides:**
+**Morphogen provides:**
 - Declarative operator composition
 - Cross-domain integration (physics → audio, CA → sequencing)
 - GPU acceleration via MLIR
@@ -94,7 +94,7 @@ Ambient music is a perfect match for Kairo's architecture:
 Traditional music: **Performance → Recording**
 Generative music: **Rules → Evolution → Recording**
 
-Kairo model:
+Morphogen model:
 ```
 Parameters + Seed + Rules → Operators → GPU Execution → Audio Output
                                       ↓
@@ -129,7 +129,7 @@ Parameters + Seed + Rules → Operators → GPU Execution → Audio Output
 └──────────────────┬──────────────────────────────┘
                    │
 ┌──────────────────▼──────────────────────────────┐
-│  Existing Kairo Domains                         │
+│  Existing Morphogen Domains                         │
 │  Audio, Transform, Stochastic, Emergence        │
 └─────────────────────────────────────────────────┘
 ```
@@ -137,23 +137,23 @@ Parameters + Seed + Rules → Operators → GPU Execution → Audio Output
 ### Dependencies
 
 **Spectral Domain requires:**
-- `kairo.transform` (FFT, STFT, iFFT, iSTFT)
-- `kairo.audio` (oscillators, filters)
+- `morphogen.transform` (FFT, STFT, iFFT, iSTFT)
+- `morphogen.audio` (oscillators, filters)
 - `Field2D<complex>` type
 
 **Ambience Domain requires:**
-- `kairo.spectral` (harmonic nebula, spectral blur)
-- `kairo.audio` (filters, effects)
-- `kairo.stochastic` (noise, random walks)
+- `morphogen.spectral` (harmonic nebula, spectral blur)
+- `morphogen.audio` (filters, effects)
+- `morphogen.stochastic` (noise, random walks)
 
 **Synthesis Domain requires:**
-- `kairo.audio` (base oscillators, filters)
-- `kairo.event` (gate/trigger timing)
+- `morphogen.audio` (base oscillators, filters)
+- `morphogen.event` (gate/trigger timing)
 
 **Composition Domain requires:**
-- `kairo.emergence` (CA, swarms)
-- `kairo.stochastic` (Markov, Poisson)
-- `kairo.event` (note timing)
+- `morphogen.emergence` (CA, swarms)
+- `morphogen.stochastic` (Markov, Poisson)
+- `morphogen.event` (note timing)
 
 ---
 
@@ -161,7 +161,7 @@ Parameters + Seed + Rules → Operators → GPU Execution → Audio Output
 
 ### Spectral Domain Types
 
-```kairo
+```morphogen
 // Frequency-domain field (complex values)
 type SpectralField = Field2D<complex, (freq: Hz, time: s)>
 
@@ -183,7 +183,7 @@ type Harmonic = {
 
 ### Ambience Domain Types
 
-```kairo
+```morphogen
 // Drone configuration
 type Drone = {
   fundamental: Ctl[Hz],
@@ -214,7 +214,7 @@ type Texture = {
 
 ### Synthesis Domain Types
 
-```kairo
+```morphogen
 // Synthesis patch (declarative graph)
 type Patch = Graph<SynthOp> {
   inputs: Map<String, Sig|Ctl>,
@@ -232,7 +232,7 @@ type Trigger = Evt<f32>  // Trigger with velocity
 
 ### Composition Domain Types
 
-```kairo
+```morphogen
 // Markov chain state transition matrix
 type MarkovMatrix = Field2D<f32, (state_from: int, state_to: int)> {
   validate: sum(row) == 1.0  // Probabilities sum to 1
@@ -260,7 +260,7 @@ type SwarmState = Agents {
 
 ### 5.1 Spectral Domain
 
-**Registry:** `kairo.audio.spectral.*`
+**Registry:** `morphogen.audio.spectral.*`
 
 #### Spectral Manipulation Operators
 
@@ -289,7 +289,7 @@ Blur spectrogram in frequency dimension (spectral smoothing).
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Create smooth pad from noise
 noise_sig = noise(seed=42, type="pink")
 spec = stft(noise_sig, window_size=2048)
@@ -380,7 +380,7 @@ Generate harmonic nebula (distributed harmonic cloud).
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Create shimmer pad with 64 distributed harmonics
 nebula = harmonic.nebula(
   fundamental = 110Hz,
@@ -502,7 +502,7 @@ Resynthesize audio from time-varying harmonic representation.
 
 ### 5.2 Ambience Domain
 
-**Registry:** `kairo.ambient.*`
+**Registry:** `morphogen.ambient.*`
 
 #### Drone Generators
 
@@ -533,7 +533,7 @@ Harmonic drone generator with shimmer.
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Slowly evolving harmonic drone
 drift_lfo = orbit.lfo(period_hours=1.0)
 drone = drone.harmonic(
@@ -627,7 +627,7 @@ Dense granular cloud synthesis.
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Granular cloud driven by CA density
 life_grid = ca.life(size=64, initial=random_grid(seed=123))
 ca_density = field.mean(life_grid) * 100  // CA alive cells → grain density
@@ -720,7 +720,7 @@ Slow drift modulator (for multi-minute evolution).
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Reverb decay drifts over 20 minutes
 decay_drift = drift.noise(period_minutes=20, depth=1.5) + 2.5
 ambient_pad |> reverb(mix=0.4, decay=decay_drift)
@@ -780,7 +780,7 @@ Brownian random walk with smoothing.
 
 ### 5.3 Synthesis Domain
 
-**Registry:** `kairo.synthesis.*`
+**Registry:** `morphogen.synthesis.*`
 
 #### Enhanced Oscillators
 
@@ -1019,7 +1019,7 @@ Sample-and-hold (random stepped modulation).
 
 ### 5.4 Composition Domain
 
-**Registry:** `kairo.composition.*`
+**Registry:** `morphogen.composition.*`
 
 #### Markov Chain Sequencing
 
@@ -1048,7 +1048,7 @@ Markov chain note sequencer.
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Simple 3-state Markov melody
 matrix = [
   [0.5, 0.3, 0.2],  // From state 0
@@ -1123,7 +1123,7 @@ Cellular automaton-driven sequencer.
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Conway's Life triggers notes
 life_rule = ca_rule("life")
 notes = ca.sequencer(
@@ -1268,7 +1268,7 @@ Euclidean rhythm generator.
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Classic 3-2 son clave rhythm
 rhythm = euclidean.rhythm(steps=16, pulses=5, rotation=0)
 ```
@@ -1357,7 +1357,7 @@ Use swarm density as modulation source.
 
 ### Pattern 1: Spectral Drone Evolution
 
-```kairo
+```morphogen
 // Generate harmonic nebula
 nebula = harmonic.nebula(fundamental=110Hz, spread=0.3, density=64)
 
@@ -1372,7 +1372,7 @@ output = blurred |> reverb(0.5, decay=6.0)
 
 ### Pattern 2: CA-Driven Granular Texture
 
-```kairo
+```morphogen
 // Cellular automaton drives grain density
 life_grid = ca.life(size=64, seed=42)
 density = field.mean(life_grid) * 150  // 0-150 grains/s
@@ -1391,7 +1391,7 @@ output = grains |> stereo.width(1.5) |> reverb(0.3)
 
 ### Pattern 3: Multi-Hour Evolving Composition
 
-```kairo
+```morphogen
 // Ultra-slow modulators
 harmonic_drift = orbit.lfo(period_hours=2.0)
 reverb_evolution = drift.noise(period_minutes=30, depth=2.0) + 3.0
@@ -1417,7 +1417,7 @@ output = mix(
 
 ### Pattern 4: Swarm → Melody + Modulation
 
-```kairo
+```morphogen
 // Boid swarm
 boids = agents.boids(num=30, bounds=100, cohesion=0.5)
 
@@ -1449,7 +1449,7 @@ output = spawn(notes, voice, max_voices=8) |> reverb(0.25)
 ### Physics → Audio
 
 **Fluid vorticity drives granular density:**
-```kairo
+```morphogen
 fluid = navier_stokes.solve(...)
 vorticity = field.curl(fluid.velocity)
 grain_density = vorticity.max() * 100
@@ -1464,7 +1464,7 @@ grains = granular.cloud(
 ### Fractals → Harmonic Evolution
 
 **Mandelbrot escape time modulates harmonic spread:**
-```kairo
+```morphogen
 mandelbrot = fractal.iterate(zoom_center, zoom_rate)
 depth = mandelbrot.escape_time.mean() / 100.0
 
@@ -1478,7 +1478,7 @@ pad = drone.harmonic(
 ### Reaction-Diffusion → Spectral Filtering
 
 **R-D pattern shapes spectral envelope:**
-```kairo
+```morphogen
 rd = reaction_diffusion.solve(...)
 pattern = rd.activator_field
 
@@ -1497,14 +1497,14 @@ filtered = spectral.filter(drone, spectral_env)
 ### Granular Synthesis Lowering
 
 **High-level operator:**
-```kairo
+```morphogen
 grains = granular.cloud(source, density=50, grain_size=80ms)
 ```
 
 **MLIR lowering:**
 ```mlir
 // Grain spawning (parallel)
-%grain_triggers = kairo.poisson_process %density, %seed : !kairo.evt<f32>
+%grain_triggers = morphogen.poisson_process %density, %seed : !morphogen.evt<f32>
 
 // Per-grain processing (GPU parallelizable)
 %grains = linalg.generic {
@@ -1529,22 +1529,22 @@ grains = granular.cloud(source, density=50, grain_size=80ms)
 ### Spectral Blur Lowering
 
 **High-level operator:**
-```kairo
+```morphogen
 blurred = spectral.blur(spectrogram, bandwidth=100Hz)
 ```
 
 **MLIR lowering:**
 ```mlir
 // Convert to frequency domain
-%spec = kairo.transform.stft %input : !kairo.stream<f32> -> !kairo.field<complex>
+%spec = morphogen.transform.stft %input : !morphogen.stream<f32> -> !morphogen.field<complex>
 
 // Gaussian convolution in frequency dimension (GPU)
-%kernel = kairo.spectral.gaussian_kernel %bandwidth : !kairo.field<f32>
+%kernel = morphogen.spectral.gaussian_kernel %bandwidth : !morphogen.field<f32>
 %blurred = linalg.conv_2d ins(%spec, %kernel) outs(%output)
-  : (!kairo.field<complex>, !kairo.field<f32>) -> !kairo.field<complex>
+  : (!morphogen.field<complex>, !morphogen.field<f32>) -> !morphogen.field<complex>
 
 // Convert back to time domain
-%result = kairo.transform.istft %blurred : !kairo.field<complex> -> !kairo.stream<f32>
+%result = morphogen.transform.istft %blurred : !morphogen.field<complex> -> !morphogen.stream<f32>
 ```
 
 **GPU acceleration:** FFT and convolution both GPU-optimized via cuFFT/rocFFT.
@@ -1554,14 +1554,14 @@ blurred = spectral.blur(spectrogram, bandwidth=100Hz)
 ### Additive Synthesis Lowering
 
 **High-level operator:**
-```kairo
+```morphogen
 sig = additive.resynth(harmonics, phases)
 ```
 
 **MLIR lowering:**
 ```mlir
 // Parallel sinusoid bank (GPU)
-%time = kairo.stream.time : !kairo.stream<f32>
+%time = morphogen.stream.time : !morphogen.stream<f32>
 
 %sines = linalg.generic {
   iterator_types = ["parallel", "reduction"]
@@ -1584,7 +1584,7 @@ sig = additive.resynth(harmonics, phases)
 
 ### Example 1: Simple Ambient Drone
 
-```kairo
+```morphogen
 scene SimpleDrone {
   // Harmonic drone with slow drift
   drift = orbit.lfo(period_hours=1.0) * 10cents
@@ -1605,7 +1605,7 @@ scene SimpleDrone {
 
 ### Example 2: CA-Driven Granular Texture
 
-```kairo
+```morphogen
 scene CAGranular {
   // Game of Life grid
   life = ca.life(size=64, seed=12345)
@@ -1634,7 +1634,7 @@ scene CAGranular {
 
 ### Example 3: Spectral Morphing Pad
 
-```kairo
+```morphogen
 scene SpectralMorph {
   // Two different spectral textures
   noise_a = noise(seed=1, type="pink") |> lpf(2kHz)
@@ -1659,7 +1659,7 @@ scene SpectralMorph {
 
 ### Example 4: Swarm-Based Generative Melody
 
-```kairo
+```morphogen
 scene SwarmMelody {
   // Boid swarm
   boids = agents.boids(
@@ -1701,7 +1701,7 @@ scene SwarmMelody {
 
 ### Example 5: Multi-Domain Physics → Audio
 
-```kairo
+```morphogen
 scene FluidAudio {
   // Fluid simulation
   fluid = navier_stokes.solve(
@@ -1905,7 +1905,7 @@ def test_long_form_stability():
 - 30 synthesis operators (oscillators, filters, modulation)
 - Declarative patch graph system
 - Example: Generative modular patch
-- Integration with Kairo.Audio operators
+- Integration with Morphogen.Audio operators
 
 **Key operators:**
 - `vco`, `wavetable`, `fm`
@@ -2008,7 +2008,7 @@ def test_long_form_stability():
 - Max/MSP (Cycling '74)
 - SuperCollider (open-source)
 
-### Kairo Documentation
+### Morphogen Documentation
 
 - [AUDIO_SPECIFICATION.md](../../AUDIO_SPECIFICATION.md)
 - [ADR-009](../adr/009-ambient-music-generative-domains.md)

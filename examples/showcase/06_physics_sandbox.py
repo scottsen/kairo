@@ -17,13 +17,13 @@ Creates interactive physics demonstrations:
 """
 
 import numpy as np
-from kairo.stdlib import rigidbody, field, visual, genetic, cellular, palette, color, image, noise, io_storage, Individual
-from kairo.stdlib.field import Field2D
-from kairo.stdlib.visual import Visual
+from morphogen.stdlib import rigidbody, field, visual, genetic, cellular, palette, color, image, noise, io_storage, Individual
+from morphogen.stdlib.field import Field2D
+from morphogen.stdlib.visual import Visual
 
 # Note: For audio integration
 try:
-    from kairo.stdlib import audio
+    from morphogen.stdlib import audio
     AUDIO_AVAILABLE = True
 except:
     AUDIO_AVAILABLE = False

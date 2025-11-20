@@ -1,4 +1,4 @@
-# SPEC: KAX — Kairo Analytical eXpressions
+# SPEC: KAX — Morphogen Analytical eXpressions
 
 **Version:** 1.0
 **Status:** Proposed
@@ -9,11 +9,11 @@
 
 ## Overview
 
-**KAX (Kairo Analytical eXpressions)** is a declarative expression language for business intelligence and analytical computations in Kairo. It is inspired by **DAX (Data Analysis Expressions)** from Microsoft Power BI and SSAS Tabular, but designed to compile into **GPU-native operator graphs**.
+**KAX (Morphogen Analytical eXpressions)** is a declarative expression language for business intelligence and analytical computations in Morphogen. It is inspired by **DAX (Data Analysis Expressions)** from Microsoft Power BI and SSAS Tabular, but designed to compile into **GPU-native operator graphs**.
 
 ### Why KAX?
 
-KAX brings semantic modeling to Kairo's BIDomain:
+KAX brings semantic modeling to Morphogen's BIDomain:
 
 1. **Measures & Calculated Columns** — Define reusable analytical computations
 2. **Filter Context** — DAX-style context manipulation (`CALCULATE`, `FILTER`, `ALL`)
@@ -38,7 +38,7 @@ The engine decides:
 
 Example:
 
-```kairo
+```morphogen
 Sales[TotalRevenue] := SUM(Sales[Amount])
 ```
 
@@ -58,7 +58,7 @@ Unlike row-by-row interpreted languages, KAX compiles into **columnar GPU operat
 
 Example:
 
-```kairo
+```morphogen
 Sales[Margin] := DIVIDE(Sales[Profit], Sales[Revenue])
 ```
 
@@ -77,25 +77,25 @@ No row-level iteration — pure vectorized GPU execution.
 
 ### 3. Domain-Composable
 
-KAX expressions integrate with all Kairo domains.
+KAX expressions integrate with all Morphogen domains.
 
 **BI → Visualization:**
 
-```kairo
+```morphogen
 let total_sales = Sales[TotalRevenue]
 viz.bar_chart(total_sales)
 ```
 
 **BI → Simulation:**
 
-```kairo
+```morphogen
 let avg_temp = Sensors[AvgTemperature]
 physics.thermal_ode(initial_temp: avg_temp)
 ```
 
 **BI → ML:**
 
-```kairo
+```morphogen
 let customer_ltv = Customers[LifetimeValue]
 ml.train_gpu(features: [customer_ltv, ...], target: Customers[Churn])
 ```
@@ -106,13 +106,13 @@ ml.train_gpu(features: [customer_ltv, ...], target: Customers[Churn])
 
 **Calculated Columns** — Computed once per row, stored
 
-```kairo
+```morphogen
 Orders[DayOfWeek] := WEEKDAY(Orders[Date])
 ```
 
 **Measures** — Computed dynamically based on filter context
 
-```kairo
+```morphogen
 Sales[TotalRevenue] := SUM(Sales[Amount])
 ```
 
@@ -124,13 +124,13 @@ KAX distinguishes these semantically and compiles them differently.
 
 ### Assignment
 
-```kairo
+```morphogen
 TableName[ColumnName] := Expression
 ```
 
 Examples:
 
-```kairo
+```morphogen
 Sales[TotalRevenue] := SUM(Sales[Amount])
 Sales[MarginPct] := DIVIDE(Sales[Profit], Sales[Revenue])
 Orders[Year] := YEAR(Orders[Date])
@@ -140,7 +140,7 @@ Orders[Year] := YEAR(Orders[Date])
 
 ### Aggregation Functions
 
-```kairo
+```morphogen
 SUM(column)
 COUNT(column)
 AVERAGE(column)
@@ -152,7 +152,7 @@ VARIANCE(column)
 
 Examples:
 
-```kairo
+```morphogen
 Sales[TotalSales] := SUM(Sales[Amount])
 Sales[AvgOrderValue] := AVERAGE(Sales[Amount])
 Sales[MaxDiscount] := MAX(Sales[Discount])
@@ -161,7 +161,7 @@ Sales[OrderCount] := COUNT(Sales[OrderID])
 
 GPU compilation:
 
-```kairo
+```morphogen
 SUM(Sales[Amount])
 → gpu.agg_sum(Sales[Amount])
 ```
@@ -170,7 +170,7 @@ SUM(Sales[Amount])
 
 ### Arithmetic & Comparison
 
-```kairo
+```morphogen
 +  -  *  /  %          // Arithmetic
 =  <>  <  >  <=  >=    // Comparison
 &&  ||  !              // Logical
@@ -178,7 +178,7 @@ SUM(Sales[Amount])
 
 Examples:
 
-```kairo
+```morphogen
 Sales[Margin] := Sales[Revenue] - Sales[Cost]
 Sales[MarginPct] := DIVIDE(Sales[Margin], Sales[Revenue]) * 100
 Sales[IsHighValue] := Sales[Amount] > 1000
@@ -186,7 +186,7 @@ Sales[IsHighValue] := Sales[Amount] > 1000
 
 GPU compilation:
 
-```kairo
+```morphogen
 Sales[Revenue] - Sales[Cost]
 → gpu.column_subtract(Sales[Revenue], Sales[Cost])
 ```
@@ -201,13 +201,13 @@ Sales[Revenue] - Sales[Cost]
 
 Syntax:
 
-```kairo
+```morphogen
 CALCULATE(expression, filter1, filter2, ...)
 ```
 
 Examples:
 
-```kairo
+```morphogen
 // Total sales for 2024 only
 Sales[2024Revenue] := CALCULATE(
     SUM(Sales[Amount]),
@@ -229,7 +229,7 @@ Sales[HighValueSales] := CALCULATE(
 
 GPU compilation:
 
-```kairo
+```morphogen
 CALCULATE(SUM(Sales[Amount]), Year = 2024)
 → gpu.dict_encode(Calendar[Year])
 → gpu.predicate(Year, EQ, 2024)
@@ -245,13 +245,13 @@ CALCULATE(SUM(Sales[Amount]), Year = 2024)
 
 Syntax:
 
-```kairo
+```morphogen
 FILTER(table, condition)
 ```
 
 Examples:
 
-```kairo
+```morphogen
 // All high-value customers
 HighValueCustomers := FILTER(
     Customers,
@@ -267,7 +267,7 @@ RecentOrders := FILTER(
 
 GPU compilation:
 
-```kairo
+```morphogen
 FILTER(Customers, Customers[LifetimeValue] > 10000)
 → gpu.predicate(Customers[LifetimeValue], GT, 10000)
 → gpu.bitmap_filter(Customers, bitmap)
@@ -281,14 +281,14 @@ FILTER(Customers, Customers[LifetimeValue] > 10000)
 
 Syntax:
 
-```kairo
+```morphogen
 ALL(table)
 ALL(column)
 ```
 
 Examples:
 
-```kairo
+```morphogen
 // Total sales across all products (ignore product filter)
 Sales[TotalAllProducts] := CALCULATE(
     SUM(Sales[Amount]),
@@ -310,13 +310,13 @@ Sales[PctOfTotal] := DIVIDE(
 
 Syntax:
 
-```kairo
+```morphogen
 ALLEXCEPT(table, column1, column2, ...)
 ```
 
 Example:
 
-```kairo
+```morphogen
 // Total sales per region, ignoring all other filters
 Sales[TotalByRegion] := CALCULATE(
     SUM(Sales[Amount]),
@@ -336,13 +336,13 @@ Iterators operate row-by-row within filter context.
 
 Syntax:
 
-```kairo
+```morphogen
 SUMX(table, expression)
 ```
 
 Examples:
 
-```kairo
+```morphogen
 // Total revenue (price × quantity per row)
 Sales[TotalRevenue] := SUMX(
     Sales,
@@ -358,7 +358,7 @@ Sales[WeightedAvg] := DIVIDE(
 
 GPU compilation:
 
-```kairo
+```morphogen
 SUMX(Sales, Sales[Price] * Sales[Quantity])
 → gpu.column_multiply(Sales[Price], Sales[Quantity])
 → gpu.agg_sum(result)
@@ -372,13 +372,13 @@ SUMX(Sales, Sales[Price] * Sales[Quantity])
 
 Syntax:
 
-```kairo
+```morphogen
 AVERAGEX(table, expression)
 ```
 
 Example:
 
-```kairo
+```morphogen
 Sales[AvgMarginPct] := AVERAGEX(
     Sales,
     DIVIDE(Sales[Profit], Sales[Revenue])
@@ -393,13 +393,13 @@ Sales[AvgMarginPct] := AVERAGEX(
 
 Syntax:
 
-```kairo
+```morphogen
 COUNTX(table, expression)
 ```
 
 Example:
 
-```kairo
+```morphogen
 Sales[OrdersWithDiscount] := COUNTX(
     Sales,
     Sales[Discount]
@@ -410,17 +410,17 @@ Sales[OrdersWithDiscount] := COUNTX(
 
 #### FILTERX (Custom)
 
-Kairo extension: `FILTERX` for GPU-optimized filtering with expressions.
+Morphogen extension: `FILTERX` for GPU-optimized filtering with expressions.
 
 Syntax:
 
-```kairo
+```morphogen
 FILTERX(table, expression)
 ```
 
 Example:
 
-```kairo
+```morphogen
 HighMarginOrders := FILTERX(
     Orders,
     DIVIDE(Orders[Profit], Orders[Revenue]) > 0.3
@@ -433,7 +433,7 @@ HighMarginOrders := FILTERX(
 
 #### Date Functions
 
-```kairo
+```morphogen
 YEAR(date)
 MONTH(date)
 DAY(date)
@@ -445,7 +445,7 @@ DATEDIFF(date1, date2, interval)
 
 Examples:
 
-```kairo
+```morphogen
 Orders[Year] := YEAR(Orders[Date])
 Orders[Quarter] := QUARTER(Orders[Date])
 Orders[DaysSinceOrder] := DATEDIFF(Orders[Date], TODAY(), DAY)
@@ -455,7 +455,7 @@ Orders[DaysSinceOrder] := DATEDIFF(Orders[Date], TODAY(), DAY)
 
 #### Time Intelligence Functions
 
-```kairo
+```morphogen
 SAMEPERIODLASTYEAR(dates)
 PREVIOUSMONTH(dates)
 PREVIOUSQUARTER(dates)
@@ -465,7 +465,7 @@ DATEADD(dates, number, interval)
 
 Examples:
 
-```kairo
+```morphogen
 // Year-over-year growth
 Sales[YoY] :=
     Sales[TotalRevenue] -
@@ -491,7 +491,7 @@ Sales[Rolling12M] := CALCULATE(
 
 GPU compilation:
 
-```kairo
+```morphogen
 SAMEPERIODLASTYEAR(Calendar[Date])
 → gpu.date_shift(Calendar[Date], -1, YEAR)
 → gpu.predicate(Calendar[Date], IN, shifted_dates)
@@ -502,7 +502,7 @@ SAMEPERIODLASTYEAR(Calendar[Date])
 
 ### Logical Functions
 
-```kairo
+```morphogen
 IF(condition, true_value, false_value)
 AND(condition1, condition2, ...)
 OR(condition1, condition2, ...)
@@ -512,7 +512,7 @@ SWITCH(expression, value1, result1, value2, result2, ..., default)
 
 Examples:
 
-```kairo
+```morphogen
 Sales[Category] := IF(
     Sales[Amount] > 1000,
     "High Value",
@@ -533,7 +533,7 @@ Sales[Segment] := SWITCH(
 
 ### Text Functions
 
-```kairo
+```morphogen
 CONCATENATE(text1, text2)
 LEFT(text, num_chars)
 RIGHT(text, num_chars)
@@ -547,7 +547,7 @@ SUBSTITUTE(text, old_text, new_text)
 
 Examples:
 
-```kairo
+```morphogen
 Customers[FullName] := CONCATENATE(
     Customers[FirstName],
     " ",
@@ -561,7 +561,7 @@ Products[InitialLetter] := LEFT(Products[Name], 1)
 
 ### Math Functions
 
-```kairo
+```morphogen
 ABS(number)
 ROUND(number, decimals)
 FLOOR(number)
@@ -576,7 +576,7 @@ MOD(number, divisor)
 
 Examples:
 
-```kairo
+```morphogen
 Sales[RoundedRevenue] := ROUND(Sales[Revenue], 2)
 Sales[MarginAbs] := ABS(Sales[Margin])
 ```
@@ -585,7 +585,7 @@ Sales[MarginAbs] := ABS(Sales[Margin])
 
 ### Statistical Functions
 
-```kairo
+```morphogen
 STDEV.S(column)     // Sample standard deviation
 STDEV.P(column)     // Population standard deviation
 VAR.S(column)       // Sample variance
@@ -597,7 +597,7 @@ RANK(value, column, order)
 
 Examples:
 
-```kairo
+```morphogen
 Sales[StdDevAmount] := STDEV.S(Sales[Amount])
 Sales[MedianRevenue] := MEDIAN(Sales[Revenue])
 Sales[P95Amount] := PERCENTILE(Sales[Amount], 0.95)
@@ -615,7 +615,7 @@ Sales[P95Amount] := PERCENTILE(Sales[Amount], 0.95)
 
 Example:
 
-```kairo
+```morphogen
 // Row context — computed for each row
 Orders[TotalPrice] := Orders[Quantity] * Orders[UnitPrice]
 ```
@@ -630,7 +630,7 @@ Orders[TotalPrice] := Orders[Quantity] * Orders[UnitPrice]
 
 Example:
 
-```kairo
+```morphogen
 // Filter context — aggregates over current filter
 Sales[TotalRevenue] := SUM(Sales[Amount])
 ```
@@ -643,7 +643,7 @@ Sales[TotalRevenue] := SUM(Sales[Amount])
 
 Example:
 
-```kairo
+```morphogen
 // Filter context
 Sales[AvgMarginPct] := AVERAGEX(
     Sales,                              // Filter context
@@ -668,7 +668,7 @@ KAX expressions compile into GPU operator DAGs.
 
 **KAX:**
 
-```kairo
+```morphogen
 Sales[TotalRevenue] := SUM(Sales[Amount])
 ```
 
@@ -685,7 +685,7 @@ gpu.agg_sum(Sales[Amount])
 
 **KAX:**
 
-```kairo
+```morphogen
 Sales[2024Revenue] := CALCULATE(
     SUM(Sales[Amount]),
     YEAR(Sales[Date]) = 2024
@@ -708,7 +708,7 @@ gpu.extract_year(Sales[Date])
 
 **KAX:**
 
-```kairo
+```morphogen
 Sales[TotalRevenue] := SUMX(
     Sales,
     Sales[Price] * Sales[Quantity]
@@ -729,7 +729,7 @@ gpu.column_multiply(Sales[Price], Sales[Quantity])
 
 **KAX:**
 
-```kairo
+```morphogen
 Sales[YoY] :=
     Sales[TotalRevenue] -
     CALCULATE(
@@ -763,7 +763,7 @@ The KAX compiler applies optimization passes before lowering to GPU:
 
 ### 1. Constant Folding
 
-```kairo
+```morphogen
 Sales[Discounted] := Sales[Price] * 0.9
 ```
 
@@ -773,7 +773,7 @@ Folds constants during compilation.
 
 ### 2. Predicate Pushdown
 
-```kairo
+```morphogen
 CALCULATE(SUM(Sales[Amount]), Region = "USA", Year = 2024)
 ```
 
@@ -793,7 +793,7 @@ gpu.agg_sum(Sales[Amount])
 
 Multiple filters on same table → combined bitmap.
 
-```kairo
+```morphogen
 CALCULATE(
     SUM(Sales[Amount]),
     Sales[Region] = "USA",
@@ -816,7 +816,7 @@ gpu.bitmap_filter(Sales, combined_bitmap)
 
 Only load columns referenced in expression.
 
-```kairo
+```morphogen
 Sales[AvgRevenue] := AVERAGE(Sales[Amount])
 ```
 
@@ -828,7 +828,7 @@ Only loads `Sales[Amount]`, not entire table.
 
 Automatically encode low-cardinality columns.
 
-```kairo
+```morphogen
 CALCULATE(SUM(Sales[Amount]), Region = "USA")
 ```
 
@@ -844,9 +844,9 @@ gpu.dict_encode(Sales[Region])
 
 ## Type System
 
-KAX supports Kairo's type system:
+KAX supports Morphogen's type system:
 
-```kairo
+```morphogen
 // Primitive types
 i32, i64, f32, f64, bool, string
 
@@ -863,7 +863,7 @@ T?
 
 Type inference:
 
-```kairo
+```morphogen
 Sales[TotalRevenue] := SUM(Sales[Amount])
 // Inferred: f64 (if Sales[Amount] is f64)
 
@@ -877,7 +877,7 @@ Orders[Year] := YEAR(Orders[Date])
 
 ### Divide by Zero
 
-```kairo
+```morphogen
 Sales[MarginPct] := DIVIDE(Sales[Profit], Sales[Revenue])
 ```
 
@@ -885,7 +885,7 @@ Sales[MarginPct] := DIVIDE(Sales[Profit], Sales[Revenue])
 
 Alternatively:
 
-```kairo
+```morphogen
 Sales[MarginPct] := IF(
     Sales[Revenue] = 0,
     0,
@@ -897,7 +897,7 @@ Sales[MarginPct] := IF(
 
 ### NULL Handling
 
-```kairo
+```morphogen
 SUM(column)       // Ignores NULLs
 COUNT(column)     // Counts non-NULL
 AVERAGE(column)   // Ignores NULLs
@@ -916,7 +916,7 @@ gpu.agg_sum(col)
 
 ### BI → Visualization
 
-```kairo
+```morphogen
 let sales_by_region = CALCULATE(
     SUM(Sales[Amount]),
     ALL(Sales),
@@ -934,7 +934,7 @@ viz.bar_chart(
 
 ### BI → Simulation
 
-```kairo
+```morphogen
 let avg_pressure = AVERAGE(SensorData[Pressure])
 let std_pressure = STDEV.S(SensorData[Pressure])
 
@@ -949,7 +949,7 @@ physics.fluid_network(
 
 ### BI ↔ ML
 
-```kairo
+```morphogen
 // Feature engineering
 Customers[LifetimeValue] := SUMX(
     FILTER(Orders, Orders[CustomerID] = Customers[CustomerID]),
@@ -974,7 +974,7 @@ let model = ml.train_gpu(
 
 ### BI → Procedural Generation
 
-```kairo
+```morphogen
 let building_heights = CALCULATE(
     SUM(CityData[Population]),
     ALL(CityData),
@@ -1088,15 +1088,15 @@ geometry.procedural_city(
 
 ## Summary
 
-**KAX (Kairo Analytical eXpressions)** is:
+**KAX (Morphogen Analytical eXpressions)** is:
 
 ✅ **DAX-inspired** — Familiar semantic model for BI users
 ✅ **GPU-compiled** — Expressions lower to GPU operator graphs
-✅ **Domain-composable** — Integrates with all Kairo domains
+✅ **Domain-composable** — Integrates with all Morphogen domains
 ✅ **Declarative** — Engine optimizes execution automatically
 ✅ **High-performance** — 5-20x faster than traditional BI engines
 
-KAX + BIDomain makes Kairo the first **Computational BI Engine** —
+KAX + BIDomain makes Morphogen the first **Computational BI Engine** —
 fusing analytics with simulation, ML, visualization, and physics in one unified platform.
 
 ---

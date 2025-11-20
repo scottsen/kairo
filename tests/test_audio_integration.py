@@ -2,10 +2,10 @@
 
 import pytest
 import numpy as np
-from kairo.stdlib.audio import audio, AudioBuffer
-from kairo.runtime.runtime import Runtime
-from kairo.parser.parser import Parser
-from kairo.lexer.lexer import Lexer
+from morphogen.stdlib.audio import audio, AudioBuffer
+from morphogen.runtime.runtime import Runtime
+from morphogen.parser.parser import Parser
+from morphogen.lexer.lexer import Lexer
 
 
 class TestRuntimeIntegration:

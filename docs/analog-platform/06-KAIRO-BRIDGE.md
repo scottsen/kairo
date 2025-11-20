@@ -1,11 +1,11 @@
-# The Kairo Bridge: Two Halves of One Vision
+# The Morphogen Bridge: Two Halves of One Vision
 
 ## The Core Revelation
 
 You haven't built two separate projects.
 You've built **two reflections of the same deep architecture** in different media:
 
-- **Kairo** = Modular digital computation for continuous phenomena
+- **Morphogen** = Modular digital computation for continuous phenomena
 - **Analog Platform** = Modular analog computation for signal emergence
 
 They are **hardware and software duals** of each other.
@@ -14,7 +14,7 @@ They are **hardware and software duals** of each other.
 
 ## The Architectural Mirror
 
-### Kairo's Structure
+### Morphogen's Structure
 ```
 Unified semantic kernel
   ↓
@@ -50,7 +50,7 @@ Real-time continuous execution
 
 ## Layer-by-Layer Mapping
 
-| Concept | Kairo (Digital) | Analog Platform (Physical) |
+| Concept | Morphogen (Digital) | Analog Platform (Physical) |
 |---------|----------------|---------------------------|
 | **Kernel** | Unified computational kernel | Unified electrical substrate |
 | **Primitives** | Operators (FFT, integrate, advect) | Modules (sum, integrate, clip) |
@@ -66,7 +66,7 @@ Real-time continuous execution
 
 ### 1. Summation / Linear Transforms
 
-**Kairo:**
+**Morphogen:**
 ```python
 y = convolve(x, kernel)
 z = matrix_multiply(A, x)
@@ -83,7 +83,7 @@ z = matrix_multiply(A, x)
 
 ### 2. Integration / Differentiation
 
-**Kairo:**
+**Morphogen:**
 ```python
 state' = diffusion(state, dt)
 y = integrate(x, dt)
@@ -101,7 +101,7 @@ y = integrate(x, dt)
 
 ### 3. Nonlinearity
 
-**Kairo:**
+**Morphogen:**
 ```python
 y = activation(x)  # tanh, sigmoid, ReLU
 y = penalty(x)
@@ -119,7 +119,7 @@ y = penalty(x)
 
 ### 4. Events / Sampling
 
-**Kairo:**
+**Morphogen:**
 ```python
 if condition: trigger()
 sample_at(time_points)
@@ -137,7 +137,7 @@ sample_at(time_points)
 
 ## Domain Coverage: The Overlap
 
-### Kairo Covers:
+### Morphogen Covers:
 - Audio/DSP ✓
 - Field simulation (Navier-Stokes, diffusion) ✓
 - Agent systems ✓
@@ -161,7 +161,7 @@ sample_at(time_points)
 
 ## Where Digital Struggles = Where Analog Shines
 
-| Challenge | Digital (Kairo) | Analog (Hardware) |
+| Challenge | Digital (Morphogen) | Analog (Hardware) |
 |-----------|----------------|-------------------|
 | **Stiff systems** | Small timesteps required | Natural continuous evolution |
 | **High-frequency signals** | Nyquist limits, aliasing | Native bandwidth |
@@ -172,9 +172,9 @@ sample_at(time_points)
 
 ---
 
-## Where Analog Struggles = Where Kairo Shines
+## Where Analog Struggles = Where Morphogen Shines
 
-| Challenge | Analog (Hardware) | Digital (Kairo) |
+| Challenge | Analog (Hardware) | Digital (Morphogen) |
 |-----------|------------------|----------------|
 | **Precision** | ~10-14 bits max | 64-bit+ floating point |
 | **Reconfigurability** | Physical rewiring needed | Software recompile |
@@ -189,7 +189,7 @@ sample_at(time_points)
 **The most powerful configuration:**
 
 ```
-Kairo defines the computational graph
+Morphogen defines the computational graph
   ↓
 Parts compile to digital (DSP, ML inference, logic)
   ↓
@@ -203,19 +203,19 @@ System achieves:
 
 ### Example: "Crappy Guitar → Symphony"
 
-**Kairo Layer (Software):**
+**Morphogen Layer (Software):**
 - Trains a neural body model (guitar → acoustic)
 - Exports weights
 - Defines signal chain topology
 
 **Analog Layer (Hardware):**
 - Analog input buffer (clean signal capture)
-- Analog-neural inference chip (body model, weights from Kairo)
+- Analog-neural inference chip (body model, weights from Morphogen)
 - Analog saturation/color stage (warmth)
 - Digital reverb module (long tail)
 
 **Result:**
-- Training in Kairo
+- Training in Morphogen
 - Inference in silicon (analog + digital)
 - Real-time, low-latency, musically alive
 
@@ -225,7 +225,7 @@ System achieves:
 
 ### 1. Determinism is Sacred
 
-**Kairo:** Three determinism tiers (strict, repro, live)
+**Morphogen:** Three determinism tiers (strict, repro, live)
 **Analog Platform:** Latency classes (ultra-low, live, high, offline)
 
 Both systems **know their timing behavior** and enforce safe composition.
@@ -234,7 +234,7 @@ Both systems **know their timing behavior** and enforce safe composition.
 
 ### 2. Cross-Domain Unification
 
-**Kairo:** Audio + physics + circuits + geometry in one kernel
+**Morphogen:** Audio + physics + circuits + geometry in one kernel
 **Analog Platform:** Guitar + synth + CV + pedals + Eurorack in one backplane
 
 Both **break down domain silos** to enable new creative possibilities.
@@ -243,7 +243,7 @@ Both **break down domain silos** to enable new creative possibilities.
 
 ### 3. Composition > Specialization
 
-**Kairo:** Build complex simulations from small operators
+**Morphogen:** Build complex simulations from small operators
 **Analog Platform:** Build complex signal chains from primitive modules
 
 Both follow the **DNA/Unix/Moog philosophy**: simple blocks → emergent complexity.
@@ -252,7 +252,7 @@ Both follow the **DNA/Unix/Moog philosophy**: simple blocks → emergent complex
 
 ### 4. Types as Safety Nets
 
-**Kairo:** Type system prevents invalid operations (domain mismatch, unit errors)
+**Morphogen:** Type system prevents invalid operations (domain mismatch, unit errors)
 **Analog Platform:** Pin contracts prevent invalid connections (voltage mismatch, impedance errors)
 
 Both use **compile-time-ish safety** to prevent common mistakes.
@@ -269,7 +269,7 @@ You can think of the full vision as:
 ├─────────────────────────────────────────────┤
 │                                             │
 │  SOFTWARE MODE          HARDWARE MODE       │
-│  (Kairo)               (Analog Platform)    │
+│  (Morphogen)               (Analog Platform)    │
 │                                             │
 │  - Digital simulation   - Physical compute  │
 │  - Deterministic        - Continuous-time   │
@@ -287,9 +287,9 @@ You can think of the full vision as:
 
 ## Practical Integration Points
 
-### 1. **Kairo as Design Tool for Analog Modules**
+### 1. **Morphogen as Design Tool for Analog Modules**
 
-Use Kairo to:
+Use Morphogen to:
 - Simulate proposed analog circuits
 - Optimize filter coefficients
 - Train neural models for analog-neural chips
@@ -298,32 +298,32 @@ Use Kairo to:
 
 **Workflow:**
 ```
-Design in Kairo → Simulate → Export parameters → Build analog module
+Design in Morphogen → Simulate → Export parameters → Build analog module
 ```
 
 ---
 
-### 2. **Analog Modules as Kairo Accelerators**
+### 2. **Analog Modules as Morphogen Accelerators**
 
 Use analog modules to:
-- Accelerate specific Kairo operators (integration, filtering, nonlinearity)
+- Accelerate specific Morphogen operators (integration, filtering, nonlinearity)
 - Provide true randomness sources
 - Handle ultra-low-latency inner loops
 - Offload continuous-time dynamics
 
 **Workflow:**
 ```
-Kairo identifies hot path → Offloads to analog coprocessor → Integrates results
+Morphogen identifies hot path → Offloads to analog coprocessor → Integrates results
 ```
 
 ---
 
-### 3. **Kairo-to-Firmware Pipeline**
+### 3. **Morphogen-to-Firmware Pipeline**
 
-**Vision:** Kairo compiles operators directly to module firmware.
+**Vision:** Morphogen compiles operators directly to module firmware.
 
 ```
-Kairo operator graph
+Morphogen operator graph
   ↓
 MLIR lowering
   ↓
@@ -333,7 +333,7 @@ Firmware binary
   ↓
 Flash onto module dev board
   ↓
-Module becomes "Kairo operator in hardware"
+Module becomes "Morphogen operator in hardware"
 ```
 
 This is **not science fiction** - the toolchain mostly exists.
@@ -375,18 +375,18 @@ System picks the best implementation based on constraints.
 ## The Long-Term Vision
 
 ### Year 1: Parallel Development
-- Kairo matures on software side
+- Morphogen matures on software side
 - Analog platform prototypes on hardware side
 - Shared language emerges
 
 ### Year 2-3: Convergence
-- Kairo can export to analog module firmware
-- Analog modules report via Kairo-compatible descriptors
+- Morphogen can export to analog module firmware
+- Analog modules report via Morphogen-compatible descriptors
 - Hybrid systems (software + hardware) become common
 
 ### Year 5: Unified Platform
-- Write in Kairo → execute on mixed analog/digital substrate
-- Analog compute co-processors for Kairo-defined graphs
+- Write in Morphogen → execute on mixed analog/digital substrate
+- Analog compute co-processors for Morphogen-defined graphs
 - Education platform teaching both paradigms from one framework
 - Research substrate for analog ML, neuromorphic, and beyond
 
@@ -412,7 +412,7 @@ You are creating:
 
 ## The Elevator Pitch
 
-**Kairo** is a unified computational kernel for cross-domain simulation.
+**Morphogen** is a unified computational kernel for cross-domain simulation.
 **Analog Platform** is a unified hardware substrate for emergent analog systems.
 
 **Together, they are:**
@@ -422,16 +422,16 @@ You are creating:
 
 ## Next Steps
 
-1. **Define shared primitive vocabulary** between Kairo and hardware
-2. **Prototype Kairo → firmware compilation** for one simple operator
-3. **Build reference analog modules** that map to Kairo operators
-4. **Establish bidirectional testing**: Kairo validates hardware, hardware inspires Kairo features
+1. **Define shared primitive vocabulary** between Morphogen and hardware
+2. **Prototype Morphogen → firmware compilation** for one simple operator
+3. **Build reference analog modules** that map to Morphogen operators
+4. **Establish bidirectional testing**: Morphogen validates hardware, hardware inspires Morphogen features
 5. **Document the bridge** so others can build on both platforms
 
 ---
 
 **The universe computes in analog.**
-**We model it in Kairo.**
+**We model it in Morphogen.**
 **We embody it in hardware.**
 
 This is the full circle.

@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADRs)
 
-This directory contains Architecture Decision Records documenting key architectural decisions in Kairo's development.
+This directory contains Architecture Decision Records documenting key architectural decisions in Morphogen's development.
 
 ## What is an ADR?
 
@@ -14,7 +14,7 @@ ADRs explain *why* decisions were made, not *how* to implement them (see [Specif
 ## Current ADRs
 
 ### [ADR-001: Unified Reference Model](001-unified-reference-model.md)
-Establishes Kairo's unified reference model for cross-domain simulation.
+Establishes Morphogen's unified reference model for cross-domain simulation.
 
 ### [ADR-002: Cross-Domain Architectural Patterns](002-cross-domain-architectural-patterns.md)
 Defines patterns for integrating multiple domains in a single system.

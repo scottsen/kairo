@@ -18,7 +18,7 @@ import sys
 import time
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.sparse_linalg import (
+from morphogen.stdlib.sparse_linalg import (
     laplacian_1d,
     laplacian_2d,
     csr_matrix,
@@ -127,7 +127,7 @@ def example_solver_comparison_nonsymmetric():
 
     # Add convection term (makes it nonsymmetric)
     # Convection in x-direction
-    from kairo.stdlib.sparse_linalg import gradient_2d
+    from morphogen.stdlib.sparse_linalg import gradient_2d
     Gx, Gy = gradient_2d(n, n)
 
     # Convection-diffusion operator: -∇² + c·∇

@@ -70,7 +70,7 @@ Every linear operator has a **spectrum** — the set of frequencies (eigenvalues
 ### What This Means for Us
 
 **For Morphogen (Digital)**:
-```kairo
+```morphogen
 # This is spectral decomposition
 let freq_domain = fft(time_signal)
 let filtered = freq_domain * lowpass_spectrum
@@ -230,7 +230,7 @@ def diffuse(field, rate, dt):
 ```
 
 **✔ Composition is operator algebra**
-```kairo
+```morphogen
 use field, audio, transform
 
 # This is: (O_ifft ∘ O_filter ∘ O_fft)(signal)
@@ -241,7 +241,7 @@ let output = audio.signal
 ```
 
 **✔ Type system enforces operator properties**
-```kairo
+```morphogen
 # Type: Signal<f32 [Hz]>
 # Operator: Unitary (FFT)
 # Property: Energy preserved
@@ -323,7 +323,7 @@ Each energy level is independent.
 
 **✔ Always provide orthogonal bases for decomposition**
 
-```kairo
+```morphogen
 # Time → Frequency (Fourier basis)
 use transform
 let spectrum = transform.fft(signal)
@@ -360,7 +360,7 @@ Actual: poles at {-100, -50}
 ### 3. **Optimization**
 Operators can be **diagonalized** for efficiency.
 
-```kairo
+```morphogen
 # Slow: convolve in time domain
 y = convolve(x, h)
 
@@ -477,7 +477,7 @@ Every domain operator should specify:
 
 **3. Expose spectral decomposition everywhere**
 
-```kairo
+```morphogen
 # Make this first-class for ALL domains
 let components = spectral_decompose(thing)
 let reconstructed = spectral_reconstruct(components)
@@ -485,7 +485,7 @@ let reconstructed = spectral_reconstruct(components)
 
 **4. Build operator composition validator**
 
-```kairo
+```morphogen
 # This should type-check at compile time
 use field, audio
 

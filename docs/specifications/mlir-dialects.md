@@ -1,4 +1,4 @@
-# SPEC: Kairo MLIR Dialects
+# SPEC: Morphogen MLIR Dialects
 
 **Version:** 1.0 Draft
 **Status:** RFC
@@ -8,28 +8,28 @@
 
 ## Overview
 
-Kairo defines **four core MLIR dialects** that form the intermediate representation between the Graph IR and executable code:
+Morphogen defines **four core MLIR dialects** that form the intermediate representation between the Graph IR and executable code:
 
-1. **kairo.stream** — Audio/control signal operations
-2. **kairo.field** — Spatial field operations
-3. **kairo.transform** — Domain transforms (FFT, STFT, etc.)
-4. **kairo.schedule** — Multirate scheduling and fencing
+1. **morphogen.stream** — Audio/control signal operations
+2. **morphogen.field** — Spatial field operations
+3. **morphogen.transform** — Domain transforms (FFT, STFT, etc.)
+4. **morphogen.schedule** — Multirate scheduling and fencing
 
 **Design Principle:** Keep dialects minimal, sharply defined, and avoid scope creep. Lower to standard MLIR dialects (linalg, affine, vector, arith, math) as soon as possible.
 
 ---
 
-## Dialect 1: kairo.stream
+## Dialect 1: morphogen.stream
 
 **Purpose:** Operations on time-varying signals (audio, control).
 
-### Type: !kairo.stream<T>
+### Type: !morphogen.stream<T>
 
 ```mlir
-!kairo.stream<f32>              // Audio signal
-!kairo.stream<f64>              // High-precision signal
-!kairo.stream<complex<f32>>     // Complex signal (spectrum)
-!kairo.stream<vec<2xf32>>       // Stereo signal
+!morphogen.stream<f32>              // Audio signal
+!morphogen.stream<f64>              // High-precision signal
+!morphogen.stream<complex<f32>>     // Complex signal (spectrum)
+!morphogen.stream<vec<2xf32>>       // Stereo signal
 ```
 
 **Attributes:**
@@ -39,20 +39,20 @@ Kairo defines **four core MLIR dialects** that form the intermediate representat
 
 **Example:**
 ```mlir
-%sig = ... : !kairo.stream<f32, domain="time", rate="audio", sample_rate=48000>
+%sig = ... : !morphogen.stream<f32, domain="time", rate="audio", sample_rate=48000>
 ```
 
 ---
 
 ### Operations
 
-#### kairo.stream.sample
+#### morphogen.stream.sample
 
 **Description:** Sample a stream at current time.
 
 **Syntax:**
 ```mlir
-%value = kairo.stream.sample %stream : !kairo.stream<f32> -> f32
+%value = morphogen.stream.sample %stream : !morphogen.stream<f32> -> f32
 ```
 
 **Lowering:**
@@ -63,13 +63,13 @@ Kairo defines **four core MLIR dialects** that form the intermediate representat
 
 ---
 
-#### kairo.stream.delay
+#### morphogen.stream.delay
 
 **Description:** Delay a stream by N samples.
 
 **Syntax:**
 ```mlir
-%delayed = kairo.stream.delay %stream, %samples : !kairo.stream<f32>, i32 -> !kairo.stream<f32>
+%delayed = morphogen.stream.delay %stream, %samples : !morphogen.stream<f32>, i32 -> !morphogen.stream<f32>
 ```
 
 **Attributes:**
@@ -88,13 +88,13 @@ memref.store %input, %delay_buffer[%write_idx] : memref<?xf32>
 
 ---
 
-#### kairo.stream.mix
+#### morphogen.stream.mix
 
 **Description:** Mix multiple streams.
 
 **Syntax:**
 ```mlir
-%mixed = kairo.stream.mix %stream1, %stream2, %stream3 : !kairo.stream<f32> -> !kairo.stream<f32>
+%mixed = morphogen.stream.mix %stream1, %stream2, %stream3 : !morphogen.stream<f32> -> !morphogen.stream<f32>
 ```
 
 **Lowering:**
@@ -105,13 +105,13 @@ memref.store %input, %delay_buffer[%write_idx] : memref<?xf32>
 
 ---
 
-#### kairo.stream.amplify
+#### morphogen.stream.amplify
 
 **Description:** Multiply stream by gain factor.
 
 **Syntax:**
 ```mlir
-%amplified = kairo.stream.amplify %stream, %gain : !kairo.stream<f32>, f32 -> !kairo.stream<f32>
+%amplified = morphogen.stream.amplify %stream, %gain : !morphogen.stream<f32>, f32 -> !morphogen.stream<f32>
 ```
 
 **Lowering:**
@@ -121,14 +121,14 @@ memref.store %input, %delay_buffer[%write_idx] : memref<?xf32>
 
 ---
 
-#### kairo.stream.filter
+#### morphogen.stream.filter
 
 **Description:** IIR or FIR filter.
 
 **Syntax:**
 ```mlir
-%filtered = kairo.stream.filter %stream, %coeffs, %state
-    : !kairo.stream<f32>, memref<?xf32>, memref<?xf32> -> !kairo.stream<f32>
+%filtered = morphogen.stream.filter %stream, %coeffs, %state
+    : !morphogen.stream<f32>, memref<?xf32>, memref<?xf32> -> !morphogen.stream<f32>
 ```
 
 **Attributes:**
@@ -143,16 +143,16 @@ memref.store %input, %delay_buffer[%write_idx] : memref<?xf32>
 
 ---
 
-## Dialect 2: kairo.field
+## Dialect 2: morphogen.field
 
 **Purpose:** Operations on spatial fields (2D, 3D grids).
 
-### Type: !kairo.field<T, Dim>
+### Type: !morphogen.field<T, Dim>
 
 ```mlir
-!kairo.field<f32, 2>              // 2D scalar field
-!kairo.field<vec<2xf32>, 2>       // 2D vector field (velocity)
-!kairo.field<f32, 3>              // 3D scalar field
+!morphogen.field<f32, 2>              // 2D scalar field
+!morphogen.field<vec<2xf32>, 2>       // 2D vector field (velocity)
+!morphogen.field<f32, 3>              // 3D scalar field
 ```
 
 **Attributes:**
@@ -163,14 +163,14 @@ memref.store %input, %delay_buffer[%write_idx] : memref<?xf32>
 
 ### Operations
 
-#### kairo.field.create
+#### morphogen.field.create
 
 **Description:** Create a field with given shape and spacing.
 
 **Syntax:**
 ```mlir
-%field = kairo.field.create %shape, %spacing, %init_value
-    : index, f32, f32 -> !kairo.field<f32, 2>
+%field = morphogen.field.create %shape, %spacing, %init_value
+    : index, f32, f32 -> !morphogen.field<f32, 2>
 ```
 
 **Attributes:**
@@ -185,14 +185,14 @@ linalg.fill ins(%init_value : f32) outs(%buffer : memref<?x?xf32>)
 
 ---
 
-#### kairo.field.stencil
+#### morphogen.field.stencil
 
 **Description:** Apply stencil operation (Laplacian, gradient, etc.).
 
 **Syntax:**
 ```mlir
-%result = kairo.field.stencil %field, %radius, %weights
-    : !kairo.field<f32, 2>, i32, memref<?xf32> -> !kairo.field<f32, 2>
+%result = morphogen.field.stencil %field, %radius, %weights
+    : !morphogen.field<f32, 2>, i32, memref<?xf32> -> !morphogen.field<f32, 2>
 ```
 
 **Attributes:**
@@ -219,14 +219,14 @@ affine.for %i = 0 to %height {
 
 ---
 
-#### kairo.field.advect
+#### morphogen.field.advect
 
 **Description:** Advect field by velocity field.
 
 **Syntax:**
 ```mlir
-%advected = kairo.field.advect %field, %velocity, %dt, %method
-    : !kairo.field<f32, 2>, !kairo.field<vec<2xf32>, 2>, f32, string -> !kairo.field<f32, 2>
+%advected = morphogen.field.advect %field, %velocity, %dt, %method
+    : !morphogen.field<f32, 2>, !morphogen.field<vec<2xf32>, 2>, f32, string -> !morphogen.field<f32, 2>
 ```
 
 **Attributes:**
@@ -250,13 +250,13 @@ affine.for %i = 0 to %height {
 
 ---
 
-#### kairo.field.reduce
+#### morphogen.field.reduce
 
 **Description:** Reduce field to scalar (sum, max, min, mean).
 
 **Syntax:**
 ```mlir
-%scalar = kairo.field.reduce %field, %op : !kairo.field<f32, 2>, string -> f32
+%scalar = morphogen.field.reduce %field, %op : !morphogen.field<f32, 2>, string -> f32
 ```
 
 **Attributes:**
@@ -276,20 +276,20 @@ affine.for %i = 0 to %height {
 
 ---
 
-## Dialect 3: kairo.transform
+## Dialect 3: morphogen.transform
 
 **Purpose:** Domain transforms (FFT, STFT, DCT, wavelets).
 
 ### Operations
 
-#### kairo.transform.fft
+#### morphogen.transform.fft
 
 **Description:** Fast Fourier Transform (time → frequency).
 
 **Syntax:**
 ```mlir
-%spectrum = kairo.transform.fft %signal, %window, %norm
-    : !kairo.stream<f32> -> !kairo.stream<complex<f32>>
+%spectrum = morphogen.transform.fft %signal, %window, %norm
+    : !morphogen.stream<f32> -> !morphogen.stream<complex<f32>>
 ```
 
 **Attributes:**
@@ -308,14 +308,14 @@ affine.for %i = 0 to %height {
 
 ---
 
-#### kairo.transform.ifft
+#### morphogen.transform.ifft
 
 **Description:** Inverse Fast Fourier Transform (frequency → time).
 
 **Syntax:**
 ```mlir
-%signal = kairo.transform.ifft %spectrum, %norm
-    : !kairo.stream<complex<f32>> -> !kairo.stream<f32>
+%signal = morphogen.transform.ifft %spectrum, %norm
+    : !morphogen.stream<complex<f32>> -> !morphogen.stream<f32>
 ```
 
 **Lowering:**
@@ -325,14 +325,14 @@ affine.for %i = 0 to %height {
 
 ---
 
-#### kairo.transform.stft
+#### morphogen.transform.stft
 
 **Description:** Short-Time Fourier Transform.
 
 **Syntax:**
 ```mlir
-%spectrogram = kairo.transform.stft %signal, %n_fft, %hop_length, %window
-    : !kairo.stream<f32>, i32, i32, string -> tensor<?x?xcomplex<f32>>
+%spectrogram = morphogen.transform.stft %signal, %n_fft, %hop_length, %window
+    : !morphogen.stream<f32>, i32, i32, string -> tensor<?x?xcomplex<f32>>
 ```
 
 **Attributes:**
@@ -354,14 +354,14 @@ affine.for %i = 0 to %height {
 
 ---
 
-#### kairo.transform.istft
+#### morphogen.transform.istft
 
 **Description:** Inverse Short-Time Fourier Transform.
 
 **Syntax:**
 ```mlir
-%signal = kairo.transform.istft %spectrogram, %hop_length, %window
-    : tensor<?x?xcomplex<f32>>, i32, string -> !kairo.stream<f32>
+%signal = morphogen.transform.istft %spectrogram, %hop_length, %window
+    : tensor<?x?xcomplex<f32>>, i32, string -> !morphogen.stream<f32>
 ```
 
 **Lowering:**
@@ -375,14 +375,14 @@ affine.for %i = 0 to %height {
 
 ---
 
-#### kairo.transform.fft2d
+#### morphogen.transform.fft2d
 
 **Description:** 2D FFT (space → k-space).
 
 **Syntax:**
 ```mlir
-%k_field = kairo.transform.fft2d %field, %norm
-    : !kairo.field<f32, 2> -> !kairo.field<complex<f32>, 2>
+%k_field = morphogen.transform.fft2d %field, %norm
+    : !morphogen.field<f32, 2> -> !morphogen.field<complex<f32>, 2>
 ```
 
 **Lowering:**
@@ -392,22 +392,22 @@ affine.for %i = 0 to %height {
 
 ---
 
-## Dialect 4: kairo.schedule
+## Dialect 4: morphogen.schedule
 
 **Purpose:** Multirate scheduling, event fencing, cross-rate resampling.
 
 ### Operations
 
-#### kairo.schedule.rate
+#### morphogen.schedule.rate
 
 **Description:** Declare execution rate for a block.
 
 **Syntax:**
 ```mlir
-kairo.schedule.rate "audio" {
+morphogen.schedule.rate "audio" {
   // Operations run at audio rate
-  %osc = kairo.stream.sine %freq : f32 -> !kairo.stream<f32>
-  %lpf = kairo.stream.filter %osc, ... : !kairo.stream<f32> -> !kairo.stream<f32>
+  %osc = morphogen.stream.sine %freq : f32 -> !morphogen.stream<f32>
+  %lpf = morphogen.stream.filter %osc, ... : !morphogen.stream<f32> -> !morphogen.stream<f32>
 }
 ```
 
@@ -417,13 +417,13 @@ kairo.schedule.rate "audio" {
 
 ---
 
-#### kairo.schedule.fence
+#### morphogen.schedule.fence
 
 **Description:** Sample-accurate synchronization barrier.
 
 **Syntax:**
 ```mlir
-kairo.schedule.fence %event_time : i64
+morphogen.schedule.fence %event_time : i64
 ```
 
 **Semantics:**
@@ -443,14 +443,14 @@ scf.if %current_sample == %event_time {
 
 ---
 
-#### kairo.schedule.resample
+#### morphogen.schedule.resample
 
 **Description:** Resample stream from one rate to another.
 
 **Syntax:**
 ```mlir
-%resampled = kairo.schedule.resample %stream, %from_rate, %to_rate, %mode
-    : !kairo.stream<f32>, i32, i32, string -> !kairo.stream<f32>
+%resampled = morphogen.schedule.resample %stream, %from_rate, %to_rate, %mode
+    : !morphogen.stream<f32>, i32, i32, string -> !morphogen.stream<f32>
 ```
 
 **Attributes:**
@@ -472,13 +472,13 @@ affine.for %i = 0 to %output_size {
 
 ---
 
-#### kairo.schedule.hop
+#### morphogen.schedule.hop
 
 **Description:** Execute a hop (block of samples).
 
 **Syntax:**
 ```mlir
-kairo.schedule.hop %start_sample, %hop_size {
+morphogen.schedule.hop %start_sample, %hop_size {
   // Execute all rate groups for this hop
   ^bb0(%sample_idx: index):
     // Operations
@@ -496,19 +496,19 @@ scf.for %i = %start_sample to %end_sample step %hop_size {
 
 ## Lowering Strategy
 
-Kairo dialects lower to standard MLIR dialects in stages:
+Morphogen dialects lower to standard MLIR dialects in stages:
 
 ```
 ┌─────────────────────────────────────────┐
-│  Kairo Graph IR (JSON)                  │
+│  Morphogen Graph IR (JSON)                  │
 └─────────────────┬───────────────────────┘
                   ▼
 ┌─────────────────────────────────────────┐
-│  Kairo Dialects                         │
-│  - kairo.stream                         │
-│  - kairo.field                          │
-│  - kairo.transform                      │
-│  - kairo.schedule                       │
+│  Morphogen Dialects                         │
+│  - morphogen.stream                         │
+│  - morphogen.field                          │
+│  - morphogen.transform                      │
+│  - morphogen.schedule                       │
 └─────────────────┬───────────────────────┘
                   ▼
 ┌─────────────────────────────────────────┐
@@ -538,9 +538,9 @@ Kairo dialects lower to standard MLIR dialects in stages:
 
 ## Example: Simple Synth
 
-### Kairo.Audio DSL
+### Morphogen.Audio DSL
 
-```kairo
+```morphogen
 scene SimpleSynth {
   let osc = sine(440Hz)
   let env = adsr(attack=0.01s, decay=0.1s, sustain=0.7, release=0.3s)
@@ -551,7 +551,7 @@ scene SimpleSynth {
 
 ---
 
-### Kairo Graph IR
+### Morphogen Graph IR
 
 ```json
 {
@@ -569,39 +569,39 @@ scene SimpleSynth {
 
 ---
 
-### Kairo Dialects (MLIR)
+### Morphogen Dialects (MLIR)
 
 ```mlir
 module {
-  func.func @simple_synth(%sample_rate: i32) -> !kairo.stream<f32> {
+  func.func @simple_synth(%sample_rate: i32) -> !morphogen.stream<f32> {
     // Audio rate: Oscillator
-    %osc = kairo.schedule.rate "audio" {
+    %osc = morphogen.schedule.rate "audio" {
       %freq = arith.constant 440.0 : f32
       %phase = arith.constant 0.0 : f32
-      %sig = kairo.stream.sine %freq, %phase : f32, f32 -> !kairo.stream<f32>
-      kairo.schedule.yield %sig : !kairo.stream<f32>
+      %sig = morphogen.stream.sine %freq, %phase : f32, f32 -> !morphogen.stream<f32>
+      morphogen.schedule.yield %sig : !morphogen.stream<f32>
     }
 
     // Control rate: Envelope
-    %env = kairo.schedule.rate "control" {
+    %env = morphogen.schedule.rate "control" {
       %attack = arith.constant 0.01 : f32
       %decay = arith.constant 0.1 : f32
       %sustain = arith.constant 0.7 : f32
       %release = arith.constant 0.3 : f32
-      %envelope = kairo.stream.adsr %attack, %decay, %sustain, %release
-          : f32, f32, f32, f32 -> !kairo.stream<f32>
-      kairo.schedule.yield %envelope : !kairo.stream<f32>
+      %envelope = morphogen.stream.adsr %attack, %decay, %sustain, %release
+          : f32, f32, f32, f32 -> !morphogen.stream<f32>
+      morphogen.schedule.yield %envelope : !morphogen.stream<f32>
     }
 
     // Resample control → audio
-    %env_upsampled = kairo.schedule.resample %env, 1000, 48000, "linear"
-        : !kairo.stream<f32>, i32, i32, string -> !kairo.stream<f32>
+    %env_upsampled = morphogen.schedule.resample %env, 1000, 48000, "linear"
+        : !morphogen.stream<f32>, i32, i32, string -> !morphogen.stream<f32>
 
     // Multiply
-    %modulated = kairo.stream.multiply %osc, %env_upsampled
-        : !kairo.stream<f32>, !kairo.stream<f32> -> !kairo.stream<f32>
+    %modulated = morphogen.stream.multiply %osc, %env_upsampled
+        : !morphogen.stream<f32>, !morphogen.stream<f32> -> !morphogen.stream<f32>
 
-    return %modulated : !kairo.stream<f32>
+    return %modulated : !morphogen.stream<f32>
   }
 }
 ```
@@ -648,16 +648,16 @@ module {
 ## Implementation Checklist
 
 ### Phase 1: Define Dialects (Weeks 9-10)
-- [ ] Define types: `!kairo.stream`, `!kairo.field`
+- [ ] Define types: `!morphogen.stream`, `!morphogen.field`
 - [ ] Define operations for each dialect
 - [ ] Write MLIR dialect .td files (TableGen)
 - [ ] Generate C++ dialect code
 
 ### Phase 2: Lowering Passes (Week 11)
-- [ ] Implement kairo.stream → arith/math lowering
-- [ ] Implement kairo.field → linalg/affine lowering
-- [ ] Implement kairo.transform → fft dialect (or vendor calls)
-- [ ] Implement kairo.schedule → scf lowering
+- [ ] Implement morphogen.stream → arith/math lowering
+- [ ] Implement morphogen.field → linalg/affine lowering
+- [ ] Implement morphogen.transform → fft dialect (or vendor calls)
+- [ ] Implement morphogen.schedule → scf lowering
 
 ### Phase 3: Backend Integration (Week 12)
 - [ ] Lower to LLVM dialect (CPU)
@@ -668,10 +668,10 @@ module {
 
 ## Summary
 
-The Kairo MLIR Dialects provide:
+The Morphogen MLIR Dialects provide:
 
 ✅ **Four minimal dialects** — stream, field, transform, schedule
-✅ **Clean lowering path** — Kairo → standard dialects → backends
+✅ **Clean lowering path** — Morphogen → standard dialects → backends
 ✅ **Avoid scope creep** — Keep dialects small and focused
 ✅ **Extensible** — Add new ops without breaking existing code
 
@@ -682,7 +682,7 @@ This is the **compiler foundation** that turns Graph IR into executable code.
 ## References
 
 - `graph-ir.md` — Graph IR is input to MLIR lowering
-- `type-system.md` — Kairo types map to MLIR types
-- `scheduler.md` — kairo.schedule implements scheduler semantics
-- `transform.md` — kairo.transform implements transform ops
+- `type-system.md` — Morphogen types map to MLIR types
+- `scheduler.md` — morphogen.schedule implements scheduler semantics
+- `transform.md` — morphogen.transform implements transform ops
 - `operator-registry.md` — Operators lower to dialect ops

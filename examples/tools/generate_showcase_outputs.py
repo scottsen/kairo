@@ -31,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
     import numpy as np
-    from kairo.stdlib import field, visual, audio
+    from morphogen.stdlib import field, visual, audio
     KAIRO_AVAILABLE = True
 except ImportError:
     KAIRO_AVAILABLE = False
@@ -344,7 +344,7 @@ def generate_physics_particles(
         Z = np.sin(X + t) * np.cos(Y + t * 0.5)
 
         # Colorize
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
         field_obj = Field2D(Z.astype(np.float32))
         vis = visual.colorize(field_obj, palette="fire", vmin=-1.0, vmax=1.0)
 
@@ -426,7 +426,7 @@ def generate_fractal_zoom(
         M_smooth = M_smooth / max_iter
 
         # Colorize
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
         field_obj = Field2D(M_smooth.astype(np.float32))
         vis = visual.colorize(field_obj, palette="viridis", vmin=0.0, vmax=1.0)
 

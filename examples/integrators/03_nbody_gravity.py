@@ -8,7 +8,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.integrators import verlet, rk4
+from morphogen.stdlib.integrators import verlet, rk4
 
 
 def gravitational_acceleration(t, positions, velocities, masses, G=1.0, softening=0.1):

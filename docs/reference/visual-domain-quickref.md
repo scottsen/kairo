@@ -1,6 +1,6 @@
 # Visual Domain Quick Reference
 
-Quick reference for Kairo's Visual/Scene domain operators and types.
+Quick reference for Morphogen's Visual/Scene domain operators and types.
 
 See [visual-scene-domain.md](./visual-scene-domain.md) for comprehensive architecture documentation.
 

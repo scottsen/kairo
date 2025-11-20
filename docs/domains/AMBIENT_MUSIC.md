@@ -10,10 +10,10 @@
 
 The Ambient Music domain provides four specialized sub-domains for ambient and generative audio composition:
 
-1. **Kairo.Spectral** — Frequency-domain audio manipulation
-2. **Kairo.Ambience** — High-level ambient primitives (drones, granular, long-form evolution)
-3. **Kairo.Synthesis** — Modular-style DSP routing
-4. **Kairo.Composition** — Generative pattern generation (Markov, CA, swarms)
+1. **Morphogen.Spectral** — Frequency-domain audio manipulation
+2. **Morphogen.Ambience** — High-level ambient primitives (drones, granular, long-form evolution)
+3. **Morphogen.Synthesis** — Modular-style DSP routing
+4. **Morphogen.Composition** — Generative pattern generation (Markov, CA, swarms)
 
 **Total:** 90 new operators across 4 domains
 
@@ -49,11 +49,11 @@ The Ambient Music domain provides four specialized sub-domains for ambient and g
 
 ---
 
-## Why Kairo for Ambient Music?
+## Why Morphogen for Ambient Music?
 
 **Unique capabilities no other tool provides:**
 
-| Kairo Strength | Ambient Music Benefit |
+| Morphogen Strength | Ambient Music Benefit |
 |----------------|----------------------|
 | **Cross-domain composition** | Physics/CA/fractals drive audio parameters |
 | **GPU acceleration** | Real-time dense granular synthesis, spectral convolution |
@@ -69,7 +69,7 @@ The Ambient Music domain provides four specialized sub-domains for ambient and g
 - **DAWs:** Linear timelines, not generative/declarative
 - **Eno-style apps (Bloom):** Closed systems, limited extensibility
 
-**Kairo unifies all of these capabilities.**
+**Morphogen unifies all of these capabilities.**
 
 ---
 
@@ -97,7 +97,7 @@ The Ambient Music domain provides four specialized sub-domains for ambient and g
 - `spectral.gate`, `spectral.enhance`, `spectral.smear`
 
 **Core Types:**
-```kairo
+```morphogen
 type SpectralField = Field2D<complex, (freq: Hz, time: s)>
 type Spectrogram = Field2D<f32, (freq: Hz, time: s)>
 type HarmonicSeries = Field1D<f32, freq: Hz>
@@ -142,7 +142,7 @@ type HarmonicSeries = Field1D<f32, freq: Hz>
 - `evolve.spectral`, `evolve.harmonic`, `evolve.density`
 
 **Core Types:**
-```kairo
+```morphogen
 type Drone = {
   fundamental: Ctl[Hz],
   texture: Enum["smooth", "shimmer", "rough", "nebula"],
@@ -195,7 +195,7 @@ type GranularCloud = {
 - `mix`, `crossfade`, `vca`, `pan`, `matrix_mixer`
 
 **Core Types:**
-```kairo
+```morphogen
 type Patch = Graph<SynthOp>  // Declarative synthesis graph
 type CV = Ctl  // Control voltage
 type Gate = Evt<void>  // Trigger events
@@ -241,7 +241,7 @@ type Gate = Evt<void>  // Trigger events
 - `swarm.pitch_map`, `swarm.density_modulation`, `swarm.spatial_pan`
 
 **Core Types:**
-```kairo
+```morphogen
 type MarkovMatrix = Field2D<f32, (state_from, state_to)>
 type CARule = {
   rule: Enum["life", "rule30", "lenia", ...],
@@ -283,7 +283,7 @@ type Pattern = Evt<Note>
 **Cross-Domain Examples:**
 
 **1. Fluid Vorticity → Granular Density**
-```kairo
+```morphogen
 fluid = navier_stokes.solve(...)
 vorticity = field.curl(fluid.velocity)
 grain_density = vorticity.max() * 80
@@ -296,7 +296,7 @@ grains = granular.cloud(
 ```
 
 **2. Mandelbrot → Harmonic Evolution**
-```kairo
+```morphogen
 mandelbrot = fractal.iterate(zoom_center, zoom_rate)
 depth = mandelbrot.escape_time.mean()
 harmonic_spread = depth / 100.0
@@ -309,7 +309,7 @@ pad = drone.harmonic(
 ```
 
 **3. Swarm → Melody Generation**
-```kairo
+```morphogen
 boids = agents.boids(num=40, cohesion=0.5)
 notes = swarm.pitch_map(
   boids,
@@ -319,14 +319,14 @@ notes = swarm.pitch_map(
 ```
 
 **4. Reaction-Diffusion → Spectral Filtering**
-```kairo
+```morphogen
 rd = reaction_diffusion.solve(...)
 spectral_env = field.to_spectrogram(rd.activator_field)
 filtered = spectral.filter(drone, spectral_env)
 ```
 
 **5. CA → Multi-Voice Composition**
-```kairo
+```morphogen
 life = ca.life(size=32, seed=100)
 notes = ca.sequencer(life, mapping=(x,y) => {
   pitch = 220Hz * (1 + (x+y)/64.0)
@@ -581,7 +581,7 @@ See [docs/guides/domain-implementation.md](../guides/domain-implementation.md) f
 
 ## References
 
-### Kairo Documentation
+### Morphogen Documentation
 - [ADR-009](../adr/009-ambient-music-generative-domains.md) — Architecture decision
 - [docs/specifications/ambient-music.md](../specifications/ambient-music.md) — Complete specification
 - [AUDIO_SPECIFICATION.md](../../AUDIO_SPECIFICATION.md) — Base audio domain

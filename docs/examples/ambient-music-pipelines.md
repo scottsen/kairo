@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document demonstrates complete ambient music pipelines that showcase Kairo's unique cross-domain composition capabilities. Each example integrates multiple domains (audio, CA, physics, fractals) to create generative ambient music impossible to achieve in traditional tools.
+This document demonstrates complete ambient music pipelines that showcase Morphogen's unique cross-domain composition capabilities. Each example integrates multiple domains (audio, CA, physics, fractals) to create generative ambient music impossible to achieve in traditional tools.
 
 **What makes these examples special:**
 - **Cross-domain modulation** — Physics/CA/fractals drive audio parameters
@@ -46,7 +46,7 @@ Classic ambient music approach:
 - Long reverb tail for spaciousness
 - Multi-hour evolution (imperceptible changes)
 
-### Kairo Pipeline
+### Morphogen Pipeline
 
 **Domain Flow:**
 ```
@@ -59,7 +59,7 @@ Ambience (Drone) → Spectral (Blur) → Audio (Reverb) → Output (Stereo)
 
 #### Stage 0: Ultra-Slow Modulators
 
-```kairo
+```morphogen
 // Hour-scale orbital LFO for harmonic drift
 let harmonic_drift = orbit.lfo(
   period_hours = 2.0,
@@ -82,7 +82,7 @@ let reverb_evolution = drift.noise(
 
 #### Stage 1: Harmonic Drone Generation
 
-```kairo
+```morphogen
 // Base frequency with slow drift
 let fundamental = 55Hz + harmonic_drift
 
@@ -104,7 +104,7 @@ let drone = drone.harmonic(
 
 #### Stage 2: Spectral Blurring
 
-```kairo
+```morphogen
 // Convert to frequency domain
 let spec = stft(drone, window_size = 2048, hop_size = 512)
 
@@ -132,7 +132,7 @@ let blurred_drone = istft(blurred_spec)
 
 #### Stage 3: Reverberation
 
-```kairo
+```morphogen
 // Long reverb with evolving decay time
 let reverbed = blurred_drone |> reverb(
   mix = 0.5,
@@ -150,7 +150,7 @@ let reverbed = blurred_drone |> reverb(
 
 #### Stage 4: Final Output
 
-```kairo
+```morphogen
 scene EnoAmbient {
   // Modulators
   let harmonic_drift = orbit.lfo(period_hours=2.0) * 15cents
@@ -191,13 +191,13 @@ scene EnoAmbient {
 ### Variations
 
 **Variation 1: Subharmonic Bass Layer**
-```kairo
+```morphogen
 let bass = drone.subharmonic(55Hz, divisions=[1,2,3,4,5]) * 0.4
 out stereo = mix(blurred * 0.6, bass * 0.4) |> reverb(...)
 ```
 
 **Variation 2: Multiple Drones at Different Rates**
-```kairo
+```morphogen
 let drone_a = drone.harmonic(55Hz + drift_a, ...)
 let drone_b = drone.harmonic(82.5Hz + drift_b, ...)
 out stereo = mix(drone_a, drone_b) |> reverb(...)
@@ -223,7 +223,7 @@ out stereo = mix(drone_a, drone_b) |> reverb(...)
 - High density = dense granular texture
 - Low density = sparse, spacious grains
 
-### Kairo Pipeline
+### Morphogen Pipeline
 
 **Domain Flow:**
 ```
@@ -236,7 +236,7 @@ Emergence (CA Life) → Field Statistics → Ambience (Granular) → Audio (Reve
 
 #### Stage 0: Cellular Automaton Setup
 
-```kairo
+```morphogen
 // Initialize Game of Life
 let life_grid = ca.life(
   size = 64,
@@ -254,7 +254,7 @@ let life_grid = ca.life(
 
 #### Stage 1: Extract CA Density
 
-```kairo
+```morphogen
 // Calculate alive cell density (0.0 - 1.0)
 let ca_density = field.mean(life_grid)
 
@@ -276,7 +276,7 @@ let grain_density = ca_density * 150
 
 #### Stage 2: Drone Source Generation
 
-```kairo
+```morphogen
 // Base drone for granulation
 let base_drone = drone.subharmonic(
   root = 110Hz,
@@ -293,7 +293,7 @@ let base_drone = drone.subharmonic(
 
 #### Stage 3: Granular Synthesis
 
-```kairo
+```morphogen
 // Granulate the drone with CA-modulated density
 let granular_texture = granular.cloud(
   source = base_drone,
@@ -320,7 +320,7 @@ let granular_texture = granular.cloud(
 
 #### Stage 4: Spatial Processing
 
-```kairo
+```morphogen
 // Widen stereo field
 let wide = stereo.width(granular_texture, width=1.5)
 
@@ -332,7 +332,7 @@ let final = wide |> reverb(mix=0.3, decay=3.0)
 
 #### Complete Scene
 
-```kairo
+```morphogen
 scene CAGranular {
   // Cellular automaton
   let life = ca.life(size=64, seed=12345, density=0.3, step_rate=10Hz)
@@ -378,7 +378,7 @@ scene CAGranular {
 
 Optionally render CA grid alongside audio:
 
-```kairo
+```morphogen
 // Export CA grid as PNG sequence
 export_ca_frames(life, fps=10, output="ca_animation.png")
 
@@ -410,7 +410,7 @@ let visual = ca.render(life, palette="viridis")
    - Fast flow → bright (high cutoff)
    - Slow flow → dark (low cutoff)
 
-### Kairo Pipeline
+### Morphogen Pipeline
 
 **Domain Flow:**
 ```
@@ -425,7 +425,7 @@ Physics (Fluid) → Field Analysis → Ambience + Spectral → Audio
 
 #### Stage 0: Fluid Simulation Setup
 
-```kairo
+```morphogen
 // Initialize Navier-Stokes solver
 let fluid = navier_stokes.solve(
   grid_size = 128,
@@ -445,7 +445,7 @@ let fluid = navier_stokes.solve(
 
 #### Stage 1: Extract Vorticity Field
 
-```kairo
+```morphogen
 // Compute vorticity (curl of velocity field)
 let vorticity = field.curl(fluid.velocity)
 
@@ -465,7 +465,7 @@ let grain_density = max_vorticity * 80
 
 #### Stage 2: Extract Velocity Magnitude
 
-```kairo
+```morphogen
 // Compute velocity magnitude
 let velocity_mag = field.magnitude(fluid.velocity)
 
@@ -485,7 +485,7 @@ let cutoff_freq = avg_velocity * 3000Hz + 500Hz
 
 #### Stage 3: Audio Synthesis
 
-```kairo
+```morphogen
 // Base drone
 let base = drone.harmonic(110Hz, spread=0.2)
 
@@ -508,7 +508,7 @@ let final = filtered |> reverb(0.35, decay=2.5)
 
 #### Complete Scene
 
-```kairo
+```morphogen
 scene FluidAudio {
   // Fluid simulation
   let fluid = navier_stokes.solve(
@@ -561,7 +561,7 @@ scene FluidAudio {
 
 Render fluid field alongside audio:
 
-```kairo
+```morphogen
 // Export vorticity as video
 export_field_video(vorticity, fps=60, colormap="plasma")
 
@@ -598,7 +598,7 @@ export_multiview([
    - Dense cluster → lots of reverb
    - Sparse spread → little reverb
 
-### Kairo Pipeline
+### Morphogen Pipeline
 
 **Domain Flow:**
 ```
@@ -613,7 +613,7 @@ Agents (Boids) → Spatial Analysis → Composition + Audio
 
 #### Stage 0: Boid Swarm Setup
 
-```kairo
+```morphogen
 // Initialize boid swarm
 let boids = agents.boids(
   num = 40,
@@ -634,7 +634,7 @@ let boids = agents.boids(
 
 #### Stage 1: Position → Pitch Mapping
 
-```kairo
+```morphogen
 // Map boid positions to pitches
 let notes = swarm.pitch_map(
   boids,
@@ -657,7 +657,7 @@ let notes = swarm.pitch_map(
 
 #### Stage 2: Density → Reverb Modulation
 
-```kairo
+```morphogen
 // Calculate swarm density
 let density = swarm.density_modulation(
   boids,
@@ -678,7 +678,7 @@ let reverb_amount = density * 0.3 + 0.2
 
 #### Stage 3: Voice Synthesis
 
-```kairo
+```morphogen
 // Define voice (per-note synthesis)
 let voice = (note: Note) => {
   let osc = sine(note.pitch)
@@ -700,7 +700,7 @@ let melody = spawn(notes, voice, max_voices=12)
 
 #### Stage 4: Final Mixing
 
-```kairo
+```morphogen
 // Apply swarm-driven reverb
 let final = melody |> reverb(reverb_amount, decay=3.0)
 ```
@@ -709,7 +709,7 @@ let final = melody |> reverb(reverb_amount, decay=3.0)
 
 #### Complete Scene
 
-```kairo
+```morphogen
 scene SwarmMelody {
   // Boid swarm
   let boids = agents.boids(
@@ -766,7 +766,7 @@ scene SwarmMelody {
 
 Render swarm motion with audio:
 
-```kairo
+```morphogen
 // Export swarm animation
 export_swarm_video(boids, fps=30, output="swarm_motion.mp4")
 
@@ -793,7 +793,7 @@ export_multiview([
 - Three layers: bass drone, mid harmonic pad, high shimmer
 - Each layer evolves independently
 
-### Kairo Pipeline
+### Morphogen Pipeline
 
 **Domain Flow:**
 ```
@@ -805,7 +805,7 @@ export_multiview([
 
 #### Stage 0: Ultra-Slow Modulators
 
-```kairo
+```morphogen
 // 8-hour orbital LFO for bass drift
 let bass_drift = orbit.lfo(
   period_hours = 8.0,
@@ -833,7 +833,7 @@ let high_shimmer = orbit.lfo(
 
 #### Stage 1: Bass Layer (Sub-Harmonics)
 
-```kairo
+```morphogen
 // Deep bass drone
 let bass = drone.subharmonic(
   root = 55Hz + bass_drift,  // Drift over 8 hours
@@ -845,7 +845,7 @@ let bass = drone.subharmonic(
 
 #### Stage 2: Mid Layer (Harmonic Pad)
 
-```kairo
+```morphogen
 // Mid-range harmonic pad
 let mid = drone.harmonic(
   fundamental = 110Hz + mid_drift,  // Drift over 4 hours
@@ -858,7 +858,7 @@ let mid = drone.harmonic(
 
 #### Stage 3: High Layer (Spectral Shimmer)
 
-```kairo
+```morphogen
 // High shimmer layer
 let high = drone.harmonic(
   fundamental = 440Hz,
@@ -876,7 +876,7 @@ let high_final = istft(shimmer_spec)
 
 #### Stage 4: Mix and Reverb
 
-```kairo
+```morphogen
 // Mix three layers
 let mix = mix(
   bass * 0.4,
@@ -892,7 +892,7 @@ let reverbed = mix |> reverb(mix=0.45, decay=6.0, size=0.95)
 
 #### Stage 5: Dynamic Reverb Evolution
 
-```kairo
+```morphogen
 // Reverb decay evolves over 1 hour
 let reverb_decay_evolution = drift.noise(
   period_minutes = 60,
@@ -910,7 +910,7 @@ let final = mix |> reverb(
 
 #### Complete Scene
 
-```kairo
+```morphogen
 scene EightHourSoundscape {
   // Ultra-slow modulators
   let bass_drift = orbit.lfo(period_hours=8.0) * 5cents
@@ -974,7 +974,7 @@ scene EightHourSoundscape {
 - Deeper zoom → wider harmonic spread
 - Visual + audio synchronized
 
-### Kairo Pipeline
+### Morphogen Pipeline
 
 **Domain Flow:**
 ```
@@ -987,7 +987,7 @@ Procedural (Mandelbrot) → Field Statistics → Spectral (Harmonic) → Audio
 
 ### Implementation
 
-```kairo
+```morphogen
 scene FractalHarmonic {
   // Mandelbrot zoom (zoom in over time)
   let mandelbrot = fractal.mandelbrot(
@@ -1054,7 +1054,7 @@ scene FractalHarmonic {
 
 ### Implementation
 
-```kairo
+```morphogen
 scene ReactionDiffusionSpectral {
   // Reaction-diffusion system
   let rd = reaction_diffusion.gray_scott(

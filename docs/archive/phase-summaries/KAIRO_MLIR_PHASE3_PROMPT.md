@@ -1,6 +1,6 @@
-# Kairo MLIR Phase 3: Temporal Execution Implementation
+# Morphogen MLIR Phase 3: Temporal Execution Implementation
 
-**Project**: Kairo Programming Language - MLIR Compilation Pipeline
+**Project**: Morphogen Programming Language - MLIR Compilation Pipeline
 **Phase**: 3 of 5 - Temporal Execution (Flow Blocks)
 **Repository**: https://github.com/scottsen/kairo
 **Estimated Effort**: 2-3 days
@@ -10,14 +10,14 @@
 
 ## Executive Summary
 
-You are implementing **Phase 3 of the Kairo MLIR compilation pipeline**: temporal execution via flow blocks. This is the most complex compilation phase, as it requires translating Kairo's unique temporal flow construct into MLIR's control flow operations (specifically `scf.for` loops with proper state management).
+You are implementing **Phase 3 of the Morphogen MLIR compilation pipeline**: temporal execution via flow blocks. This is the most complex compilation phase, as it requires translating Morphogen's unique temporal flow construct into MLIR's control flow operations (specifically `scf.for` loops with proper state management).
 
 **Current State**:
-- ✅ Kairo v0.3.1: 100% feature-complete, 160 runtime tests passing
+- ✅ Morphogen v0.3.1: 100% feature-complete, 160 runtime tests passing
 - ✅ MLIR Phases 1-2: Complete (basic ops, functions, if/else, structs) - 21 tests passing
 - ⏳ Total: 181/181 tests passing (including all v0.3.1 features)
 
-**Your Mission**: Enable compilation of Kairo's flow blocks (temporal iteration) to MLIR, allowing all 5 example programs to compile and demonstrating that Kairo's temporal features can be efficiently lowered to standard imperative control flow.
+**Your Mission**: Enable compilation of Morphogen's flow blocks (temporal iteration) to MLIR, allowing all 5 example programs to compile and demonstrating that Morphogen's temporal features can be efficiently lowered to standard imperative control flow.
 
 **Success Criteria**:
 1. Flow blocks compile to `scf.for` loops in MLIR
@@ -31,12 +31,12 @@ You are implementing **Phase 3 of the Kairo MLIR compilation pipeline**: tempora
 
 ## Project Context
 
-### What is Kairo?
+### What is Morphogen?
 
-Kairo is a **temporal programming language** designed for physics simulations and time-based computations. Its key innovation is the **flow block** - a first-class construct for temporal iteration that makes time-evolving systems natural to express.
+Morphogen is a **temporal programming language** designed for physics simulations and time-based computations. Its key innovation is the **flow block** - a first-class construct for temporal iteration that makes time-evolving systems natural to express.
 
 **Core Example**:
-```kairo
+```morphogen
 struct State {
     position: Float
     velocity: Float
@@ -57,13 +57,13 @@ This expresses: "Start with `initial` state, evolve it for 2.0 seconds in steps 
 
 ### What You're Building
 
-You're building the **compiler** that translates Kairo code into MLIR (Multi-Level Intermediate Representation), which can then be optimized and lowered to machine code.
+You're building the **compiler** that translates Morphogen code into MLIR (Multi-Level Intermediate Representation), which can then be optimized and lowered to machine code.
 
 **Current Architecture**:
 ```
-Kairo Source (.kairo)
+Morphogen Source (.kairo)
     ↓ [Parser - COMPLETE]
-Kairo AST
+Morphogen AST
     ↓ [Type Checker - COMPLETE]
 Typed AST
     ↓ [MLIR Compiler - 40% COMPLETE]
@@ -88,26 +88,26 @@ Executable
 
 ## Technical Background: Flow Blocks
 
-### Kairo Syntax
+### Morphogen Syntax
 
 Flow blocks have three forms:
 
 **1. Time-based flow (duration + dt)**:
-```kairo
+```morphogen
 flow initial_state over 2.0 by 0.1 with update_fn
 ```
 Means: "Iterate for 2.0 time units, in steps of 0.1"
 Iterations: 20 (2.0 / 0.1)
 
 **2. Step-based flow (explicit steps)**:
-```kairo
+```morphogen
 flow initial_state for 10 steps with update_fn
 ```
 Means: "Iterate exactly 10 times"
 `dt` is not provided to update function
 
 **3. Substeps (nested iteration)**:
-```kairo
+```morphogen
 flow state over 1.0 by 0.01 substeps 5 with update_fn
 ```
 Means: "Outer loop: 100 steps of 0.01. Inner loop: 5 substeps per step"
@@ -198,9 +198,9 @@ Flow block compilation requires:
 
 ### State Variable Management
 
-Kairo's `@state` decorator marks functions that update state through flow blocks:
+Morphogen's `@state` decorator marks functions that update state through flow blocks:
 
-```kairo
+```morphogen
 @state
 def update(s: State, dt: Float) -> State {
     // Modify s and return it
@@ -427,7 +427,7 @@ In MLIR compilation, ignore decorators (or use them for optimization hints).
 Add tests incrementally:
 
 **1. Simple flow (time-based, scalar state)**:
-```kairo
+```morphogen
 def increment(x: Float, dt: Float) -> Float {
     return x + dt
 }
@@ -437,7 +437,7 @@ let result = flow 0.0 over 1.0 by 0.1 with increment
 ```
 
 **2. Flow with struct state**:
-```kairo
+```morphogen
 struct Point {
     x: Float
     y: Float
@@ -454,7 +454,7 @@ let end = flow start over 1.0 by 0.1 with move
 ```
 
 **3. Step-based flow**:
-```kairo
+```morphogen
 def double(x: Float) -> Float {
     return x * 2.0
 }
@@ -464,7 +464,7 @@ let result = flow 1.0 for 5 steps with double
 ```
 
 **4. Flow with substeps**:
-```kairo
+```morphogen
 def tiny_step(x: Float, dt: Float) -> Float {
     return x + dt
 }
@@ -474,7 +474,7 @@ let result = flow 0.0 over 1.0 by 0.1 substeps 2 with tiny_step
 ```
 
 **5. Physics simulation (spring oscillator)**:
-```kairo
+```morphogen
 struct Spring {
     position: Float
     velocity: Float
@@ -495,7 +495,7 @@ let final = flow initial over 2.0 by 0.01 with spring_step
 ```
 
 **6. Nested state (particle system)**:
-```kairo
+```morphogen
 struct Particle {
     x: Float
     vx: Float
@@ -649,8 +649,8 @@ Aim for at least 10 comprehensive tests covering:
 
 ### Example 1: Simple Flow
 
-**Kairo**:
-```kairo
+**Morphogen**:
+```morphogen
 def increment(x: Float, dt: Float) -> Float {
     return x + dt
 }
@@ -694,8 +694,8 @@ func.func @main() -> f64 {
 
 ### Example 2: Struct State
 
-**Kairo**:
-```kairo
+**Morphogen**:
+```morphogen
 struct Point {
     x: Float
     y: Float
@@ -1065,7 +1065,7 @@ class MLIRCompiler(ASTVisitor):
 
 ## Reference Materials
 
-### Kairo Repository Structure
+### Morphogen Repository Structure
 
 ```
 kairo/
@@ -1204,10 +1204,10 @@ A 10/10 PR that takes 3 days is better than a 7/10 PR that takes 1 day.
 Phase 3 completion means:
 - **60% of MLIR pipeline complete** (was 40%)
 - **All v0.3.1 examples can compile** (massive milestone)
-- **Temporal execution proven** (core Kairo innovation validated)
+- **Temporal execution proven** (core Morphogen innovation validated)
 - **Phases 4-5 are easy** (lambdas + polish)
 
-You're delivering the heart of Kairo's compilation story.
+You're delivering the heart of Morphogen's compilation story.
 
 ---
 
@@ -1218,7 +1218,7 @@ When you create your PR:
 ```
 MLIR Phase 3: Temporal Execution (Flow Blocks)
 
-Implements compilation of Kairo flow blocks to MLIR scf.for loops,
+Implements compilation of Morphogen flow blocks to MLIR scf.for loops,
 enabling temporal iteration with proper state management.
 
 Features:
@@ -1281,7 +1281,7 @@ You have:
 - ✅ Reference semantics (Python runtime)
 - ✅ Proven workflow (3 consecutive 10/10 PRs)
 
-Go build the heart of Kairo's temporal execution system. Make it exceptional.
+Go build the heart of Morphogen's temporal execution system. Make it exceptional.
 
 **Target: 10/10 quality, ~400-500 lines, 10+ tests, 2-3 days.**
 

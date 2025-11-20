@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "kairo"
-version = "0.10.0"
+name = "morphogen"
+version = "0.11.0"
 description = "A language of creative determinism for simulation, sound, and visual form"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -67,7 +67,7 @@ io = [
 ]
 
 [project.scripts]
-kairo = "kairo.cli:main"
+morphogen = "morphogen.cli:main"
 
 [tool.black]
 line-length = 100
@@ -94,7 +94,7 @@ addopts = [
     "--strict-markers",
     "--tb=short",
     # Coverage options (uncomment when coverage is desired)
-    # "--cov=kairo",
+    # "--cov=morphogen",
     # "--cov-report=html",
     # "--cov-report=term-missing",
     # "--cov-fail-under=80",
@@ -107,7 +107,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["kairo"]
+source = ["morphogen"]
 omit = [
     "*/tests/*",
     "*/examples/*",

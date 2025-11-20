@@ -10,7 +10,7 @@ This is a minimal example showing just the game domain in action.
 """
 
 import numpy as np
-from kairo.stdlib.flappy import flappy, random_controller
+from morphogen.stdlib.flappy import flappy, random_controller
 
 
 def main():

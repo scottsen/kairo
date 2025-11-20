@@ -1,4 +1,4 @@
-# 2-Stroke Engine & Muffler Acoustic Modeling in Kairo
+# 2-Stroke Engine & Muffler Acoustic Modeling in Morphogen
 
 **Date:** 2025-11-15
 **Status:** Vision / Use Case Specification
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-**2-stroke exhaust system modeling** is a **perfect showcase** for Kairo's multi-domain, operator-driven, geometry-aware simulation architecture.
+**2-stroke exhaust system modeling** is a **perfect showcase** for Morphogen's multi-domain, operator-driven, geometry-aware simulation architecture.
 
 A 2-stroke exhaust system is not just a pipe — it is:
 - An **acoustic device** (resonance, filtering, sound shaping)
@@ -17,7 +17,7 @@ A 2-stroke exhaust system is not just a pipe — it is:
 - A **coupled nonlinear fluid system** (pressure waves, thermal effects)
 - A **geometric structure** (exact pipe shapes, expansion chambers, cones)
 
-This problem **uniquely demonstrates Kairo's core strengths**:
+This problem **uniquely demonstrates Morphogen's core strengths**:
 - ✅ **Multi-domain coupling** — fluid → acoustic → thermal → audio
 - ✅ **Geometry-aware physics** — shape directly influences simulation
 - ✅ **Time & frequency domain** — pressure waves + spectral filtering
@@ -26,11 +26,11 @@ This problem **uniquely demonstrates Kairo's core strengths**:
 
 **No mainstream system unifies geometry + acoustics + fluid dynamics + signal processing in one composable operator graph.**
 
-Kairo does.
+Morphogen does.
 
 ---
 
-## Why This Problem Is Perfect for Kairo
+## Why This Problem Is Perfect for Morphogen
 
 ### Multi-Domain Nature
 
@@ -43,7 +43,7 @@ A 2-stroke muffler simulation spans **at least 6 domains**:
 5. **AudioDomain** — Sound synthesis, microphone modeling, WAV export
 6. **OptimizationDomain** — Inverse design, parameter tuning
 
-These are **not separate tools** — they are **unified operators** in Kairo's graph IR.
+These are **not separate tools** — they are **unified operators** in Morphogen's graph IR.
 
 ### Operator Graph Architecture
 
@@ -77,7 +77,7 @@ Just applied to **gas + acoustics**.
 
 ---
 
-## Physical Components & Kairo Operators
+## Physical Components & Morphogen Operators
 
 ### 1. Pressure Wave Propagation
 
@@ -86,8 +86,8 @@ Just applied to **gas + acoustics**.
 - Pulses travel down exhaust pipe
 - Wave speed depends on temperature, gas composition
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # FluidDynamicsDomain
 pulse_generator(rpm, cylinder_volume, compression_ratio) -> PressurePulse
 pressure_wave_propagate(pulse, pipe_geometry, dt) -> Field1D<Pa>
@@ -108,8 +108,8 @@ pressure_wave_propagate(pulse, pipe_geometry, dt) -> Field1D<Pa>
 - Converging cone sends positive reflection wave back to cylinder
 - Timing is critical: wave must arrive during scavenging phase
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # AcousticsDomain + GeometryDomain
 expansion_chamber = geom.expansion_chamber(
     inlet_diameter = 40mm,
@@ -132,7 +132,7 @@ reflections = acoustic.reflection_coefficients(waveguide)
 
 **Why This Needs Geometry:**
 - Wave behavior **depends on exact cone angles**
-- Kairo's `GeometryDomain` provides precise shape definitions
+- Morphogen's `GeometryDomain` provides precise shape definitions
 - Operators sample geometry to build acoustic network
 
 ---
@@ -144,8 +144,8 @@ reflections = acoustic.reflection_coefficients(waveguide)
 - Resonant frequency depends on chamber volume and neck dimensions
 - Tuned to specific RPM for peak power
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # AcousticsDomain
 helmholtz_resonator(
     volume = chamber_volume,
@@ -174,8 +174,8 @@ resonant_rpm = acoustic.resonance_to_rpm(
 - Pushes fresh fuel-air mixture back into cylinder
 - Prevents mixture from escaping out exhaust port
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # FluidDynamicsDomain + AcousticsDomain coupling
 backpressure_wave = acoustic.reflected_wave(
     incident_pulse,
@@ -202,8 +202,8 @@ efficiency = timing.alignment(backpressure_wave, scavenge_timing)
 - Temperature affects wave speed: \( c = \sqrt{\gamma R T} \)
 - Viscosity changes with temperature
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # ThermalDomain
 gas_properties = thermal.gas_properties(
     temperature_field,
@@ -230,8 +230,8 @@ waveguide_thermal = acoustic.update_properties(
 - Fiberglass packing absorbs high frequencies
 - Quarter-wave tubes (resonant absorbers)
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # AcousticsDomain
 perforated_pipe(
     hole_diameter = 5mm,
@@ -267,8 +267,8 @@ muffler_segment = acoustic.absorptive_segment(
 - Radiation impedance (frequency-dependent)
 - Directivity pattern
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # AcousticsDomain
 radiation = acoustic.radiation_impedance(
     pipe_diameter = 50mm,
@@ -293,8 +293,8 @@ sound_pressure_level = acoustic.radiate_to_air(
 - Stereo positioning
 - Export WAV
 
-**Kairo Operators:**
-```kairo
+**Morphogen Operators:**
+```morphogen
 # AudioDomain
 microphone = audio.microphone_model(
     type = "measurement",  # flat response
@@ -325,11 +325,11 @@ audio.export_wav("2stroke_exhaust.wav", stereo)
 
 ---
 
-## Complete Kairo Operator Graph
+## Complete Morphogen Operator Graph
 
 Here's how the full simulation composes:
 
-```kairo
+```morphogen
 scene TwoStrokeExhaust {
     // ==================
     // 1. GEOMETRY
@@ -525,7 +525,7 @@ scene TwoStrokeExhaust {
 
 ---
 
-## What Kairo Can Produce
+## What Morphogen Can Produce
 
 ### Outputs
 
@@ -562,7 +562,7 @@ scene TwoStrokeExhaust {
 
 ## Technical Approaches (Multiple Fidelity Levels)
 
-Kairo's domain system supports **multiple methods** depending on fidelity needs:
+Morphogen's domain system supports **multiple methods** depending on fidelity needs:
 
 ### Method 1: 1D Waveguide Simulation (Fast, Accurate)
 
@@ -581,8 +581,8 @@ Kairo's domain system supports **multiple methods** depending on fidelity needs:
 - 1D only (no radial modes)
 - Assumes planar wave propagation
 
-**Kairo Implementation:**
-```kairo
+**Morphogen Implementation:**
+```morphogen
 # AcousticsDomain
 waveguide_network_1d(geometry, sample_rate)
 ```
@@ -607,8 +607,8 @@ waveguide_network_1d(geometry, sample_rate)
 - Less accurate for complex geometries
 - Lumped approximation breaks down at high frequencies
 
-**Kairo Implementation:**
-```kairo
+**Morphogen Implementation:**
+```morphogen
 # AcousticsDomain + CircuitDomain
 acoustic_network = circuit.from_acoustic_geometry(exhaust_system)
 response = circuit.simulate(acoustic_network, pulse)
@@ -634,8 +634,8 @@ This is **exactly like SPICE** but for acoustics.
 - Slower (but GPU-accelerated)
 - More complex boundary conditions
 
-**Kairo Implementation:**
-```kairo
+**Morphogen Implementation:**
+```morphogen
 # AcousticsDomain + FieldDomain
 acoustic_field_3d = field.acoustic_fdtd(
     geometry,
@@ -662,8 +662,8 @@ acoustic_field_3d = field.acoustic_fdtd(
 - Very slow (hours to days)
 - Overkill for most use cases
 
-**Kairo Implementation:**
-```kairo
+**Morphogen Implementation:**
+```morphogen
 # FluidDynamicsDomain (advanced)
 cfd_solver = fluid.navier_stokes_compressible(
     geometry,
@@ -676,14 +676,14 @@ Only needed for **racing-level** optimization.
 
 ---
 
-## Required Kairo Domains & Operators
+## Required Morphogen Domains & Operators
 
 ### FluidDynamicsDomain (NEW)
 
 **Purpose:** Compressible gas flow, pressure waves, thermodynamics
 
 **Operators:**
-```kairo
+```morphogen
 # Pulse generation
 engine.combustion_pulse(rpm, displacement, compression_ratio) -> PressurePulse
 
@@ -709,7 +709,7 @@ engine.backpressure_timing(pressure_field, engine_timing) -> Efficiency
 **Purpose:** Wave propagation, resonance, impedance, sound radiation
 
 **Operators:**
-```kairo
+```morphogen
 # Waveguide construction
 acoustic.waveguide_from_geometry(geometry, discretization) -> WaveguideNetwork
 acoustic.reflection_coefficients(waveguide) -> Vec<f32>
@@ -742,7 +742,7 @@ acoustic.resonant_frequencies(waveguide) -> Vec<Hz>
 ### GeometryDomain (Additions)
 
 **New Primitives:**
-```kairo
+```morphogen
 # Exhaust-specific shapes
 geom.expansion_chamber(inlet, diverge_angle, belly, converge_angle, outlet)
 geom.pipe_chain(segments) -> CompositeGeometry
@@ -758,7 +758,7 @@ geom.axis_symmetric_mesh(geometry, radial_resolution, axial_resolution)
 ### AudioDomain (Additions)
 
 **New Operators:**
-```kairo
+```morphogen
 # Acoustic → Audio conversion
 audio.pressure_to_sample(pressure_pa, reference_pressure) -> f32
 audio.microphone_model(type, position, orientation) -> Microphone
@@ -776,7 +776,7 @@ audio.export_wav(filename, samples, sample_rate, bit_depth)
 ### OptimizationDomain (Future)
 
 **Use Cases:**
-```kairo
+```morphogen
 # Find optimal expansion chamber dimensions
 optimizer.minimize(
     objective = |params| -1.0 * engine_power(params),  # maximize power
@@ -801,7 +801,7 @@ optimizer.pareto_front(
 
 ---
 
-## Why This Showcases Kairo Better Than Almost Anything
+## Why This Showcases Morphogen Better Than Almost Anything
 
 ### 1. Truly Multi-Domain
 
@@ -817,7 +817,7 @@ This uses **six domains** in deep coupling:
 
 This is not a toy problem.
 **Professional exhaust designers** use expensive specialized software for this.
-Kairo unifies what currently requires multiple tools:
+Morphogen unifies what currently requires multiple tools:
 - CAD (SolidWorks, OnShape)
 - CFD (ANSYS Fluent)
 - Acoustics (Ricardo WAVE, GT-Power)
@@ -833,7 +833,7 @@ This is the TiaCAD lesson applied to physics:
 
 ### 4. Time-Domain + Frequency-Domain
 
-Kairo naturally handles both:
+Morphogen naturally handles both:
 - **Time-domain**: Pressure wave propagation (integration)
 - **Frequency-domain**: Transfer function analysis (FFT)
 
@@ -847,7 +847,7 @@ Switching between them is **seamless**.
 - Audio tools don't do fluid dynamics
 - No one unifies all of them
 
-Kairo's **operator graph architecture** makes this natural.
+Morphogen's **operator graph architecture** makes this natural.
 
 ---
 
@@ -927,15 +927,15 @@ Kairo's **operator graph architecture** makes this natural.
 
 ## Comparison to Existing Tools
 
-| Tool | Domain | Kairo Advantage |
+| Tool | Domain | Morphogen Advantage |
 |------|--------|-----------------|
-| **Ricardo WAVE** | 1D gas dynamics, acoustics | ❌ Proprietary, expensive<br>❌ No geometry integration<br>❌ No audio synthesis<br>✅ Kairo: Open, unified, audio output |
-| **GT-Power** | Engine simulation | ❌ Black-box solver<br>❌ No geometry modeling<br>✅ Kairo: Transparent operators, geometry-aware |
-| **ANSYS Fluent** | 3D CFD | ❌ Overkill for 1D waves<br>❌ No acoustic analysis<br>✅ Kairo: Right fidelity for the problem |
-| **COMSOL** | Multi-physics | ❌ General-purpose (not optimized)<br>❌ No audio output<br>✅ Kairo: Domain-specific operators |
-| **Pure Data / Max/MSP** | Audio synthesis | ❌ No physics<br>❌ No geometry<br>✅ Kairo: Physics-driven audio |
+| **Ricardo WAVE** | 1D gas dynamics, acoustics | ❌ Proprietary, expensive<br>❌ No geometry integration<br>❌ No audio synthesis<br>✅ Morphogen: Open, unified, audio output |
+| **GT-Power** | Engine simulation | ❌ Black-box solver<br>❌ No geometry modeling<br>✅ Morphogen: Transparent operators, geometry-aware |
+| **ANSYS Fluent** | 3D CFD | ❌ Overkill for 1D waves<br>❌ No acoustic analysis<br>✅ Morphogen: Right fidelity for the problem |
+| **COMSOL** | Multi-physics | ❌ General-purpose (not optimized)<br>❌ No audio output<br>✅ Morphogen: Domain-specific operators |
+| **Pure Data / Max/MSP** | Audio synthesis | ❌ No physics<br>❌ No geometry<br>✅ Morphogen: Physics-driven audio |
 
-**Kairo is the only system that unifies all of these.**
+**Morphogen is the only system that unifies all of these.**
 
 ---
 
@@ -965,15 +965,15 @@ When implemented, this should include:
 
 ## Conclusion
 
-**2-stroke muffler modeling is a perfect Kairo showcase** because it:
+**2-stroke muffler modeling is a perfect Morphogen showcase** because it:
 
 1. ✅ **Demonstrates multi-domain strength** — 6 domains, deeply coupled
 2. ✅ **Shows geometry-physics integration** — TiaCAD principles applied to acoustics
 3. ✅ **Produces compelling outputs** — Realistic engine sounds, performance metrics
 4. ✅ **Solves a real problem** — Professional exhaust designers need this
-5. ✅ **Is uniquely suited to Kairo** — No other system unifies these domains
+5. ✅ **Is uniquely suited to Morphogen** — No other system unifies these domains
 
-This is not just "can Kairo do this?" — this is **"Kairo does this better than anything else."**
+This is not just "can Morphogen do this?" — this is **"Morphogen does this better than anything else."**
 
 ---
 
@@ -990,7 +990,7 @@ This is not just "can Kairo do this?" — this is **"Kairo does this better than
 - **Yamaha VL1** — Physical modeling synthesizer (uses waveguides)
 - **Python-acoustics** — Acoustic modeling library
 
-### Kairo Docs
+### Morphogen Docs
 - `docs/architecture/domain-architecture.md` — Domain overview
 - `docs/specifications/geometry.md` — Geometry domain (TiaCAD patterns)
 - `docs/specifications/transform.md` — Transform operations (FFT, STFT)

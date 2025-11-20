@@ -15,8 +15,8 @@ Kairo's MLIR-based audio dialect, including:
 All examples compile to MLIR and lower to optimized SCF loops with memref operations.
 """
 
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
-from kairo.mlir.compiler_v2 import MLIRCompilerV2
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
 
 def example1_basic_oscillator():

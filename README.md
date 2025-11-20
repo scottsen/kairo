@@ -17,33 +17,33 @@ tags:
 - deterministic
 ---
 
-# Kairo
+# Morphogen
 
 > *Where computation becomes composition*
 
-**Kairo** is a universal, deterministic computation platform that unifies domains that have never talked to each other before: **audio synthesis meets physics simulation meets circuit design meets geometry meets optimization** — all in one type system, one scheduler, one language.
+**Morphogen** is a universal, deterministic computation platform that unifies domains that have never talked to each other before: **audio synthesis meets physics simulation meets circuit design meets geometry meets optimization** — all in one type system, one scheduler, one language.
 
-## Why Kairo Exists
+## Why Morphogen Exists
 
 Current tools force you to:
 - Export CAD → import to FEA → export mesh → import to CFD → manually couple results
 - Write audio DSP in C++ → physics in Python → visualization in JavaScript
 - Bridge domains with brittle scripts and incompatible data formats
 
-**Kairo eliminates this fragmentation.** Model a guitar string's physics, synthesize its sound, optimize its geometry, and visualize the result — all in the same deterministic execution environment.
+**Morphogen eliminates this fragmentation.** Model a guitar string's physics, synthesize its sound, optimize its geometry, and visualize the result — all in the same deterministic execution environment.
 
 ## Two Surfaces, One Kernel
 
-Kairo presents **two human-friendly faces** powered by a single semantic kernel:
+Morphogen presents **two human-friendly faces** powered by a single semantic kernel:
 
-- **Kairo.Audio** — Declarative language for compositional audio, physics, and multi-domain scenes
+- **Morphogen.Audio** — Declarative language for compositional audio, physics, and multi-domain scenes
 - **RiffStack** — Live performance environment for real-time interaction and improvisation
 
 Both compile to the same Graph IR, share the same operator registry, and guarantee deterministic, reproducible results.
 
 > 📐 **Deep Dive**: See [ARCHITECTURE.md](ARCHITECTURE.md) for the complete stack design (kernel, frontends, Graph IR, MLIR compilation)
 
-## What Makes Kairo Different
+## What Makes Morphogen Different
 
 **Cross-Domain Composition**
 - Audio synthesis + fluid dynamics + circuit simulation in the same program
@@ -69,9 +69,9 @@ Both compile to the same Graph IR, share the same operator registry, and guarant
 
 ## Sister Project: Philbrick
 
-**Kairo** (software) and **[Philbrick](https://github.com/scottsen/philbrick)** (hardware) are **two halves of one vision** — modular computation in different substrates.
+**Morphogen** (software) and **[Philbrick](https://github.com/scottsen/philbrick)** (hardware) are **two halves of one vision** — modular computation in different substrates.
 
-| Aspect | Kairo (Digital) | Philbrick (Analog/Hybrid) |
+| Aspect | Morphogen (Digital) | Philbrick (Analog/Hybrid) |
 |--------|----------------|---------------------------|
 | **Purpose** | Digital simulation of continuous phenomena | Physical embodiment of continuous dynamics |
 | **Primitives** | Streams, fields, transforms | Sum, integrate, nonlinearity, events |
@@ -81,7 +81,7 @@ Both compile to the same Graph IR, share the same operator registry, and guarant
 
 ### The Bridge
 
-- **Design in Kairo** → Simulate and optimize continuous-time systems
+- **Design in Morphogen** → Simulate and optimize continuous-time systems
 - **Build in Philbrick** → Physical modules implementing the same primitives
 - **Validate Together** → Software and hardware mirror each other
 
@@ -93,9 +93,9 @@ Both platforms share the same four core operations (sum, integrate, nonlinearity
 
 ## Cross-Domain in Action
 
-Here's what sets Kairo apart — domains working together seamlessly:
+Here's what sets Morphogen apart — domains working together seamlessly:
 
-```kairo
+```morphogen
 # Couple fluid dynamics → acoustics → audio synthesis
 use fluid, acoustics, audio
 
@@ -129,7 +129,7 @@ See [docs/use-cases/2-stroke-muffler-modeling.md](docs/use-cases/2-stroke-muffle
 ### Installation
 
 ```bash
-git clone https://github.com/scottsen/kairo.git
+git clone https://github.com/scottsen/morphogen.git
 cd kairo
 pip install -e .
 ```
@@ -138,7 +138,7 @@ pip install -e .
 
 Create `hello.kairo`:
 
-```kairo
+```morphogen
 # hello.kairo - Heat diffusion
 
 use field, visual
@@ -170,9 +170,9 @@ kairo run hello.kairo
 
 ### Temporal Model
 
-Kairo programs describe time-evolving systems through `flow` blocks:
+Morphogen programs describe time-evolving systems through `flow` blocks:
 
-```kairo
+```morphogen
 flow(dt=0.01, steps=1000) {
     # Execute this block 1000 times with timestep 0.01
     temp = diffuse(temp, rate=0.1, dt)
@@ -184,7 +184,7 @@ flow(dt=0.01, steps=1000) {
 
 Persistent variables are declared with `@state`:
 
-```kairo
+```morphogen
 @state vel : Field2D<Vec2<f32>> = zeros((256, 256))
 @state agents : Agents<Particle> = alloc(count=1000)
 
@@ -198,7 +198,7 @@ flow(dt=0.01) {
 
 All randomness is explicit via RNG objects:
 
-```kairo
+```morphogen
 @state agents : Agents<Particle> = alloc(count=100, init=spawn_random)
 
 fn spawn_random(id: u32, rng: RNG) -> Particle {
@@ -213,7 +213,7 @@ fn spawn_random(id: u32, rng: RNG) -> Particle {
 
 Types can carry dimensional information:
 
-```kairo
+```morphogen
 temp : Field2D<f32 [K]>           # Temperature in Kelvin
 pos : Vec2<f32 [m]>               # Position in meters
 vel : Vec2<f32 [m/s]>             # Velocity in m/s
@@ -232,7 +232,7 @@ x = dist + time                   # ERROR: m + s is invalid
 
 **✅ NEW in v0.10.0** - Import domain-specific operators into your program:
 
-```kairo
+```morphogen
 use field, audio, rigidbody
 
 @state temp : Field2D<f32> = zeros((256, 256))
@@ -260,7 +260,7 @@ flow(dt=0.01) {
 
 ### 1. Field Dialect - Dense Grid Operations
 
-```kairo
+```morphogen
 use field
 
 @state temp : Field2D<f32> = random_normal(seed=42, shape=(256, 256))
@@ -283,7 +283,7 @@ flow(dt=0.1) {
 
 **✅ PRODUCTION-READY - implemented in v0.8.2!**
 
-```kairo
+```morphogen
 use rigidbody  # ✅ WORKING - fully implemented!
 
 // Create physics world
@@ -313,7 +313,7 @@ flow(dt=0.016) {  // 60 FPS
 
 **✅ PRODUCTION-READY - implemented in v0.4.0!**
 
-```kairo
+```morphogen
 use agent  # ✅ WORKING - fully implemented!
 
 struct Boid {
@@ -344,13 +344,13 @@ flow(dt=0.01) {
 
 **Status:** Production-ready as of v0.4.0 (2025-11-14)
 
-### 4. Audio Dialect (Kairo.Audio) - Sound Synthesis and Processing
+### 4. Audio Dialect (Morphogen.Audio) - Sound Synthesis and Processing
 
 **✅ PRODUCTION-READY - implemented in v0.5.0 and v0.6.0!**
 
-Kairo.Audio is a compositional, deterministic audio language with physical modeling, synthesis, and real-time I/O.
+Morphogen.Audio is a compositional, deterministic audio language with physical modeling, synthesis, and real-time I/O.
 
-```kairo
+```morphogen
 use audio  # ✅ WORKING - fully implemented!
 
 # Synthesis example (v0.5.0)
@@ -384,7 +384,7 @@ audio.save(final, "out.wav") # Export to WAV/FLAC
 
 **✅ PRODUCTION-READY - implemented in v0.10.0!**
 
-```kairo
+```morphogen
 use graph
 
 // Create social network
@@ -412,7 +412,7 @@ let components = graph.connected_components(network)
 
 **✅ PRODUCTION-READY - implemented in v0.10.0!**
 
-```kairo
+```morphogen
 use signal
 
 // Generate and analyze signal
@@ -438,7 +438,7 @@ let filtered = signal.lowpass(sig, cutoff=2000.0, order=4)
 
 **✅ PRODUCTION-READY - implemented in v0.10.0!**
 
-```kairo
+```morphogen
 use statemachine
 
 // Create game AI state machine
@@ -465,7 +465,7 @@ sm = sm.send_event("enemy_spotted")  // Transitions to chase
 
 **✅ PRODUCTION-READY - implemented in v0.10.0!**
 
-```kairo
+```morphogen
 use terrain
 
 // Generate procedural terrain
@@ -496,7 +496,7 @@ let biomes = terrain.classify_biomes(heightmap)
 
 **✅ PRODUCTION-READY - implemented in v0.10.0!**
 
-```kairo
+```morphogen
 use vision
 
 // Edge detection
@@ -525,7 +525,7 @@ let dilated = vision.morphological(image, operation="dilate", kernel_size=5)
 
 **✅ ENHANCED in v0.6.0 - Agent rendering and video export!**
 
-```kairo
+```morphogen
 use visual
 
 # Colorize fields (v0.2.2)
@@ -557,7 +557,7 @@ output combined
 
 ### Fluid Simulation (Navier-Stokes)
 
-```kairo
+```morphogen
 use field, visual
 
 @state vel : Field2D<Vec2<f32 [m/s]>> = zeros((256, 256))
@@ -590,7 +590,7 @@ flow(dt=0.01, steps=1000) {
 
 ### Reaction-Diffusion (Gray-Scott)
 
-```kairo
+```morphogen
 use field, visual
 
 @state u : Field2D<f32> = ones((256, 256))
@@ -677,7 +677,7 @@ See `examples/` directory for more!
 
 ## The Ecosystem Vision
 
-Kairo's domain architecture has been massively expanded in November 2025, establishing it as a **universal multi-domain platform**.
+Morphogen's domain architecture has been massively expanded in November 2025, establishing it as a **universal multi-domain platform**.
 
 ### Domain Coverage (25 Domains Implemented)
 
@@ -716,11 +716,11 @@ Kairo's domain architecture has been massively expanded in November 2025, establ
 
 ## Professional Applications & Long-Term Vision
 
-Kairo's unified multi-domain architecture addresses fundamental problems across professional fields:
+Morphogen's unified multi-domain architecture addresses fundamental problems across professional fields:
 
 ### Education & Academia
 **Current Pain**: MATLAB costs $2,450/seat, reproducibility crisis in research, students learn 5 different tools for physics + audio + visualization
-**Kairo Solution**: Free, open, integrated platform for computational education and research
+**Morphogen Solution**: Free, open, integrated platform for computational education and research
 - **Replace MATLAB**: One tool for physics simulation, data analysis, and visualization
 - **Reproducible Research**: Deterministic execution ensures papers are reproducible
 - **Cross-domain Learning**: Students learn multi-physics thinking, not isolated tools
@@ -728,7 +728,7 @@ Kairo's unified multi-domain architecture addresses fundamental problems across 
 
 ### Digital Twins & Enterprise
 **Current Pain**: Building digital twins requires coupling 5+ commercial tools (thermal + structural + fluid + acoustics), costing $500K+ in licenses
-**Kairo Solution**: Unified multi-physics platform for product development and optimization
+**Morphogen Solution**: Unified multi-physics platform for product development and optimization
 - **Automotive**: Couple exhaust acoustics + fluid dynamics + thermal analysis for muffler design
 - **Aerospace**: Optimize geometry based on coupled CFD + structural + thermal analysis
 - **Product Development**: Design → simulate → optimize in one deterministic pipeline
@@ -736,26 +736,26 @@ Kairo's unified multi-domain architecture addresses fundamental problems across 
 
 ### Audio Production & Lutherie
 **Current Pain**: Physical modeling requires separate tools for mechanics, acoustics, and DSP
-**Kairo Solution**: Physics → Acoustics → Audio synthesis in unified framework
+**Morphogen Solution**: Physics → Acoustics → Audio synthesis in unified framework
 - Record acoustic guitar → extract timbre → create playable virtual instrument
 - Design guitar body geometry → simulate acoustics → hear the sound before building
 - Model pickup placement + circuit design → optimize tone before winding coils
 
 ### Scientific Computing
 **Current Pain**: Multi-physics simulations require coupling incompatible solvers (COMSOL + MATLAB + custom code)
-**Kairo Solution**: Unified PDE solver + Monte Carlo + optimization + visualization
+**Morphogen Solution**: Unified PDE solver + Monte Carlo + optimization + visualization
 - Chemistry: Molecular dynamics + reaction kinetics + thermodynamics
 - Ecology: Agent-based modeling + field diffusion + spatial statistics
 - Climate: Fluid dynamics + thermal transport + stochastic processes
 
 ### Creative Coding & Generative Art
 **Current Pain**: Real-time graphics + procedural audio + physics simulation = three separate frameworks
-**Kairo Solution**: All creative domains in one deterministic, reproducible environment
+**Morphogen Solution**: All creative domains in one deterministic, reproducible environment
 - Couple particle systems to audio synthesis (visual state → sound parameters)
 - Procedural geometry generation driven by audio analysis
 - Deterministic generative art: same seed = identical output every time
 
-**Key Insight**: These fields don't need *separate tools* — they need *integrated domains*. Kairo is the only platform that unifies them with a single type system, scheduler, and compiler.
+**Key Insight**: These fields don't need *separate tools* — they need *integrated domains*. Morphogen is the only platform that unifies them with a single type system, scheduler, and compiler.
 
 > 📊 **Strategic Analysis**: See [docs/DOMAIN_VALUE_ANALYSIS.md](docs/DOMAIN_VALUE_ANALYSIS.md) for comprehensive domain assessment and market strategy
 
@@ -768,14 +768,14 @@ Kairo's unified multi-domain architecture addresses fundamental problems across 
 ### Essential Reading
 
 **Architecture & Vision**
-- **[Architecture](ARCHITECTURE.md)** ⭐ — The Kairo Stack: kernel, frontends, Graph IR, MLIR compilation
+- **[Architecture](ARCHITECTURE.md)** ⭐ — The Morphogen Stack: kernel, frontends, Graph IR, MLIR compilation
 - **[Ecosystem Map](ECOSYSTEM_MAP.md)** ⭐ — Complete map of all domains, modules, and expansion roadmap
 - **[Domain Architecture](docs/architecture/domain-architecture.md)** — Deep technical vision (2,266 lines, 20+ domains)
 
 **Getting Started**
 - **[Getting Started Guide](docs/getting-started.md)** — Installation, first program, core concepts
-- **[Language Specification](SPECIFICATION.md)** — Complete Kairo language reference
-- **[Audio Specification](AUDIO_SPECIFICATION.md)** — Kairo.Audio compositional DSL
+- **[Language Specification](SPECIFICATION.md)** — Complete Morphogen language reference
+- **[Audio Specification](AUDIO_SPECIFICATION.md)** — Morphogen.Audio compositional DSL
 
 **Strategic & Professional Applications**
 - **[Domain Value Analysis](docs/DOMAIN_VALUE_ANALYSIS.md)** ⭐ — Comprehensive strategic analysis and market positioning
@@ -807,10 +807,10 @@ See **[docs/adr/](docs/adr/)** for why key decisions were made:
 
 ## Evolution from Creative Computation DSL
 
-Kairo v0.3.1 is the evolution of Creative Computation DSL v0.2.2, incorporating:
+Morphogen v0.3.1 is the evolution of Creative Computation DSL v0.2.2, incorporating:
 
 - **Better semantics**: `flow(dt)` blocks, `@state` declarations, explicit RNG
-- **Clearer branding**: "Kairo" is unique and memorable
+- **Clearer branding**: "Morphogen" is unique and memorable
 - **Same foundation**: Frontend work carries forward, comprehensive stdlib preserved
 
 See [docs/KAIRO_v0.3.1_SUMMARY.md](docs/KAIRO_v0.3.1_SUMMARY.md) for detailed evolution rationale.
@@ -819,15 +819,15 @@ See [docs/KAIRO_v0.3.1_SUMMARY.md](docs/KAIRO_v0.3.1_SUMMARY.md) for detailed ev
 
 ## Related Projects
 
-**[RiffStack](https://github.com/scottsen/riffstack)** - Live performance shell for Kairo.Audio
+**[RiffStack](https://github.com/scottsen/riffstack)** - Live performance shell for Morphogen.Audio
 
-RiffStack is a stack-based, YAML-driven performance environment that serves as the live interface to Kairo.Audio. While Kairo.Audio provides the compositional language layer, RiffStack offers real-time interaction and performance capabilities. Together they form a complete audio synthesis and performance ecosystem built on Kairo's deterministic execution kernel.
+RiffStack is a stack-based, YAML-driven performance environment that serves as the live interface to Morphogen.Audio. While Morphogen.Audio provides the compositional language layer, RiffStack offers real-time interaction and performance capabilities. Together they form a complete audio synthesis and performance ecosystem built on Morphogen's deterministic execution kernel.
 
 ---
 
 ## Contributing
 
-Kairo is building toward something transformative: a universal platform where professional domains that have never talked before can seamlessly compose. Contributions welcome at all levels!
+Morphogen is building toward something transformative: a universal platform where professional domains that have never talked before can seamlessly compose. Contributions welcome at all levels!
 
 ### High-Impact Areas
 

@@ -10,9 +10,9 @@ Tests lambda expression compilation to MLIR, including:
 """
 
 import pytest
-from kairo.parser import Parser
-from kairo.lexer import Lexer
-from kairo.mlir import MLIRCompiler
+from morphogen.parser import Parser
+from morphogen.lexer import Lexer
+from morphogen.mlir import MLIRCompiler
 
 
 def parse(code: str):

@@ -13,9 +13,9 @@ import numpy as np
 from pathlib import Path
 from typing import List, Optional, Tuple, Dict, Any
 
-from kairo.stdlib.agents import agents, particle_behaviors
-from kairo.stdlib.visual import visual, Visual
-from kairo.stdlib import audio
+from morphogen.stdlib.agents import agents, particle_behaviors
+from morphogen.stdlib.visual import visual, Visual
+from morphogen.stdlib import audio
 
 
 def create_firework_burst(center, color_base, count=200, seed=None):

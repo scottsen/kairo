@@ -6,7 +6,7 @@
 
 ## Overview
 
-**Morphogen** (formerly Kairo) and **[Philbrick](https://github.com/scottsen/philbrick)** are sister projects that implement the same compositional vision in different substrates:
+**Morphogen** (formerly Morphogen) and **[Philbrick](https://github.com/scottsen/philbrick)** are sister projects that implement the same compositional vision in different substrates:
 
 - **Morphogen** = Digital simulation of continuous-time phenomena
 - **Philbrick** = Physical embodiment of continuous-time dynamics

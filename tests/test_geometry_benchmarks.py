@@ -9,7 +9,7 @@ Run with: pytest tests/test_geometry_benchmarks.py --benchmark-only
 
 import pytest
 import numpy as np
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     # Primitives
     point2d, circle, polygon, regular_polygon,
     box3d, sphere, point3d,
@@ -204,7 +204,7 @@ class TestPolygonOperationBenchmarks:
 
     def test_benchmark_large_polygon_area(self, benchmark):
         """Benchmark area computation for large polygon."""
-        from kairo.stdlib.geometry import area
+        from morphogen.stdlib.geometry import area
 
         # Create a large polygon
         theta = np.linspace(0, 2 * np.pi, 1000)

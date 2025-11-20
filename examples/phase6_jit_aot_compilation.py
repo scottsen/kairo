@@ -27,15 +27,15 @@ from pathlib import Path
 
 # Try to import MLIR components
 try:
-    from kairo.mlir.context import KairoMLIRContext
-    from kairo.mlir.codegen import (
+    from morphogen.mlir.context import KairoMLIRContext
+    from morphogen.mlir.codegen import (
         create_jit,
         create_aot,
         create_execution_engine,
         OutputFormat,
         ExecutionMode,
     )
-    from kairo.mlir.lowering import lower_to_llvm
+    from morphogen.mlir.lowering import lower_to_llvm
     from mlir import ir
     from mlir.dialects import builtin, func, arith, scf, memref
     import numpy as np
@@ -378,8 +378,8 @@ def example6_field_jit():
         return
 
     try:
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
-        from kairo.mlir.lowering import FieldToSCFPass
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.lowering import FieldToSCFPass
 
         ctx = KairoMLIRContext()
 
@@ -418,7 +418,7 @@ def example7_audio_jit():
         return
 
     try:
-        from kairo.mlir.lowering import AudioToSCFPass
+        from morphogen.mlir.lowering import AudioToSCFPass
 
         print("Audio Synthesis JIT Compilation Pipeline:")
         print("  1. Define audio synthesis graph")

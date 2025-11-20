@@ -8,7 +8,7 @@ Demonstrates spatial relationship queries:
 """
 
 import numpy as np
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     point2d, line2d, circle, rectangle, polygon,
     distance_point_point, distance_point_line, distance_point_circle,
     intersect_circle_circle,

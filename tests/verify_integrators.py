@@ -4,7 +4,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.integrators import (
+from morphogen.stdlib.integrators import (
     euler, rk2, rk4,
     verlet, leapfrog, symplectic,
     dormand_prince_step, adaptive_integrate,

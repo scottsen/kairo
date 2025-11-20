@@ -8,10 +8,10 @@ import pytest
 import tempfile
 import os
 from pathlib import Path
-from kairo.parser.parser import parse
-from kairo.runtime.runtime import Runtime, ExecutionContext
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
+from morphogen.parser.parser import parse
+from morphogen.runtime.runtime import Runtime, ExecutionContext
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
 
 
 @pytest.mark.skip(reason="Portfolio examples need runtime compatibility fixes (field.map, function syntax)")

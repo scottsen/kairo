@@ -1,14 +1,14 @@
 """Tests for Level 3 cross-domain validators with unit and rate checking."""
 
 import pytest
-from kairo.cross_domain.validators import (
+from morphogen.cross_domain.validators import (
     validate_unit_compatibility,
     validate_rate_compatibility_cross_domain,
     validate_type_with_units,
     check_unit_conversion_needed,
     CrossDomainTypeError,
 )
-from kairo.ast.types import (
+from morphogen.ast.types import (
     f32,
     vec2,
     field2d,

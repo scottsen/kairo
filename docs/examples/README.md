@@ -1,6 +1,6 @@
-# Kairo Examples & Case Studies
+# Morphogen Examples & Case Studies
 
-This directory contains comprehensive examples and case studies demonstrating Kairo's multi-domain capabilities.
+This directory contains comprehensive examples and case studies demonstrating Morphogen's multi-domain capabilities.
 
 ---
 
@@ -13,7 +13,7 @@ This directory contains comprehensive examples and case studies demonstrating Ka
 **Complexity:** Advanced
 **Hardware:** GPU-optimized (RTX 3060 12GB target)
 
-A complete racing AI training pipeline demonstrating how Kairo's unified operator model enables seamless integration of physics simulation, neural network inference, genetic algorithms, and real-time visualization — all in one composable graph.
+A complete racing AI training pipeline demonstrating how Morphogen's unified operator model enables seamless integration of physics simulation, neural network inference, genetic algorithms, and real-time visualization — all in one composable graph.
 
 **What This Demonstrates:**
 - Multi-domain composition (Physics + NN + GA + Rendering + Telemetry + Recording)
@@ -23,7 +23,7 @@ A complete racing AI training pipeline demonstrating how Kairo's unified operato
 - Deterministic training with perfect reproducibility
 - 10-100× performance vs traditional Unity + Python approaches
 
-**Key Insight:** This is **one of Kairo's strongest use cases** because it merges traditionally-separate technologies (game engine physics, ML frameworks, custom GA code) into a single clean pipeline.
+**Key Insight:** This is **one of Morphogen's strongest use cases** because it merges traditionally-separate technologies (game engine physics, ML frameworks, custom GA code) into a single clean pipeline.
 
 **Use Cases:**
 - Autonomous racing AI
@@ -46,7 +46,7 @@ A complete racing AI training pipeline demonstrating how Kairo's unified operato
 **Domains:** Geometry, FluidNetwork, ThermalODE, FluidJet, CombustionLight
 **Complexity:** Advanced
 
-A complete multi-physics modeling example showing how Kairo's operator graph paradigm extends from audio/graphics into engineering physics.
+A complete multi-physics modeling example showing how Morphogen's operator graph paradigm extends from audio/graphics into engineering physics.
 
 **What This Demonstrates:**
 - Multi-physics system modeling (draft pressure, flow networks, thermal ODEs, jets, combustion)
@@ -55,7 +55,7 @@ A complete multi-physics modeling example showing how Kairo's operator graph par
 - Design optimization workflow (parameter sweeps, objective search)
 - New domain requirements (FluidNetwork, ThermalODE, FluidJet, CombustionLight)
 
-**Key Insight:** The J-tube fire pit is basically a **little multi-physics engine in steel** — and Kairo is exactly the kind of thing that wants to model that.
+**Key Insight:** The J-tube fire pit is basically a **little multi-physics engine in steel** — and Morphogen is exactly the kind of thing that wants to model that.
 
 **Use Cases:**
 - Fire pits (secondary combustion optimization)
@@ -77,7 +77,7 @@ A complete multi-physics modeling example showing how Kairo's operator graph par
 **Domains:** OrbitalMechanics, Aerodynamics, RocketEquation, PartsAssembly, PhysicsIntegration, FailureMechanics
 **Complexity:** Advanced
 
-Demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynamics, rocket staging, part assembly) and become a framework for aerospace simulations.
+Demonstrates how Morphogen can model KSP-style physics (orbital mechanics, aerodynamics, rocket staging, part assembly) and become a framework for aerospace simulations.
 
 **What This Demonstrates:**
 - Real-time multi-domain physics (orbits, aero, propulsion, structures)
@@ -87,7 +87,7 @@ Demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynam
 - Cross-domain integration (Geometry/TiaCAD → Physics → Audio → Visualization)
 - Educational platform for orbital mechanics and aerospace engineering
 
-**Key Insight:** KSP's entire gameplay loop maps perfectly onto Kairo's domain architecture — proving Kairo can handle **real-time game physics** and **aerospace simulation**.
+**Key Insight:** KSP's entire gameplay loop maps perfectly onto Morphogen's domain architecture — proving Morphogen can handle **real-time game physics** and **aerospace simulation**.
 
 **Use Cases:**
 - Spaceflight simulation games (KSP-like)
@@ -155,7 +155,7 @@ Demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynam
 
 ## How to Use These Examples
 
-### 1. **Learning Kairo's Architecture**
+### 1. **Learning Morphogen's Architecture**
 
 Start with the J-Tube Fire Pit example to understand:
 - How operators compose into pipelines
@@ -194,7 +194,7 @@ We welcome new examples! Guidelines:
 # Example Title
 
 ## 1. Physical/Conceptual System
-## 2. Kairo Modeling Pipeline
+## 2. Morphogen Modeling Pipeline
 ## 3. Domain Requirements
 ## 4. Operator Specifications
 ## 5. Complete Code Example
@@ -240,4 +240,4 @@ We welcome new examples! Guidelines:
 
 ---
 
-**Kairo is not a library. Kairo is a platform.**
+**Morphogen is not a library. Morphogen is a platform.**

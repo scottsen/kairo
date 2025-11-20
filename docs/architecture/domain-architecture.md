@@ -1,4 +1,4 @@
-# Kairo Domain Architecture
+# Morphogen Domain Architecture
 
 **Version:** 1.0
 **Status:** Vision Document
@@ -8,9 +8,9 @@
 
 ## Overview
 
-This document presents a comprehensive, forward-looking view of the domains and layers Kairo will eventually encompass. These domains emerge naturally from building a **deterministic, multi-domain semantic compute kernel** designed for audio, physics, graphics, AI, simulation, and analytics.
+This document presents a comprehensive, forward-looking view of the domains and layers Morphogen will eventually encompass. These domains emerge naturally from building a **deterministic, multi-domain semantic compute kernel** designed for audio, physics, graphics, AI, simulation, and analytics.
 
-This is not aspirational fluff — these are the domains that consistently appear in successful multi-modal compute systems. Each domain is justified by real computational needs and integrated into Kairo's unified type system, scheduler, and MLIR compilation pipeline.
+This is not aspirational fluff — these are the domains that consistently appear in successful multi-modal compute systems. Each domain is justified by real computational needs and integrated into Morphogen's unified type system, scheduler, and MLIR compilation pipeline.
 
 ### Document Purpose
 
@@ -53,7 +53,7 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 **Why Essential**: Audio processing, signal analysis, PDE solving, and compression all require fast, accurate transforms.
 
-**Status**: ✅ Partially implemented (FFT, STFT, IFFT in kairo.transform dialect)
+**Status**: ✅ Partially implemented (FFT, STFT, IFFT in morphogen.transform dialect)
 
 **Operators**:
 - `fft` / `ifft` — Fast Fourier Transform (1D)
@@ -100,7 +100,7 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 **Why Essential**: Fluid simulation, reaction-diffusion, heat transfer, and electromagnetic fields all operate on spatial grids.
 
-**Status**: ✅ Partially implemented (kairo.field dialect with stencil, advect, reduce)
+**Status**: ✅ Partially implemented (morphogen.field dialect with stencil, advect, reduce)
 
 **Operators**:
 - `field.create` — Allocate field with shape, spacing, initial value
@@ -115,7 +115,7 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 **Dependencies**: Sparse linear algebra (for solvers), stencil patterns
 
-**References**: `../specifications/mlir-dialects.md` (kairo.field)
+**References**: `../specifications/mlir-dialects.md` (morphogen.field)
 
 ---
 
@@ -146,9 +146,9 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 **Purpose**: Real-time audio synthesis, filtering, effects, mixing.
 
-**Why Essential**: Kairo began as a creative audio kernel and must excel at low-latency, sample-accurate audio processing.
+**Why Essential**: Morphogen began as a creative audio kernel and must excel at low-latency, sample-accurate audio processing.
 
-**Status**: ✅ Partially implemented (oscillators, filters, envelopes via kairo.stream)
+**Status**: ✅ Partially implemented (oscillators, filters, envelopes via morphogen.stream)
 
 **Operators**:
 - `osc.sine` / `osc.triangle` / `osc.sawtooth` / `osc.square` — Oscillators
@@ -163,7 +163,7 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 **Dependencies**: Transform (for spectral effects)
 
-**References**: `../specifications/mlir-dialects.md` (kairo.stream)
+**References**: `../specifications/mlir-dialects.md` (morphogen.stream)
 
 ---
 
@@ -231,7 +231,7 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 
 **Purpose**: Circuit simulation (SPICE-like), analog modeling, PCB parasitic extraction, multi-physics coupling (electrical + thermal + EM).
 
-**Why Essential**: EE/circuit modeling is one of the most natural domains for Kairo because it combines differential equations, spatial geometry (PCB traces), physics (EM fields), audio/analog modeling, discrete-time simulation, nonlinear systems, constraints solving, and multi-domain coupling. **No existing tool unifies circuit simulation + PCB layout + audio modeling + EM fields in one framework.**
+**Why Essential**: EE/circuit modeling is one of the most natural domains for Morphogen because it combines differential equations, spatial geometry (PCB traces), physics (EM fields), audio/analog modeling, discrete-time simulation, nonlinear systems, constraints solving, and multi-domain coupling. **No existing tool unifies circuit simulation + PCB layout + audio modeling + EM fields in one framework.**
 
 **Status**: 🔲 Planned (ADR-003, ../specifications/circuit.md)
 
@@ -356,11 +356,11 @@ These domains form the bare minimum for a universal transform/simulation kernel.
 - `examples/circuit/` — Example circuits (RC filter, op-amp, guitar pedal, PCB trace)
 - ngspice, LTspice, FastHenry, FastCap (reference implementations)
 
-**Why This is a Perfect Fit for Kairo**:
+**Why This is a Perfect Fit for Morphogen**:
 
-Circuits are fundamentally **typed operator graphs** (resistor → capacitor → op-amp → speaker), which matches Kairo's operator registry architecture exactly. Circuit simulation requires **multi-domain physics** (ODEs, linear systems, nonlinear solvers, EM fields, thermal), which Kairo's unified kernel provides. PCB layout is **geometry with electrical constraints**, perfectly suited for Kairo's geometry + circuit integration. Analog audio modeling is **circuit simulation + DSP**, which Kairo unifies seamlessly.
+Circuits are fundamentally **typed operator graphs** (resistor → capacitor → op-amp → speaker), which matches Morphogen's operator registry architecture exactly. Circuit simulation requires **multi-domain physics** (ODEs, linear systems, nonlinear solvers, EM fields, thermal), which Morphogen's unified kernel provides. PCB layout is **geometry with electrical constraints**, perfectly suited for Morphogen's geometry + circuit integration. Analog audio modeling is **circuit simulation + DSP**, which Morphogen unifies seamlessly.
 
-**No existing tool can compete** with Kairo's unified circuit + PCB + audio + EM + thermal architecture. This is Kairo's **killer app** for the EE and analog audio communities.
+**No existing tool can compete** with Morphogen's unified circuit + PCB + audio + EM + thermal architecture. This is Morphogen's **killer app** for the EE and analog audio communities.
 
 ---
 
@@ -368,14 +368,14 @@ Circuits are fundamentally **typed operator graphs** (resistor → capacitor →
 
 **Purpose**: Video encoding, audio/video filtering, sync correction, transcoding, and ffmpeg-style multimedia pipelines.
 
-**Why Essential**: Video processing is fundamentally stream-based, operator-based, filter-based, parameterizable, batchable, GPU-accelerable, and graph-representable. **This is literally Kairo's native shape.** ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs — video fits Kairo as naturally as audio, perhaps **more naturally** than any other domain.
+**Why Essential**: Video processing is fundamentally stream-based, operator-based, filter-based, parameterizable, batchable, GPU-accelerable, and graph-representable. **This is literally Morphogen's native shape.** ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs — video fits Morphogen as naturally as audio, perhaps **more naturally** than any other domain.
 
 **Status**: 🔲 Planned (../specifications/video-audio-encoding.md)
 
 **Key Insight**: Video processing pipelines are **typed operator DAGs** with **temporal constraints** (sync, frame rate, time alignment).
 
 ```
-Kairo = operator DAG on structured data
+Morphogen = operator DAG on structured data
 Video = operator DAG on AV streams
 ```
 
@@ -405,7 +405,7 @@ Video = operator DAG on AV streams
 - Audio: `codec.aac()`, `codec.opus()`, `codec.flac()`
 - GPU: `codec.h264_nvenc()`, `codec.h265_nvenc()`, `codec.h264_qsv()`
 
-**SyncDomain** — Audio/video synchronization (Kairo's sweet spot)
+**SyncDomain** — Audio/video synchronization (Morphogen's sweet spot)
 - Offset detection: `sync.detect_constant_offset()`, `sync.detect_drift()`
 - Correction: `sync.apply_offset()`, `sync.timewarp()`, `sync.resample_with_drift_compensation()`
 - Event alignment: `vision.detect_flash()`, `audio.detect_clap()`, `sync.align_events()`
@@ -417,7 +417,7 @@ Video = operator DAG on AV streams
 - `batch.map()` — Map function over file list
 
 **Example Pipeline** (ffmpeg equivalent):
-```kairo
+```morphogen
 # ffmpeg -i input.mp4 -vf "scale=1920:-1, unsharp" -c:v libx264 -crf 18 output.mp4
 pipeline:
   - input = video.decode("input.mp4")
@@ -435,7 +435,7 @@ pipeline:
 
 **Why This Matters**:
 
-Kairo becomes the only platform that unifies audio synthesis, video encoding, sync correction, field simulation, agent systems, geometry, circuit modeling, and optimization — all with the same type system, scheduler, and MLIR compilation.
+Morphogen becomes the only platform that unifies audio synthesis, video encoding, sync correction, field simulation, agent systems, geometry, circuit modeling, and optimization — all with the same type system, scheduler, and MLIR compilation.
 
 **Unique Capabilities**:
 - ✅ **Cleaner than ffmpeg** — Typed operators, composable pipelines
@@ -447,17 +447,17 @@ Kairo becomes the only platform that unifies audio synthesis, video encoding, sy
 
 **Dependencies**:
 - **Transform** (FFT for cross-correlation sync detection)
-- **Audio** (existing Kairo.Audio domain for DSP)
+- **Audio** (existing Morphogen.Audio domain for DSP)
 - **Visual** (frame rendering and export)
 - **Stochastic** (for noise modeling in denoise)
 - **Image/Vision** (for flash detection, object tracking) [future]
 
 **Backend Strategy**:
 
-Kairo doesn't reimplement ffmpeg — it **orchestrates** ffmpeg as a backend:
+Morphogen doesn't reimplement ffmpeg — it **orchestrates** ffmpeg as a backend:
 
 ```
-Kairo Pipeline → Graph IR → Backend Compiler → ffmpeg command
+Morphogen Pipeline → Graph IR → Backend Compiler → ffmpeg command
 ```
 
 Advantages: Leverage ffmpeg's 20+ years of development, add type safety, enable composability, ensure determinism, optimize filter graphs, auto-select GPU codecs.
@@ -470,17 +470,17 @@ Alternative backends: GStreamer, custom C++, GPU compute shaders, hardware APIs 
 - EBU R128 loudness standard
 - NVENC, QuickSync, AMF (GPU acceleration APIs)
 
-**Why This is a Perfect Fit for Kairo**:
+**Why This is a Perfect Fit for Morphogen**:
 
-Video processing already behaves like Kairo's operator DAG architecture. ffmpeg filter graphs map one-to-one to Kairo pipelines. Audio/video sync leverages Kairo's existing strength in time-domain signal processing. Batch processing exploits Kairo's deterministic execution model. GPU acceleration fits naturally into Kairo's MLIR compilation pipeline.
+Video processing already behaves like Morphogen's operator DAG architecture. ffmpeg filter graphs map one-to-one to Morphogen pipelines. Audio/video sync leverages Morphogen's existing strength in time-domain signal processing. Batch processing exploits Morphogen's deterministic execution model. GPU acceleration fits naturally into Morphogen's MLIR compilation pipeline.
 
-**Video belongs in Kairo.** This is a huge new capability slice that fits perfectly with Kairo's core architecture.
+**Video belongs in Morphogen.** This is a huge new capability slice that fits perfectly with Morphogen's core architecture.
 
 ---
 
 ## 2. Next-Wave Domains (HIGHLY LIKELY)
 
-These domains naturally emerge once you have a computational kernel that is deterministic, multirate, type+unit safe, GPU/CPU pluggable, and graph-IR based. This is where Kairo becomes **superdomain-capable**, not just an audio/visual kernel.
+These domains naturally emerge once you have a computational kernel that is deterministic, multirate, type+unit safe, GPU/CPU pluggable, and graph-IR based. This is where Morphogen becomes **superdomain-capable**, not just an audio/visual kernel.
 
 ---
 
@@ -507,7 +507,7 @@ Every geometric object lives in a coordinate frame and provides auto-generated a
 - **Placement** — Declarative composition: map anchor to anchor (not hierarchical nesting)
 
 **Example:**
-```kairo
+```morphogen
 let base = geom.box(50mm, 30mm, 5mm)
 let pillar = geom.cylinder(radius=5mm, height=50mm)
 
@@ -531,7 +531,7 @@ let tower = mesh.place(
 
 **2. Primitives (3D Solids)**
 
-```kairo
+```morphogen
 geom.box(width, height, depth)
 geom.sphere(radius)
 geom.cylinder(radius, height)
@@ -548,7 +548,7 @@ geom.torus(major_radius, minor_radius)
 
 2D planar constructions (on XY plane):
 
-```kairo
+```morphogen
 sketch.rectangle(width, height)
 sketch.circle(radius)
 sketch.polygon(points)
@@ -564,7 +564,7 @@ sketch.offset(sketch, distance)
 
 **4. Extrusion & Revolution (2D → 3D)**
 
-```kairo
+```morphogen
 extrude(sketch, height)
 revolve(sketch, axis="z", angle=360deg)
 loft(sketches, ruled=false)
@@ -572,7 +572,7 @@ sweep(profile, path, twist=0deg)
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Create vase by revolution
 let profile = sketch.polygon([(0,0), (10,0), (8,20), (5,25)])
 let vase = revolve(profile, axis="y", angle=360deg)
@@ -582,7 +582,7 @@ let vase = revolve(profile, axis="y", angle=360deg)
 
 **5. Boolean Operations (3D)**
 
-```kairo
+```morphogen
 geom.union(s1, s2, ...)
 geom.difference(s1, s2)
 geom.intersection(s1, s2)
@@ -598,14 +598,14 @@ let cut = solid_A - solid_B     # Difference
 
 **6. Pattern Operations**
 
-```kairo
+```morphogen
 pattern.linear(object, direction, count, spacing)
 pattern.circular(object, axis, count, angle=360deg)
 pattern.grid(object, rows, cols, spacing_x, spacing_y)
 ```
 
 **Example (bolt hole pattern):**
-```kairo
+```morphogen
 let hole = geom.cylinder(radius=3mm, height=10mm)
 let bolts = pattern.circular(hole, axis="z", count=6)
 ```
@@ -614,14 +614,14 @@ let bolts = pattern.circular(hole, axis="z", count=6)
 
 **7. Finishing Operations**
 
-```kairo
+```morphogen
 geom.fillet(solid, edges, radius)    # Round edges
 geom.chamfer(solid, edges, distance)  # Bevel edges
 geom.shell(solid, faces, thickness)   # Hollow out
 ```
 
 **Example:**
-```kairo
+```morphogen
 let box = geom.box(20mm, 20mm, 10mm)
 let rounded = geom.fillet(box, edges=.edges(">Z"), radius=2mm)
 ```
@@ -630,7 +630,7 @@ let rounded = geom.fillet(box, edges=.edges(">Z"), radius=2mm)
 
 **8. Mesh Operations (Discrete Geometry)**
 
-```kairo
+```morphogen
 mesh.from_solid(solid, tolerance=0.01mm)
 mesh.subdivide(mesh, method="catmull-clark", iterations=1)
 mesh.laplacian(mesh) -> SparseMatrix
@@ -644,7 +644,7 @@ field.to_mesh(field, isovalue) -> Mesh  # Marching cubes
 
 **9. Measurement & Query**
 
-```kairo
+```morphogen
 geom.measure.volume(solid) -> f64
 geom.measure.area(face) -> f64
 geom.measure.bounds(object) -> BoundingBox
@@ -658,7 +658,7 @@ geom.measure.distance(obj_a, obj_b) -> f64
 
 **TiaCAD principle**: All rotations/scales must specify an explicit origin (no implicit frame).
 
-```kairo
+```morphogen
 # ✅ Explicit origin (required!)
 let rotated = transform.rotate(
     mesh,
@@ -671,7 +671,7 @@ let bad = transform.rotate(mesh, 45 deg)  # ERROR: origin required
 ```
 
 **Transform operators:**
-```kairo
+```morphogen
 transform.translate(object, offset)
 transform.rotate(object, angle, axis, origin)
 transform.scale(object, factor, origin)
@@ -699,14 +699,14 @@ transform.to_coord(field, coord_type="polar|spherical|cylindrical")
 #### Cross-Domain Integration
 
 **Geometry → Fields (CFD, Heat Transfer)**
-```kairo
+```morphogen
 let solid = geom.sphere(10mm)
 let sdf = field.from_solid(solid, bounds=..., resolution=(100,100,100))
 let temperature = field.solve_heat(domain=sdf, ...)
 ```
 
 **Geometry → Physics (Collision, Dynamics)**
-```kairo
+```morphogen
 let body = physics.rigid_body(
     shape = geom.box(10mm, 10mm, 10mm),
     mass = 1.0 kg
@@ -714,7 +714,7 @@ let body = physics.rigid_body(
 ```
 
 **Geometry → Visuals (Rendering)**
-```kairo
+```morphogen
 let rendered = visual.render(
     solid,
     camera_frame = camera.frame(),
@@ -762,7 +762,7 @@ operator:
 #### Testing Strategy
 
 **1. Determinism Tests**
-```kairo
+```morphogen
 # Primitives are bit-exact
 assert_eq!(geom.box(10mm, 10mm, 10mm), geom.box(10mm, 10mm, 10mm))
 
@@ -771,20 +771,20 @@ assert_eq!(box.anchor("face_top"), box.anchor("face_top"))
 ```
 
 **2. Measurement Tests**
-```kairo
+```morphogen
 let cube = geom.box(10mm, 10mm, 10mm)
 assert_approx_eq!(geom.measure.volume(cube), 1000.0 mm³, tol=1e-9)
 ```
 
 **3. Transform Tests (Explicit Origins)**
-```kairo
+```morphogen
 # Rotation around center preserves center position
 let rotated = transform.rotate(box, 45deg, origin=.center)
 assert_vec_eq!(rotated.anchor("center").position(), box.anchor("center").position())
 ```
 
 **4. Backend Equivalence**
-```kairo
+```morphogen
 @backend(cadquery)
 let result_cq = geom.box(...) + geom.sphere(...)
 
@@ -805,7 +805,7 @@ assert_solid_equivalent!(result_cq, result_cgal, tol=1e-6)
 
 ---
 
-#### Summary: Why TiaCAD Matters to Kairo
+#### Summary: Why TiaCAD Matters to Morphogen
 
 TiaCAD's lessons apply **beyond geometry**:
 
@@ -823,7 +823,7 @@ TiaCAD's lessons apply **beyond geometry**:
 - **Agents** — `.sensor`, `.waypoint`
 - **Fields** — `.boundary_north`, `.gradient_max`
 
-This unification makes Kairo's multi-domain vision coherent and practical.
+This unification makes Morphogen's multi-domain vision coherent and practical.
 
 ---
 
@@ -854,9 +854,9 @@ This unification makes Kairo's multi-domain vision coherent and practical.
 
 ### 2.3 Optimization Domain
 
-**Purpose**: Design discovery and parameter optimization across all Kairo domains through comprehensive algorithm support.
+**Purpose**: Design discovery and parameter optimization across all Morphogen domains through comprehensive algorithm support.
 
-**Why Critical**: Transforms Kairo from **"simulate physics"** to **"discover new designs"**. Different optimization problems require different solvers based on continuity, smoothness, dimensionality, noise, and computational cost. Kairo's physical domains (combustion, acoustics, circuits, motors, geometry) span all these problem types.
+**Why Critical**: Transforms Morphogen from **"simulate physics"** to **"discover new designs"**. Different optimization problems require different solvers based on continuity, smoothness, dimensionality, noise, and computational cost. Morphogen's physical domains (combustion, acoustics, circuits, motors, geometry) span all these problem types.
 
 **Status**: 🔲 Planned (v0.10+)
 
@@ -936,7 +936,7 @@ All optimizers share a unified interface:
   - Algorithm-specific metadata (population, surrogate models, Pareto fronts)
 
 **Example Operators**:
-```kairo
+```morphogen
 opt.ga<T>(genome, fitness, population_size, generations, ...) -> OptResult<T>
 opt.de(bounds, fitness, population_size, generations, ...) -> OptResult<Array<f64>>
 opt.cmaes(initial_mean, sigma, bounds, fitness, ...) -> OptResult<Array<f64>>
@@ -948,9 +948,9 @@ opt.nsga2<T>(genome, objectives, population_size, ...) -> MultiObjectiveResult<T
 
 #### Simulation Subgraph Integration
 
-Optimizers accept **Kairo simulation subgraphs** as objective functions:
+Optimizers accept **Morphogen simulation subgraphs** as objective functions:
 
-```kairo
+```morphogen
 # Define simulation
 scene MotorTorqueRipple(winding_pattern: Array<int>) {
     let motor = motors.pmsm(winding_pattern)
@@ -975,7 +975,7 @@ The subgraph is **compiled once**, then evaluated many times with different para
 
 Surrogate models (Gaussian Processes, RBF, polynomials) are **first-class objects**:
 
-```kairo
+```morphogen
 # Train expensive surrogate
 let result = opt.bayesian(bounds, expensive_cfd_simulation, n_iterations=50)
 
@@ -1061,7 +1061,7 @@ All optimizers guarantee:
 - Enables regression testing and reproducible research
 - Critical for scientific validation
 
-```kairo
+```morphogen
 # Same seed → identical results
 let result1 = opt.ga(genome, fitness, seed=42)
 let result2 = opt.ga(genome, fitness, seed=42)
@@ -1070,9 +1070,9 @@ assert_eq!(result1.best, result2.best)
 
 ---
 
-#### What Kairo Gains
+#### What Morphogen Gains
 
-With comprehensive optimization support, Kairo enables:
+With comprehensive optimization support, Morphogen enables:
 
 1. **Automatic motor tuning** — Winding patterns, control loops
 2. **Muffler shape evolution** — Multi-objective noise vs. backpressure
@@ -1089,7 +1089,7 @@ With comprehensive optimization support, Kairo enables:
 
 **See**: **[reference/optimization-algorithms.md](../reference/optimization-algorithms.md)** for:
 - Complete operator signatures for all 16 algorithms
-- Detailed use cases for each Kairo domain
+- Detailed use cases for each Morphogen domain
 - Implementation examples and testing strategy
 - MLIR lowering approach
 - Performance considerations and parallelization
@@ -1205,7 +1205,7 @@ With comprehensive optimization support, Kairo enables:
 #### Operator Families
 
 **Analysis Operators (13 new):**
-```kairo
+```morphogen
 pitch.autocorrelation(signal) → f32[Hz]
 pitch.yin(signal, threshold) → f32[Hz]
 harmonic.track_fundamental(signal) → Ctl[Hz]
@@ -1227,7 +1227,7 @@ cepstral.transform(spectrum) → Field1D<f32>
 ```
 
 **Synthesis Operators (6 new/extended):**
-```kairo
+```morphogen
 additive.synth(harmonics, f0) → AudioSignal
 modal.synth(modes, excitation) → AudioSignal
 excitation.pluck(type, params) → AudioSignal
@@ -1236,7 +1236,7 @@ granular.resynth(signal, grain_size, density) → AudioSignal
 ```
 
 **High-Level Operators (5 new):**
-```kairo
+```morphogen
 instrument.analyze(signal) → InstrumentModel
 instrument.synthesize(model, pitch, velocity) → AudioSignal
 instrument.morph(model_a, model_b, blend) → InstrumentModel
@@ -1248,7 +1248,7 @@ instrument.load(path) → InstrumentModel
 
 #### Core Type: InstrumentModel
 
-```kairo
+```morphogen
 type InstrumentModel {
   id: String
   type: Enum  // "modal_string", "additive", etc.
@@ -1278,7 +1278,7 @@ type InstrumentModel {
 - **Physics Domain (Layer 4)** — Modal analysis (damped oscillators)
 
 **Example workflow:**
-```kairo
+```morphogen
 // Analysis (cross-domain composition)
 let spectrum = stft(recording)              // Transform domain
 let f0 = harmonic.track_fundamental(spectrum)  // InstrumentModeling
@@ -1321,7 +1321,7 @@ let output = note_a3 |> reverb(0.15)        // Audio domain
 - **IRCAM Modalys** — Modal synthesis framework
 - **SPEAR, AudioSculpt** — Additive resynthesis tools
 
-**Kairo unifies all of these** in an extensible, GPU-accelerated, deterministic framework.
+**Morphogen unifies all of these** in an extensible, GPU-accelerated, deterministic framework.
 
 ---
 
@@ -1400,7 +1400,7 @@ let output = note_a3 |> reverb(0.15)        // Audio domain
 
 Fast, accurate simulation of wave propagation in ducts and pipes:
 
-```kairo
+```morphogen
 # 1D Euler equations (inviscid compressible flow)
 fluid.euler_1d(
     pressure: Field1D<Pa>,
@@ -1427,7 +1427,7 @@ fluid.pressure_pulse(
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # 2-stroke engine combustion pulse
 let pulse = fluid.pressure_pulse(
     peak_pressure = 15 bar,
@@ -1446,7 +1446,7 @@ let (p', v', rho') = fluid.euler_1d(pressure, velocity, density, dt)
 
 For liquid flow and low-speed gas flow:
 
-```kairo
+```morphogen
 # 2D/3D incompressible Navier-Stokes
 fluid.navier_stokes(
     velocity: Field2D<Vec2<m/s>>,  # or Field3D<Vec3<m/s>>
@@ -1463,7 +1463,7 @@ fluid.project(velocity: Field, dt: Time) -> Field  # Divergence-free projection
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # Classic smoke simulation
 velocity = fluid.advect(velocity, velocity, dt)
 velocity = fluid.diffuse(velocity, viscosity, dt)
@@ -1476,7 +1476,7 @@ velocity = fluid.project(velocity, dt)  # Ensure incompressibility
 
 Temperature affects gas properties (density, viscosity, sound speed):
 
-```kairo
+```morphogen
 # Temperature-dependent properties
 fluid.thermal_properties(
     temperature: Field<K>,
@@ -1503,7 +1503,7 @@ fluid.buoyancy_force(
 
 **4. Boundary Conditions**
 
-```kairo
+```morphogen
 # Inlet boundary (fixed pressure or velocity)
 fluid.inlet_bc(field: Field, inlet_region: Region, value: T) -> Field
 
@@ -1523,7 +1523,7 @@ fluid.slip_bc(velocity: Field, wall_region: Region) -> Field
 
 For 2-stroke and 4-stroke engine modeling:
 
-```kairo
+```morphogen
 # Combustion pulse for piston engine
 engine.combustion_pulse(
     rpm: f32,
@@ -1565,7 +1565,7 @@ engine.scavenging_efficiency(
 #### Cross-Domain Integration
 
 **FluidDynamics → Acoustics (2-Stroke Exhaust)**
-```kairo
+```morphogen
 # Fluid dynamics generates pressure pulse
 let pulse = engine.combustion_pulse(rpm, displacement, compression_ratio)
 
@@ -1575,7 +1575,7 @@ let sound = acoustic.propagate(pulse, waveguide, dt)
 ```
 
 **FluidDynamics → Thermal → FluidDynamics (Feedback)**
-```kairo
+```morphogen
 # Temperature affects gas properties
 let gas_props = fluid.thermal_properties(temperature, "exhaust")
 
@@ -1590,7 +1590,7 @@ let wave_speed = fluid.sound_speed(gas_props)
 #### Testing Strategy
 
 **1. Conservation Tests**
-```kairo
+```morphogen
 # Mass conservation
 assert total_mass(density_field) ≈ total_mass(density_field')
 
@@ -1599,7 +1599,7 @@ assert total_energy(p, v, rho) ≈ total_energy(p', v', rho')
 ```
 
 **2. Shock Tube (Riemann Problem)**
-```kairo
+```morphogen
 # Standard gas dynamics test: discontinuity propagation
 let (p_left, p_right) = (100 kPa, 10 kPa)
 let shock_tube = fluid.riemann_problem(p_left, p_right)
@@ -1607,7 +1607,7 @@ let shock_tube = fluid.riemann_problem(p_left, p_right)
 ```
 
 **3. Pipe Resonance**
-```kairo
+```morphogen
 # Fundamental mode of organ pipe
 let resonant_freq = fluid.pipe_resonance(length, open_ends=true)
 assert resonant_freq ≈ sound_speed / (2 * length)
@@ -1671,7 +1671,7 @@ At acoustic discontinuities (area changes, material boundaries):
 
 Convert geometry to acoustic network (fast, accurate for pipes):
 
-```kairo
+```morphogen
 # Build digital waveguide from pipe geometry
 acoustic.waveguide_from_geometry(
     geometry: PipeGeometry,
@@ -1693,7 +1693,7 @@ acoustic.update_properties(
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # 2-stroke expansion chamber
 let chamber = geom.expansion_chamber(inlet=40mm, belly=120mm, outlet=50mm)
 let waveguide = acoustic.waveguide_from_geometry(chamber, dx=1mm, sr=44100Hz)
@@ -1706,7 +1706,7 @@ let reflections = acoustic.reflection_coefficients(waveguide)
 
 Sample-accurate wave propagation (digital waveguide algorithm):
 
-```kairo
+```morphogen
 # Single time step of waveguide simulation
 acoustic.waveguide_step(
     pressure_forward: Field1D<Pa>,   # right-traveling wave
@@ -1734,7 +1734,7 @@ acoustic.waveguide_step_pv(
 
 Classic acoustic component (volume + neck = tuned resonator):
 
-```kairo
+```morphogen
 # Compute resonant frequency of Helmholtz resonator
 acoustic.helmholtz_frequency(
     volume: m³,
@@ -1759,7 +1759,7 @@ acoustic.attach_resonator(
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # Muffler with quarter-wave resonator
 let resonator = acoustic.helmholtz_resonator(
     volume = 500 cm³,
@@ -1775,7 +1775,7 @@ let resonator = acoustic.helmholtz_resonator(
 
 Muffler components:
 
-```kairo
+```morphogen
 # Perforated pipe (partial reflection, partial transmission)
 acoustic.perforated_pipe(
     hole_diameter: Length,
@@ -1807,7 +1807,7 @@ acoustic.absorptive_segment(
 
 Sound radiating from pipe exit to open air:
 
-```kairo
+```morphogen
 # Radiation impedance (frequency-dependent)
 acoustic.radiation_impedance(
     diameter: Length,
@@ -1830,7 +1830,7 @@ acoustic.directivity_pattern(
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # Tailpipe exit radiation
 let radiation = acoustic.radiation_impedance(diameter=45mm, type="unflanged")
 let mic_pressure = acoustic.radiate_to_point(
@@ -1847,7 +1847,7 @@ let mic_pressure = acoustic.radiate_to_point(
 
 Finite-difference time-domain for complex geometries:
 
-```kairo
+```morphogen
 # 2D/3D acoustic field simulation
 acoustic.fdtd_step(
     pressure: Field2D<Pa>,       # or Field3D
@@ -1864,7 +1864,7 @@ acoustic.absorbing_boundary(field, region)  # Anechoic (no reflections)
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # Room acoustics simulation
 let room = geom.box(5m, 4m, 3m)
 let sdf = field.from_solid(room, resolution=1cm)
@@ -1875,7 +1875,7 @@ let (p', v') = acoustic.fdtd_step(pressure, velocity, sdf, absorption, dt)
 
 **7. Transfer Functions & Frequency Analysis**
 
-```kairo
+```morphogen
 # Compute acoustic transfer function (input → output)
 acoustic.transfer_function(
     waveguide: WaveguideNetwork,
@@ -1909,7 +1909,7 @@ acoustic.insertion_loss(
 - **Acoustic Inertance** (pipe mass) ≈ Inductance
 - **Acoustic Resistance** (friction) ≈ Resistance
 
-```kairo
+```morphogen
 # Convert acoustic system to lumped circuit
 acoustic.to_lumped_network(
     geometry: PipeGeometry
@@ -1927,7 +1927,7 @@ acoustic.solve_lumped(
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 # Quick muffler design iteration
 let circuit = acoustic.to_lumped_network(muffler_geometry)
 let response = acoustic.solve_lumped(circuit, engine_pulse, (50Hz, 5000Hz))
@@ -1949,7 +1949,7 @@ let response = acoustic.solve_lumped(circuit, engine_pulse, (50Hz, 5000Hz))
 #### Cross-Domain Integration
 
 **Acoustics → Audio (Sound Synthesis)**
-```kairo
+```morphogen
 # Acoustic pressure → Audio signal
 let audio_sample = audio.pressure_to_sample(
     acoustic_pressure_pa,
@@ -1965,7 +1965,7 @@ let mic_signal = audio.microphone_response(
 ```
 
 **FluidDynamics → Acoustics → Audio (Complete Chain)**
-```kairo
+```morphogen
 # 1. Fluid dynamics: Combustion pulse
 let pulse = engine.combustion_pulse(rpm=8000)
 
@@ -1982,7 +1982,7 @@ audio.export_wav("engine_sound.wav", audio)
 ```
 
 **Geometry → Acoustics (Shape Determines Sound)**
-```kairo
+```morphogen
 # Parametric pipe design
 let chamber = geom.expansion_chamber(
     diverge_angle = 12 deg,  # ← Change this
@@ -2000,7 +2000,7 @@ let resonant_freqs = acoustic.resonant_frequencies(waveguide)
 #### Testing Strategy
 
 **1. Pipe Resonance Tests**
-```kairo
+```morphogen
 # Open-open pipe: f = n * c / (2L)
 let pipe = geom.cylinder(diameter=50mm, length=1m)
 let resonances = acoustic.resonant_frequencies(pipe)
@@ -2008,7 +2008,7 @@ assert resonances[0] ≈ 340 Hz / (2 * 1m) = 170 Hz
 ```
 
 **2. Reflection Coefficient Tests**
-```kairo
+```morphogen
 # Area expansion: negative reflection
 let expansion = geom.area_change(from=10cm², to=40cm²)
 let R = acoustic.reflection_coefficient(expansion)
@@ -2019,14 +2019,14 @@ assert R < 0  # Negative reflection (pressure inversion)
 ```
 
 **3. Helmholtz Resonator Tests**
-```kairo
+```morphogen
 let resonator = acoustic.helmholtz_resonator(V=1L, L=10cm, A=1cm²)
 let f_res = acoustic.resonant_frequency(resonator)
 assert f_res ≈ (340 / 2π) * sqrt(1e-4 / (1e-3 * 0.1)) ≈ 54 Hz
 ```
 
 **4. Energy Conservation (Lossless Waveguide)**
-```kairo
+```morphogen
 let energy_before = acoustic.total_energy(pressure, velocity)
 let (p', v') = acoustic.waveguide_step(pressure, velocity, ...)
 let energy_after = acoustic.total_energy(p', v')
@@ -2089,7 +2089,7 @@ assert energy_before ≈ energy_after  # (if no absorption)
 
 **Purpose**: Unified simulation of emergent systems including Cellular Automata, Agent-Based Models, Reaction-Diffusion, L-Systems, and Swarm Intelligence.
 
-**Why Critical**: Transforms Kairo from **"simulate physics"** to **"create artificial life and complex systems"**. Emergent systems are foundational for:
+**Why Critical**: Transforms Morphogen from **"simulate physics"** to **"create artificial life and complex systems"**. Emergent systems are foundational for:
 - **Creative coding** (generative art, procedural generation)
 - **Biological modeling** (morphogenesis, ecology, evolution)
 - **Optimization** (swarm intelligence, stigmergy)
@@ -2197,7 +2197,7 @@ Stigmergic optimization and network formation:
 #### Cross-Domain Integration
 
 **Emergence → Geometry (Pattern → Surface)**
-```kairo
+```morphogen
 // Reaction-diffusion → 3D surface
 (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 let heightmap = v
@@ -2205,7 +2205,7 @@ let surface = geom.displace(plane, heightmap, scale=20mm)
 ```
 
 **Emergence → Physics (Network → Structure)**
-```kairo
+```morphogen
 // Slime mold network → structural optimization
 let network = swarm.slime_mold(field, food_sources=anchors)
 let structure = geom.from_network(network, diameter=5mm)
@@ -2213,14 +2213,14 @@ let stress = physics.stress_test(structure, load=100N)
 ```
 
 **Emergence → Acoustics (Swarm → Scattering)**
-```kairo
+```morphogen
 // Boids → acoustic scatterers
 let positions = agent.positions(boids)
 let wave = acoustic.propagate_with_scatterers(source, scatterers=positions)
 ```
 
 **Emergence → Audio (Sonification)**
-```kairo
+```morphogen
 // Agent density → audio frequency
 let density = agent.to_field(boids, property="density")
 let freq = 200Hz + density.mean() * 800Hz
@@ -2228,7 +2228,7 @@ out audio = osc.sine(freq)
 ```
 
 **Emergence → Optimization (Evolutionary Design)**
-```kairo
+```morphogen
 // Optimize CA parameters for structural strength
 let result = opt.nsga2(
     objectives = [strength_fn, lightness_fn],
@@ -2259,7 +2259,7 @@ let result = opt.nsga2(
 - **Processing/p5.js:** Visual scripting, ad-hoc implementations
 - **MATLAB/Python:** Fragmented libraries
 
-**Kairo EmergenceDomain:**
+**Morphogen EmergenceDomain:**
 1. ✅ **Unified platform** — CA + ABM + RD + L-systems + Swarms in one system
 2. ✅ **Cross-domain integration** — Seamless composition with Geometry, Physics, Audio, Optimization
 3. ✅ **GPU acceleration** — All operators designed for parallel execution
@@ -2274,7 +2274,7 @@ let result = opt.nsga2(
 #### Example Applications
 
 **1. Biological Morphogenesis → 3D Printing**
-```kairo
+```morphogen
 // RD pattern → geometry → stress test → STL export
 (u, v) = rd.gray_scott(u, v, f=0.055, k=0.062)
 let surface = geom.displace(plane, v, scale=20mm)
@@ -2283,7 +2283,7 @@ io.export_stl(surface, "organic_structure.stl")
 ```
 
 **2. Slime Mold Network → PCB Routing**
-```kairo
+```morphogen
 // Optimize PCB traces using slime mold
 let network = swarm.slime_mold(field, food_sources=component_positions)
 let traces = circuit.from_network(network, width=0.2mm)
@@ -2291,7 +2291,7 @@ let parasitics = circuit.extract_parasitics(traces)
 ```
 
 **3. Boids → Acoustic Scattering → Audio**
-```kairo
+```morphogen
 // Swarm scatters sound waves
 let positions = agent.positions(boids)
 let wave = acoustic.propagate_with_scatterers(source, scatterers=positions)
@@ -2299,7 +2299,7 @@ out audio = acoustic.to_audio(wave, mic_position=vec3(10, 0, 0))
 ```
 
 **4. CA Lattice → Structural Optimization**
-```kairo
+```morphogen
 // Optimize CA-generated lattice for strength/weight
 let result = opt.nsga2(
     objectives = [maximize_strength, minimize_mass],
@@ -2308,7 +2308,7 @@ let result = opt.nsga2(
 ```
 
 **5. L-System Trees → Wind Physics**
-```kairo
+```morphogen
 // Generate tree, simulate wind forces
 let tree = lsys.to_geometry(tree_lsys.evolve(5))
 let branches = physics.rigid_bodies(tree.branches)
@@ -2350,7 +2350,7 @@ let wind_forces = fluid.drag_force(wind_field, branches)
 #### Testing Strategy
 
 **Determinism Tests:**
-```kairo
+```morphogen
 // CA must be bit-exact
 let ca1 = ca.create(128, 128, seed=42)
 let ca2 = ca.create(128, 128, seed=42)
@@ -2358,7 +2358,7 @@ assert_eq!(ca1, ca2)
 ```
 
 **Conservation Tests:**
-```kairo
+```morphogen
 // Boids: momentum conservation
 let p_before = agent.total_momentum(boids)
 boids = agent.boids(boids, dt=0.1s)
@@ -2367,7 +2367,7 @@ assert_approx_eq!(p_before, p_after)
 ```
 
 **Pattern Recognition Tests:**
-```kairo
+```morphogen
 // Life: glider moves diagonally
 let glider = ca.load_pattern("glider")
 let evolved = ca.step_n(glider, rule=life_rule, steps=4)
@@ -2385,7 +2385,7 @@ assert_eq!(ca.find_pattern(evolved, "glider"), vec2(1, 1))
 
 ---
 
-#### Why This is a Perfect Fit for Kairo
+#### Why This is a Perfect Fit for Morphogen
 
 **Emergent systems are fundamentally graph-friendly:**
 - Local rules → composable operators
@@ -2395,7 +2395,7 @@ assert_eq!(ca.find_pattern(evolved, "glider"), vec2(1, 1))
 
 **The killer feature:** No existing tool unifies emergence + physics + audio + geometry in one deterministic, GPU-accelerated platform.
 
-This makes Kairo the **universal platform for complex systems research and creative coding**.
+This makes Morphogen the **universal platform for complex systems research and creative coding**.
 
 ---
 
@@ -2403,14 +2403,14 @@ This makes Kairo the **universal platform for complex systems research and creat
 
 **Purpose**: Unified procedural synthesis of complex structures including trees, terrains, cities, organic forms, fractals, and materials through rule-based, noise-driven, and grammar-based generation.
 
-**Why Critical**: Transforms Kairo from **"simulate existing systems"** to **"synthesize new worlds"**. This domain enables:
+**Why Critical**: Transforms Morphogen from **"simulate existing systems"** to **"synthesize new worlds"**. This domain enables:
 - **Game development** (forests, terrains, cities — rival SpeedTree, Houdini)
 - **Film/VFX** (environment generation at scale)
 - **Architecture** (parametric design, procedural buildings)
 - **Creative coding** (generative art, organic structures)
 - **3D printing** (procedural organic geometries)
 
-**SpeedTree Inspiration**: SpeedTree is the industry-standard vegetation tool ($$$), but it's limited to trees and offline workflows. **Kairo can exceed SpeedTree** by adding:
+**SpeedTree Inspiration**: SpeedTree is the industry-standard vegetation tool ($$$), but it's limited to trees and offline workflows. **Morphogen can exceed SpeedTree** by adding:
 - **True physics-based growth** (light, gravity, structural optimization)
 - **Cross-domain integration** (trees + wind + acoustics + terrain + ecology)
 - **GPU real-time generation** (100k+ instances)
@@ -2603,7 +2603,7 @@ Procedural cities and buildings:
 #### Cross-Domain Integration
 
 **Procedural → Geometry (Trees → Meshes)**
-```kairo
+```morphogen
 // L-system → branch tree → mesh → solid geometry
 let tree_string = lsystem.expand(grammar, iterations=7)
 let branches = branches.from_lsystem(tree_string, angle=22.5deg)
@@ -2612,7 +2612,7 @@ let solid = geom.from_mesh(mesh)  // GeometryDomain
 ```
 
 **Procedural → Physics (Wind Simulation)**
-```kairo
+```morphogen
 // Generate forest, simulate wind forces
 let forest = vegetation.distribute(terrain, species=[oak, pine], count=10000)
 let wind_field = fluid.wind(velocity=vec3(10, 0, 0))  // FluidDomain
@@ -2620,7 +2620,7 @@ forest = vegetation.apply_wind(forest, wind_field)   // ProceduralDomain
 ```
 
 **Procedural → Acoustics (Forest Scattering)**
-```kairo
+```morphogen
 // Forest scatters sound waves
 let forest = vegetation.distribute(terrain, count=5000)
 let source = acoustic.point_source(position=vec3(0, 2, 0))
@@ -2629,7 +2629,7 @@ out audio = acoustic.listener(scattered, position=vec3(100, 2, 0))
 ```
 
 **Procedural + Physics + Geometry (Structural Optimization)**
-```kairo
+```morphogen
 // Optimize tree growth for structural integrity
 let tree = growth.space_colonization(root, attractors, iterations=200)
 tree = growth.gravity(tree, stiffness=0.1)  // Bend under weight
@@ -2638,7 +2638,7 @@ tree = branches.reinforce(tree, stress_threshold=10MPa)  // Strengthen weak bran
 ```
 
 **Procedural + Terrain + Ecology + Acoustics (Complete World)**
-```kairo
+```morphogen
 // Generate world: terrain → erosion → biomes → vegetation → wind → acoustics
 let terrain = terrain.fractal(size=1000m, octaves=8, seed=42)
 terrain = terrain.erode(terrain, type="hydraulic", iterations=200)
@@ -2676,7 +2676,7 @@ out visual = visual.render_terrain(terrain, vegetation, camera)
 - **Unity/Unreal ProBuilder:** Game-specific, not general-purpose
 - **Substance Designer:** Materials only, not full 3D generation
 
-**Kairo ProceduralDomain:**
+**Morphogen ProceduralDomain:**
 1. ✅ **Trees + terrains + cities + materials** in one unified system
 2. ✅ **Cross-domain integration** — Geometry, Physics, Audio, Optimization, Fluids
 3. ✅ **GPU acceleration** — Real-time generation (100k+ instances)
@@ -2694,7 +2694,7 @@ out visual = visual.render_terrain(terrain, vegetation, camera)
 #### Example Applications
 
 **1. SpeedTree-Quality Birch Tree**
-```kairo
+```morphogen
 // 20 lines of YAML → production-ready tree
 procedural:
   - id: birch_tree
@@ -2712,7 +2712,7 @@ procedural:
 ```
 
 **2. Realistic Terrain with Ecosystem**
-```kairo
+```morphogen
 // Terrain → erosion → biomes → 10,000 trees
 let terrain = terrain.fractal(size=2000m, octaves=8, seed=42)
 terrain = terrain.erode(terrain, type="hydraulic", iterations=200)
@@ -2721,7 +2721,7 @@ let forest = vegetation.distribute(terrain, biomes, species=[oak, pine], count=1
 ```
 
 **3. Physics-Based Tree Growth**
-```kairo
+```morphogen
 // Space colonization → structural analysis → reinforcement
 let tree = growth.space_colonization(root, attractors, iterations=200)
 tree = growth.tropism(tree, direction=light_direction, weight=0.3)
@@ -2731,7 +2731,7 @@ tree = branches.reinforce(tree, stress_threshold=10MPa)
 ```
 
 **4. Procedural City with Acoustics**
-```kairo
+```morphogen
 // Roads → buildings → traffic → acoustic noise map
 let roads = urban.road_network(bounds, density=0.1, seed=42)
 let buildings = urban.procedural_building(lots, style="commercial")
@@ -2741,7 +2741,7 @@ out audio = acoustic.binaural_city(noise_map, listener_pos)
 ```
 
 **5. Autumn Forest Animation**
-```kairo
+```morphogen
 // Seasonal colors + wind + leaf fall
 scene AutumnForest {
     step(t: Time) {
@@ -2764,28 +2764,28 @@ scene AutumnForest {
 - [ ] L-systems (define, expand, parametric, stochastic)
 - [ ] Branching (from_lsystem, to_mesh, randomize, prune)
 - [ ] Space colonization algorithm
-- **Deliverable:** "Kairo Trees v1" demo (basic but functional)
+- **Deliverable:** "Morphogen Trees v1" demo (basic but functional)
 
 **Phase 2: Production Quality (v0.12)**
 - [ ] Growth algorithms (tropism, gravity, collision_avoidance)
 - [ ] Foliage (scatter, instancing, LOD)
 - [ ] Materials (bark, stone, wood, PBR)
 - [ ] Terrain (fractal, erode, biome_map, vegetation.distribute)
-- **Deliverable:** "Kairo Trees v2" demo (SpeedTree-quality) + "Kairo Terrain" demo
+- **Deliverable:** "Morphogen Trees v2" demo (SpeedTree-quality) + "Morphogen Terrain" demo
 
 **Phase 3: Animation and Urban (v1.0)**
 - [ ] Wind (simple_sway, turbulent, from_fluid)
 - [ ] Seasonal (color_transition, leaf_fall)
 - [ ] Urban (roads, buildings, traffic, facades)
 - [ ] Cross-domain examples (10+ complete workflows)
-- **Deliverable:** "Kairo Procedural World" demo (trees + terrain + city + acoustics)
+- **Deliverable:** "Morphogen Procedural World" demo (trees + terrain + city + acoustics)
 
 ---
 
 #### Testing Strategy
 
 **Determinism Tests:**
-```kairo
+```morphogen
 // Grammar expansion must be bit-exact
 let tree1 = lsystem.expand(grammar, iterations=7, seed=42)
 let tree2 = lsystem.expand(grammar, iterations=7, seed=42)
@@ -2798,7 +2798,7 @@ assert_eq!(n1, n2)
 ```
 
 **Visual Regression Tests:**
-```kairo
+```morphogen
 // Render tree and compare to reference image
 let tree = procedural.birch_tree(seed=42)
 let rendered = visual.render(tree, camera=ref_camera)
@@ -2806,7 +2806,7 @@ assert_image_similar(rendered, "ref_birch_tree.png", threshold=0.95)
 ```
 
 **Performance Tests:**
-```kairo
+```morphogen
 // 100k instances should render at 60 FPS
 let forest = instancing.create(oak_mesh, count=100000)
 let fps = visual.benchmark(forest, duration=10s)
@@ -2823,11 +2823,11 @@ assert!(fps >= 60)
 
 ---
 
-#### Why This is a Perfect Fit for Kairo
+#### Why This is a Perfect Fit for Morphogen
 
 **SpeedTree proves the market** — It's the industry-standard vegetation tool used in AAA games and films, and it costs $$$. But it's limited to trees and offline workflows.
 
-**Kairo ProceduralDomain can be "SpeedTree+++":**
+**Morphogen ProceduralDomain can be "SpeedTree+++":**
 1. **All of SpeedTree's features** (L-systems, branching, foliage, wind, LOD)
 2. **Plus terrain generation** (fractal, erosion, biomes)
 3. **Plus urban/architectural** (cities, buildings, roads)
@@ -2840,18 +2840,18 @@ assert!(fps >= 60)
 **The killer feature**: No existing tool unifies procedural generation + physics + audio + geometry + optimization in one deterministic, GPU-accelerated platform.
 
 **Market opportunity:**
-- Game studios need procedural tools → Kairo can be open alternative to expensive tools
-- Film industry needs large-scale environments → Kairo can generate massive scenes
-- Architecture firms need parametric design → Kairo offers programmable parametric workflows
-- Generative artists need creative tools → Kairo unifies art + physics + sound
+- Game studios need procedural tools → Morphogen can be open alternative to expensive tools
+- Film industry needs large-scale environments → Morphogen can generate massive scenes
+- Architecture firms need parametric design → Morphogen offers programmable parametric workflows
+- Generative artists need creative tools → Morphogen unifies art + physics + sound
 
-This makes Kairo the **universal platform for procedural content creation and world building**.
+This makes Morphogen the **universal platform for procedural content creation and world building**.
 
 ---
 
 ## 3. Advanced Domains (FUTURE EXPANSION)
 
-These are "Version 2+" ideas — realistic but not urgent. They represent specialized use cases that extend Kairo into new application areas.
+These are "Version 2+" ideas — realistic but not urgent. They represent specialized use cases that extend Morphogen into new application areas.
 
 ---
 
@@ -2859,7 +2859,7 @@ These are "Version 2+" ideas — realistic but not urgent. They represent specia
 
 **Purpose**: Neural fields, neural spectral transforms, learned PDE solvers.
 
-**Why Interesting**: Not a "deep learning framework" — but neural fields (e.g., NeRF, SDF) and neural operators (e.g., Fourier Neural Operators) fit naturally into Kairo's field/transform model.
+**Why Interesting**: Not a "deep learning framework" — but neural fields (e.g., NeRF, SDF) and neural operators (e.g., Fourier Neural Operators) fit naturally into Morphogen's field/transform model.
 
 **Status**: 🔲 Research (v1.0+)
 
@@ -2900,7 +2900,7 @@ These are "Version 2+" ideas — realistic but not urgent. They represent specia
 
 **Purpose**: Control theory operators, trajectory optimization, kinematics/dynamics.
 
-**Why Interesting**: Kairo's deterministic semantics make it ideal for robotic control.
+**Why Interesting**: Morphogen's deterministic semantics make it ideal for robotic control.
 
 **Status**: 🔲 Research (v1.1+)
 
@@ -2921,7 +2921,7 @@ These are "Version 2+" ideas — realistic but not urgent. They represent specia
 
 **Purpose**: Agent-based discrete event systems (queues, networks, processes).
 
-**Why Interesting**: Kairo's event model already supports sample-accurate scheduling; extending to discrete event simulation is straightforward.
+**Why Interesting**: Morphogen's event model already supports sample-accurate scheduling; extending to discrete event simulation is straightforward.
 
 **Status**: 🔲 Research (v1.1+)
 
@@ -2938,21 +2938,21 @@ These are "Version 2+" ideas — realistic but not urgent. They represent specia
 
 ## 4. Domains We Probably Won't Build
 
-For completeness, here are domains that don't align with Kairo's mission as a **semantic transform kernel**:
+For completeness, here are domains that don't align with Morphogen's mission as a **semantic transform kernel**:
 
 - **Database / Tabular** — SQL-like queries, relational algebra (better served by databases)
-- **Natural Language** — Text processing, parsing, LLMs (orthogonal to Kairo's focus)
+- **Natural Language** — Text processing, parsing, LLMs (orthogonal to Morphogen's focus)
 - **Cryptography** — Hashing, encryption, signatures (security-critical, specialized)
 - **Blockchain Consensus** — Proof-of-work, Byzantine agreement (niche application)
 - **GUI Rendering** — Widget layout, event handling (UI frameworks handle this)
 
-These are better addressed by specialized tools. Kairo focuses on **numerical computation, simulation, and creative coding**.
+These are better addressed by specialized tools. Morphogen focuses on **numerical computation, simulation, and creative coding**.
 
 ---
 
 ## Summary: Full Domain Spectrum
 
-Here is the likely full spectrum of domains Kairo will eventually want:
+Here is the likely full spectrum of domains Morphogen will eventually want:
 
 ### 1. Core (Must-Have) — v0.7-v0.8
 | Domain | Status | Priority |
@@ -2999,7 +2999,7 @@ Here is the likely full spectrum of domains Kairo will eventually want:
 
 ## Design Principles
 
-All Kairo domains adhere to these principles:
+All Morphogen domains adhere to these principles:
 
 1. **Deterministic by Default** — Operations are reproducible unless explicitly marked `@nondeterministic`
 2. **Type + Unit Safe** — Physical units are tracked and validated at compile time
@@ -3012,9 +3012,9 @@ All Kairo domains adhere to these principles:
 
 ## Integration Example: Multi-Domain Simulation
 
-A realistic Kairo program using multiple domains:
+A realistic Morphogen program using multiple domains:
 
-```kairo
+```morphogen
 scene FluidWithParticles {
   // Fields: Velocity and pressure
   let velocity: Field2D<Vec2<m/s>> = field.create(512, 512, Vec2(0, 0))
@@ -3060,7 +3060,7 @@ scene FluidWithParticles {
 6. **Visual** — Palette mapping and rendering
 7. **Audio** — Sonification via oscillator
 
-This demonstrates Kairo's **cross-domain composability** — all domains share the same type system, scheduler, and MLIR backend.
+This demonstrates Morphogen's **cross-domain composability** — all domains share the same type system, scheduler, and MLIR backend.
 
 ---
 
@@ -3094,14 +3094,14 @@ All domains support three determinism tiers:
 3. **Nondeterministic** — External I/O or adaptive termination (e.g., `io.stream(live)`)
 
 ### MLIR Dialect Strategy
-- **Domain-Specific Dialects**: kairo.stream, kairo.field, kairo.transform, kairo.schedule
+- **Domain-Specific Dialects**: morphogen.stream, morphogen.field, morphogen.transform, morphogen.schedule
 - **Lower to Standard Dialects ASAP**: linalg, affine, vector, arith, math, scf, memref
 - **Backend Dialects**: llvm (CPU), gpu (CUDA/ROCm), spirv (Vulkan)
 
 See `../specifications/mlir-dialects.md` for current dialect definitions.
 
 ### GPU Acceleration
-All domains follow Kairo's GPU lowering principles:
+All domains follow Morphogen's GPU lowering principles:
 - Structured parallelism (explicit iteration spaces)
 - Memory hierarchy management (global/shared/register)
 - Static shape preference
@@ -3114,7 +3114,7 @@ See `gpu-mlir-principles.md` for details.
 
 ## Conclusion
 
-Kairo's domain architecture is designed for **long-term extensibility** while maintaining **core simplicity**. By focusing on:
+Morphogen's domain architecture is designed for **long-term extensibility** while maintaining **core simplicity**. By focusing on:
 - Deterministic semantics
 - Type + unit safety
 - Multirate scheduling
@@ -3130,7 +3130,7 @@ This document will evolve as new domains are designed, prototyped, and integrate
 ## References
 
 ### Core Specifications
-- **../specifications/mlir-dialects.md** — Current dialect definitions (kairo.stream, kairo.field, kairo.transform, kairo.schedule)
+- **../specifications/mlir-dialects.md** — Current dialect definitions (morphogen.stream, morphogen.field, morphogen.transform, morphogen.schedule)
 - **overview.md** — Overall system architecture
 - **gpu-mlir-principles.md** — GPU lowering design rules
 - **../specifications/type-system.md** — Type system and unit tracking
@@ -3152,7 +3152,7 @@ This document will evolve as new domains are designed, prototyped, and integrate
 
 ### Examples & Case Studies
 - **../examples/j-tube-firepit-multiphysics.md** — J-tube fire pit as multi-physics design example (validates physics domains)
-- **../examples/README.md** — Comprehensive guide to Kairo examples and case studies
+- **../examples/README.md** — Comprehensive guide to Morphogen examples and case studies
 
 ---
 

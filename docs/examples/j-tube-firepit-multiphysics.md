@@ -1,30 +1,30 @@
-# J-Tube Fire Pit: A Multi-Physics Engineering Example for Kairo
+# J-Tube Fire Pit: A Multi-Physics Engineering Example for Morphogen
 
 **Version:** 1.0
 **Status:** Design Document
 **Last Updated:** 2025-11-15
-**Authors:** Kairo Architecture Team
+**Authors:** Morphogen Architecture Team
 
 ---
 
 ## Overview
 
-The J-tube fire pit is a **multi-physics system in steel** — and Kairo is exactly the kind of platform that should model it. This document demonstrates how Kairo's operator graph paradigm extends from audio/graphics into engineering physics domains.
+The J-tube fire pit is a **multi-physics system in steel** — and Morphogen is exactly the kind of platform that should model it. This document demonstrates how Morphogen's operator graph paradigm extends from audio/graphics into engineering physics domains.
 
 ### What This Document Demonstrates
 
 1. **Physical System Description** — How the J-tube fire pit works as a multi-physics engine
-2. **Kairo Simulation Pipeline** — Stage-by-stage modeling from inputs to outputs
+2. **Morphogen Simulation Pipeline** — Stage-by-stage modeling from inputs to outputs
 3. **New Domain Requirements** — FluidNetwork, ThermalODE, FluidJet, CombustionLight domains
 4. **Operator Specifications** — Detailed operator definitions for each domain
 5. **Cross-Domain Integration** — How geometry, thermal, fluid, and combustion domains compose
-6. **Design Optimization** — Using Kairo for parametric design iteration
+6. **Design Optimization** — Using Morphogen for parametric design iteration
 
 ### Why This Matters
 
-The J-tube fire pit validates Kairo's multi-domain vision:
+The J-tube fire pit validates Morphogen's multi-domain vision:
 - It's not "just another use case" — it proves the operator graph mental model works for **engineering design**
-- It pushes Kairo into **physics modeling**, not just audio/graphics
+- It pushes Morphogen into **physics modeling**, not just audio/graphics
 - It shows that domains like FluidNetwork, ThermalODE, and CombustionLight are **worth formalizing**
 - It demonstrates **reference-based composition** (anchors, frames) across physical systems
 
@@ -62,7 +62,7 @@ hot core → buoyant draft → pressure drop → air network in J-tubes
          → preheated jets → secondary combustion in flame
 ```
 
-That's a **graph of physics operators**, which is exactly how Kairo thinks.
+That's a **graph of physics operators**, which is exactly how Morphogen thinks.
 
 ---
 
@@ -85,9 +85,9 @@ That's a **graph of physics operators**, which is exactly how Kairo thinks.
 
 ---
 
-## 2. Simulating the J-Tube System in Kairo
+## 2. Simulating the J-Tube System in Morphogen
 
-We'll walk through a Kairo-style simulation pipeline from **inputs → outputs**, showing which domains/operators handle each step.
+We'll walk through a Morphogen-style simulation pipeline from **inputs → outputs**, showing which domains/operators handle each step.
 
 ---
 
@@ -95,7 +95,7 @@ We'll walk through a Kairo-style simulation pipeline from **inputs → outputs**
 
 **Goal:** Define the physical configuration.
 
-**Kairo Domains:** `GeometryDomain`
+**Morphogen Domains:** `GeometryDomain`
 
 **Types:**
 - `Pipe` — J-tube geometry
@@ -108,8 +108,8 @@ We'll walk through a Kairo-style simulation pipeline from **inputs → outputs**
 - `tube[i].inlet`, `tube[i].outlet`
 - `tube[i].heated_section`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Fire pit geometry
 let pit = geom.cylinder(
     radius = 250mm,
@@ -162,14 +162,14 @@ $$
 \Delta P \approx \rho g H \left(\frac{1}{T_{\text{amb}}} - \frac{1}{T_{\text{flue}}}\right)
 $$
 
-**Kairo Domain:** `FluidNetworkDomain`
+**Morphogen Domain:** `FluidNetworkDomain`
 
 **Operators:**
 - `draft_pressure(chamber_ref, chimney_height, T_amb, T_hot) -> ΔP`
 - `chimney_effect(chamber_geometry, flame_temp) -> ΔP`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Estimate draft pressure
 let delta_p = fluid_net.draft_pressure(
     chamber = pit,
@@ -194,7 +194,7 @@ let delta_p = fluid_net.draft_pressure(
 
 **Physics:** Each tube is a pipe with friction and minor losses (Darcy-Weisbach + bend loss + entrance/exit losses).
 
-**Kairo Domain:** `FluidNetworkDomain`
+**Morphogen Domain:** `FluidNetworkDomain`
 
 **Types:**
 - `Tube` — Pipe geometry + flow resistance
@@ -206,8 +206,8 @@ let delta_p = fluid_net.draft_pressure(
 - `tube_resistance(tube_geometry, roughness, Re_guess) -> R_tube`
 - `network_solve(ΔP, tubes[]) -> {m_dot[i], p_in[i], p_out[i]}`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Create fluid network
 let flow_net = fluid_net.create()
 
@@ -246,7 +246,7 @@ let v_exit = flow_solution.exit_velocity  // m/s at nozzle
 - DSP graph solver (audio routing)
 - N-body integrator (force summation)
 
-So Kairo's general solver infrastructure is **reused**.
+So Morphogen's general solver infrastructure is **reused**.
 
 ---
 
@@ -260,7 +260,7 @@ $$
 \dot{m} c_p \frac{dT_{\text{air}}}{dx} = h A_s (T_{\text{wall}}(x) - T_{\text{air}})
 $$
 
-**Kairo Domain:** `ThermalODEDomain`
+**Morphogen Domain:** `ThermalODEDomain`
 
 **Types:**
 - `TubeSegment` — 1D thermal model
@@ -271,8 +271,8 @@ $$
 - `wall_temp_model(fire_state, tube_position) -> T_wall(x)`
 - `heat_transfer_1D(tube_ref, m_dot, T_in, wall_temp_model) -> T_out`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Estimate wall temperature profile
 let wall_temp = thermal.wall_temp_model(
     fire_state = pit.fire_state,
@@ -292,7 +292,7 @@ let T_jet = thermal.heat_transfer_1D(
 // Result: T_jet ≈ 400-600K (preheated air)
 ```
 
-**Internally:** This is just an ODE integrator node in the Kairo graph, lowered to:
+**Internally:** This is just an ODE integrator node in the Morphogen graph, lowered to:
 - Explicit Euler (fast, approximate)
 - Runge-Kutta
 - Vectorized stepper on GPU
@@ -313,7 +313,7 @@ let T_jet = thermal.heat_transfer_1D(
 - Jet direction (angle relative to radial/tangential)
 - Reynolds number, entrainment estimate
 
-**Kairo Domain:** `FluidJetDomain`
+**Morphogen Domain:** `FluidJetDomain`
 
 **Types:**
 - `Jet` — Velocity, temperature, direction, area
@@ -326,8 +326,8 @@ let T_jet = thermal.heat_transfer_1D(
 - `jet_entrainment(Jet, plume_state) -> mixing_factor`
 - `jet_visualization(JetArray, fire_core.ref) -> Field2D/3D`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Create jet from tube exit
 let jet = fluid_jet.from_tube(
     tube = tube,
@@ -375,7 +375,7 @@ let jet_field = fluid_jet.visualization(
 - Residence time in hot zone
 - Smoke reduction factor
 
-**Kairo Domain:** `CombustionLightDomain`
+**Morphogen Domain:** `CombustionLightDomain`
 
 **Types:**
 - `MixtureState` — Fuel, air, equivalence ratio
@@ -387,8 +387,8 @@ let jet_field = fluid_jet.visualization(
 - `zone_temperature(FireState, JetHeating) -> T_zone`
 - `smoke_reduction(φ, T_zone, mixing_factor, residence_time) -> SmokeIndex`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Compute equivalence ratio
 let phi = combustion.equivalence_ratio(
     fuel_rate = pit.fuel_rate,
@@ -428,7 +428,7 @@ let smoke_index = combustion.smoke_reduction(
 
 **Goal:** Turn all simulation outputs into design insight.
 
-**Kairo Domains:** `VisualizationDomain`, `OptimizationDomain`
+**Morphogen Domains:** `VisualizationDomain`, `OptimizationDomain`
 
 **Operators:**
 - `plot_flow_per_tube(FlowPerTube)`
@@ -438,8 +438,8 @@ let smoke_index = combustion.smoke_reduction(
 - `param_sweep(parameters, pipeline_subgraph) -> results[]`
 - `search_best(parameters, objective=SmokeIndex_min) -> best_config`
 
-**Kairo Code:**
-```kairo
+**Morphogen Code:**
+```morphogen
 // Visualization
 visual.plot_jet_map(
     jets = all_jets,
@@ -479,9 +479,9 @@ print(f"  Smoke index: {best.smoke_index}")
 
 ---
 
-## 3. New Domains & Operators Kairo Should Add
+## 3. New Domains & Operators Morphogen Should Add
 
-From the pipeline above, we can list the concrete domain additions Kairo should grow.
+From the pipeline above, we can list the concrete domain additions Morphogen should grow.
 
 ---
 
@@ -491,7 +491,7 @@ From the pipeline above, we can list the concrete domain additions Kairo should 
 
 #### Core Types
 
-```kairo
+```morphogen
 type Tube {
     geometry: Pipe,
     diameter: Length,
@@ -572,7 +572,7 @@ type JunctionRef = Ref<Junction>
     {"name": "pressures", "type": "Array<Pressure>"}
   ],
   "determinism": "repro",
-  "lowering": {"dialect": "kairo.fluid", "template": "mna_fluid_solver"},
+  "lowering": {"dialect": "morphogen.fluid", "template": "mna_fluid_solver"},
   "description": "Solve fluid network (Modified Nodal Analysis)"
 }
 ```
@@ -592,7 +592,7 @@ type JunctionRef = Ref<Junction>
 
 #### Core Types
 
-```kairo
+```morphogen
 type ThermalSegment {
     length: Length,
     diameter: Length,
@@ -669,7 +669,7 @@ type ThermalProfile {
 
 #### Core Types
 
-```kairo
+```morphogen
 type Jet {
     flow: f32<kg/s>,
     velocity: f32<m/s>,
@@ -773,7 +773,7 @@ type JetArray {
 
 #### Core Types
 
-```kairo
+```morphogen
 type MixtureState {
     fuel_rate: f32<kg/s>,
     air_rate: f32<kg/s>,
@@ -981,11 +981,11 @@ type SmokeIndex {
 
 ---
 
-## 4. Complete Kairo Pipeline Example
+## 4. Complete Morphogen Pipeline Example
 
-Here's the full J-tube fire pit simulation as a Kairo program:
+Here's the full J-tube fire pit simulation as a Morphogen program:
 
-```kairo
+```morphogen
 scene JTubeFirePit {
     // === STAGE 0: GEOMETRY ===
 
@@ -1134,18 +1134,18 @@ scene JTubeFirePit {
 
 ---
 
-## 5. Why This Matters for Kairo
+## 5. Why This Matters for Morphogen
 
-### 5.1 Validates the Kairo Mental Model
+### 5.1 Validates the Morphogen Mental Model
 
 The J-tube fire pit proves that **operator graphs work for engineering**:
 - Each stage is an operator or operator chain
 - Domains compose cleanly (Geometry → Fluid → Thermal → Combustion → Visual)
 - References/anchors connect physical systems
 
-### 5.2 Pushes Kairo into Engineering Modeling
+### 5.2 Pushes Morphogen into Engineering Modeling
 
-Not just audio/graphics — now Kairo handles:
+Not just audio/graphics — now Morphogen handles:
 - Fire pits
 - Mufflers
 - Intakes
@@ -1180,7 +1180,7 @@ This validates ADR-002's anchor system.
 
 **Pattern:** Geometry provides **pipe objects** with anchors, FluidNetwork uses those to build the flow graph.
 
-```kairo
+```morphogen
 let tube = geom.pipe(centerline, diameter, thickness)
 let resistance = fluid_net.tube_resistance(geometry=tube, ...)
 ```
@@ -1193,7 +1193,7 @@ let resistance = fluid_net.tube_resistance(geometry=tube, ...)
 
 **Pattern:** Flow rates from network solve become inputs to thermal ODE.
 
-```kairo
+```morphogen
 let flow_solution = fluid_net.network_solve(...)
 let T_out = thermal.heat_transfer_1D(m_dot=flow_solution.mass_flow[i], ...)
 ```
@@ -1206,7 +1206,7 @@ let T_out = thermal.heat_transfer_1D(m_dot=flow_solution.mass_flow[i], ...)
 
 **Pattern:** Exit temperature from thermal ODE defines jet properties.
 
-```kairo
+```morphogen
 let T_jet = thermal.heat_transfer_1D(...)
 let jet = fluid_jet.from_tube(T_out=T_jet, ...)
 ```
@@ -1219,7 +1219,7 @@ let jet = fluid_jet.from_tube(T_out=T_jet, ...)
 
 **Pattern:** Jet array feeds combustion zone temperature and mixing.
 
-```kairo
+```morphogen
 let jets = [...]
 let T_zone = combustion.zone_temperature(jet_info=jets)
 let smoke_index = combustion.smoke_reduction(T_zone=T_zone, mixing=..., ...)
@@ -1233,7 +1233,7 @@ let smoke_index = combustion.smoke_reduction(T_zone=T_zone, mixing=..., ...)
 
 **Pattern:** All outputs can be visualized.
 
-```kairo
+```morphogen
 visual.plot_quiver(jet_field)
 visual.plot_line(T_jets)
 visual.plot_smoke_index(smoke_index)
@@ -1247,7 +1247,7 @@ visual.plot_smoke_index(smoke_index)
 
 ### 7.1 Parameter Sweep
 
-```kairo
+```morphogen
 let sweep_results = optimize.param_sweep(
     params = {
         tube_diameter: range(20mm, 35mm, step=5mm),
@@ -1265,7 +1265,7 @@ let sweep_results = optimize.param_sweep(
 
 ### 7.2 Objective Optimization
 
-```kairo
+```morphogen
 let best = optimize.search_best(
     results = sweep_results,
     objective = maximize(smoke_index),
@@ -1282,7 +1282,7 @@ let best = optimize.search_best(
 
 ### 7.3 Sensitivity Analysis
 
-```kairo
+```morphogen
 let sensitivity = optimize.sensitivity_analysis(
     base_config = best,
     perturb = [tube_diameter, nozzle_area],
@@ -1337,13 +1337,13 @@ let sensitivity = optimize.sensitivity_analysis(
 
 **Experimental Data:**
 - Measure actual J-tube fire pit smoke output
-- Compare Kairo smoke_index to visual smoke assessment
+- Compare Morphogen smoke_index to visual smoke assessment
 - Validate jet velocity with anemometer
 
 **CFD Comparison:**
 - Run OpenFOAM simulation of same geometry
-- Compare Kairo jet_field to CFD velocity field
-- Validate Kairo's "CFD-lite" approximations
+- Compare Morphogen jet_field to CFD velocity field
+- Validate Morphogen's "CFD-lite" approximations
 
 ---
 
@@ -1356,7 +1356,7 @@ let sensitivity = optimize.sensitivity_analysis(
 **Approach:**
 - Add `CFDDomain` with operators like `navier_stokes_step`
 - Lower to existing CFD backends (OpenFOAM, SU2, etc.)
-- Use Kairo for **setup and post-processing**, CFD for **solving**
+- Use Morphogen for **setup and post-processing**, CFD for **solving**
 
 ---
 
@@ -1387,18 +1387,18 @@ let sensitivity = optimize.sensitivity_analysis(
 
 ### 9.4 Interactive Design Tool
 
-**Goal:** Web-based parametric design tool powered by Kairo.
+**Goal:** Web-based parametric design tool powered by Morphogen.
 
 **Tech Stack:**
 - Frontend: React + Three.js (geometry preview)
-- Backend: Kairo pipeline (WASM or server-side)
+- Backend: Morphogen pipeline (WASM or server-side)
 - Interaction: Sliders for tube_diameter, nozzle_area, etc.
 - Output: Real-time smoke_index, jet visualization
 
 **User Experience:**
 ```
 User adjusts tube_diameter slider
-→ Kairo recomputes pipeline (< 100ms)
+→ Morphogen recomputes pipeline (< 100ms)
 → 3D view updates jet visualization
 → Smoke index gauge updates
 ```
@@ -1410,22 +1410,22 @@ User adjusts tube_diameter slider
 ### What We've Shown
 
 1. **Physical System** — J-tube fire pit as multi-physics engine
-2. **Kairo Pipeline** — 6 stages from geometry to smoke reduction
+2. **Morphogen Pipeline** — 6 stages from geometry to smoke reduction
 3. **New Domains** — FluidNetwork, ThermalODE, FluidJet, CombustionLight
 4. **Operator Specs** — Detailed definitions for each domain
 5. **Cross-Domain Flows** — How domains compose via references/anchors
 6. **Design Optimization** — Parameter sweeps and objective search
 
-### Why This Validates Kairo
+### Why This Validates Morphogen
 
 - **Operator graphs work for engineering** — Not just audio/graphics
 - **Domains compose cleanly** — Geometry → Fluid → Thermal → Combustion
 - **References/anchors are critical** — Physical connection points
-- **Kairo becomes a design platform** — Not just a runtime
+- **Morphogen becomes a design platform** — Not just a runtime
 
 ### Next Steps
 
-1. **Formalize domains** — Add FluidNetwork, ThermalODE, FluidJet, CombustionLight to Kairo core
+1. **Formalize domains** — Add FluidNetwork, ThermalODE, FluidJet, CombustionLight to Morphogen core
 2. **Implement operators** — Build reference implementations (Python first)
 3. **MLIR lowering** — Define dialects and lowering passes
 4. **Example implementations** — J-tube fire pit, muffler, heat exchanger
@@ -1454,9 +1454,9 @@ User adjusts tube_diameter slider
 
 **Conclusion:**
 
-The J-tube fire pit is not "just another use case" — it's a **proof point** that Kairo's operator graph paradigm extends naturally from audio/graphics into **engineering physics**. By formalizing domains like FluidNetwork, ThermalODE, FluidJet, and CombustionLight, Kairo becomes a **multi-physics design platform** capable of modeling fire pits, mufflers, engines, HVAC systems, and beyond.
+The J-tube fire pit is not "just another use case" — it's a **proof point** that Morphogen's operator graph paradigm extends naturally from audio/graphics into **engineering physics**. By formalizing domains like FluidNetwork, ThermalODE, FluidJet, and CombustionLight, Morphogen becomes a **multi-physics design platform** capable of modeling fire pits, mufflers, engines, HVAC systems, and beyond.
 
-**Kairo is not a library. Kairo is a platform.**
+**Morphogen is not a library. Morphogen is a platform.**
 
 ---
 

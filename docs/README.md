@@ -1,12 +1,12 @@
-# Kairo Documentation
+# Morphogen Documentation
 
-Welcome to the Kairo documentation! This guide will help you navigate the documentation based on what you want to accomplish.
+Welcome to the Morphogen documentation! This guide will help you navigate the documentation based on what you want to accomplish.
 
-> 💡 **First time here?** Start with the main [README.md](../README.md) to understand Kairo's vision and what makes it unique. Then come back here for detailed technical documentation.
+> 💡 **First time here?** Start with the main [README.md](../README.md) to understand Morphogen's vision and what makes it unique. Then come back here for detailed technical documentation.
 
 ## Quick Start
 
-- **New to Kairo?** Start with [Getting Started](getting-started.md) for installation and your first program
+- **New to Morphogen?** Start with [Getting Started](getting-started.md) for installation and your first program
 - **Understand the architecture?** Read [Architecture Overview](architecture/overview.md) or the main [ARCHITECTURE.md](../ARCHITECTURE.md)
 - **See the full ecosystem?** Check [ECOSYSTEM_MAP.md](../ECOSYSTEM_MAP.md) for all domains and roadmap
 - **Need help?** Check [Troubleshooting](troubleshooting.md)
@@ -15,7 +15,7 @@ Welcome to the Kairo documentation! This guide will help you navigate the docume
 
 ### 📐 [Architecture](architecture/)
 High-level design and architectural principles
-- [Overview](architecture/overview.md) - Core Kairo architecture
+- [Overview](architecture/overview.md) - Core Morphogen architecture
 - [Domain Architecture](architecture/domain-architecture.md) - How domains fit together (110KB - comprehensive!)
 - [GPU & MLIR Principles](architecture/gpu-mlir-principles.md) - GPU execution and MLIR integration
 - [Interactive Visualization](architecture/interactive-visualization.md) - Visualization approach
@@ -40,10 +40,10 @@ Why key architectural decisions were made (8 records)
 
 ### 📖 [Guides](guides/)
 How-to documentation for implementers
-- [Domain Implementation Guide](guides/domain-implementation.md) - How to add new domains to Kairo
+- [Domain Implementation Guide](guides/domain-implementation.md) - How to add new domains to Morphogen
 
 ### 💡 [Examples](examples/)
-Complete working examples demonstrating Kairo capabilities
+Complete working examples demonstrating Morphogen capabilities
 - [Emergence Cross-Domain](examples/emergence-cross-domain.md)
 - [J-Tube Firepit Multiphysics](examples/j-tube-firepit-multiphysics.md)
 - [Kerbal Space Program Simulation](examples/kerbal-space-program.md)
@@ -64,7 +64,7 @@ Catalogs, operator references, and domain overviews
 ### 🗺️ [Roadmap](roadmap/)
 Planning and progress tracking
 - [MVP Roadmap](roadmap/mvp.md)
-- [Kairo Core v0.1 Roadmap](roadmap/v0.1.md)
+- [Morphogen Core v0.1 Roadmap](roadmap/v0.1.md)
 - [Implementation Progress](roadmap/implementation-progress.md)
 - [Testing Strategy](roadmap/testing-strategy.md)
 
@@ -95,12 +95,12 @@ Deprecated CCDSL v0.2.2 documentation (for historical reference)
 
 **I want to...**
 
-- **Understand Kairo's vision and impact** → Read the main [README.md](../README.md) and [Professional Applications](reference/professional-domains.md)
-- **Understand Kairo's architecture** → Start with [Architecture Overview](architecture/overview.md), then [Domain Architecture](architecture/domain-architecture.md)
+- **Understand Morphogen's vision and impact** → Read the main [README.md](../README.md) and [Professional Applications](reference/professional-domains.md)
+- **Understand Morphogen's architecture** → Start with [Architecture Overview](architecture/overview.md), then [Domain Architecture](architecture/domain-architecture.md)
 - **See the complete ecosystem** → Check [ECOSYSTEM_MAP.md](../ECOSYSTEM_MAP.md) for all domains and roadmap
 - **Implement a new domain** → Read [Domain Implementation Guide](guides/domain-implementation.md) and relevant [ADRs](adr/)
 - **Learn about a specific domain** → Check [Specifications](specifications/) for the domain spec, then related [ADRs](adr/)
-- **See Kairo in action** → Browse [Examples](examples/) and [Use Cases](use-cases/)
+- **See Morphogen in action** → Browse [Examples](examples/) and [Use Cases](use-cases/)
 - **Find specific operators** → Search [Reference](reference/) for operator catalogs
 - **Understand a design decision** → Look in [ADRs](adr/)
 - **Track project progress** → See [Roadmap](roadmap/)

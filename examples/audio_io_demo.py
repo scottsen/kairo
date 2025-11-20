@@ -9,7 +9,7 @@ Requirements:
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.audio import audio
+from morphogen.stdlib.audio import audio
 import numpy as np
 
 
@@ -45,7 +45,7 @@ def demo_wav_export():
     envelope = audio.adsr(attack=0.1, decay=0.2, sustain=0.7, release=0.5, duration=2.0)
 
     # Apply envelope (element-wise multiplication)
-    from kairo.stdlib.audio import AudioBuffer
+    from morphogen.stdlib.audio import AudioBuffer
     enveloped = AudioBuffer(
         data=chord.data * envelope.data,
         sample_rate=chord.sample_rate
@@ -86,7 +86,7 @@ def demo_flac_export():
         note = audio.sine(freq=freq, duration=0.3)
         envelope = audio.ar(attack=0.01, release=0.2, duration=0.3)
 
-        from kairo.stdlib.audio import AudioBuffer
+        from morphogen.stdlib.audio import AudioBuffer
         enveloped = AudioBuffer(
             data=note.data * envelope.data,
             sample_rate=note.sample_rate

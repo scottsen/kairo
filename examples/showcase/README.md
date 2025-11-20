@@ -412,7 +412,7 @@ for step in range(n_steps):
 All examples output Image objects. To save them:
 
 ```python
-from kairo.stdlib import io_storage
+from morphogen.stdlib import io_storage
 
 # After running an example
 img = fractal_explorer.mandelbrot_with_noise_overlay()
@@ -427,7 +427,7 @@ io_storage.save(img, "fractal.jpg", format="jpeg", quality=95)
 ### Creating Animations
 
 ```python
-from kairo.stdlib import io_storage
+from morphogen.stdlib import io_storage
 
 # Generate frames
 frames = []
@@ -529,7 +529,7 @@ Demonstrates integration of:
 """
 
 import numpy as np
-from kairo.stdlib import domain1, domain2, domain3
+from morphogen.stdlib import domain1, domain2, domain3
 
 
 def my_demo():

@@ -16,8 +16,8 @@ Creates stunning visualizations of Mandelbrot and Julia sets with:
 """
 
 import numpy as np
-from kairo.stdlib import field, noise, palette, color, image
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import field, noise, palette, color, image
+from morphogen.stdlib.field import Field2D
 
 
 def compute_mandelbrot(width, height, x_min=-2.5, x_max=1.0,

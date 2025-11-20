@@ -4,7 +4,7 @@ Tests for neural network domain.
 
 import pytest
 import numpy as np
-from kairo.stdlib.neural import (
+from morphogen.stdlib.neural import (
     neural, DenseLayer, MLP, NeuralOperations
 )
 

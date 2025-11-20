@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from kairo.stdlib.agents import agents, Agents
+from morphogen.stdlib.agents import agents, Agents
 
 
 class TestAgentMap:

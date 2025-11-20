@@ -1,8 +1,8 @@
 """Test proper physics simulation patterns like the portfolio examples."""
 
 import numpy as np
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
 
 print("=" * 60)
 print("Testing Kairo with Proper Physics Patterns")

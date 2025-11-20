@@ -1,4 +1,4 @@
-# Kairo v0.7.0 Phase 5: Audio Operations Dialect - Completion Summary
+# Morphogen v0.7.0 Phase 5: Audio Operations Dialect - Completion Summary
 
 **Status:** ✅ COMPLETE
 **Completion Date:** 2025-11-14
@@ -8,7 +8,7 @@
 
 ## Overview
 
-Phase 5 successfully integrates audio synthesis and processing into Kairo's MLIR compilation pipeline through a new Audio Operations dialect. This phase enables compiled audio generation with oscillators, filters, envelopes, and effects, all lowering to optimized SCF loops with memref operations.
+Phase 5 successfully integrates audio synthesis and processing into Morphogen's MLIR compilation pipeline through a new Audio Operations dialect. This phase enables compiled audio generation with oscillators, filters, envelopes, and effects, all lowering to optimized SCF loops with memref operations.
 
 ## Deliverables
 
@@ -19,35 +19,35 @@ Implemented complete audio dialect with 5 core operations:
 #### Operations
 
 - **`AudioBufferCreateOp`**: Allocate audio buffers with sample rate, channels, and duration
-  - Signature: `%buf = kairo.audio.buffer.create %sr, %ch, %dur`
+  - Signature: `%buf = morphogen.audio.buffer.create %sr, %ch, %dur`
   - Parameters: sample_rate (index), channels (index), duration (f32)
   - Use case: Initialize audio buffers for synthesis
 
 - **`AudioOscillatorOp`**: Generate waveforms (sine, square, saw, triangle)
-  - Signature: `%osc = kairo.audio.oscillator %buf, %waveform, %freq, %phase`
+  - Signature: `%osc = morphogen.audio.oscillator %buf, %waveform, %freq, %phase`
   - Waveforms: 0=sine, 1=square, 2=saw, 3=triangle
   - Use case: Core tone generation
 
 - **`AudioEnvelopeOp`**: Apply ADSR envelopes to signals
-  - Signature: `%env = kairo.audio.envelope %buf, %attack, %decay, %sustain, %release`
+  - Signature: `%env = morphogen.audio.envelope %buf, %attack, %decay, %sustain, %release`
   - Parameters: A/D/R in seconds, S as level (0.0-1.0)
   - Use case: Shape amplitude over time
 
 - **`AudioFilterOp`**: IIR/FIR filters (lowpass, highpass, bandpass)
-  - Signature: `%filt = kairo.audio.filter %buf, %type, %cutoff, %resonance`
+  - Signature: `%filt = morphogen.audio.filter %buf, %type, %cutoff, %resonance`
   - Filter types: 0=lowpass, 1=highpass, 2=bandpass
   - Use case: Timbral shaping and frequency control
 
 - **`AudioMixOp`**: Mix multiple audio signals with scaling
-  - Signature: `%mix = kairo.audio.mix %buf1, %buf2, ..., %gain1, %gain2, ...`
+  - Signature: `%mix = morphogen.audio.mix %buf1, %buf2, ..., %gain1, %gain2, ...`
   - Parameters: Variable-length buffers and gains
   - Use case: Combine multiple audio sources
 
 #### Type System
 
-- **`AudioType`**: `!kairo.audio<sample_rate, channels>`
-  - Example: `!kairo.audio<44100, 1>` (mono 44.1kHz)
-  - Example: `!kairo.audio<48000, 2>` (stereo 48kHz)
+- **`AudioType`**: `!morphogen.audio<sample_rate, channels>`
+  - Example: `!morphogen.audio<44100, 1>` (mono 44.1kHz)
+  - Example: `!morphogen.audio<48000, 2>` (stereo 48kHz)
   - Implemented as OpaqueType for Phase 5
 
 ### 2. Audio-to-SCF Lowering (`kairo/mlir/lowering/audio_to_scf.py`) - ✅ 658 lines
@@ -281,7 +281,7 @@ Phase 5 sets the foundation for Phase 6: JIT/AOT Compilation
 
 ## Conclusion
 
-Phase 5 successfully delivers a complete audio synthesis dialect for Kairo, enabling:
+Phase 5 successfully delivers a complete audio synthesis dialect for Morphogen, enabling:
 
 - ✅ Compiled audio generation with MLIR
 - ✅ High-level operations (oscillators, envelopes, filters, mixing)
@@ -291,7 +291,7 @@ Phase 5 successfully delivers a complete audio synthesis dialect for Kairo, enab
 
 **Phase 5 Status: COMPLETE ✅**
 
-With Phases 2-5 complete, Kairo v0.7.0 now has fully functional dialects for:
+With Phases 2-5 complete, Morphogen v0.7.0 now has fully functional dialects for:
 - Field operations (spatial)
 - Temporal operations (time evolution)
 - Agent operations (multi-agent systems)

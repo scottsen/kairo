@@ -8,7 +8,7 @@ Demonstrates 2D transformations:
 """
 
 import numpy as np
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     point2d, circle, rectangle, polygon,
     translate_circle, translate_rectangle, translate_polygon,
     rotate_circle, rotate_rectangle, rotate_polygon,

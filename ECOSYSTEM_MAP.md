@@ -1,22 +1,22 @@
-# Kairo Ecosystem Map
+# Morphogen Ecosystem Map
 
-> **A comprehensive map of all Kairo domains, modules, and expansion roadmap**
+> **A comprehensive map of all Morphogen domains, modules, and expansion roadmap**
 
 ## Purpose of This Document
 
 **For architects**: Understand how all pieces fit together (kernel → domains → frontends)
 **For contributors**: See where to add new domains and what's already specified
-**For users**: Understand Kairo's scope and what's possible today vs. planned
+**For users**: Understand Morphogen's scope and what's possible today vs. planned
 
-This document defines the **complete Kairo ecosystem** — from the non-negotiable kernel to optional domain libraries to user-facing frontends. It serves as both an architectural guide and a roadmap for future expansion.
+This document defines the **complete Morphogen ecosystem** — from the non-negotiable kernel to optional domain libraries to user-facing frontends. It serves as both an architectural guide and a roadmap for future expansion.
 
-> 💡 **New to Kairo?** Start with [README.md](README.md) for the vision. This document is a detailed catalog of all domains and their relationships.
+> 💡 **New to Morphogen?** Start with [README.md](README.md) for the vision. This document is a detailed catalog of all domains and their relationships.
 
 ---
 
 ## Overview
 
-Kairo's world consists of a **minimal kernel** (types, units, domains, scheduler, transforms, registry, MLIR) that supports **optional domain libraries** (audio, physics, circuits, chemistry, video, optimization, etc.) and **human-friendly DSL frontends** that all compile to the same deterministic Graph IR.
+Morphogen's world consists of a **minimal kernel** (types, units, domains, scheduler, transforms, registry, MLIR) that supports **optional domain libraries** (audio, physics, circuits, chemistry, video, optimization, etc.) and **human-friendly DSL frontends** that all compile to the same deterministic Graph IR.
 
 **Key Insight**: All domains — audio synthesis, fluid dynamics, circuit simulation, geometry, optimization — share the same execution model. This enables **cross-domain composition** impossible in traditional tools.
 
@@ -35,7 +35,7 @@ Kairo's world consists of a **minimal kernel** (types, units, domains, scheduler
 
 ## 1. Core Kernel Domains (non-negotiable)
 
-These are foundational to *everything* Kairo does — audio, physics, fractals, visuals, ML.
+These are foundational to *everything* Morphogen does — audio, physics, fractals, visuals, ML.
 They define the **semantic building blocks**.
 
 ### 1.1 Domain: Time
@@ -147,10 +147,10 @@ These are cross-domain kernel subsystems.
 ### 2.6 MLIR Backend
 
 **Dialects:**
-* `kairo.stream`
-* `kairo.field`
-* `kairo.transform`
-* `kairo.agent` (optional later)
+* `morphogen.stream`
+* `morphogen.field`
+* `morphogen.transform`
+* `morphogen.agent` (optional later)
 
 **Lowering to:**
 * linalg
@@ -172,7 +172,7 @@ Each sits on top of the core types & transforms.
 
 **Status:** Active development
 
-Already part of Kairo.Audio:
+Already part of Morphogen.Audio:
 
 * Oscillators (sine, saw, tri, square, noise)
 * Filters (lpf, hpf, bpf, notch, allpass, shelves)
@@ -197,26 +197,26 @@ Already part of Kairo.Audio:
 
 Four specialized domains for ambient and generative music:
 
-**Kairo.Spectral** (15 operators)
+**Morphogen.Spectral** (15 operators)
 * Spectral blurring, morphing, freezing
 * Harmonic nebulae (distributed harmonic clouds)
 * Vocoding and spectral filtering
 * Additive resynthesis with time-varying parameters
 * Pitch-shifting drones
 
-**Kairo.Ambience** (25 operators)
+**Morphogen.Ambience** (25 operators)
 * Drone generators (harmonic pads, subharmonic bass, shimmer)
 * Granular synthesis (clouds, frozen, reverse)
 * Long-form modulators (drift noise, orbit LFOs, hour-scale evolution)
 * Texture generators (evolving, shimmer, noise fields)
 
-**Kairo.Synthesis** (30 operators)
+**Morphogen.Synthesis** (30 operators)
 * Enhanced modular synthesis (VCO, wavetable, FM)
 * Advanced filters (multimode, formant, comb)
 * Modulation sources (LFO, envelope follower, sample-and-hold)
 * Declarative patch routing (compute graph as signal flow)
 
-**Kairo.Composition** (20 operators)
+**Morphogen.Composition** (20 operators)
 * Markov chain sequencers (melodic and parameter evolution)
 * CA-driven composition (Life, Lenia, Rule30 → notes)
 * Stochastic generators (Poisson triggers, Brownian melodies)
@@ -390,7 +390,7 @@ Eventually MLIR gives you:
 
 **Status:** Architecture complete (PR #43) — **`docs/SPEC-CIRCUIT.md`** (1,136 lines)
 
-The most natural domain for Kairo — circuits ARE typed operator graphs!
+The most natural domain for Morphogen — circuits ARE typed operator graphs!
 
 * **Atomic operators**: R, C, L, voltage/current sources
 * **Composite operators**: Op-amps, transistors, transformers
@@ -427,7 +427,7 @@ The "holy grail" of audio DSP — recordings → synthesis models:
 
 **Status:** Architecture complete (PR #48) — **`docs/LEARNINGS/OPTIMIZATION_ALGORITHMS_CATALOG.md`** (1,529 lines)
 
-16 algorithms transforming Kairo: simulation → design discovery:
+16 algorithms transforming Morphogen: simulation → design discovery:
 
 * **Evolutionary** (4): GA, DE, CMA-ES, PSO
 * **Local** (3): Gradient Descent, L-BFGS, Nelder-Mead
@@ -457,7 +457,7 @@ Four specialized domains for engineering simulation:
 
 These sit **above the kernel completely** and emit Graph IR.
 
-### 4.1 Kairo.Audio
+### 4.1 Morphogen.Audio
 
 **Declarative DSL for time-dependent audio scenes**
 
@@ -477,7 +477,7 @@ These sit **above the kernel completely** and emit Graph IR.
 * YAML patch definitions
 * Loopers and live control
 * Performance-oriented ergonomics
-* Compiles to same Graph IR as Kairo.Audio
+* Compiles to same Graph IR as Morphogen.Audio
 
 **See:** [RiffStack repository](https://github.com/scottsen/riffstack)
 
@@ -485,10 +485,10 @@ These sit **above the kernel completely** and emit Graph IR.
 
 Potential future frontends:
 
-* **Kairo.Fractal** — specialized fractal exploration language
-* **Kairo.Physics** — physics simulation DSL
-* **Kairo.Visual** — visual composition language
-* **Kairo.Agent** — agent-based modeling language
+* **Morphogen.Fractal** — specialized fractal exploration language
+* **Morphogen.Physics** — physics simulation DSL
+* **Morphogen.Visual** — visual composition language
+* **Morphogen.Agent** — agent-based modeling language
 
 **All emit the same Graph IR.**
 
@@ -535,7 +535,7 @@ Potential future frontends:
 * Ergonomics
 * Composition tools
 
-**But they emit pure Kairo Graph IR.**
+**But they emit pure Morphogen Graph IR.**
 
 ---
 
@@ -544,7 +544,7 @@ Potential future frontends:
 ```
 ┌─────────────────────────────────────────────────┐
 │           User-Facing Frontends                 │
-│  Kairo.Audio | RiffStack | Future DSLs          │
+│  Morphogen.Audio | RiffStack | Future DSLs          │
 └────────────────┬────────────────────────────────┘
                  │
                  ▼ (Graph IR)
@@ -555,7 +555,7 @@ Potential future frontends:
                  │
                  ▼ (Operator Registry)
 ┌─────────────────────────────────────────────────┐
-│              Kairo Kernel                       │
+│              Morphogen Kernel                       │
 │  Types | Units | Scheduler | Transforms | MLIR  │
 └─────────────────────────────────────────────────┘
 ```
@@ -601,7 +601,7 @@ Potential future frontends:
 
 ### Frontends
 
-* Kairo.Audio ⭐ (active)
+* Morphogen.Audio ⭐ (active)
 * RiffStack ⭐ (active)
 * Future DSLs 📋 (planned)
 
@@ -638,7 +638,7 @@ Potential future frontends:
 
 * Kernel complete
 * Audio domain library production-ready
-* Kairo.Audio + RiffStack frontends stable
+* Morphogen.Audio + RiffStack frontends stable
 * MLIR pipeline functional
 
 ### Phase 2: Visual Expansion (v0.5 - v0.7)
@@ -666,20 +666,20 @@ Potential future frontends:
 
 ## Conclusion
 
-The Kairo ecosystem is designed for **sustainable growth**. The kernel remains minimal and stable, while domain libraries and frontends can expand indefinitely without breaking existing code.
+The Morphogen ecosystem is designed for **sustainable growth**. The kernel remains minimal and stable, while domain libraries and frontends can expand indefinitely without breaking existing code.
 
-**Core insight:** Audio, physics, fractals, and visuals are not fundamentally different problems — they're all **time-evolving fields and streams transformed between domains**. Kairo's kernel provides the universal substrate; domain libraries provide the specialized operators.
+**Core insight:** Audio, physics, fractals, and visuals are not fundamentally different problems — they're all **time-evolving fields and streams transformed between domains**. Morphogen's kernel provides the universal substrate; domain libraries provide the specialized operators.
 
 This architecture ensures that a physics simulation, a fractal renderer, and an audio synthesizer can **compose seamlessly** — because they speak the same language.
 
-**Professional Impact:** This unified ecosystem unlocks transformative value across science, engineering, finance, agriculture, and trades — domains that currently suffer from fragmented tools and lack cross-domain integration. See **[docs/reference/professional-domains.md](docs/reference/professional-domains.md)** for detailed analysis of Kairo's value proposition in 10 professional fields.
+**Professional Impact:** This unified ecosystem unlocks transformative value across science, engineering, finance, agriculture, and trades — domains that currently suffer from fragmented tools and lack cross-domain integration. See **[docs/reference/professional-domains.md](docs/reference/professional-domains.md)** for detailed analysis of Morphogen's value proposition in 10 professional fields.
 
 ---
 
 **Related Documentation:**
 
 **Architecture**:
-* [ARCHITECTURE.md](ARCHITECTURE.md) — The Kairo Stack architecture (kernel, frontends, Graph IR, MLIR)
+* [ARCHITECTURE.md](ARCHITECTURE.md) — The Morphogen Stack architecture (kernel, frontends, Graph IR, MLIR)
 * [docs/architecture/domain-architecture.md](docs/architecture/domain-architecture.md) — Complete multi-domain technical vision (2,266 lines)
 * [docs/architecture/gpu-mlir-principles.md](docs/architecture/gpu-mlir-principles.md) — GPU lowering and MLIR integration
 

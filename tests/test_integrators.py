@@ -5,7 +5,7 @@ Tests all integration methods for correctness, accuracy, and determinism.
 
 import pytest
 import numpy as np
-from kairo.stdlib.integrators import (
+from morphogen.stdlib.integrators import (
     euler, rk2, rk4,
     verlet, leapfrog, symplectic,
     dormand_prince_step, adaptive_integrate,

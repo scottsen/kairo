@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document summarizes the implementation of Kairo's cross-domain operator composition infrastructure, enabling seamless data flow between computational domains (Field, Agent, Audio, Physics, Geometry, etc.).
+This document summarizes the implementation of Morphogen's cross-domain operator composition infrastructure, enabling seamless data flow between computational domains (Field, Agent, Audio, Physics, Geometry, etc.).
 
 **Key Achievement:** Implemented production-ready infrastructure for cross-domain composition as specified in ADR-002 and ROADMAP v1.0.0.
 
@@ -86,7 +86,7 @@ class CrossDomainRegistry:
 **New Language Constructs:**
 
 #### `compose()` Statement
-```kairo
+```morphogen
 compose(module1, module2, module3)
 ```
 - **Purpose:** Parallel composition of cross-domain modules
@@ -94,7 +94,7 @@ compose(module1, module2, module3)
 - **Status:** Ready for runtime integration
 
 #### `link()` Statement
-```kairo
+```morphogen
 link module_name { metadata... }
 ```
 - **Purpose:** Declare dependency metadata (no runtime cost)
@@ -267,7 +267,7 @@ $ PYTHONPATH=/home/user/kairo python examples/cross_domain_field_agent_coupling.
 
 ## Integration Points
 
-### With Existing Kairo Systems
+### With Existing Morphogen Systems
 
 1. **Field Dialect** ✅
    - FieldToAgentInterface samples fields created by field operations
@@ -400,7 +400,7 @@ The infrastructure is production-ready and extensible. Future work involves:
 - Additional domain transforms
 - Performance optimization
 
-**This implementation provides the foundation for Kairo's vision of seamless multi-domain composition as outlined in ADR-002 and the v1.0.0 roadmap.**
+**This implementation provides the foundation for Morphogen's vision of seamless multi-domain composition as outlined in ADR-002 and the v1.0.0 roadmap.**
 
 ---
 

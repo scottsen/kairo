@@ -8,7 +8,7 @@
 
 ## Overview
 
-This specification defines Kairo's **timbre extraction and instrument modeling** capability — a system for analyzing acoustic recordings, extracting timbre characteristics, and synthesizing new notes with the same sonic character.
+This specification defines Morphogen's **timbre extraction and instrument modeling** capability — a system for analyzing acoustic recordings, extracting timbre characteristics, and synthesizing new notes with the same sonic character.
 
 This is one of the **holy grails of audio DSP**: turning a recording into a reusable synthesis model.
 
@@ -21,7 +21,7 @@ This is one of the **holy grails of audio DSP**: turning a recording into a reus
 - Morph instruments (guitar → violin, piano, synth hybrid)
 - Measure exact timbre evolution (for luthiers and engineers)
 
-**Why Kairo is ideal:**
+**Why Morphogen is ideal:**
 - Cross-domain operator architecture (audio + physics + transforms)
 - MLIR compilation for GPU acceleration
 - Deterministic semantics for reproducible analysis
@@ -42,7 +42,7 @@ This capability builds on established techniques from:
 | **Modal synthesis** | Resonant mode decomposition | 1990s+ |
 | **Convolution-based resonators** | Impulse response modeling | 2000s+ |
 
-Kairo **unifies all of these** in a way that is:
+Morphogen **unifies all of these** in a way that is:
 - ✅ Extensible (operator-driven)
 - ✅ Domain-aware (cross-domain composition)
 - ✅ Physically rooted (modal analysis, harmonic decomposition)
@@ -144,7 +144,7 @@ From a single recorded note (or a set of them), we mathematically extract:
 
 ---
 
-## Kairo Domain Model
+## Morphogen Domain Model
 
 ### AudioAnalysisDomain (NEW)
 
@@ -190,7 +190,7 @@ From a single recorded note (or a set of them), we mathematically extract:
 
 **Key Type:**
 
-```kairo
+```morphogen
 type InstrumentModel {
   id: String                          // "acoustic_guitar_1"
   type: Enum                          // "modal_string", "modal_membrane", "additive", etc.
@@ -227,11 +227,11 @@ type InstrumentModel {
 
 ---
 
-## Example: Full Pipeline (Kairo Language)
+## Example: Full Pipeline (Morphogen Language)
 
 ### 1. Analyze Acoustic Guitar Recording
 
-```kairo
+```morphogen
 scene AnalyzeGuitar {
   // Load recording
   let recording = io.load("samples/guitar_E3.wav")
@@ -290,7 +290,7 @@ scene AnalyzeGuitar {
 
 ### 2. Synthesize New Notes from Model
 
-```kairo
+```morphogen
 scene SynthesizeFromModel {
   // Load model
   let guitar = instrument.load("models/guitar_e3.kairo")
@@ -323,7 +323,7 @@ scene SynthesizeFromModel {
 
 ### 3. Morph Guitar into Violin
 
-```kairo
+```morphogen
 scene MorphInstruments {
   let guitar = instrument.load("models/guitar_e3.kairo")
   let violin = instrument.load("models/violin_a4.kairo")
@@ -346,7 +346,7 @@ scene MorphInstruments {
 
 ## Deconstruction Techniques (DSP Methods)
 
-These are standard in acoustics and DSP; Kairo just operators-them.
+These are standard in acoustics and DSP; Morphogen just operators-them.
 
 ### 1. Harmonic + Noise Model (H+N Model)
 
@@ -411,7 +411,7 @@ cepstrum(signal) = cepstrum(excitation) + cepstrum(body)
 
 ---
 
-## What Kairo Needs to Add
+## What Morphogen Needs to Add
 
 ### New Domains
 
@@ -480,7 +480,7 @@ These operators are **ideal for GPU acceleration:**
 | `spectral.filter` | `linalg.matmul` | Apply spectral mask in frequency domain |
 
 **MLIR Dialects Used:**
-- `kairo.transform` (FFT, STFT)
+- `morphogen.transform` (FFT, STFT)
 - `linalg` (matrix ops, generic ops)
 - `vector` (SIMD vectorization)
 - `gpu` (GPU kernels)
@@ -589,7 +589,7 @@ These operators are **ideal for GPU acceleration:**
 
 **Test:** Analyze → Synthesize → Measure Error
 
-```kairo
+```morphogen
 let original = io.load("guitar_e3.wav")
 let model = instrument.analyze(original)
 let resynthesized = instrument.synthesize(model, pitch=note("E3"), velocity=1.0)
@@ -604,7 +604,7 @@ assert(error < 0.05)  // <5% spectral error
 
 **Test:** Same input → Same output (bit-exact)
 
-```kairo
+```morphogen
 let model1 = instrument.analyze(recording)
 let model2 = instrument.analyze(recording)
 assert_eq!(model1, model2)
@@ -616,7 +616,7 @@ assert_eq!(model1, model2)
 
 **Test:** Synthesize at different pitches, verify harmonic structure
 
-```kairo
+```morphogen
 let model = instrument.analyze("guitar_e3.wav")
 let note_a3 = instrument.synthesize(model, pitch=220Hz, velocity=1.0)
 let note_a4 = instrument.synthesize(model, pitch=440Hz, velocity=1.0)
@@ -631,7 +631,7 @@ assert(harmonics_match(note_a3, note_a4, ratio=2.0))
 
 **Test:** Morph between two instruments, verify interpolation
 
-```kairo
+```morphogen
 let guitar = instrument.load("guitar.kairo")
 let violin = instrument.load("violin.kairo")
 
@@ -689,7 +689,7 @@ assert(guitar.spectral_centroid < note.spectral_centroid < violin.spectral_centr
 
 ## Cross-Domain Integration
 
-**Timbre extraction naturally integrates with other Kairo domains:**
+**Timbre extraction naturally integrates with other Morphogen domains:**
 
 ### Audio ↔ Physics
 - Modal analysis reveals physical properties (mass, stiffness, damping)
@@ -724,7 +724,7 @@ assert(guitar.spectral_centroid < note.spectral_centroid < violin.spectral_centr
 - **Modalys** — Modal synthesis environment
 - **IRCAM AudioSculpt** — Spectral analysis/resynthesis
 
-### Kairo Documentation
+### Morphogen Documentation
 - **transform.md** — Transform operators (FFT, STFT)
 - **operator-registry.md** — Operator metadata
 - **AUDIO_SPECIFICATION.md** — Audio domain specification
@@ -734,7 +734,7 @@ assert(guitar.spectral_centroid < note.spectral_centroid < violin.spectral_centr
 
 ## Conclusion
 
-Kairo's timbre extraction and instrument modeling capability is:
+Morphogen's timbre extraction and instrument modeling capability is:
 
 ✅ **Scientifically grounded** — Built on established DSP techniques (modal analysis, harmonic decomposition, deconvolution)
 ✅ **Operator-driven** — Composes analysis, synthesis, and modeling operators
@@ -743,9 +743,9 @@ Kairo's timbre extraction and instrument modeling capability is:
 ✅ **Deterministic** — Reproducible analysis and synthesis
 ✅ **Extensible** — Easy to add new analysis/synthesis methods
 
-**This is a perfect fit for Kairo's architecture.**
+**This is a perfect fit for Morphogen's architecture.**
 
-Not only can Kairo do this — **this is an ideal showcase of Kairo's cross-domain operator model.**
+Not only can Morphogen do this — **this is an ideal showcase of Morphogen's cross-domain operator model.**
 
 ---
 

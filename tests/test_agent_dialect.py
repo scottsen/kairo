@@ -5,8 +5,8 @@ These tests require MLIR Python bindings to be installed.
 """
 
 import pytest
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
-from kairo.mlir.dialects.agent import (
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.dialects.agent import (
     AgentType, AgentDialect,
     AgentSpawnOp, AgentUpdateOp, AgentQueryOp, AgentBehaviorOp
 )
@@ -634,7 +634,7 @@ class TestAgentLowering:
         """Test lowering agent spawn to memref allocation."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -667,7 +667,7 @@ class TestAgentLowering:
         """Test lowering agent update to memref store."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -710,7 +710,7 @@ class TestAgentLowering:
         """Test lowering agent query to memref load."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -752,7 +752,7 @@ class TestAgentLowering:
         """Test lowering agent behavior to loops."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -794,7 +794,7 @@ class TestAgentCompilerIntegration:
 
     def test_compile_agent_program_spawn(self):
         """Test compiling agent program with spawn."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -818,7 +818,7 @@ class TestAgentCompilerIntegration:
 
     def test_compile_agent_program_with_behavior(self):
         """Test compiling agent program with spawn and behavior."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -846,7 +846,7 @@ class TestAgentCompilerIntegration:
 
     def test_compile_agent_program_with_update_and_query(self):
         """Test compiling agent program with update and query operations."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -888,7 +888,7 @@ class TestAgentIntegrationWithOtherDialects:
         """Test agents can work with temporal state management."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.dialects.temporal import TemporalDialect
+        from morphogen.mlir.dialects.temporal import TemporalDialect
 
         ctx = KairoMLIRContext()
         with ctx.ctx, ir.Location.unknown():
@@ -924,7 +924,7 @@ class TestAgentIntegrationWithOtherDialects:
         """Test module with multiple sequential agent operations."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)

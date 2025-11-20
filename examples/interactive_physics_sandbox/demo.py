@@ -28,13 +28,13 @@ Run: python examples/interactive_physics_sandbox/demo.py
 
 import numpy as np
 from pathlib import Path
-from kairo.stdlib import rigidbody, field, palette, visual, image, color
-from kairo.stdlib.rigidbody import (
+from morphogen.stdlib import rigidbody, field, palette, visual, image, color
+from morphogen.stdlib.rigidbody import (
     PhysicsWorld2D, RigidBody2D,
     create_circle_body, create_box_body,
     step_world, get_body_vertices
 )
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib.field import Field2D
 
 
 # ============================================================================

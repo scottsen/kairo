@@ -9,12 +9,12 @@
 
 ## Context
 
-Kairo was originally designed with a **device-transparent compute model**:
+Morphogen was originally designed with a **device-transparent compute model**:
 
 > "Operators can run on either CPU or GPU with identical semantics.
 > GPU is an accelerator, chosen for performance, not for algorithmic reasons."
 
-This model has served Kairo well across many domains:
+This model has served Morphogen well across many domains:
 
 - ✅ **Audio DSP** — FFT, filters, oscillators (CPU or GPU)
 - ✅ **Fractal rendering** — Mandelbrot, Julia sets (CPU or GPU)
@@ -57,12 +57,12 @@ We face a choice:
 
 1. **Option A:** Force BI into the existing device-transparent model
    - Result: Compromise BI performance and semantics
-   - Consequence: Kairo BI would not be competitive with VertiPaq, cuDF, or OmniSciDB
+   - Consequence: Morphogen BI would not be competitive with VertiPaq, cuDF, or OmniSciDB
    - Outcome: BI becomes a second-class domain
 
 2. **Option B:** Introduce a new concept — **GPU-First Domains**
    - Result: Some domains explicitly require GPU
-   - Consequence: Kairo's abstraction model evolves
+   - Consequence: Morphogen's abstraction model evolves
    - Outcome: BI becomes a first-class, high-performance domain
 
 ### Why This Matters
@@ -75,17 +75,17 @@ BI is not the only domain that benefits from GPU-first semantics:
 - **Graph Algorithms** — GPU-native adjacency representations
 - **Cryptography** — Warp-level parallel hashing, GPU-specific bit operations
 
-If Kairo wants to be a **universal computational platform**, it must support GPU-first domains.
+If Morphogen wants to be a **universal computational platform**, it must support GPU-first domains.
 
 ---
 
 ## Decision
 
-**We will introduce GPU-First Domains as a new architectural concept in Kairo.**
+**We will introduce GPU-First Domains as a new architectural concept in Morphogen.**
 
 ### What is a GPU-First Domain?
 
-A **GPU-First Domain** is a Kairo domain where:
+A **GPU-First Domain** is a Morphogen domain where:
 
 1. **GPU is not an accelerator — it is the primary execution model**
 2. **Operators require GPU memory formats** (e.g., dictionary-encoded columns, bitmaps)
@@ -96,7 +96,7 @@ A **GPU-First Domain** is a Kairo domain where:
 
 GPU-First domains are explicitly marked in their definition:
 
-```kairo
+```morphogen
 domain: BI
 device: gpu
 ```
@@ -108,7 +108,7 @@ This indicates:
 
 Contrast with device-transparent domains:
 
-```kairo
+```morphogen
 domain: Audio
 device: any  // Can run on CPU or GPU
 ```
@@ -117,7 +117,7 @@ device: any  // Can run on CPU or GPU
 
 GPU-First domains introduce GPU-specific operators:
 
-```kairo
+```morphogen
 // Dictionary encoding (GPU-native)
 op gpu.dict_encode<T>(
     col: GpuColumn<T>
@@ -155,7 +155,7 @@ These operators:
 
 We introduce GPU-resident types:
 
-```kairo
+```morphogen
 type GpuColumn<T> {
     data: GpuBuffer<T>,
     count: i64,
@@ -191,7 +191,7 @@ These types:
 
 The operator registry must support device-specific operators:
 
-```kairo
+```morphogen
 // GPU-first operator
 @device(gpu)
 op gpu.dict_encode<T>(col: GpuColumn<T>) -> GpuDictEncodedColumn<T>
@@ -228,7 +228,7 @@ The scheduler must:
 
 Example:
 
-```kairo
+```morphogen
 // All GPU-resident — no host transfers
 let encoded = gpu.dict_encode(Sales[ProductName])
 let filtered = gpu.bitmap_filter(bitmap, Sales)
@@ -254,7 +254,7 @@ GPU-first domains can interact with device-transparent domains:
 
 **BI → Visualization:**
 
-```kairo
+```morphogen
 let sales_total = gpu.agg_sum(Sales[Amount])  // GPU-first
 viz.bar_chart(sales_total)                    // Device-transparent
 ```
@@ -268,7 +268,7 @@ Host: viz.bar_chart (receives scalar)
 
 **BI → Simulation:**
 
-```kairo
+```morphogen
 let avg_temp = gpu.agg_avg(Sensors[Temperature])  // GPU-first
 physics.thermal_ode(initial_temp: avg_temp)       // Device-transparent
 ```
@@ -282,7 +282,7 @@ Host or GPU: thermal_ode (receives scalar, can run on either)
 
 **Mixed GPU pipelines:**
 
-```kairo
+```morphogen
 let grouped = gpu.segmented_groupby(Sales[Region], Sales[Amount], Sum)  // GPU
 let heatmap = viz.gpu_heatmap(grouped)                                  // GPU
 render.gpu(heatmap)                                                     // GPU
@@ -302,7 +302,7 @@ GPU: render.gpu (consumes GpuTexture)
 
 If a GPU-first operator is invoked without GPU:
 
-```kairo
+```morphogen
 let result = gpu.dict_encode(Sales[ProductName])
 ```
 
@@ -315,7 +315,7 @@ Hint: Check CUDA/ROCm installation or run on a GPU-enabled machine.
 
 Optional: Provide CPU fallback (if semantically feasible):
 
-```kairo
+```morphogen
 @device(gpu)
 @fallback(cpu)  // Optional CPU implementation (if possible)
 op gpu.dict_encode<T>(col: GpuColumn<T>) -> GpuDictEncodedColumn<T>
@@ -325,11 +325,11 @@ For BI, most operators have **no CPU fallback** — GPU is required.
 
 ---
 
-## Why GPU-First Domains Fit Kairo
+## Why GPU-First Domains Fit Morphogen
 
-### 1. Kairo is Already GPU-Centric
+### 1. Morphogen is Already GPU-Centric
 
-Kairo's MLIR pipeline already lowers to GPU:
+Morphogen's MLIR pipeline already lowers to GPU:
 - `gpu.launch` for parallel kernels
 - `gpu.memcpy` for host ↔ device transfers
 - GPU dialect integration
@@ -344,21 +344,21 @@ GPU-first domains integrate naturally:
 
 **BI + Visualization:**
 
-```kairo
+```morphogen
 let sales = gpu.agg_sum(Sales[Amount])
 viz.bar_chart(sales)
 ```
 
 **BI + ML:**
 
-```kairo
+```morphogen
 let features = gpu.calc_column(Customers, ...)
 ml.train_gpu(features, target)
 ```
 
 **BI + Simulation:**
 
-```kairo
+```morphogen
 let avg_pressure = gpu.agg_avg(Sensors[Pressure])
 physics.fluid_network(initial_pressure: avg_pressure)
 ```
@@ -376,7 +376,7 @@ GPU-first BI operators achieve:
 | Bitmap filtering | 30-100x |
 | Hash joins | 15-40x |
 
-This makes Kairo BI competitive with cuDF, OmniSciDB, and RAPIDS.
+This makes Morphogen BI competitive with cuDF, OmniSciDB, and RAPIDS.
 
 ---
 
@@ -390,7 +390,7 @@ GPU-first domains enable future expansions:
 - **Graph Algorithms** — GPU adjacency representations
 - **Cryptography** — Warp-level hashing
 
-Kairo becomes a **universal GPU-first computational platform**.
+Morphogen becomes a **universal GPU-first computational platform**.
 
 ---
 
@@ -407,7 +407,7 @@ Kairo becomes a **universal GPU-first computational platform**.
 **Cons:**
 - ❌ BI performance would be poor
 - ❌ Cannot use GPU-native data structures (dictionary encoding, bitmaps)
-- ❌ Kairo BI would not be competitive
+- ❌ Morphogen BI would not be competitive
 - ❌ Limits future GPU-first domains (ML, ray tracing)
 
 **Decision:** Rejected — compromises BI performance and limits future growth.
@@ -416,19 +416,19 @@ Kairo becomes a **universal GPU-first computational platform**.
 
 ### Alternative 2: Create a Separate GPU-Only BI Engine
 
-**Approach:** Build BI as a standalone GPU library, not integrated with Kairo.
+**Approach:** Build BI as a standalone GPU library, not integrated with Morphogen.
 
 **Pros:**
 - GPU-native performance
-- No impact on Kairo's abstraction
+- No impact on Morphogen's abstraction
 
 **Cons:**
 - ❌ No cross-domain composability
 - ❌ Fragmented ecosystem
 - ❌ Cannot combine BI with simulation, ML, rendering
-- ❌ Defeats Kairo's vision of unified computational platform
+- ❌ Defeats Morphogen's vision of unified computational platform
 
-**Decision:** Rejected — violates Kairo's core principle of domain composability.
+**Decision:** Rejected — violates Morphogen's core principle of domain composability.
 
 ---
 
@@ -557,7 +557,7 @@ We will know GPU-first domains are successful when:
 
 ## Conclusion
 
-**GPU-First Domains** are a necessary evolution of Kairo's architecture.
+**GPU-First Domains** are a necessary evolution of Morphogen's architecture.
 
 They enable:
 - ✅ **High-performance BI** competitive with cuDF and OmniSciDB
@@ -565,12 +565,12 @@ They enable:
 - ✅ **Future expansion** into ML, ray tracing, sparse algebra
 - ✅ **GPU-native semantics** where appropriate
 
-This decision preserves Kairo's core principles:
+This decision preserves Morphogen's core principles:
 - **Declarative operator model** — GPU-first operators are still declarative
 - **Cross-domain composability** — GPU-first domains integrate with all others
 - **Extensibility** — New GPU-first domains are easy to add
 
-And it positions Kairo as a **universal GPU-first computational platform**.
+And it positions Morphogen as a **universal GPU-first computational platform**.
 
 ---
 

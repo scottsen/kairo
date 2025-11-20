@@ -1,4 +1,4 @@
-# Kairo: Strategic Next Steps for Cool Domains & Demos
+# Morphogen: Strategic Next Steps for Cool Domains & Demos
 
 ## Current State (November 16, 2025)
 
@@ -181,7 +181,7 @@
 
 ### Import from Existing Domains
 ```python
-from kairo.stdlib import (
+from morphogen.stdlib import (
     integrators,        # For time-stepping
     field,              # For spatial operations
     visual,             # For rendering

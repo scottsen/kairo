@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document specifies **four new physics domains** for Kairo that enable multi-physics engineering modeling. These domains emerged from the J-tube fire pit design example and are generally applicable to thermal-fluid systems, combustion, HVAC, and mechanical engineering.
+This document specifies **four new physics domains** for Morphogen that enable multi-physics engineering modeling. These domains emerged from the J-tube fire pit design example and are generally applicable to thermal-fluid systems, combustion, HVAC, and mechanical engineering.
 
 ### Domains Covered
 
@@ -21,7 +21,7 @@ This document specifies **four new physics domains** for Kairo that enable multi
 
 - **Deterministic by default** — All operators are repro or strict unless marked otherwise
 - **Unit-safe** — All physical quantities have units (Pa, K, kg/s, W/(m·K), etc.)
-- **Reference-based composition** — Uses Kairo's anchor/frame system from GeometryDomain
+- **Reference-based composition** — Uses Morphogen's anchor/frame system from GeometryDomain
 - **Layered complexity** — Simple approximations first, can upgrade to full CFD/FEA later
 - **Cross-domain integration** — Clean interfaces with Geometry, Fields, Visualization domains
 
@@ -44,7 +44,7 @@ This document specifies **four new physics domains** for Kairo that enable multi
 
 ### 1.1 Core Types
 
-```kairo
+```morphogen
 // Pipe geometry + flow properties
 type Tube {
     geometry: Pipe,          // Geometric representation
@@ -122,7 +122,7 @@ type JunctionRef = Ref<Junction>
   },
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_network.draft_pressure",
+    "python": "morphogen.stdlib.fluid_network.draft_pressure",
     "formula": "ΔP = ρ·g·H·(1/T_amb - 1/T_hot)"
   },
 
@@ -174,7 +174,7 @@ type JunctionRef = Ref<Junction>
   },
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_network.tube_resistance",
+    "python": "morphogen.stdlib.fluid_network.tube_resistance",
     "formula": "R = (f·L/D + K_bends)·(1/(2·ρ·A²))"
   },
 
@@ -225,13 +225,13 @@ type JunctionRef = Ref<Junction>
   },
 
   "lowering_hints": {
-    "dialect": "kairo.fluid",
+    "dialect": "morphogen.fluid",
     "template": "mna_fluid_solver",
     "parallelize": true
   },
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_network.network_solve",
+    "python": "morphogen.stdlib.fluid_network.network_solve",
     "algorithm": "Modified Nodal Analysis (MNA)"
   },
 
@@ -274,7 +274,7 @@ type JunctionRef = Ref<Junction>
 
 ### 2.1 Core Types
 
-```kairo
+```morphogen
 // 1D thermal segment (tube, rod, wall)
 type ThermalSegment {
     length: Length,
@@ -331,7 +331,7 @@ type ThermalProfile {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.thermal_ode.wall_temp_model"
+    "python": "morphogen.stdlib.thermal_ode.wall_temp_model"
   },
 
   "notes": [
@@ -381,7 +381,7 @@ type ThermalProfile {
   },
 
   "implementation": {
-    "python": "kairo.stdlib.thermal_ode.heat_transfer_1D",
+    "python": "morphogen.stdlib.thermal_ode.heat_transfer_1D",
     "formula": "m_dot·c_p·dT/dx = h·A_s·(T_wall(x) - T_air)"
   },
 
@@ -439,7 +439,7 @@ type ThermalProfile {
   },
 
   "implementation": {
-    "python": "kairo.stdlib.thermal_ode.lumped_capacity",
+    "python": "morphogen.stdlib.thermal_ode.lumped_capacity",
     "formula": "m·c_p·dT/dt = Q_in - h·A·(T - T_amb)"
   }
 }
@@ -475,7 +475,7 @@ type ThermalProfile {
 
 ### 3.1 Core Types
 
-```kairo
+```morphogen
 // Single jet
 type Jet {
     flow: f32<kg/s>,        // Mass flow rate
@@ -523,7 +523,7 @@ type JetArray {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_jet.jet_from_tube",
+    "python": "morphogen.stdlib.fluid_jet.jet_from_tube",
     "formula": "v = m_dot / (ρ·A)"
   },
 
@@ -561,7 +561,7 @@ type JetArray {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_jet.jet_reynolds",
+    "python": "morphogen.stdlib.fluid_jet.jet_reynolds",
     "formula": "Re = ρ·v·D/μ"
   }
 }
@@ -598,7 +598,7 @@ type JetArray {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_jet.jet_entrainment"
+    "python": "morphogen.stdlib.fluid_jet.jet_entrainment"
   },
 
   "notes": [
@@ -640,7 +640,7 @@ type JetArray {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.fluid_jet.jet_field"
+    "python": "morphogen.stdlib.fluid_jet.jet_field"
   },
 
   "notes": [
@@ -678,7 +678,7 @@ type JetArray {
 
 ### 4.1 Core Types
 
-```kairo
+```morphogen
 // Mixture composition
 type MixtureState {
     fuel_rate: f32<kg/s>,
@@ -733,7 +733,7 @@ type SmokeIndex {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.combustion_light.equivalence_ratio",
+    "python": "morphogen.stdlib.combustion_light.equivalence_ratio",
     "formula": "φ = (fuel/air) / (fuel/air)_stoich"
   },
 
@@ -776,7 +776,7 @@ type SmokeIndex {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.combustion_light.zone_temperature"
+    "python": "morphogen.stdlib.combustion_light.zone_temperature"
   },
 
   "notes": [
@@ -819,7 +819,7 @@ type SmokeIndex {
   "rate": "control",
 
   "implementation": {
-    "python": "kairo.stdlib.combustion_light.smoke_reduction"
+    "python": "morphogen.stdlib.combustion_light.smoke_reduction"
   },
 
   "notes": [
@@ -847,25 +847,25 @@ type SmokeIndex {
 ### 5.1 Integration Patterns
 
 **Geometry → FluidNetwork:**
-```kairo
+```morphogen
 let tube = geom.pipe(centerline, diameter, thickness)
 let resistance = fluid_net.tube_resistance(geometry=tube, ...)
 ```
 
 **FluidNetwork → ThermalODE:**
-```kairo
+```morphogen
 let flow_solution = fluid_net.network_solve(...)
 let T_out = thermal.heat_transfer_1D(m_dot=flow_solution.mass_flow[i], ...)
 ```
 
 **ThermalODE → FluidJet:**
-```kairo
+```morphogen
 let T_jet = thermal.heat_transfer_1D(...)
 let jet = fluid_jet.from_tube(T_out=T_jet, ...)
 ```
 
 **FluidJet → CombustionLight:**
-```kairo
+```morphogen
 let jets = [...]
 let T_zone = combustion.zone_temperature(jet_info=jets)
 ```
@@ -931,20 +931,20 @@ let T_zone = combustion.zone_temperature(jet_info=jets)
 
 ### 7.1 Dialect Design
 
-**kairo.fluid dialect:**
+**morphogen.fluid dialect:**
 - `fluid.draft_pressure` — Map to simple arithmetic
 - `fluid.tube_resistance` — Inline or call runtime function
 - `fluid.network_solve` — Lower to sparse linear algebra (linalg.sparse)
 
-**kairo.thermal dialect:**
+**morphogen.thermal dialect:**
 - `thermal.heat_transfer_1D` — Lower to ODE integrator (loop + vectorized ops)
 - `thermal.lumped_capacity` — Lower to recurrence relation
 
-**kairo.jet dialect:**
+**morphogen.jet dialect:**
 - `jet.from_tube` — Inline calculations
-- `jet.field` — Lower to field ops (kairo.field dialect)
+- `jet.field` — Lower to field ops (morphogen.field dialect)
 
-**kairo.combustion dialect:**
+**morphogen.combustion dialect:**
 - `combustion.equivalence_ratio` — Inline
 - `combustion.smoke_reduction` — Call runtime function (empirical model)
 
@@ -1025,7 +1025,7 @@ def test_j_tube_pipeline():
 - [ ] Integration tests (cross-domain pipelines)
 
 ### Phase 2: MLIR Lowering (v0.10)
-- [ ] Define kairo.fluid, kairo.thermal, kairo.jet, kairo.combustion dialects
+- [ ] Define morphogen.fluid, morphogen.thermal, morphogen.jet, morphogen.combustion dialects
 - [ ] Implement lowering passes
 - [ ] Validate lowered code vs Python reference
 
@@ -1052,7 +1052,7 @@ def test_j_tube_pipeline():
 
 ### Why This Matters
 
-- **Validates Kairo for engineering** — Not just audio/graphics
+- **Validates Morphogen for engineering** — Not just audio/graphics
 - **Enables multi-physics design** — Fire pits, mufflers, HVAC, burners
 - **Demonstrates cross-domain composition** — Geometry → Fluid → Thermal → Combustion
 - **Proves reference/anchor system works** — Physical connection points

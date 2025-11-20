@@ -6,7 +6,7 @@ import tempfile
 import os
 from pathlib import Path
 
-from kairo.stdlib.audio import AudioBuffer, AudioOperations, audio
+from morphogen.stdlib.audio import AudioBuffer, AudioOperations, audio
 
 
 class TestAudioIO:

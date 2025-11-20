@@ -11,8 +11,8 @@ Generates several procedural images showing the power of these domains.
 """
 
 import numpy as np
-from kairo.stdlib import noise, palette, color, image, field
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import noise, palette, color, image, field
+from morphogen.stdlib.field import Field2D
 
 
 def demo_basic_noise_with_palette():

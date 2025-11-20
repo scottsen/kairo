@@ -8,7 +8,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.integrators import euler, rk2, rk4, verlet, symplectic
+from morphogen.stdlib.integrators import euler, rk2, rk4, verlet, symplectic
 
 
 def sho_derivative(t, state):

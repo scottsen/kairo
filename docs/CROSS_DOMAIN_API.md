@@ -8,7 +8,7 @@
 
 ## Overview
 
-Kairo's cross-domain composition infrastructure enables seamless data flow between different computational domains (Field, Agent, Audio, Physics, Geometry, etc.). This document describes the API for creating, registering, and using cross-domain transforms.
+Morphogen's cross-domain composition infrastructure enables seamless data flow between different computational domains (Field, Agent, Audio, Physics, Geometry, etc.). This document describes the API for creating, registering, and using cross-domain transforms.
 
 **Key Features:**
 - **Type-safe transforms** between domain pairs
@@ -71,7 +71,7 @@ if CrossDomainRegistry.has_transform("field", "agent"):
 
 **API:**
 ```python
-from kairo.cross_domain.interface import FieldToAgentInterface
+from morphogen.cross_domain.interface import FieldToAgentInterface
 
 # Create transform
 transform = FieldToAgentInterface(
@@ -96,7 +96,7 @@ sampled_values = transform(field)
 **Example:**
 ```python
 import numpy as np
-from kairo.cross_domain.interface import FieldToAgentInterface
+from morphogen.cross_domain.interface import FieldToAgentInterface
 
 # Create velocity field (vortex)
 y, x = np.mgrid[0:100, 0:100]
@@ -127,7 +127,7 @@ print(velocities.shape)  # (2, 2) - two agents, two velocity components
 
 **API:**
 ```python
-from kairo.cross_domain.interface import AgentToFieldInterface
+from morphogen.cross_domain.interface import AgentToFieldInterface
 
 # Create transform
 transform = AgentToFieldInterface(
@@ -184,7 +184,7 @@ print(density_field.max())  # Maximum density (how many particles in a cell)
 
 **API:**
 ```python
-from kairo.cross_domain.interface import PhysicsToAudioInterface
+from morphogen.cross_domain.interface import PhysicsToAudioInterface
 
 # Create transform with mapping
 transform = PhysicsToAudioInterface(
@@ -260,8 +260,8 @@ print(audio_params["frequencies"])  # [261.63, 293.66, ...]
 ### Method 1: Subclass `DomainInterface`
 
 ```python
-from kairo.cross_domain.interface import DomainInterface
-from kairo.cross_domain.registry import register_transform
+from morphogen.cross_domain.interface import DomainInterface
+from morphogen.cross_domain.registry import register_transform
 import numpy as np
 
 @register_transform("geometry", "field", metadata={"version": "1.0"})
@@ -301,7 +301,7 @@ class GeometryToFieldInterface(DomainInterface):
 ### Method 2: Use `@DomainTransform` Decorator
 
 ```python
-from kairo.cross_domain.interface import DomainTransform
+from morphogen.cross_domain.interface import DomainTransform
 import numpy as np
 
 @DomainTransform(
@@ -331,12 +331,12 @@ def field_to_image(field, cmap="viridis"):
 
 Parallel composition of cross-domain modules:
 
-```kairo
+```morphogen
 compose(module1, module2, module3)
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Define modules
 module FluidField(dt: f32) {
     @state vel : Field2D<Vec2<f32>> = zeros((256, 256))
@@ -359,12 +359,12 @@ compose(
 
 Declare dependency metadata (no runtime cost):
 
-```kairo
+```morphogen
 link module_name { metadata... }
 ```
 
 **Example:**
-```kairo
+```morphogen
 link AudioDomain {
     version: 1.0,
     required: true,
@@ -379,7 +379,7 @@ link AudioDomain {
 ### Type Checking
 
 ```python
-from kairo.cross_domain.validators import validate_cross_domain_flow
+from morphogen.cross_domain.validators import validate_cross_domain_flow
 
 # Validate a cross-domain flow
 is_valid = validate_cross_domain_flow(
@@ -392,7 +392,7 @@ is_valid = validate_cross_domain_flow(
 ### Field Validation
 
 ```python
-from kairo.cross_domain.validators import validate_field_data
+from morphogen.cross_domain.validators import validate_field_data
 
 validate_field_data(field, allow_vector=True)  # Raises on error
 ```
@@ -400,7 +400,7 @@ validate_field_data(field, allow_vector=True)  # Raises on error
 ### Agent Position Validation
 
 ```python
-from kairo.cross_domain.validators import validate_agent_positions
+from morphogen.cross_domain.validators import validate_agent_positions
 
 validate_agent_positions(positions, ndim=2)  # Raises on error
 ```
@@ -408,7 +408,7 @@ validate_agent_positions(positions, ndim=2)  # Raises on error
 ### Dimensional Compatibility
 
 ```python
-from kairo.cross_domain.validators import check_dimensional_compatibility
+from morphogen.cross_domain.validators import check_dimensional_compatibility
 
 check_dimensional_compatibility(field_shape=(128, 128), positions=agent_pos)
 ```
@@ -420,7 +420,7 @@ check_dimensional_compatibility(field_shape=(128, 128), positions=agent_pos)
 ### List All Transforms
 
 ```python
-from kairo.cross_domain.registry import CrossDomainRegistry
+from morphogen.cross_domain.registry import CrossDomainRegistry
 
 # List all registered transforms
 all_transforms = CrossDomainRegistry.list_all()
@@ -490,7 +490,7 @@ Cross-Domain Transform Graph:
 
 ```python
 import numpy as np
-from kairo.cross_domain.interface import FieldToAgentInterface, AgentToFieldInterface
+from morphogen.cross_domain.interface import FieldToAgentInterface, AgentToFieldInterface
 
 # Setup
 grid_size = 128
@@ -573,7 +573,7 @@ for step in range(100):
 
 **API**:
 ```python
-from kairo.cross_domain import AudioToVisualInterface
+from morphogen.cross_domain import AudioToVisualInterface
 
 transform = AudioToVisualInterface(
     audio_signal,
@@ -604,7 +604,7 @@ visual_params = transform(audio_signal)
 
 **API**:
 ```python
-from kairo.cross_domain import FieldToAudioInterface
+from morphogen.cross_domain import FieldToAudioInterface
 
 transform = FieldToAudioInterface(
     field,
@@ -635,7 +635,7 @@ audio_params = transform(field)
 
 **API**:
 ```python
-from kairo.cross_domain import TerrainToFieldInterface, FieldToTerrainInterface
+from morphogen.cross_domain import TerrainToFieldInterface, FieldToTerrainInterface
 
 # Terrain → Field
 t2f = TerrainToFieldInterface(heightmap, normalize=True)
@@ -659,7 +659,7 @@ terrain_data = f2t(field)
 
 **API**:
 ```python
-from kairo.cross_domain import VisionToFieldInterface
+from morphogen.cross_domain import VisionToFieldInterface
 
 transform = VisionToFieldInterface(
     image,
@@ -687,7 +687,7 @@ field = transform(image)
 
 **API**:
 ```python
-from kairo.cross_domain import GraphToVisualInterface
+from morphogen.cross_domain import GraphToVisualInterface
 
 transform = GraphToVisualInterface(
     graph_data={'nodes': [...], 'edges': [...]},
@@ -713,7 +713,7 @@ visual_data = transform(graph_data)
 
 **API**:
 ```python
-from kairo.cross_domain import CellularToFieldInterface
+from morphogen.cross_domain import CellularToFieldInterface
 
 transform = CellularToFieldInterface(ca_state, normalize=True)
 field = transform(ca_state)
@@ -733,7 +733,7 @@ field = transform(ca_state)
 ### Automatic Path Finding
 
 ```python
-from kairo.cross_domain import find_transform_path
+from morphogen.cross_domain import find_transform_path
 
 # Find path from source to target domain
 path = find_transform_path("terrain", "audio", max_hops=3)
@@ -743,7 +743,7 @@ print(path)  # ['terrain', 'field', 'audio']
 ### Pipeline Creation
 
 ```python
-from kairo.cross_domain import TransformComposer
+from morphogen.cross_domain import TransformComposer
 
 composer = TransformComposer(enable_caching=True)
 
@@ -764,13 +764,13 @@ print(pipeline.length)  # 2
 ### Composition Utilities
 
 ```python
-from kairo.cross_domain import auto_compose, compose
+from morphogen.cross_domain import auto_compose, compose
 
 # Shorthand for automatic composition
 pipeline = auto_compose("field", "audio")
 
 # Manual composition of transform instances
-from kairo.cross_domain import FieldToAgentInterface, AgentToFieldInterface
+from morphogen.cross_domain import FieldToAgentInterface, AgentToFieldInterface
 
 t1 = FieldToAgentInterface(field, positions)
 t2 = AgentToFieldInterface(positions, values, field_shape)
@@ -806,7 +806,7 @@ Demonstrates automatic pipeline composition and execution.
 """
 
 import numpy as np
-from kairo.cross_domain import TransformComposer, AudioToVisualInterface
+from morphogen.cross_domain import TransformComposer, AudioToVisualInterface
 
 # Generate procedural terrain
 terrain = np.random.rand(256, 256) * 100.0
@@ -834,7 +834,7 @@ print(f"Generated audio with frequency {audio_params['frequency']:.2f} Hz")
 ## Registry Inspection
 
 ```python
-from kairo.cross_domain import CrossDomainRegistry
+from morphogen.cross_domain import CrossDomainRegistry
 
 # List all transforms
 all_transforms = CrossDomainRegistry.list_all()
@@ -882,5 +882,5 @@ Planned cross-domain transforms (v0.12+):
 ---
 
 **Last Updated:** 2025-11-16 (Phase 2 Complete)
-**Maintainer:** Kairo Development Team
+**Maintainer:** Morphogen Development Team
 **Version:** v0.11.0 (Cross-Domain Infrastructure Phase 2)

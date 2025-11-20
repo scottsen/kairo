@@ -5,9 +5,9 @@ import numpy as np
 import tempfile
 import os
 
-from kairo.stdlib.visual import Visual, VisualOperations, visual
-from kairo.stdlib.agents import Agents, agents
-from kairo.stdlib.field import field
+from morphogen.stdlib.visual import Visual, VisualOperations, visual
+from morphogen.stdlib.agents import Agents, agents
+from morphogen.stdlib.field import field
 
 
 class TestVisualAgents:

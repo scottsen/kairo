@@ -1,9 +1,47 @@
 # Changelog
 
-All notable changes to Kairo will be documented in this file.
+All notable changes to Morphogen will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [0.11.0] - 2025-11-20
+
+### 🎉 MAJOR: Project Renamed to Morphogen
+
+**Breaking Change:** The project has been renamed from "Kairo" to "Morphogen" to better reflect its essence as an emergence-focused continuous-time computation platform.
+
+**Why "Morphogen"?**
+- Named after Alan Turing's morphogenesis (1952): simple continuous-time differential equations creating complex emergent patterns
+- Aligns perfectly with our architecture: four simple primitives (sum, integrate, nonlinearity, events) composing into emergent complexity
+- Unique market positioning: "emergence-focused continuous-time computation"
+- Educational value: teaches Turing's morphogenesis while teaching the platform
+- See ADR-011 for full rationale
+
+**What Changed:**
+- Package name: `kairo` → `morphogen`
+- CLI command: `kairo` → `morphogen`
+- All imports: `from kairo.*` → `from morphogen.*`
+- MLIR dialects: `kairo.*` → `morphogen.*`
+- Class names: `KairoMLIRContext` → `MorphogenMLIRContext`
+- All documentation updated
+
+**Migration Guide:**
+```python
+# Before (v0.10.x)
+from kairo.stdlib import field, audio
+import kairo
+
+# After (v0.11.0+)
+from morphogen.stdlib import field, audio
+import morphogen
+```
+
+**Sister Project:**
+- Analog hardware platform "Philbrick" established (named after George A. Philbrick, inventor of modular analog computing)
+- Morphogen (digital) + Philbrick (analog) = unified computational vision
 
 ---
 
@@ -15,11 +53,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Status:** ✅ COMPLETE
 **Achievement:** New `geometry` domain added with 50+ operators for spatial computation!
 
-This major addition brings comprehensive geometric primitives, transformations, and spatial queries to Kairo, enabling powerful 2D/3D spatial reasoning for simulations, graphics, and computational geometry tasks.
+This major addition brings comprehensive geometric primitives, transformations, and spatial queries to Morphogen, enabling powerful 2D/3D spatial reasoning for simulations, graphics, and computational geometry tasks.
 
 **What Was Implemented:**
 
-1. **New Geometry Domain** (`kairo/stdlib/geometry.py`)
+1. **New Geometry Domain** (`morphogen/stdlib/geometry.py`)
    - 50+ operators across 5 layers of functionality
    - Full type annotations and comprehensive documentation
    - Frame-aware transformations and coordinate conversions
@@ -68,7 +106,7 @@ This major addition brings comprehensive geometric primitives, transformations, 
 - NumPy-based implementation for performance
 - Type-safe with proper Python type hints
 - Deterministic operations (all operators marked `deterministic=True`)
-- Follows established Kairo patterns (decorator, categories, signatures)
+- Follows established Morphogen patterns (decorator, categories, signatures)
 
 **Use Cases:**
 - Physics simulations (collision detection, spatial partitioning)
@@ -91,19 +129,19 @@ This major addition brings comprehensive geometric primitives, transformations, 
 **Status:** ✅ COMPLETE
 **Achievement:** Level 2 integration jumped from 39.1% → 95.7% → **100% complete!**
 
-This represents a **massive milestone**: all 23 stdlib domains are now fully integrated with the operator registry and ready for use from `.kairo` source files.
+This represents a **massive milestone**: all 23 stdlib domains are now fully integrated with the operator registry and ready for use from `.morphogen` source files.
 
 **What Was Completed:**
 
 1. **Created Temporal Domain (24 operators)**
-   - New `kairo/stdlib/temporal.py` with temporal logic and scheduling
+   - New `morphogen/stdlib/temporal.py` with temporal logic and scheduling
    - Delay lines, timers, clocks, event sequences
    - Edge detection, threshold crossings, temporal logic operators
    - Lag operations, time series analysis (difference, cumsum)
    - Rate conversion and resampling
 
 2. **Fixed Import Errors (13 domains)**
-   - Corrected `from kairo.core.operators` → `from kairo.core.operator` (singular)
+   - Corrected `from morphogen.core.operators` → `from morphogen.core.operator` (singular)
    - Added missing `OpCategory` imports to 3 domains
 
 3. **Completed @operator Decorators (374 total operators)**
@@ -163,7 +201,7 @@ This represents a **massive milestone**: all 23 stdlib domains are now fully int
 We are launching a strategic pivot from breadth (adding more domains) to depth (finishing the 23 domains we have). This initiative is documented in `docs/guides/DOMAIN_FINISHING_GUIDE.md`.
 
 **The Problem:**
-We have 23 domains implemented, but most are "half-finished" — they work in Python but aren't fully integrated into Kairo/Morphogen as a platform.
+We have 23 domains implemented, but most are "half-finished" — they work in Python but aren't fully integrated into Morphogen/Morphogen as a platform.
 
 **The Solution:**
 A comprehensive 10-month roadmap to bring all 23 domains through 5 levels of completion:
@@ -175,7 +213,7 @@ A comprehensive 10-month roadmap to bring all 23 domains through 5 levels of com
 2. **Level 2: Language Integration** (Months 3-4, 8 weeks)
    - Domain registry system
    - `use {domain}` statement support
-   - Operators callable from `.kairo` source files
+   - Operators callable from `.morphogen` source files
    - Type signatures for all operators
 
 3. **Level 3: Type System Enforcement** (Months 5-6, 8 weeks)
@@ -233,7 +271,7 @@ A comprehensive 10-month roadmap to bring all 23 domains through 5 levels of com
 > "Stop adding domains. Finish the 23 we have. Then every future domain integrates from day 1."
 
 **Success Metrics:**
-- By Month 4: All 23 domains usable from `.kairo` files
+- By Month 4: All 23 domains usable from `.morphogen` files
 - By Month 6: Full type safety across all domains
 - By Month 8: Multirate execution working
 - By Month 10: 3 production applications + 5+ domains with native compilation
@@ -250,7 +288,7 @@ A comprehensive 10-month roadmap to bring all 23 domains through 5 levels of com
 
 **Implementation of Level 2, Phase 1 from Domain Finishing Guide**
 
-We've begun Level 2 (Language Integration) by implementing the core domain registry infrastructure. This is the foundation that will enable all 23 domains to be accessible from `.kairo` source files.
+We've begun Level 2 (Language Integration) by implementing the core domain registry infrastructure. This is the foundation that will enable all 23 domains to be accessible from `.morphogen` source files.
 
 **New Core Infrastructure:**
 
@@ -288,7 +326,7 @@ The graph domain is now the first fully-integrated domain, serving as the templa
 **What This Enables:**
 
 This infrastructure is the foundation for:
-1. `use graph` statements in `.kairo` files (parser enhancement needed)
+1. `use graph` statements in `.morphogen` files (parser enhancement needed)
 2. Type checking of operator calls (type system needed)
 3. Auto-generated documentation (tooling needed)
 4. IDE autocompletion (LSP integration needed)
@@ -328,7 +366,7 @@ The signal domain is now the second fully-integrated domain, demonstrating the s
 
 **Module-Level Exports:**
 
-All 20 operators are exported at module level in `kairo/stdlib/signal.py` for automatic discovery by the domain registry system.
+All 20 operators are exported at module level in `morphogen/stdlib/signal.py` for automatic discovery by the domain registry system.
 
 **Integration Progress:**
 - ✅ Signal domain: 20/20 operators integrated (100%)
@@ -344,7 +382,7 @@ This integration validates the systematic approach:
 4. Verify registration and operator metadata
 
 **Related:**
-- `kairo/stdlib/signal.py` - Signal processing operators with @operator decorators
+- `morphogen/stdlib/signal.py` - Signal processing operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 - `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
@@ -377,7 +415,7 @@ The statemachine domain is now the third fully-integrated domain, continuing the
 
 **Implementation Details:**
 
-- Added `from kairo.core.operator import operator, OpCategory` import
+- Added `from morphogen.core.operator import operator, OpCategory` import
 - Applied `@operator` decorator to all 15 methods in `StateMachineOperations` class
 - Categorized operators by function:
   - CONSTRUCT: Creating state machines and behavior tree nodes
@@ -388,7 +426,7 @@ The statemachine domain is now the third fully-integrated domain, continuing the
 
 **Module-Level Exports:**
 
-All 15 operators are exported at module level in `kairo/stdlib/statemachine.py` for automatic discovery by the domain registry system:
+All 15 operators are exported at module level in `morphogen/stdlib/statemachine.py` for automatic discovery by the domain registry system:
 - FSM operators: create, add_state, add_transition, start, update, send_event, get_state_name, is_in_state, get_valid_transitions, to_graphviz
 - Behavior tree operators: create_sequence, create_selector, create_action, create_condition, execute_behavior
 
@@ -406,7 +444,7 @@ The statemachine domain provides two complementary paradigms for behavior modeli
 Both are essential for game AI, UI flows, protocol implementations, and workflow systems.
 
 **Related:**
-- `kairo/stdlib/statemachine.py` - State machine and behavior tree operators with @operator decorators
+- `morphogen/stdlib/statemachine.py` - State machine and behavior tree operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 - `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
@@ -437,7 +475,7 @@ The terrain domain is now the fourth fully-integrated domain, continuing the met
 
 **Implementation Details:**
 
-- Added `from kairo.core.operator import operator, OpCategory` import
+- Added `from morphogen.core.operator import operator, OpCategory` import
 - Applied `@operator` decorator to all 11 methods in `TerrainOperations` class
 - Categorized operators by function:
   - CONSTRUCT: Creating and generating heightmaps
@@ -448,7 +486,7 @@ The terrain domain is now the fourth fully-integrated domain, continuing the met
 
 **Module-Level Exports:**
 
-All 11 operators are exported at module level in `kairo/stdlib/terrain.py` for automatic discovery by the domain registry system:
+All 11 operators are exported at module level in `morphogen/stdlib/terrain.py` for automatic discovery by the domain registry system:
 - Creation: create_heightmap, from_noise_perlin
 - Erosion: hydraulic_erosion, thermal_erosion
 - Analysis: calculate_slope, calculate_aspect, classify_biomes
@@ -470,7 +508,7 @@ The terrain domain provides comprehensive procedural terrain generation and anal
 Essential for procedural world generation, game development, and geographic simulation.
 
 **Related:**
-- `kairo/stdlib/terrain.py` - Terrain generation operators with @operator decorators
+- `morphogen/stdlib/terrain.py` - Terrain generation operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 - `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
@@ -501,7 +539,7 @@ The vision domain is now the fifth fully-integrated domain, continuing the metho
 
 **Implementation Details:**
 
-- Added `from kairo.core.operator import operator, OpCategory` import
+- Added `from morphogen.core.operator import operator, OpCategory` import
 - Applied `@operator` decorator to all 13 methods in `VisionOperations` class
 - Categorized operators by function:
   - CONSTRUCT: Creating grayscale images from arrays
@@ -512,7 +550,7 @@ The vision domain is now the fifth fully-integrated domain, continuing the metho
 
 **Module-Level Exports:**
 
-All 13 operators are exported at module level in `kairo/stdlib/vision.py` for automatic discovery by the domain registry system:
+All 13 operators are exported at module level in `morphogen/stdlib/vision.py` for automatic discovery by the domain registry system:
 - Construction: create_image
 - Edge Detection: sobel, laplacian, canny
 - Feature Detection: harris_corners, find_contours, hough_lines
@@ -536,7 +574,7 @@ The vision domain provides comprehensive computer vision and image analysis capa
 Essential for computer vision, image analysis, object detection, and visual processing applications.
 
 **Related:**
-- `kairo/stdlib/vision.py` - Computer vision operators with @operator decorators
+- `morphogen/stdlib/vision.py` - Computer vision operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 - `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
@@ -578,7 +616,7 @@ The cellular domain is now the sixth fully-integrated domain, continuing the met
 
 **Module-Level Exports:**
 
-All 18 operators are exported at module level in `kairo/stdlib/cellular.py` for automatic discovery by the domain registry system:
+All 18 operators are exported at module level in `morphogen/stdlib/cellular.py` for automatic discovery by the domain registry system:
 - Field Creation: alloc, random_init, from_array
 - Neighbor Counting: count_neighbors_moore, count_neighbors_von_neumann
 - Rule Application: apply_rule, apply_wolfram_rule
@@ -604,7 +642,7 @@ The cellular domain provides comprehensive cellular automata capabilities:
 Essential for emergent pattern simulation, artificial life, procedural generation, and complexity research.
 
 **Related:**
-- `kairo/stdlib/cellular.py` - Cellular automata operators with @operator decorators
+- `morphogen/stdlib/cellular.py` - Cellular automata operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 - `docs/guides/DOMAIN_FINISHING_GUIDE.md` - Complete roadmap
@@ -644,7 +682,7 @@ The optimization domain is now the seventh fully-integrated domain, providing ev
 
 **Module-Level Exports:**
 
-All 5 operators are module-level functions in `kairo/stdlib/optimization.py`:
+All 5 operators are module-level functions in `morphogen/stdlib/optimization.py`:
 - minimize: unified optimization interface
 - differential_evolution: DE optimizer
 - cmaes: CMA-ES optimizer
@@ -668,7 +706,7 @@ The optimization domain provides comprehensive optimization capabilities:
 Essential for parameter tuning, design discovery, multi-objective optimization, and automated system configuration.
 
 **Related:**
-- `kairo/stdlib/optimization.py` - Optimization operators with @operator decorators
+- `morphogen/stdlib/optimization.py` - Optimization operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 
@@ -709,7 +747,7 @@ The neural domain is now the eighth fully-integrated domain, providing feedforwa
 
 **Module-Level Exports:**
 
-All 16 operators are exported via the `neural` singleton in `kairo/stdlib/neural.py`:
+All 16 operators are exported via the `neural` singleton in `morphogen/stdlib/neural.py`:
 - Activations: tanh, relu, sigmoid, softmax, leaky_relu
 - Core Ops: linear, apply_activation, dense, forward
 - Network Ops: alloc_layer, alloc_mlp
@@ -733,7 +771,7 @@ The neural domain provides feedforward neural network capabilities:
 Essential for agent control, genetic algorithms, evolutionary robotics, and neuroevolution.
 
 **Related:**
-- `kairo/stdlib/neural.py` - Neural network operators with @operator decorators
+- `morphogen/stdlib/neural.py` - Neural network operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 
@@ -772,7 +810,7 @@ The noise domain is now the ninth fully-integrated domain, providing procedural 
 
 **Module-Level Exports:**
 
-All 11 operators are exported via the `noise` singleton in `kairo/stdlib/noise.py`:
+All 11 operators are exported via the `noise` singleton in `morphogen/stdlib/noise.py`:
 - Basic Noise: perlin2d, simplex2d, value2d, worley
 - Fractal Noise: fbm, ridged_fbm, turbulence, marble
 - Advanced: vector_field, gradient_field, plasma
@@ -794,7 +832,7 @@ The noise domain provides comprehensive procedural noise generation:
 Essential for procedural textures, terrain generation, particle effects, and visual randomization.
 
 **Related:**
-- `kairo/stdlib/noise.py` - Noise generation operators with @operator decorators
+- `morphogen/stdlib/noise.py` - Noise generation operators with @operator decorators
 - `kairo/core/operator.py` - @operator decorator system
 - `kairo/core/domain_registry.py` - Central domain registry
 
@@ -804,10 +842,10 @@ Essential for procedural textures, terrain generation, particle effects, and vis
 
 ### Added - Five New Computational Domains ⭐⭐⭐
 
-This release significantly expands Kairo's domain coverage with five major new domains, bringing the total to 23 domains.
+This release significantly expands Morphogen's domain coverage with five major new domains, bringing the total to 23 domains.
 
 - **Graph/Network Domain** ✅
-  - **Implementation**: `kairo/stdlib/graph.py` (1,200+ lines)
+  - **Implementation**: `morphogen/stdlib/graph.py` (1,200+ lines)
   - **Data Structures**: `Graph`, `GraphMetrics`
   - **Core Operations**:
     - Graph creation: `create_empty`, `from_adjacency_matrix`, `to_adjacency_matrix`
@@ -824,7 +862,7 @@ This release significantly expands Kairo's domain coverage with five major new d
   - **Impact**: Enables network analysis, social graphs, routing algorithms, flow optimization
 
 - **Signal Processing Domain** ✅
-  - **Implementation**: `kairo/stdlib/signal.py` (1,000+ lines)
+  - **Implementation**: `morphogen/stdlib/signal.py` (1,000+ lines)
   - **Data Structures**: `Signal1D`, `Spectrum`, `Spectrogram`
   - **Core Operations**:
     - Signal generation: `sine_wave`, `chirp`, `white_noise`
@@ -840,7 +878,7 @@ This release significantly expands Kairo's domain coverage with five major new d
   - **Impact**: Enables frequency analysis, spectral processing, time-frequency representations
 
 - **State Machine Domain** ✅
-  - **Implementation**: `kairo/stdlib/statemachine.py` (900+ lines)
+  - **Implementation**: `morphogen/stdlib/statemachine.py` (900+ lines)
   - **Data Structures**: `State`, `Transition`, `StateMachine`, `BehaviorNode`
   - **Core Operations**:
     - State machine: `create`, `add_state`, `add_transition`, `start`
@@ -853,7 +891,7 @@ This release significantly expands Kairo's domain coverage with five major new d
   - **Impact**: Enables game AI, UI flows, protocol implementations, workflow systems
 
 - **Terrain Generation Domain** ✅
-  - **Implementation**: `kairo/stdlib/terrain.py` (800+ lines)
+  - **Implementation**: `morphogen/stdlib/terrain.py` (800+ lines)
   - **Data Structures**: `Heightmap`, `BiomeMap`
   - **Core Operations**:
     - Generation: `from_noise_perlin` (multi-octave procedural generation)
@@ -866,7 +904,7 @@ This release significantly expands Kairo's domain coverage with five major new d
   - **Impact**: Enables procedural terrain generation, game worlds, geographic simulations
 
 - **Computer Vision Domain** ✅
-  - **Implementation**: `kairo/stdlib/vision.py` (900+ lines)
+  - **Implementation**: `morphogen/stdlib/vision.py` (900+ lines)
   - **Data Structures**: `ImageGray`, `EdgeMap`, `Keypoint`, `Contour`
   - **Core Operations**:
     - Edge detection: `sobel`, `laplacian`, `canny`
@@ -884,7 +922,7 @@ This release significantly expands Kairo's domain coverage with five major new d
 - **Total New Code**: 4,800+ lines of production code across 5 new domains
 - **Total Domains**: 23 domains (up from 18)
 - **New Examples**: 8 comprehensive example files with visualizations
-- **Code Quality**: Follows established Kairo patterns (immutability, NumPy backend, comprehensive docs)
+- **Code Quality**: Follows established Morphogen patterns (immutability, NumPy backend, comprehensive docs)
 - **Integration**: All domains compatible with existing cross-domain infrastructure
 
 ### Domain Ecosystem Growth
@@ -900,7 +938,7 @@ The addition of these 5 domains creates powerful new cross-domain workflows:
 
 **Commit**: `2e8c864` - Prepare for Morphogen rename and Philbrick integration
 
-This release includes preparation for the project's upcoming rename from Kairo to Morphogen, establishing the connection with sister hardware project Philbrick.
+This release includes preparation for the project's upcoming rename from Morphogen to Morphogen, establishing the connection with sister hardware project Philbrick.
 
 - **MORPHOGEN_RENAME_PREP.md** (437 lines)
   - Comprehensive rename execution checklist
@@ -932,7 +970,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
 ### Added - Base-Level Domain Implementations ⭐⭐⭐
 
 - **Integrators Dialect** (P0 - Critical) ✅
-  - **Implementation**: `kairo/stdlib/integrators.py` (520 lines)
+  - **Implementation**: `morphogen/stdlib/integrators.py` (520 lines)
   - **Operators**:
     - Explicit methods: `euler`, `rk2`, `rk4` (O(dt), O(dt²), O(dt⁴) accuracy)
     - Symplectic methods: `verlet`, `leapfrog`, `symplectic` (energy-conserving for physics)
@@ -947,7 +985,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **Impact**: Unlocks principled time-stepping for all physics domains (Agent, Circuit, Fluid, Acoustics)
 
 - **I/O & Storage Domain** (P1 - Foundational) ✅
-  - **Implementation**: `kairo/stdlib/io_storage.py` (576 lines)
+  - **Implementation**: `morphogen/stdlib/io_storage.py` (576 lines)
   - **Operators**:
     - Image I/O: `load_image`, `save_image` (PNG, JPEG, BMP via Pillow)
       - Grayscale/RGB/RGBA support, quality control for JPEG (1-100)
@@ -982,7 +1020,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **Impact**: Enables asset loading, result export, checkpointing, data interchange with all external tools
 
 - **Sparse Linear Algebra Domain** (P1 - Foundational) ✅
-  - **Implementation**: `kairo/stdlib/sparse_linalg.py` (588 lines)
+  - **Implementation**: `morphogen/stdlib/sparse_linalg.py` (588 lines)
   - **Operators**:
     - Sparse matrices: `csr_matrix`, `csc_matrix`, `coo_matrix`
     - Iterative solvers: `solve_cg`, `solve_bicgstab`, `solve_gmres`, `solve_sparse` (auto-select)
@@ -1028,7 +1066,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
 ### Added - Rigid Body Physics Domain ⭐⭐⭐
 
 - **RigidBody2D Physics** (PR #74) ✅
-  - **Implementation**: `kairo/stdlib/rigidbody.py` (850+ lines)
+  - **Implementation**: `morphogen/stdlib/rigidbody.py` (850+ lines)
   - **Core Types**:
     - `RigidBody2D`: Full rigid body with position, rotation, velocity, angular velocity, mass, inertia
     - `PhysicsWorld2D`: Physics world container with gravity, damping, solver settings
@@ -1108,7 +1146,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
 ### Added - Advanced Domains ⭐⭐⭐
 
 - **Particle Effects / VFX Extensions for Agents Domain** ✅
-  - **Implementation**: Extended `kairo/stdlib/agents.py` (+340 lines) and `kairo/stdlib/visual.py` (+120 lines)
+  - **Implementation**: Extended `morphogen/stdlib/agents.py` (+340 lines) and `morphogen/stdlib/visual.py` (+120 lines)
   - **New Operators**:
     - **Particle Emission**: `agents.emit()` - Flexible particle emission system
       - Multiple emission shapes: `point`, `circle`, `sphere`, `cone`
@@ -1184,7 +1222,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - Configurable population sizes and hyperparameters
     - Fitness evaluation framework
     - Convergence tracking and history
-  - **Impact**: Transforms Kairo from simulation platform into design discovery platform
+  - **Impact**: Transforms Morphogen from simulation platform into design discovery platform
 
 - **Cross-Domain Showcase Examples** (PR #71) ✅
   - **Examples**: Comprehensive demonstrations showing domain integration
@@ -1193,7 +1231,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - Real-world use cases across different domains
     - Integration patterns and best practices
     - Performance optimization techniques
-  - **Impact**: Demonstrates Kairo's unique value in cross-domain operator composition
+  - **Impact**: Demonstrates Morphogen's unique value in cross-domain operator composition
 
 ### Technical Highlights
 
@@ -1212,7 +1250,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
 ### Added - Procedural Graphics Domains ⭐⭐⭐
 
 - **NoiseDomain** (Tier 1 - Critical) ✅
-  - **Implementation**: `kairo/stdlib/noise.py` (850+ lines)
+  - **Implementation**: `morphogen/stdlib/noise.py` (850+ lines)
   - **Operators** (11 total):
     - **Layer 1 - Basic Noise**: `perlin2d`, `simplex2d`, `value2d`, `worley`
     - **Layer 2 - Fractals**: `fbm`, `ridged_fbm`, `turbulence`, `marble`
@@ -1225,7 +1263,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **Impact**: Enables fractal visualization, procedural terrain, texture synthesis, turbulence fields
 
 - **PaletteDomain** (Tier 1 - Critical) ✅
-  - **Implementation**: `kairo/stdlib/palette.py` (550+ lines)
+  - **Implementation**: `morphogen/stdlib/palette.py` (550+ lines)
   - **Operators** (15+ total):
     - **Layer 1 - Creation**: `from_colors`, `from_gradient`, `greyscale`, `rainbow`, `hsv_wheel`, `inferno`, `viridis`, `plasma`, `magma`, `cosine`, `fire`, `ice`
     - **Layer 2 - Transforms**: `shift`, `cycle`, `flip`/`reverse`, `lerp`, `saturate`, `brightness`
@@ -1238,7 +1276,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **Impact**: Enables fractal coloring, heatmaps, spectrograms, procedural art, audio-reactive visuals
 
 - **ColorDomain** (Tier 1 - Critical) ✅
-  - **Implementation**: `kairo/stdlib/color.py` (500+ lines)
+  - **Implementation**: `morphogen/stdlib/color.py` (500+ lines)
   - **Operators** (15+ total):
     - **Layer 1 - Conversions**: `rgb_to_hsv`, `hsv_to_rgb`, `rgb_to_hsl`, `hsl_to_rgb`, `hex_to_rgb`, `rgb_to_hex`, `temperature_to_rgb`
     - **Layer 2 - Manipulation**: `add`, `multiply`, `mix`, `brightness`, `saturate`, `gamma_correct`
@@ -1252,7 +1290,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **Impact**: Enables color grading, temperature-based lighting, photoshop-style effects, procedural color generation
 
 - **ImageDomain** (Tier 2 - Essential) ✅
-  - **Implementation**: `kairo/stdlib/image.py` (700+ lines)
+  - **Implementation**: `morphogen/stdlib/image.py` (700+ lines)
   - **Operators** (20+ total):
     - **Layer 1 - Creation**: `blank`, `rgb`, `from_field`, `compose`
     - **Layer 2 - Transforms**: `scale`, `rotate`, `warp`
@@ -1268,7 +1306,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **Impact**: Enables procedural texture generation, fractal visualization, post-processing, simulation rendering, normal map generation
 
 - **FieldDomain Extensions** (Tier 2 - Essential) ✅
-  - **Extended**: `kairo/stdlib/field.py` (417 → 690 lines, +273 lines)
+  - **Extended**: `morphogen/stdlib/field.py` (417 → 690 lines, +273 lines)
   - **New Operators** (10 total):
     - **Differential Operators**: `gradient`, `divergence`, `curl`
     - **Processing**: `smooth`, `normalize`, `threshold`, `clamp`, `abs`
@@ -1349,12 +1387,12 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - Separation of concerns: `get()` for active agents, `get_all()` for complete state
     - Memory efficient: `get()` only returns alive agent data
     - Type safe: Both methods raise KeyError for missing properties
-    - Consistent API: Matches Kairo's property access patterns
+    - Consistent API: Matches Morphogen's property access patterns
   - **Use Cases**:
     - Agent simulation loops (use `get()` for active agents)
     - Debugging and visualization (use `get_all()` to see full state)
     - Performance optimization (avoid processing dead agents)
-  - **Implementation**: `kairo/stdlib/agents.py:56-83`
+  - **Implementation**: `morphogen/stdlib/agents.py:56-83`
   - **Impact**: Provides clean, efficient interface for agent property access in simulations
 
 - **Circuit/Electrical Engineering Domain** ⭐ (PR #43)
@@ -1370,7 +1408,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - `examples/circuit/README.md`: Comprehensive circuit examples documentation
   - **Key Capabilities**: Typed operator graphs (R → C → Op-Amp), multi-domain integration (Circuit ↔ Audio, Geometry, Physics), reference-based composition, type + unit safety
   - **Domain Position**: Core domain 1.8 in DOMAIN_ARCHITECTURE.md
-  - **Impact**: Establishes Kairo as the only tool that unifies circuit simulation, PCB layout, analog audio modeling, and multi-physics coupling
+  - **Impact**: Establishes Morphogen as the only tool that unifies circuit simulation, PCB layout, analog audio modeling, and multi-physics coupling
 
 - **Fluid Dynamics & Acoustics Domains** ⭐ (PR #44)
   - **New Use Cases**:
@@ -1380,7 +1418,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - Acoustics domain: 1D waveguide simulation, FDTD acoustics, Helmholtz resonators, perforated pipes, radiation impedance
   - **Cross-Domain Integration**: FluidDynamics → Acoustics → Audio → Geometry coupling
   - **Updated**: `EXAMPLE_PORTFOLIO_PLAN.md` with FluidDynamics & Acoustics examples
-  - **Impact**: Demonstrates Kairo's unique value in unifying multi-domain operator graphs for problems requiring 6+ domains
+  - **Impact**: Demonstrates Morphogen's unique value in unifying multi-domain operator graphs for problems requiring 6+ domains
 
 - **Instrument Modeling & Timbre Extraction Domain** ⭐ (PR #45)
   - **New Specifications**:
@@ -1405,10 +1443,10 @@ This release includes preparation for the project's upcoming rename from Kairo t
   - **New Specifications**:
     - `docs/SPEC-PHYSICS-DOMAINS.md`: Four new physics domains (FluidNetwork, ThermalODE, FluidJet, CombustionLight)
     - `docs/EXAMPLES/J-TUBE-FIREPIT-MULTIPHYSICS.md`: Complete J-tube fire pit multi-physics modeling example
-    - `docs/EXAMPLES/README.md`: Comprehensive guide to Kairo examples and case studies
+    - `docs/EXAMPLES/README.md`: Comprehensive guide to Morphogen examples and case studies
   - **Key Capabilities**: Geometry → Fluid → Thermal → Combustion pipeline, validates operator graph paradigm for engineering physics
   - **Updated**: `docs/DOMAIN_ARCHITECTURE.md` with Next-Wave physics domains
-  - **Impact**: Proves Kairo can model thermal-fluid systems, combustion, and multi-physics engineering problems
+  - **Impact**: Proves Morphogen can model thermal-fluid systems, combustion, and multi-physics engineering problems
 
 - **Optimization Domain & Algorithms** ⭐ (PR #48)
   - **New Catalog**:
@@ -1420,7 +1458,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - Combinatorial/Discrete: Simulated Annealing, Tabu Search, Beam Search
     - Multi-Objective: NSGA-II, SPEA2, MOPSO
   - **Updated**: `docs/DOMAIN_ARCHITECTURE.md` (section 2.3) with algorithm summaries, operator contracts, 3-phase roadmap
-  - **Impact**: Transforms Kairo from simulation platform into design discovery platform
+  - **Impact**: Transforms Morphogen from simulation platform into design discovery platform
 
 - **TiaCAD Integration - Unified Reference & Frame Model** ⭐
   - **New Specifications**:
@@ -1438,7 +1476,7 @@ This release includes preparation for the project's upcoming rename from Kairo t
     - Auto-generated anchors for all geometric objects
     - Cross-domain applicability (geometry, audio, physics, agents, fields)
     - Backend-neutral operator semantics with multiple lowering targets
-  - **Impact**: Unifies spatial, temporal, and structural references across all Kairo domains; provides declarative, refactor-safe composition model; establishes foundation for v0.9+ geometry domain implementation
+  - **Impact**: Unifies spatial, temporal, and structural references across all Morphogen domains; provides declarative, refactor-safe composition model; establishes foundation for v0.9+ geometry domain implementation
 
 ### Changed
 - **Code cleanup**: Removed stale TODOs and updated documentation
@@ -1453,12 +1491,12 @@ This release includes preparation for the project's upcoming rename from Kairo t
 
 ### Overview - LLVM-Based JIT/AOT Compilation
 
-Phase 6 of Kairo v0.7.4 implements the complete JIT/AOT compilation infrastructure using LLVM backend. This phase bridges the gap between high-level MLIR dialects and executable native code, enabling production-ready compilation with optimization, caching, and multiple output formats.
+Phase 6 of Morphogen v0.7.4 implements the complete JIT/AOT compilation infrastructure using LLVM backend. This phase bridges the gap between high-level MLIR dialects and executable native code, enabling production-ready compilation with optimization, caching, and multiple output formats.
 
 ### Added - JIT/AOT Compilation (Phase 6)
 
 #### LLVM Lowering Pass
-- **`kairo.mlir.lowering.scf_to_llvm`** - SCF/Arith/Func to LLVM dialect lowering (199 lines):
+- **`morphogen.mlir.lowering.scf_to_llvm`** - SCF/Arith/Func to LLVM dialect lowering (199 lines):
   - `SCFToLLVMPass`: Complete lowering pipeline using MLIR's built-in passes
   - `convert-scf-to-cf`: Lower SCF to Control Flow dialect
   - `convert-arith-to-llvm`: Lower arithmetic operations to LLVM
@@ -1469,7 +1507,7 @@ Phase 6 of Kairo v0.7.4 implements the complete JIT/AOT compilation infrastructu
   - `lower_to_llvm()` convenience function
 
 #### JIT Compilation Engine
-- **`kairo.mlir.codegen.jit`** - JIT compilation with caching (392 lines):
+- **`morphogen.mlir.codegen.jit`** - JIT compilation with caching (392 lines):
   - `KairoJIT`: Full-featured JIT compiler
   - `CompilationCache`: In-memory and persistent disk caching
   - Thread-safe execution with locks
@@ -1481,7 +1519,7 @@ Phase 6 of Kairo v0.7.4 implements the complete JIT/AOT compilation infrastructu
   - `create_jit()` factory function
 
 #### AOT Compilation Engine
-- **`kairo.mlir.codegen.aot`** - AOT compilation to native binaries (626 lines):
+- **`morphogen.mlir.codegen.aot`** - AOT compilation to native binaries (626 lines):
   - `KairoAOT`: Complete AOT compiler
   - `OutputFormat` enum: 7 output formats
     - `EXECUTABLE`: Native executables (.exe, no extension)
@@ -1498,7 +1536,7 @@ Phase 6 of Kairo v0.7.4 implements the complete JIT/AOT compilation infrastructu
   - `create_aot()` factory function
 
 #### ExecutionEngine API
-- **`kairo.mlir.codegen.executor`** - High-level unified API (405 lines):
+- **`morphogen.mlir.codegen.executor`** - High-level unified API (405 lines):
   - `ExecutionEngine`: Context manager for JIT/AOT execution
   - `ExecutionMode` enum: JIT, AOT, INTERPRET
   - `MemoryBuffer`: Automatic memory management with cleanup
@@ -1768,7 +1806,7 @@ Comprehensive audio buffer operations, DSP, and spectral analysis capabilities a
 
 ### Code Statistics
 
-- **~670 lines** of production code added to `kairo/stdlib/audio.py`
+- **~670 lines** of production code added to `morphogen/stdlib/audio.py`
 - **~610 lines** of comprehensive test coverage
 - **51 total tests** (18 buffer ops + 33 spectral ops)
 - **100% test pass rate**
@@ -1798,24 +1836,24 @@ Comprehensive audio buffer operations, DSP, and spectral analysis capabilities a
 
 ### Overview - Audio Operations Dialect
 
-Phase 5 of Kairo v0.7.0 integrates audio synthesis and processing into the MLIR compilation pipeline through a new Audio Operations dialect. This phase enables compiled audio generation with oscillators, filters, envelopes, and effects, building on the stdlib audio DSP operations added previously.
+Phase 5 of Morphogen v0.7.0 integrates audio synthesis and processing into the MLIR compilation pipeline through a new Audio Operations dialect. This phase enables compiled audio generation with oscillators, filters, envelopes, and effects, building on the stdlib audio DSP operations added previously.
 
 ### Added - Audio Dialect (Phase 5)
 
 #### Audio Operations
-- **`kairo.mlir.dialects.audio`** - Complete audio dialect with 5 operations (618 lines):
+- **`morphogen.mlir.dialects.audio`** - Complete audio dialect with 5 operations (618 lines):
   - `AudioBufferCreateOp`: Allocate audio buffers (sample_rate, channels, duration)
   - `AudioOscillatorOp`: Generate waveforms (sine, square, saw, triangle)
   - `AudioEnvelopeOp`: Apply ADSR envelopes to signals
   - `AudioFilterOp`: IIR/FIR filters (lowpass, highpass, bandpass)
   - `AudioMixOp`: Mix multiple audio signals with scaling
 - **Type System**:
-  - `!kairo.audio<sample_rate, channels>`: Audio buffer type
-  - Example: `!kairo.audio<44100, 1>` (mono 44.1kHz)
+  - `!morphogen.audio<sample_rate, channels>`: Audio buffer type
+  - Example: `!morphogen.audio<44100, 1>` (mono 44.1kHz)
   - Supports variable sample rates and channel counts
 
 #### Lowering Pass
-- **`kairo.mlir.lowering.audio_to_scf`** - Audio-to-SCF lowering pass (658 lines):
+- **`morphogen.mlir.lowering.audio_to_scf`** - Audio-to-SCF lowering pass (658 lines):
   - `audio.buffer.create` → `memref.alloc` with zero initialization
   - `audio.oscillator` → `scf.for` loops with `math.sin` for sine waves
   - `audio.envelope` → `scf.for` with ADSR state machine (`scf.if` for stages)
@@ -1825,7 +1863,7 @@ Phase 5 of Kairo v0.7.0 integrates audio synthesis and processing into the MLIR 
 - Efficient memref-based audio buffer storage
 
 #### Compiler Integration
-- **Extended `kairo.mlir.compiler_v2`** with audio methods (+319 lines):
+- **Extended `morphogen.mlir.compiler_v2`** with audio methods (+319 lines):
   - `compile_audio_buffer_create()`: Compile buffer creation
   - `compile_audio_oscillator()`: Compile oscillator operation
   - `compile_audio_envelope()`: Compile ADSR envelope
@@ -1923,23 +1961,23 @@ Phase 5 of Kairo v0.7.0 integrates audio synthesis and processing into the MLIR 
 
 ### Overview - Agent Operations Dialect
 
-Phase 4 of Kairo v0.7.0 implements the agent operations dialect for agent-based simulations with spawning, behavior trees, and property management. This phase builds on Phase 2 (Field Operations) and Phase 3 (Temporal Execution) to enable multi-agent simulations compiled through MLIR to efficient native code.
+Phase 4 of Morphogen v0.7.0 implements the agent operations dialect for agent-based simulations with spawning, behavior trees, and property management. This phase builds on Phase 2 (Field Operations) and Phase 3 (Temporal Execution) to enable multi-agent simulations compiled through MLIR to efficient native code.
 
 ### Added - Agent Dialect (Phase 4)
 
 #### Agent Operations
-- **`kairo.mlir.dialects.agent`** - Complete agent dialect with 4 operations:
+- **`morphogen.mlir.dialects.agent`** - Complete agent dialect with 4 operations:
   - `AgentSpawnOp`: Create agents at positions with initial properties (position, velocity, state)
   - `AgentUpdateOp`: Update agent properties at specific indices
   - `AgentQueryOp`: Read agent property values
   - `AgentBehaviorOp`: Apply behavior rules (move, seek, bounce)
 - **Type System**:
-  - `!kairo.agent<T>`: Agent collection type
+  - `!morphogen.agent<T>`: Agent collection type
   - Standard property layout: `[pos_x, pos_y, vel_x, vel_y, state]` (5 properties)
   - Memory model: `memref<?x5xT>` for dynamic agent arrays
 
 #### Lowering Pass
-- **`kairo.mlir.lowering.agent_to_scf`** - Agent-to-SCF lowering pass (434 lines):
+- **`morphogen.mlir.lowering.agent_to_scf`** - Agent-to-SCF lowering pass (434 lines):
   - `agent.spawn` → `memref.alloc` + initialization loops
   - `agent.update` → `memref.store` operations
   - `agent.query` → `memref.load` operations
@@ -1949,7 +1987,7 @@ Phase 4 of Kairo v0.7.0 implements the agent operations dialect for agent-based 
 - Integration with Field and Temporal dialects
 
 #### Compiler Integration
-- **Extended `kairo.mlir.compiler_v2`** with agent methods (+280 lines):
+- **Extended `morphogen.mlir.compiler_v2`** with agent methods (+280 lines):
   - `compile_agent_spawn()`: Compile agent spawning
   - `compile_agent_update()`: Compile property updates
   - `compile_agent_query()`: Compile property queries
@@ -2044,12 +2082,12 @@ Options:
 
 ### Overview - Temporal Execution Layer
 
-Phase 3 of Kairo v0.7.0 implements the temporal execution layer, enabling time-evolving simulations with flow blocks and state management. This builds on Phase 2's field operations to add temporal dynamics.
+Phase 3 of Morphogen v0.7.0 implements the temporal execution layer, enabling time-evolving simulations with flow blocks and state management. This builds on Phase 2's field operations to add temporal dynamics.
 
 ### Added - Temporal Dialect (Phase 3)
 
 #### Temporal Operations
-- **`kairo.mlir.dialects.temporal`** - Complete temporal dialect with 6 operations:
+- **`morphogen.mlir.dialects.temporal`** - Complete temporal dialect with 6 operations:
   - `FlowCreateOp`: Define flow blocks with temporal parameters (dt, steps)
   - `FlowStepOp`: Single timestep execution (placeholder for future)
   - `FlowRunOp`: Execute complete flow for N timesteps
@@ -2057,11 +2095,11 @@ Phase 3 of Kairo v0.7.0 implements the temporal execution layer, enabling time-e
   - `StateUpdateOp`: Update state values (SSA-compatible)
   - `StateQueryOp`: Read current state values
 - **Type System**:
-  - `!kairo.flow<T>`: Flow type representing temporal execution blocks
-  - `!kairo.state<T>`: State type representing persistent storage
+  - `!morphogen.flow<T>`: Flow type representing temporal execution blocks
+  - `!morphogen.state<T>`: State type representing persistent storage
 
 #### Lowering Pass
-- **`kairo.mlir.lowering.temporal_to_scf`** - Temporal-to-SCF lowering pass:
+- **`morphogen.mlir.lowering.temporal_to_scf`** - Temporal-to-SCF lowering pass:
   - `flow.create` → Flow metadata storage
   - `flow.run` → `scf.for` loop with iter_args for state evolution
   - `state.create` → `memref.alloc` + initialization loops
@@ -2072,7 +2110,7 @@ Phase 3 of Kairo v0.7.0 implements the temporal execution layer, enabling time-e
 - Integration with Phase 2 field operations
 
 #### Compiler Integration
-- **Extended `kairo.mlir.compiler_v2`** with temporal methods:
+- **Extended `morphogen.mlir.compiler_v2`** with temporal methods:
   - `compile_flow_create()`: Compile flow creation
   - `compile_flow_run()`: Compile flow execution
   - `compile_state_create()`: Compile state allocation
@@ -2133,7 +2171,7 @@ Phase 3 of Kairo v0.7.0 implements the temporal execution layer, enabling time-e
 
 ### Overview - Real MLIR Integration
 
-Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR generation to **real MLIR integration** using Python bindings. This enables true native code generation, optimization passes, and JIT compilation.
+Morphogen v0.7.0 represents a fundamental transformation from text-based MLIR IR generation to **real MLIR integration** using Python bindings. This enables true native code generation, optimization passes, and JIT compilation.
 
 ### Added - Field Operations Dialect (Phase 2 - Completed 2025-11-14)
 
@@ -2142,7 +2180,7 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 - **FieldGradientOp** - Central difference gradient computation
 - **FieldLaplacianOp** - 5-point stencil Laplacian operator
 - **FieldDiffuseOp** - Jacobi diffusion solver with double-buffering
-- **FieldType** - Opaque type wrapper for `!kairo.field<T>` MLIR type
+- **FieldType** - Opaque type wrapper for `!morphogen.field<T>` MLIR type
 
 #### Field-to-SCF Lowering Pass (`kairo/mlir/lowering/field_to_scf.py`)
 - Pattern-based lowering infrastructure transforming field ops → nested `scf.for` loops + `memref`
@@ -2203,11 +2241,11 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 
 #### Core Architecture
 - **MLIR Python bindings integration** - Replaced text-based IR generation with real MLIR
-- **`kairo.mlir.context`** - MLIR context management and dialect registration
-- **`kairo.mlir.compiler_v2`** - New compiler using real MLIR Python bindings
+- **`morphogen.mlir.context`** - MLIR context management and dialect registration
+- **`morphogen.mlir.compiler_v2`** - New compiler using real MLIR Python bindings
 - **Module structure** for progressive implementation:
-  - `kairo/mlir/dialects/` - Custom Kairo dialects (field, agent, audio, visual)
-  - `kairo/mlir/lowering/` - Lowering passes (Kairo → SCF → LLVM)
+  - `kairo/mlir/dialects/` - Custom Morphogen dialects (field, agent, audio, visual)
+  - `kairo/mlir/lowering/` - Lowering passes (Morphogen → SCF → LLVM)
   - `kairo/mlir/codegen/` - JIT and AOT compilation engines
 
 #### Documentation
@@ -2409,7 +2447,7 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 - ✅ Complete musical compositions
 
 #### Runtime Integration
-- Audio namespace available in Kairo runtime
+- Audio namespace available in Morphogen runtime
 - Full integration with parser and type system
 - AudioBuffer type registered
 - Example compositions working
@@ -2421,7 +2459,7 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 - Composition examples
 
 ### Implementation
-- **`kairo/stdlib/audio.py`** (1,250+ lines of production code)
+- **`morphogen/stdlib/audio.py`** (1,250+ lines of production code)
 - NumPy-based for performance
 - Modular design with clear separation of concerns
 - Comprehensive docstrings and type hints
@@ -2498,7 +2536,7 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 - ✅ SPH (Smoothed Particle Hydrodynamics) foundations
 
 #### Runtime Integration
-- Agents namespace available in Kairo runtime
+- Agents namespace available in Morphogen runtime
 - Full integration with parser and type system
 - Agents<T> type registered
 - Example simulations working
@@ -2510,7 +2548,7 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 - Field-agent coupling tutorials
 
 ### Implementation
-- **`kairo/stdlib/agents.py`** (569 lines of production code)
+- **`morphogen/stdlib/agents.py`** (569 lines of production code)
 - NumPy-backed for all operations
 - Spatial hashing for efficient neighbor queries
 - Modular design with clear API
@@ -2520,13 +2558,13 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 ## [0.3.1] - 2025-11-14
 
 ### Added
-- **Ecosystem Map Documentation** (`ECOSYSTEM_MAP.md`) - Comprehensive map of all Kairo domains, modules, and libraries
+- **Ecosystem Map Documentation** (`ECOSYSTEM_MAP.md`) - Comprehensive map of all Morphogen domains, modules, and libraries
 - **Documentation Accuracy Improvements**:
   - Complete rewrite of `STATUS.md` with honest assessment of what's implemented
   - Clear distinction between production-ready, experimental, and planned features
   - Accurate MLIR status (text-based IR, not real MLIR bindings)
 - **Version Consistency**: Fixed `kairo/__init__.py` to match setup.py version (0.3.1)
-- **Branding**: Consistent "Kairo" naming throughout (replaced "Creative Computation DSL" remnants)
+- **Branding**: Consistent "Morphogen" naming throughout (replaced "Creative Computation DSL" remnants)
 
 ### Changed
 - **STATUS.md**: Complete rewrite with factual, accurate status of all components
@@ -2568,7 +2606,7 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 
 ### Documentation
 - `SPECIFICATION.md` updated with v0.3.0 features
-- `ARCHITECTURE.md` - Finalized Kairo Stack architecture
+- `ARCHITECTURE.md` - Finalized Morphogen Stack architecture
 - Architecture specifications for all core components
 
 ---
@@ -2637,8 +2675,8 @@ Kairo v0.7.0 represents a fundamental transformation from text-based MLIR IR gen
 
 ### Implementation Details
 - **`kairo/runtime/runtime.py`** - 398 lines of production runtime code
-- **`kairo/stdlib/field.py`** - 369 lines of NumPy-backed field operations
-- **`kairo/stdlib/visual.py`** - 217 lines of visualization code
+- **`morphogen/stdlib/field.py`** - 369 lines of NumPy-backed field operations
+- **`morphogen/stdlib/visual.py`** - 217 lines of visualization code
 - **NumPy backend** for all field operations
 - **Pillow** for image export
 - **Pygame** for interactive display
@@ -2782,7 +2820,7 @@ All changelog entries reflect **actual implemented features**, not aspirational 
 ## Notes
 
 ### Rebranding (0.3.0)
-- Project renamed from "Creative Computation DSL" to "Kairo"
+- Project renamed from "Creative Computation DSL" to "Morphogen"
 - More memorable, unique branding
 - Reflects evolution from DSL to full creative computation platform
 

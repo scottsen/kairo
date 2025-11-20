@@ -6,7 +6,7 @@
 - claude/help-find-i-01EgbLSzB9zhzYoLijN3Jeyj (Base-level domains)
 - claude/add-palette-noise-color-domains-014gjWhseLb1kNyKH9BVGekv (Procedural graphics domains)
 
-**Goal**: Implement critical missing base-level and procedural graphics domains for Kairo v0.8-v1.0
+**Goal**: Implement critical missing base-level and procedural graphics domains for Morphogen v0.8-v1.0
 
 ---
 

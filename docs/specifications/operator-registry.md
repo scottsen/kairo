@@ -1,4 +1,4 @@
-# SPEC: Kairo Operator Registry
+# SPEC: Morphogen Operator Registry
 
 **Version:** 2.0 Draft
 **Status:** RFC
@@ -8,7 +8,7 @@
 
 ## Overview
 
-The **Operator Registry** is the single source of truth for all operations in Kairo. It defines:
+The **Operator Registry** is the single source of truth for all operations in Morphogen. It defines:
 
 1. **Operator signatures** — Inputs, outputs, parameters with types/units
 2. **Determinism metadata** — Tier (strict/repro/live) and behavior
@@ -160,7 +160,7 @@ The **Operator Registry** is the single source of truth for all operations in Ka
 
 ## Layered Operator Architecture
 
-Kairo's operator registry is organized into **7 semantic layers**, from foundational kernel operations to domain-specific applications. Each layer builds on the layers below it, creating a coherent operator universe.
+Morphogen's operator registry is organized into **7 semantic layers**, from foundational kernel operations to domain-specific applications. Each layer builds on the layers below it, creating a coherent operator universe.
 
 ### Layer 1: Kernel Core Operators
 
@@ -183,7 +183,7 @@ Kairo's operator registry is organized into **7 semantic layers**, from foundati
   "inputs": [{"name": "x", "type": "Any"}],
   "params": {"to": {"type": "Type"}},
   "determinism": "strict",
-  "lowering": {"dialect": "kairo.core", "template": "cast_generic"}
+  "lowering": {"dialect": "morphogen.core", "template": "cast_generic"}
 }
 ```
 
@@ -223,7 +223,7 @@ Kairo's operator registry is organized into **7 semantic layers**, from foundati
   },
   "domain_change": {"from": "time", "to": "frequency"},
   "determinism": "strict",
-  "lowering": {"dialect": "kairo.transform", "template": "fft_1d"},
+  "lowering": {"dialect": "morphogen.transform", "template": "fft_1d"},
   "numeric_properties": {"invertible": true, "inverse_op": "ifft"}
 }
 ```
@@ -265,7 +265,7 @@ See **[transform.md](transform.md)** for complete transform dialect specificatio
   },
   "outputs": [{"type": "Stream<f32,time>"}],
   "determinism": "repro",
-  "lowering": {"dialect": "kairo.stream", "template": "brownian_step"}
+  "lowering": {"dialect": "morphogen.stream", "template": "brownian_step"}
 }
 ```
 
@@ -304,7 +304,7 @@ See **[transform.md](transform.md)** for complete transform dialect specificatio
     "symplectic": true,
     "conservative": true
   },
-  "lowering": {"dialect": "kairo.stream", "template": "verlet_step"}
+  "lowering": {"dialect": "morphogen.stream", "template": "verlet_step"}
 }
 ```
 
@@ -381,7 +381,7 @@ See **[transform.md](transform.md)** for complete transform dialect specificatio
   },
   "outputs": [{"type": "Stream<f32,time,audio>"}],
   "determinism": "strict",
-  "lowering": {"dialect": "kairo.audio", "template": "biquad_lpf"}
+  "lowering": {"dialect": "morphogen.audio", "template": "biquad_lpf"}
 }
 ```
 
@@ -588,7 +588,7 @@ See **[transform.md](transform.md)** for complete transform dialect specificatio
   },
   "outputs": [{"type": "Stream<Vec2<f32>,time>", "description": "[price, variance]"}],
   "determinism": "repro",
-  "lowering": {"dialect": "kairo.stochastic", "template": "heston_euler"}
+  "lowering": {"dialect": "morphogen.stochastic", "template": "heston_euler"}
 }
 ```
 
@@ -856,7 +856,7 @@ Operators can customize behavior per profile:
 ```json
 {
   "implementation": {
-    "python": "kairo.stdlib.oscillators.sine"
+    "python": "morphogen.stdlib.oscillators.sine"
   }
 }
 ```
@@ -875,14 +875,14 @@ def sine(freq: f32<Hz>, phase: f32<rad> = 0.0) -> Stream<f32, time, audio>:
 ```json
 {
   "implementation": {
-    "mlir": "kairo.signal.sine"
+    "mlir": "morphogen.signal.sine"
   }
 }
 ```
 
 **MLIR operation:**
 ```mlir
-%out = kairo.signal.sine %freq, %phase : (f32, f32) -> !kairo.stream<f32>
+%out = morphogen.signal.sine %freq, %phase : (f32, f32) -> !morphogen.stream<f32>
 ```
 
 ---
@@ -1092,7 +1092,7 @@ def {op_def.category}.{op_def.name}({inputs_mlir}, {params_mlir}) -> ({outputs_m
 def generate_markdown_docs(registry):
     """Generate markdown documentation from registry."""
 
-    md = "# Kairo Operator Reference\n\n"
+    md = "# Morphogen Operator Reference\n\n"
 
     for category in registry.categories:
         md += f"## {category.title()}\n\n"
@@ -1113,7 +1113,7 @@ def generate_markdown_docs(registry):
 
             # Example
             md += "**Example:**\n\n"
-            md += f"```kairo\nlet output = {op.name}("
+            md += f"```morphogen\nlet output = {op.name}("
             md += ", ".join(f"{p['name']}={p.get('default', '...')}" for p in op.params)
             md += ")\n```\n\n"
 
@@ -1175,8 +1175,8 @@ def generate_markdown_docs(registry):
   },
 
   "implementation": {
-    "python": "kairo.stdlib.filters.lpf",
-    "mlir": "kairo.signal.lpf"
+    "python": "morphogen.stdlib.filters.lpf",
+    "mlir": "morphogen.signal.lpf"
   },
 
   "tests": [

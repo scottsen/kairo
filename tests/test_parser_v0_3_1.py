@@ -1,8 +1,8 @@
 """Tests for Kairo v0.3.1 parser features."""
 
 import pytest
-from kairo.parser.parser import parse
-from kairo.ast.nodes import *
+from morphogen.parser.parser import parse
+from morphogen.ast.nodes import *
 
 
 class TestFlowBlocks:

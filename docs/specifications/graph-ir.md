@@ -1,4 +1,4 @@
-# SPEC: Kairo Graph IR
+# SPEC: Morphogen Graph IR
 
 **Version:** 1.0 Draft
 **Status:** RFC
@@ -8,7 +8,7 @@
 
 ## Overview
 
-**Kairo Graph IR** is the canonical intermediate representation between frontends (Kairo.Audio, RiffStack) and the Kairo Kernel. It's a typed, JSON-based directed acyclic graph (DAG) that captures:
+**Morphogen Graph IR** is the canonical intermediate representation between frontends (Morphogen.Audio, RiffStack) and the Morphogen Kernel. It's a typed, JSON-based directed acyclic graph (DAG) that captures:
 
 - Nodes (operators with parameters)
 - Edges (data dependencies)
@@ -17,7 +17,7 @@
 - Event streams
 
 **Design Goals:**
-1. **Frontend-agnostic** — Both Kairo.Audio DSL and RiffStack YAML emit the same IR
+1. **Frontend-agnostic** — Both Morphogen.Audio DSL and RiffStack YAML emit the same IR
 2. **Human-readable** — JSON format, inspectable, debuggable
 3. **Type-safe** — Full type/unit/domain annotations for validation
 4. **Deterministic** — Explicit ordering, seeding, profile constraints
@@ -201,7 +201,7 @@ Maps logical output names to node:port references.
     "stereo": ["pan1:left", "pan1:right"]
   },
   "metadata": {
-    "source": "Kairo.Audio",
+    "source": "Morphogen.Audio",
     "scene_name": "SimpleSynth",
     "author": "user@example.com"
   }
@@ -359,9 +359,9 @@ def validate_units(param_value, expected_unit):
 
 ## Frontend Emission Examples
 
-### From Kairo.Audio
+### From Morphogen.Audio
 
-```kairo
+```morphogen
 scene SimpleTone {
   let osc = sine(440Hz)
   let filtered = lpf(osc, cutoff=2kHz, q=0.8)
@@ -519,7 +519,7 @@ Reference external files (IRs, samples, models):
 
 ## Summary
 
-Kairo Graph IR provides:
+Morphogen Graph IR provides:
 
 ✅ **Unified representation** for all frontends
 ✅ **Type-safe** with full annotations

@@ -4,8 +4,8 @@ import pytest
 import tempfile
 import numpy as np
 from pathlib import Path
-from kairo.stdlib.field import field, Field2D
-from kairo.runtime.runtime import ExecutionContext, Runtime
+from morphogen.stdlib.field import field, Field2D
+from morphogen.runtime.runtime import ExecutionContext, Runtime
 
 
 @pytest.fixture

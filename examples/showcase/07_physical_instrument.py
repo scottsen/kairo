@@ -17,19 +17,19 @@ Creates physically modeled instruments:
 """
 
 import numpy as np
-from kairo.stdlib import audio, field, palette, image, visual, io_storage
-from kairo.stdlib.field import Field2D
-from kairo.stdlib.visual import Visual
+from morphogen.stdlib import audio, field, palette, image, visual, io_storage
+from morphogen.stdlib.field import Field2D
+from morphogen.stdlib.visual import Visual
 
 # Try to import acoustics and signal if available
 try:
-    from kairo.stdlib import acoustics
+    from morphogen.stdlib import acoustics
     ACOUSTICS_AVAILABLE = True
 except:
     ACOUSTICS_AVAILABLE = False
 
 try:
-    from kairo.stdlib import signal as signal_proc
+    from morphogen.stdlib import signal as signal_proc
     SIGNAL_AVAILABLE = True
 except:
     SIGNAL_AVAILABLE = False

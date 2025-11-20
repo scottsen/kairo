@@ -2,7 +2,7 @@
 
 import pytest
 import numpy as np
-from kairo.stdlib.audio import audio, AudioBuffer
+from morphogen.stdlib.audio import audio, AudioBuffer
 
 
 class TestADSREnvelope:

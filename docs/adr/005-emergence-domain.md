@@ -9,7 +9,7 @@
 
 ## Context
 
-Kairo has successfully evolved from an audio/visual creative coding kernel to a multi-domain physics simulation platform. We have:
+Morphogen has successfully evolved from an audio/visual creative coding kernel to a multi-domain physics simulation platform. We have:
 
 - ✅ Audio DSP (oscillators, filters, effects)
 - ✅ Visual/Fractal rendering
@@ -19,7 +19,7 @@ Kairo has successfully evolved from an audio/visual creative coding kernel to a 
 - ✅ Circuit modeling
 - ✅ Geometry/CAD (TiaCAD-inspired)
 
-However, Kairo currently lacks support for **emergent systems** — a major class of computational models that sit naturally between:
+However, Morphogen currently lacks support for **emergent systems** — a major class of computational models that sit naturally between:
 - **Physics** (continuous PDEs, particles)
 - **Optimization** (swarm algorithms)
 - **Graphics** (procedural generation)
@@ -55,7 +55,7 @@ This fragmentation prevents cross-domain workflows like:
 
 ## Decision
 
-**We will add an EmergenceDomain to Kairo as a core domain (v0.10-v1.0).**
+**We will add an EmergenceDomain to Morphogen as a core domain (v0.10-v1.0).**
 
 The EmergenceDomain will provide:
 
@@ -96,13 +96,13 @@ The EmergenceDomain will provide:
 
 ---
 
-## Why EmergenceDomain Fits Kairo
+## Why EmergenceDomain Fits Morphogen
 
 ### 1. Emergent Systems Are Graph-Friendly
 
-**CA, ABM, RD, L-systems are fundamentally local and composable** — exactly Kairo's operator model:
+**CA, ABM, RD, L-systems are fundamentally local and composable** — exactly Morphogen's operator model:
 
-```kairo
+```morphogen
 // Natural composition
 let ca = ca.create(512, 512, init="random")
 let evolved = ca.step(ca, rule=life_rule)
@@ -117,7 +117,7 @@ This is **impossible** in traditional tools (NetLogo, Golly, etc.).
 ### 2. Cross-Domain Workflows Unlock Innovation
 
 **Example 1: Biological Morphogenesis → 3D Printing**
-```kairo
+```morphogen
 // Reaction-diffusion pattern
 (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 
@@ -133,7 +133,7 @@ io.export_stl(surface, "organic_structure.stl")
 ```
 
 **Example 2: Slime Mold Network → Circuit Layout**
-```kairo
+```morphogen
 // Generate optimal network
 let network = swarm.slime_mold(field, food_sources=component_positions)
 
@@ -145,7 +145,7 @@ let fields = circuit.em_solve(traces, frequency=2.4GHz)
 ```
 
 **Example 3: Boids → Acoustic Scattering → Audio**
-```kairo
+```morphogen
 scene SwarmAcoustics {
     let boids = agent.boids(boids, count=1000)
     let positions = agent.positions(boids)
@@ -204,7 +204,7 @@ All emergence operators are embarrassingly parallel:
 - RD integration (iterative solvers with fixed tolerance)
 - Swarm algorithms (deterministic RNG, stable force ordering)
 
-**This matches Kairo's determinism profiles perfectly.**
+**This matches Morphogen's determinism profiles perfectly.**
 
 ---
 
@@ -217,7 +217,7 @@ All emergence operators are embarrassingly parallel:
 - **MATLAB/Python:** Fragmented libraries, no unified pipeline
 - **Game engines (Unity/Unreal):** Not deterministic, hard to extend
 
-**Kairo + EmergenceDomain:**
+**Morphogen + EmergenceDomain:**
 - ✅ CA + ABM + RD + L-systems + Swarms in one system
 - ✅ Cross-domain integration (Geometry, Physics, Audio, Optimization)
 - ✅ GPU acceleration
@@ -252,7 +252,7 @@ All emergence operators are embarrassingly parallel:
    - Generative architecture
 
 4. **Academic Impact**
-   - "Kairo: A Unified Platform for Emergent Systems and Multi-Physics Simulation"
+   - "Morphogen: A Unified Platform for Emergent Systems and Multi-Physics Simulation"
    - First deterministic, GPU-accelerated emergence platform
    - Cross-domain workflows unprecedented in literature
 
@@ -298,7 +298,7 @@ All emergence operators are embarrassingly parallel:
 
 **Cons:**
 - ❌ Misses huge creative coding community
-- ❌ Limits Kairo to "serious engineering" (excludes art, biology, games)
+- ❌ Limits Morphogen to "serious engineering" (excludes art, biology, games)
 - ❌ Competitors (Processing, TouchDesigner) dominate generative art space
 - ❌ No differentiator for procedural generation
 
@@ -314,12 +314,12 @@ All emergence operators are embarrassingly parallel:
 
 **Cons:**
 - ❌ No determinism guarantees
-- ❌ Can't integrate with Kairo's type system
+- ❌ Can't integrate with Morphogen's type system
 - ❌ No GPU acceleration
-- ❌ No cross-domain composition (NetLogo can't export to Kairo geometry)
+- ❌ No cross-domain composition (NetLogo can't export to Morphogen geometry)
 - ❌ Dependency hell (FFI, version conflicts)
 
-**Rejected:** Breaks Kairo's unified compilation model.
+**Rejected:** Breaks Morphogen's unified compilation model.
 
 ---
 
@@ -408,8 +408,8 @@ All emergence operators are embarrassingly parallel:
 - [ ] 3D-printable procedural models
 
 **Community:**
-- [ ] "Show me a cool Kairo emergence example" becomes common demo
-- [ ] Artists adopt Kairo for generative work
+- [ ] "Show me a cool Morphogen emergence example" becomes common demo
+- [ ] Artists adopt Morphogen for generative work
 - [ ] Academic papers cite EmergenceDomain
 
 ---
@@ -444,7 +444,7 @@ All emergence operators are embarrassingly parallel:
 - **Processing / p5.js** (creative coding)
 - **TouchDesigner** (visual creative platform)
 
-### Kairo Specs
+### Morphogen Specs
 
 - **../specifications/emergence.md** — Complete domain specification
 - **../reference/emergence-operators.md** — Operator catalog
@@ -456,7 +456,7 @@ All emergence operators are embarrassingly parallel:
 **✅ APPROVED for v0.10-v1.0 implementation**
 
 **Rationale:**
-1. Natural fit for Kairo's operator model
+1. Natural fit for Morphogen's operator model
 2. Unique cross-domain integration (no competitor offers this)
 3. Unlocks major user communities (artists, biologists, game devs)
 4. GPU-accelerable, deterministic, composable

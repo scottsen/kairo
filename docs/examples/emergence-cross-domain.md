@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document provides **complete, runnable examples** demonstrating how Kairo's EmergenceDomain integrates with other domains:
+This document provides **complete, runnable examples** demonstrating how Morphogen's EmergenceDomain integrates with other domains:
 
 1. **Emergence → Geometry** — Patterns become 3D objects
 2. **Emergence → Physics** — Emergent structures undergo stress testing
@@ -19,7 +19,7 @@ This document provides **complete, runnable examples** demonstrating how Kairo's
 6. **Multi-Domain Pipelines** — Combining 4+ domains
 
 Each example includes:
-- ✅ Complete Kairo code
+- ✅ Complete Morphogen code
 - ✅ Explanation of cross-domain integration
 - ✅ Expected output / validation
 - ✅ Extensions and variations
@@ -41,7 +41,7 @@ Each example includes:
 
 ## Complete Code
 
-```kairo
+```morphogen
 scene BiologicalMorphogenesis {
     // 1. Initialize reaction-diffusion system
     let u = field.create(512, 512, 1.0)
@@ -108,7 +108,7 @@ scene BiologicalMorphogenesis {
 
 ### 1. EmergenceDomain → GeometryDomain
 
-```kairo
+```morphogen
 // RD pattern becomes displacement map
 let heightmap = v
 let surface = geom.displace(base, displacement=heightmap, scale=20mm)
@@ -123,7 +123,7 @@ let surface = geom.displace(base, displacement=heightmap, scale=20mm)
 
 ### 2. GeometryDomain → PhysicsDomain
 
-```kairo
+```morphogen
 let stress = physics.stress_test(structure, load=load, material="PLA")
 ```
 
@@ -137,7 +137,7 @@ let stress = physics.stress_test(structure, load=load, material="PLA")
 
 ### 3. PhysicsDomain → VisualizationDomain
 
-```kairo
+```morphogen
 out stress_viz = visual.render_stress(stress, palette="plasma")
 ```
 
@@ -166,7 +166,7 @@ out stress_viz = visual.render_stress(stress, palette="plasma")
 
 ### Variation 1: Different RD Parameters
 
-```kairo
+```morphogen
 // Spots pattern
 (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 
@@ -181,7 +181,7 @@ out stress_viz = visual.render_stress(stress, palette="plasma")
 
 ### Variation 2: Multi-Layer Structure
 
-```kairo
+```morphogen
 // Create multiple layers
 let layer1 = geom.displace(base, v, scale=10mm)
 let layer2 = geom.displace(base, u, scale=5mm)
@@ -196,7 +196,7 @@ let structure = geom.union(
 
 ### Variation 3: Optimization Loop
 
-```kairo
+```morphogen
 // Find RD parameters that maximize strength
 let result = opt.differential_evolution(
     objective = |params| {
@@ -248,13 +248,13 @@ Design PCB traces connecting 5 components while minimizing:
 
 **Traditional approach:** Manual routing or auto-router (often suboptimal)
 
-**Kairo approach:** Slime mold network optimization
+**Morphogen approach:** Slime mold network optimization
 
 ---
 
 ## Complete Code
 
-```kairo
+```morphogen
 scene SlimeMoldPCB {
     // 1. Define component positions (food sources for slime mold)
     let components = [
@@ -323,7 +323,7 @@ scene SlimeMoldPCB {
 
 ### 1. EmergenceDomain → GraphDomain
 
-```kairo
+```morphogen
 let graph = network.threshold(threshold).to_graph()
 ```
 
@@ -337,7 +337,7 @@ let graph = network.threshold(threshold).to_graph()
 
 ### 2. GraphDomain → CircuitDomain
 
-```kairo
+```morphogen
 let traces = circuit.traces_from_graph(graph, width=0.2mm)
 ```
 
@@ -350,7 +350,7 @@ let traces = circuit.traces_from_graph(graph, width=0.2mm)
 
 ### 3. CircuitDomain → PhysicsDomain (EM)
 
-```kairo
+```morphogen
 let em_fields = circuit.em_solve(traces, frequency=2.4GHz)
 ```
 
@@ -414,7 +414,7 @@ let em_fields = circuit.em_solve(traces, frequency=2.4GHz)
 
 ## Complete Code
 
-```kairo
+```morphogen
 scene SwarmAcoustics {
     // 1. Initialize boids
     let boids = agent.create(
@@ -481,7 +481,7 @@ scene SwarmAcoustics {
 
 ### 1. EmergenceDomain → AcousticsDomain
 
-```kairo
+```morphogen
 let positions = agent.positions(boids)
 let wave = acoustic.propagate_with_scatterers(source, scatterers=positions)
 ```
@@ -496,7 +496,7 @@ let wave = acoustic.propagate_with_scatterers(source, scatterers=positions)
 
 ### 2. AcousticsDomain → AudioDomain
 
-```kairo
+```morphogen
 let audio_sample = audio.pressure_to_sample(mic_pressure)
 ```
 
@@ -524,7 +524,7 @@ let audio_sample = audio.pressure_to_sample(mic_pressure)
 
 ### Variation 1: Multiple Frequencies
 
-```kairo
+```morphogen
 let sources = [
     acoustic.point_source(position=vec3(-5, 0, 5), frequency=500Hz),
     acoustic.point_source(position=vec3(5, 0, 5), frequency=1500Hz)
@@ -540,7 +540,7 @@ let wave = acoustic.propagate_multi_source_with_scatterers(
 
 ### Variation 2: Agent-Controlled Frequency
 
-```kairo
+```morphogen
 // Boid density controls frequency
 let density = agent.to_field(boids, property="density", resolution=(64, 64, 16))
 let avg_density = field.reduce(density, "mean")
@@ -583,7 +583,7 @@ Design a lightweight bracket using CA-generated lattice structure.
 
 ## Complete Code
 
-```kairo
+```morphogen
 scene CABracketOptimization {
     // Optimization function
     fn design_bracket(ca_seed: u64, ca_steps: i32) -> (f32, f32) {
@@ -665,7 +665,7 @@ scene CABracketOptimization {
 
 ### 1. EmergenceDomain → GeometryDomain
 
-```kairo
+```morphogen
 let pattern = ca.to_field(evolved)
 let lattice = geom.lattice_from_pattern(pattern, cell_size=2mm)
 ```
@@ -679,7 +679,7 @@ let lattice = geom.lattice_from_pattern(pattern, cell_size=2mm)
 
 ### 2. GeometryDomain → OptimizationDomain
 
-```kairo
+```morphogen
 let result = opt.nsga2(
     objectives = [strength_fn, lightness_fn],
     ...
@@ -729,7 +729,7 @@ let result = opt.nsga2(
 
 ## Complete Code
 
-```kairo
+```morphogen
 scene TreeWindSimulation {
     // 1. Generate tree using L-system
     let tree_lsys = lsys.create(
@@ -811,7 +811,7 @@ scene TreeWindSimulation {
 
 ### 1. EmergenceDomain → GeometryDomain
 
-```kairo
+```morphogen
 let tree_mesh = lsys.to_geometry(evolved, ...)
 ```
 
@@ -824,7 +824,7 @@ let tree_mesh = lsys.to_geometry(evolved, ...)
 
 ### 2. GeometryDomain → PhysicsDomain
 
-```kairo
+```morphogen
 let branches = tree_mesh.branches.map(|branch| physics.rigid_body(...))
 ```
 
@@ -837,7 +837,7 @@ let branches = tree_mesh.branches.map(|branch| physics.rigid_body(...))
 
 ### 3. FluidDomain → PhysicsDomain
 
-```kairo
+```morphogen
 let wind_force = fluid.drag_force(wind, body=branch)
 ```
 
@@ -923,7 +923,7 @@ Because EmergenceDomain is deterministic (strict/repro), we can:
 - Evolve L-system parameters for aesthetics
 - Tune swarm algorithms for network efficiency
 
-**This is unique to Kairo.**
+**This is unique to Morphogen.**
 
 ---
 
@@ -953,7 +953,7 @@ By combining emergence with:
 - **Acoustics** → Spatial audio
 - **Optimization** → Evolutionary design
 
-Kairo becomes a **universal creative and scientific platform** — unmatched by any existing tool.
+Morphogen becomes a **universal creative and scientific platform** — unmatched by any existing tool.
 
 ---
 

@@ -2,7 +2,7 @@
 
 **Status**: Proposed
 **Date**: 2025-11-15
-**Authors**: Kairo Architecture Team
+**Authors**: Morphogen Architecture Team
 
 ---
 
@@ -32,13 +32,13 @@ Depending on the problem, chemists must juggle 8+ incompatible ecosystems:
 - Optimization is manual
 - ML integration is basically nonexistent
 
-This is a domain **crying out for a unified framework like Kairo**, because Kairo can be the bridge — the way TiaCAD unified CAD modeling and RiffStack unified DSP graphs.
+This is a domain **crying out for a unified framework like Morphogen**, because Morphogen can be the bridge — the way TiaCAD unified CAD modeling and RiffStack unified DSP graphs.
 
 ---
 
 ## Decision
 
-**We will implement a comprehensive Chemistry and Chemical Engineering domain in Kairo**, providing:
+**We will implement a comprehensive Chemistry and Chemical Engineering domain in Morphogen**, providing:
 
 1. **Unified operator framework** that wraps molecular mechanics, quantum chemistry, MD, process simulation, and CFD
 2. **Multi-scale modeling** from quantum → molecular → reactor → process
@@ -47,9 +47,9 @@ This is a domain **crying out for a unified framework like Kairo**, because Kair
 5. **Multiphysics coupling** treating fluid flow, heat transfer, mass transfer, reaction kinetics, and phase equilibrium as composable operator graphs
 6. **Unified visualization** for molecules, trajectories, fields, and reactor flows
 
-### What Makes Kairo Uniquely Suited
+### What Makes Morphogen Uniquely Suited
 
-Kairo already has the infrastructure chemistry needs but lacks:
+Morphogen already has the infrastructure chemistry needs but lacks:
 
 ✅ **Operator graph paradigm** — Wrap any external solver (LAMMPS, ORCA, etc.)
 ✅ **YAML-driven workflows** — Describe end-to-end chemical processes declaratively
@@ -97,13 +97,13 @@ Kairo already has the infrastructure chemistry needs but lacks:
 
 ## Rationale
 
-### Why Chemistry Is a Strategic Domain for Kairo
+### Why Chemistry Is a Strategic Domain for Morphogen
 
 1. **Large, underserved market** — Chemical engineering is a $4 trillion industry
 2. **Clear pain points** — Fragmentation is universally acknowledged
 3. **No existing unified solution** — Aspen/COMSOL are proprietary, narrow, expensive
-4. **Natural fit for Kairo** — Multi-domain, multi-scale, multi-physics problems
-5. **Demonstrates Kairo's universality** — If Kairo can handle chemistry + audio + circuits, it's truly universal
+4. **Natural fit for Morphogen** — Multi-domain, multi-scale, multi-physics problems
+5. **Demonstrates Morphogen's universality** — If Morphogen can handle chemistry + audio + circuits, it's truly universal
 6. **Research impact** — Reproducible workflows are critical for computational chemistry
 
 ### Comparison to Existing Tools
@@ -116,9 +116,9 @@ Kairo already has the infrastructure chemistry needs but lacks:
 | **Cantera** | Reaction kinetics | ⚠️ | ❌ | ✅ | ❌ |
 | **RDKit** | Molecular informatics | ⚠️ | ⚠️ | ✅ | ❌ |
 | **OpenFOAM** | CFD | ⚠️ | ❌ | ✅ | ❌ |
-| **Kairo** | **All of the above** | ✅ | ✅ | ✅ | ✅ |
+| **Morphogen** | **All of the above** | ✅ | ✅ | ✅ | ✅ |
 
-**Kairo is basically**: PyTorch + OpenFOAM + GROMACS + RDKit + Matplotlib + Aspen + ML + Optimization — **unified into a single operator graph system**.
+**Morphogen is basically**: PyTorch + OpenFOAM + GROMACS + RDKit + Matplotlib + Aspen + ML + Optimization — **unified into a single operator graph system**.
 
 ---
 
@@ -186,14 +186,14 @@ Kairo already has the infrastructure chemistry needs but lacks:
 
 - **[specifications/chemistry.md](../specifications/chemistry.md)** — Complete technical specification of chemistry operators
 - **[use-cases/chemistry-unified-framework.md](../use-cases/chemistry-unified-framework.md)** — Real-world chemistry workflow examples
-- **[architecture/domain-architecture.md](../architecture/domain-architecture.md)** — How chemistry fits into Kairo's domain structure
+- **[architecture/domain-architecture.md](../architecture/domain-architecture.md)** — How chemistry fits into Morphogen's domain structure
 
 ---
 
 ## Approval
 
 This ADR is **proposed** and awaiting review by:
-- Kairo core team
+- Morphogen core team
 - Domain experts in chemistry/chemical engineering
 - Community feedback
 

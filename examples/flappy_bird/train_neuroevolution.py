@@ -22,9 +22,9 @@ from typing import List
 import time
 
 # Kairo domains
-from kairo.stdlib.flappy import flappy, GameState
-from kairo.stdlib.neural import neural, MLP
-from kairo.stdlib.genetic import genetic, Population
+from morphogen.stdlib.flappy import flappy, GameState
+from morphogen.stdlib.neural import neural, MLP
+from morphogen.stdlib.genetic import genetic, Population
 
 
 # === CONFIGURATION ===

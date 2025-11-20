@@ -2,7 +2,7 @@
 
 ## Overview
 
-Level 3 enhances Kairo's type system with:
+Level 3 enhances Morphogen's type system with:
 1. **Physical Unit System** - Dimensional analysis and unit compatibility checking
 2. **Cross-Domain Type Validation** - Unit-aware validation across domain boundaries
 3. **Rate Compatibility Checking** - Audio-rate vs control-rate validation
@@ -31,7 +31,7 @@ This builds on the foundation of Level 2 (23 domains with 374 operators) to ensu
 
 **Example Usage:**
 ```python
-from kairo.types.rate_compat import Rate, RateInfo, validate_rate_compatibility
+from morphogen.types.rate_compat import Rate, RateInfo, validate_rate_compatibility
 
 # Check rate compatibility
 valid, msg = validate_rate_compatibility(Rate.AUDIO, Rate.CONTROL)
@@ -61,7 +61,7 @@ factor = get_conversion_factor(source, target)  # 441.0 (downsample ratio)
 
 **Example Usage:**
 ```python
-from kairo.ast.types import sig, ctl, f32, Rate
+from morphogen.ast.types import sig, ctl, f32, Rate
 
 # Audio-rate stream at 44.1kHz
 audio = sig(f32(), sample_rate=44100.0, unit="Pa")  # Pressure
@@ -112,7 +112,7 @@ validate_rate_compatibility_cross_domain(
 Comprehensive type validation including base types, units, and rates.
 
 ```python
-from kairo.ast.types import sig, f32
+from morphogen.ast.types import sig, f32
 
 source = sig(f32(), sample_rate=44100.0, unit="Pa")
 target = sig(f32(), sample_rate=44100.0, unit="Pa")
@@ -212,8 +212,8 @@ pytest tests/test_level3_validators.py -v
 ### Example 1: Audio Processing with Rate Safety
 
 ```python
-from kairo.ast.types import sig, ctl, f32, Rate
-from kairo.cross_domain.validators import validate_type_with_units
+from morphogen.ast.types import sig, ctl, f32, Rate
+from morphogen.cross_domain.validators import validate_type_with_units
 
 # Audio-rate oscillator output
 oscillator_out = sig(f32(), sample_rate=44100.0)
@@ -232,8 +232,8 @@ except CrossDomainTypeError as e:
 ### Example 2: Physics to Audio Sonification
 
 ```python
-from kairo.ast.types import field2d, sig, f32
-from kairo.cross_domain.validators import validate_unit_compatibility
+from morphogen.ast.types import field2d, sig, f32
+from morphogen.cross_domain.validators import validate_unit_compatibility
 
 # Velocity field from fluid simulation
 velocity_field = field2d(f32("m/s"), unit="m/s")
@@ -252,8 +252,8 @@ except CrossDomainTypeError as e:
 ### Example 3: Multi-Domain Flow with Units
 
 ```python
-from kairo.ast.types import f32, vec2
-from kairo.cross_domain.validators import check_unit_conversion_needed
+from morphogen.ast.types import f32, vec2
+from morphogen.cross_domain.validators import check_unit_conversion_needed
 
 # Agent positions in meters
 agent_pos = vec2("m")

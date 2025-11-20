@@ -1,4 +1,4 @@
-# Kairo Optimization Domain: Complete Algorithm Catalog
+# Morphogen Optimization Domain: Complete Algorithm Catalog
 
 **Version:** 1.0
 **Date:** 2025-11-15
@@ -9,9 +9,9 @@
 
 ## Overview
 
-This document catalogs the **complete set of optimization algorithms** that Kairo's Optimization Domain should eventually support. These algorithms transform Kairo from a simulation platform into a **design discovery platform**, enabling automatic parameter tuning, shape optimization, and multi-objective design exploration across all physical domains.
+This document catalogs the **complete set of optimization algorithms** that Morphogen's Optimization Domain should eventually support. These algorithms transform Morphogen from a simulation platform into a **design discovery platform**, enabling automatic parameter tuning, shape optimization, and multi-objective design exploration across all physical domains.
 
-### Why Optimization Matters for Kairo
+### Why Optimization Matters for Morphogen
 
 Different optimization problems require different solvers based on:
 - **Continuity** — Smooth vs. discontinuous objective functions
@@ -21,7 +21,7 @@ Different optimization problems require different solvers based on:
 - **Computational Cost** — Fast analytical vs. expensive CFD/FEM
 - **Multi-Objective** — Single goal vs. competing tradeoffs
 
-Kairo's physical domains (combustion, acoustics, circuits, motors, geometry, etc.) span all these problem types, so the Optimization Domain must be **comprehensive** and **modular**.
+Morphogen's physical domains (combustion, acoustics, circuits, motors, geometry, etc.) span all these problem types, so the Optimization Domain must be **comprehensive** and **modular**.
 
 ---
 
@@ -37,9 +37,9 @@ Algorithms are grouped into five categories:
 
 For each algorithm, we specify:
 - **Best For** — Problem characteristics where it excels
-- **Use Cases** — Concrete Kairo domain applications
+- **Use Cases** — Concrete Morphogen domain applications
 - **Operator Signature** — How it integrates into the operator registry
-- **Dependencies** — Required Kairo subsystems
+- **Dependencies** — Required Morphogen subsystems
 - **Implementation Priority** — Phase 1, Phase 2, or Future
 
 ---
@@ -52,7 +52,7 @@ For each algorithm, we specify:
 
 **Purpose**: Broad exploration of rough, nonlinear, noisy, or discontinuous landscapes.
 
-**Why Essential**: Common in Kairo's physical domains (combustion, acoustics, circuits, motors) where objective functions are:
+**Why Essential**: Common in Morphogen's physical domains (combustion, acoustics, circuits, motors) where objective functions are:
 - Non-differentiable (geometric constraints, discrete choices)
 - Noisy (stochastic simulations, CFD turbulence)
 - Multi-modal (many local optima)
@@ -74,7 +74,7 @@ For each algorithm, we specify:
 - Noisy CFD-like problems (exhaust flow, combustion)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.ga<T>(
     genome: GenomeSpec<T>,
     fitness: (T) -> f64,
@@ -89,7 +89,7 @@ opt.ga<T>(
 ```
 
 **Genome Specification**:
-```kairo
+```morphogen
 # Example: LC filter optimization
 let genome = GenomeSpec({
     L: RangeParam(1.0 μH, 100.0 μH),
@@ -99,7 +99,7 @@ let genome = GenomeSpec({
 ```
 
 **Output**:
-```kairo
+```morphogen
 struct OptResult<T> {
     best: T,
     best_fitness: f64,
@@ -134,7 +134,7 @@ struct OptResult<T> {
 - More reliable for real-parameter optimization
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.de<T>(
     bounds: Array<(f64, f64)>,  # Min/max for each parameter
     fitness: (Array<f64>) -> f64,
@@ -148,7 +148,7 @@ opt.de<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Optimize PID controller
 let bounds = [(0.0, 10.0), (0.0, 5.0), (0.0, 1.0)]  # Kp, Ki, Kd
 let result = opt.de(
@@ -190,7 +190,7 @@ let result = opt.de(
 - State-of-the-art for black-box optimization
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.cmaes<T>(
     initial_mean: Array<f64>,
     initial_sigma: f64,
@@ -207,7 +207,7 @@ opt.cmaes<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Fit 20-parameter acoustic model to measured spectrum
 let result = opt.cmaes(
     initial_mean = [0.0; 20],
@@ -247,7 +247,7 @@ let result = opt.cmaes(
 - Good for problems with smooth gradients but unknown analytically
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.pso<T>(
     bounds: Array<(f64, f64)>,
     fitness: (Array<f64>) -> f64,
@@ -266,7 +266,7 @@ opt.pso<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Optimize Helmholtz resonator dimensions
 let result = opt.pso(
     bounds = [(10mm, 100mm), (5mm, 50mm), (20mm, 200mm)],  # neck_dia, neck_len, volume
@@ -307,10 +307,10 @@ let result = opt.pso(
 - Tuning LTI filter coefficients (linear time-invariant systems)
 - Control stability optimization (gradient of Lyapunov function)
 - Fitting mathematical models to measured data (least-squares)
-- Neural network training (if Kairo adds autodiff)
+- Neural network training (if Morphogen adds autodiff)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.gradient_descent<T>(
     initial: Array<f64>,
     gradient: (Array<f64>) -> Array<f64>,  # Or auto-computed via autodiff
@@ -322,7 +322,7 @@ opt.gradient_descent<T>(
 ```
 
 **Example (with Autodiff)**:
-```kairo
+```morphogen
 # Fit filter to target frequency response
 let target_response = [...]
 let result = opt.gradient_descent(
@@ -361,7 +361,7 @@ let result = opt.gradient_descent(
 - L-BFGS variant handles high dimensions efficiently
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.lbfgs<T>(
     initial: Array<f64>,
     objective: (Array<f64>) -> f64,
@@ -376,7 +376,7 @@ opt.lbfgs<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Estimate thermal conductivity from temperature measurements
 let result = opt.lbfgs(
     initial = [10.0],  # Initial guess for k (W/m·K)
@@ -416,7 +416,7 @@ let result = opt.lbfgs(
 - Simple and reliable for low-dimensional problems (<10 dimensions)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.nelder_mead<T>(
     initial: Array<f64>,
     objective: (Array<f64>) -> f64,
@@ -432,7 +432,7 @@ opt.nelder_mead<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Optimize muffler geometry to match target frequency response
 let result = opt.nelder_mead(
     initial = [50mm, 100mm, 30mm],  # chamber_length, chamber_diameter, baffle_thickness
@@ -459,7 +459,7 @@ let result = opt.nelder_mead(
 
 **Purpose**: Optimize **expensive** simulations by building a lightweight model (surrogate) and exploring intelligently.
 
-**Why Critical for Kairo**:
+**Why Critical for Morphogen**:
 - CFD simulations (combustion, fluid flow) may take minutes per evaluation
 - FEM simulations (structural, thermal) can be very slow
 - Complex multi-domain simulations (motor + thermal + control) are expensive
@@ -488,7 +488,7 @@ let result = opt.nelder_mead(
 - Sample-efficient (finds good solutions with minimal evaluations)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.bayesian<T>(
     bounds: Array<(f64, f64)>,
     objective: (Array<f64>) -> f64,
@@ -507,7 +507,7 @@ opt.bayesian<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Optimize combustion chamber geometry (expensive CFD)
 let result = opt.bayesian(
     bounds = [(50mm, 200mm), (10mm, 50mm), (100mm, 500mm)],  # diameter, height, cone_angle
@@ -522,7 +522,7 @@ let result = opt.bayesian(
     acquisition = "ei"
 )
 
-# Kairo stores GP model for reuse / visualization
+# Morphogen stores GP model for reuse / visualization
 viz.plot_landscape(result.gp_model, bounds)
 ```
 
@@ -546,7 +546,7 @@ viz.plot_landscape(result.gp_model, bounds)
 - Reducing motor torque ripple models (surrogate for FEM)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.response_surface<T>(
     design_points: Array<Array<f64>>,
     objective: (Array<f64>) -> f64,
@@ -578,7 +578,7 @@ opt.response_surface<T>(
 - Exhaust tuning (2-stroke engines)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.kriging<T>(
     bounds: Array<(f64, f64)>,
     objective: (Array<f64>) -> f64,
@@ -624,7 +624,7 @@ opt.kriging<T>(
 - Choosing muffler baffle counts (integer parameters)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.simulated_annealing<T>(
     initial: T,
     energy: (T) -> f64,        # Objective function
@@ -640,7 +640,7 @@ opt.simulated_annealing<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Optimize jet hole pattern (discrete positions on a grid)
 struct JetPattern {
     holes: Array<(int, int)>  # Grid positions
@@ -681,7 +681,7 @@ let result = opt.simulated_annealing(
 - Combining multiple discrete constraints (manufacturing, assembly)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.tabu_search<T>(
     initial: T,
     objective: (T) -> f64,
@@ -713,7 +713,7 @@ opt.tabu_search<T>(
 - Optimizing winding patterns in stators (layer-by-layer)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.beam_search<T>(
     initial_states: Array<T>,
     expand: (T) -> Array<T>,   # Generate successors
@@ -738,7 +738,7 @@ opt.beam_search<T>(
 
 **Purpose**: Optimize **competing objectives** (Pareto frontiers).
 
-**Why Critical**: Most real Kairo problems have tradeoffs:
+**Why Critical**: Most real Morphogen problems have tradeoffs:
 - **Minimize smoke AND maximize flame beauty** (combustion)
 - **Maximize torque AND minimize current ripple** (motors)
 - **Maximize muffler quietness AND maintain power** (acoustics)
@@ -759,7 +759,7 @@ opt.beam_search<T>(
 - Combustion chamber (efficiency vs. emissions vs. noise)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.nsga2<T>(
     genome: GenomeSpec<T>,
     objectives: Array<(T) -> f64>,  # Multiple objectives
@@ -777,7 +777,7 @@ opt.nsga2<T>(
 ```
 
 **Example**:
-```kairo
+```morphogen
 # Optimize muffler: quietness vs. backpressure
 let genome = GenomeSpec({
     chamber_length: RangeParam(100mm, 500mm),
@@ -822,7 +822,7 @@ viz.plot_pareto_front(result.pareto_values, labels=["Noise Reduction", "Backpres
 - Problems requiring fine-grained Pareto front resolution
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.spea2<T>(
     genome: GenomeSpec<T>,
     objectives: Array<(T) -> f64>,
@@ -851,7 +851,7 @@ opt.spea2<T>(
 - Control loop tuning (settling time vs. overshoot)
 
 **Operator Signature**:
-```kairo
+```morphogen
 opt.mopso<T>(
     bounds: Array<(f64, f64)>,
     objectives: Array<(Array<f64>) -> f64>,
@@ -870,7 +870,7 @@ opt.mopso<T>(
 
 ---
 
-## Integration with Kairo Architecture
+## Integration with Morphogen Architecture
 
 ---
 
@@ -935,9 +935,9 @@ All optimizers follow a unified contract:
 
 ### Simulation Subgraph Integration
 
-Optimizers accept **Kairo subgraphs** as objective functions:
+Optimizers accept **Morphogen subgraphs** as objective functions:
 
-```kairo
+```morphogen
 # Define a simulation subgraph
 scene MotorTorqueRipple(winding_pattern: Array<int>) {
     let motor = motors.pmsm(winding_pattern)
@@ -965,7 +965,7 @@ let result = opt.de(
 
 Bayesian Optimization and Response Surface models are **first-class objects**:
 
-```kairo
+```morphogen
 # Train surrogate
 let result = opt.bayesian(bounds, expensive_cfd_simulation, n_iterations=50)
 
@@ -984,9 +984,9 @@ viz.plot_surface_3d(gp_model, bounds, title="Predicted Efficiency")
 
 ### Metrics Extraction
 
-Optimizers integrate with Kairo's metrics system:
+Optimizers integrate with Morphogen's metrics system:
 
-```kairo
+```morphogen
 metrics OptimizationMetrics {
     best_fitness: f64
     n_evaluations: int
@@ -1011,9 +1011,9 @@ scene OptimizeFilter {
 
 ### Visualization Support
 
-Kairo provides built-in visualization for optimization results:
+Morphogen provides built-in visualization for optimization results:
 
-```kairo
+```morphogen
 # Convergence plot
 viz.plot_convergence(result.fitness_history)
 
@@ -1060,7 +1060,7 @@ viz.animate_population(result.population_history)
 
 **Deliverables**:
 - `kairo/stdlib/optimization.py` (Python reference)
-- `kairo.opt` MLIR dialect (lowering plan)
+- `morphogen.opt` MLIR dialect (lowering plan)
 - `docs/specifications/optimization.md` (domain specification - to be created)
 
 ---
@@ -1131,7 +1131,7 @@ viz.animate_population(result.population_history)
 - Pipe diameter (continuous)
 - Air/fuel ratio (continuous)
 
-```kairo
+```morphogen
 let genome = GenomeSpec({
     jet_positions: GridPattern(10, 10),  # 10x10 grid
     pipe_diameter: RangeParam(50mm, 150mm),
@@ -1163,7 +1163,7 @@ let result = opt.ga(
 - Baffle count
 - Perforate hole size
 
-```kairo
+```morphogen
 let result = opt.nsga2(
     genome = GenomeSpec({
         chamber_length: RangeParam(100mm, 500mm),
@@ -1193,7 +1193,7 @@ viz.plot_pareto_front(result.pareto_values)
 
 **Parameters**: Kp, Ki, Kd
 
-```kairo
+```morphogen
 let result = opt.de(
     bounds = [(0.0, 10.0), (0.0, 5.0), (0.0, 1.0)],  # Kp, Ki, Kd
     fitness = |params| {
@@ -1217,7 +1217,7 @@ let result = opt.de(
 
 **Parameters**: 20 control point positions
 
-```kairo
+```morphogen
 let result = opt.cmaes(
     initial_mean = [0.0; 20],
     initial_sigma = 5.0,
@@ -1241,7 +1241,7 @@ let result = opt.cmaes(
 
 **Parameters**: Chamber geometry (3D)
 
-```kairo
+```morphogen
 let result = opt.bayesian(
     bounds = [(100mm, 300mm), (50mm, 150mm), (10deg, 45deg)],
     objective = |params| {
@@ -1260,9 +1260,9 @@ viz.plot_landscape_3d(result.gp_model, bounds)
 
 ---
 
-## What Kairo Gains
+## What Morphogen Gains
 
-By adding comprehensive optimization support, Kairo transforms from **"simulate physics"** to **"discover new designs"**:
+By adding comprehensive optimization support, Morphogen transforms from **"simulate physics"** to **"discover new designs"**:
 
 1. **Automatic Motor Tuning** — Optimize winding patterns, magnet shapes, control loops
 2. **Muffler Shape Evolution** — Multi-objective noise vs. backpressure
@@ -1281,7 +1281,7 @@ By adding comprehensive optimization support, Kairo transforms from **"simulate 
 
 All optimization algorithms support **deterministic execution**:
 
-```kairo
+```morphogen
 # Same seed → identical results
 let result1 = opt.ga(genome, fitness, seed=42)
 let result2 = opt.ga(genome, fitness, seed=42)
@@ -1302,25 +1302,25 @@ Optimization operators are **high-level constructs** that lower to:
 
 1. **Control Flow** (scf dialect) — For/while loops over generations/iterations
 2. **Linear Algebra** (linalg dialect) — For surrogate models (GP, RBF)
-3. **Stochastic** (kairo.stochastic dialect) — For mutation, crossover, sampling
+3. **Stochastic** (morphogen.stochastic dialect) — For mutation, crossover, sampling
 4. **Function Calls** (func dialect) — For user-provided objective functions
 
 **Example (Genetic Algorithm)**:
 ```mlir
 // High-level
-%result = kairo.opt.ga %genome, %fitness, %config
+%result = morphogen.opt.ga %genome, %fitness, %config
 
 // Lowers to:
-%population = kairo.stochastic.init_population %genome, %pop_size, %seed
+%population = morphogen.stochastic.init_population %genome, %pop_size, %seed
 scf.for %gen = 0 to %n_generations {
     %fitness_vals = scf.for %i = 0 to %pop_size {
         %individual = tensor.extract %population[%i]
         %fit = func.call @fitness(%individual)
         scf.yield %fit
     }
-    %selected = kairo.opt.tournament_select %population, %fitness_vals
-    %offspring = kairo.opt.crossover %selected
-    %mutated = kairo.opt.mutate %offspring, %mutation_rate, %seed
+    %selected = morphogen.opt.tournament_select %population, %fitness_vals
+    %offspring = morphogen.opt.crossover %selected
+    %mutated = morphogen.opt.mutate %offspring, %mutation_rate, %seed
     %population = %mutated
 }
 ```
@@ -1343,7 +1343,7 @@ Standard optimization test functions:
 
 ### 2. Determinism Tests
 
-```kairo
+```morphogen
 @test("GA determinism")
 fn test_ga_determinism() {
     let genome = GenomeSpec({ x: RangeParam(−5.0, 5.0) })
@@ -1355,7 +1355,7 @@ fn test_ga_determinism() {
 
 ### 3. Convergence Tests
 
-```kairo
+```morphogen
 @test("CMA-ES converges on Rosenbrock")
 fn test_cmaes_convergence() {
     let result = opt.cmaes(
@@ -1372,7 +1372,7 @@ fn test_cmaes_convergence() {
 
 ### 4. Multi-Objective Tests
 
-```kairo
+```morphogen
 @test("NSGA-II finds Pareto front")
 fn test_nsga2_pareto() {
     let result = opt.nsga2(
@@ -1400,7 +1400,7 @@ fn test_nsga2_pareto() {
 
 Objective function evaluations are **embarrassingly parallel**:
 
-```kairo
+```morphogen
 # Automatic parallelization
 @parallel(strategy="rayon")
 let fitness_values = population.map(|individual| fitness(individual))
@@ -1414,7 +1414,7 @@ let fitness_values = population.map(|individual| fitness(individual))
 
 Optimizers reuse compiled simulation subgraphs:
 
-```kairo
+```morphogen
 # Compile once
 let compiled_sim = compile(MotorTorqueRipple)
 
@@ -1430,7 +1430,7 @@ opt.de(bounds, fitness, ...)  # Fast!
 
 Bayesian Optimization caches GP models:
 
-```kairo
+```morphogen
 # First run (50 evaluations)
 let result1 = opt.bayesian(bounds, expensive_cfd, n_iterations=50)
 io.save(result1.gp_model, "model.gp")
@@ -1510,7 +1510,7 @@ let result2 = opt.bayesian(
 - **Bayesian Optimization**: Brochu et al., "A Tutorial on Bayesian Optimization" (2010)
 - **NSGA-II**: Deb et al., "A Fast and Elitist Multiobjective Genetic Algorithm: NSGA-II" (2002)
 
-### Kairo Architecture
+### Morphogen Architecture
 - **../architecture/domain-architecture.md** — Section 2.3 (Optimization domain overview)
 - **ADR-002** — Cross-domain architectural patterns
 - **../specifications/operator-registry.md** — Operator registration

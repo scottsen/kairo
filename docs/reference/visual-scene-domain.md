@@ -2,13 +2,13 @@
 
 ## Overview
 
-The Visual/Scene domain provides Kairo with **composable math-visualization capabilities** inspired by 3Blue1Brown's Manim library, but built natively into Kairo's multi-domain architecture. This creates a powerful system for explanatory graphics, mathematical animations, and interactive visualizations.
+The Visual/Scene domain provides Morphogen with **composable math-visualization capabilities** inspired by 3Blue1Brown's Manim library, but built natively into Morphogen's multi-domain architecture. This creates a powerful system for explanatory graphics, mathematical animations, and interactive visualizations.
 
 > **Core Concept**: A composable 2D/3D visual DSL with scene graph + animation/timeline engine that plays nicely with math.
 
 ## What Makes This Special
 
-Unlike traditional visualization tools, Kairo's approach integrates:
+Unlike traditional visualization tools, Morphogen's approach integrates:
 
 1. **Scene graph architecture** - Composable visual objects (curves, text, surfaces, arrows)
 2. **Parametric everything** - Functions, transforms, and paths as first-class primitives
@@ -16,10 +16,10 @@ Unlike traditional visualization tools, Kairo's approach integrates:
 4. **Camera system** - Pans, zooms, rotations, tracking
 5. **Multi-domain integration** - Direct connection to simulation, noise, palette, and field domains
 
-### Why Kairo > Manim for Scientific Computing
+### Why Morphogen > Manim for Scientific Computing
 
 **Direct Simulation Integration**
-- Visualize differential equations from Kairo's ODE solver
+- Visualize differential equations from Morphogen's ODE solver
 - Show emergent systems (CA, agents) with live field updates
 - Animate optimization surfaces (GA/PSO results)
 - Display J-tube simulations (pressure, flow, velocity)
@@ -678,7 +678,7 @@ visual.update_from_state(state)
 
 ## Comparison to Manim
 
-| Feature | Manim | Kairo Visual |
+| Feature | Manim | Morphogen Visual |
 |---------|-------|--------------|
 | **Core Language** | Python | Julia / Domain IR |
 | **Architecture** | Monolithic | Multi-domain, composable |
@@ -691,7 +691,7 @@ visual.update_from_state(state)
 | **Type System** | Dynamic | Static + inference |
 | **Timeline** | Imperative | Declarative + imperative |
 
-### What Kairo Does Better
+### What Morphogen Does Better
 
 1. **Unified computation + visualization**
    - Simulate and visualize in one graph
@@ -729,7 +729,7 @@ visual.update_from_state(state)
    - More animation presets
    - LaTeX integration
 
-**Kairo's Goal**: Match Manim's ergonomics while exceeding its capabilities for scientific computing.
+**Morphogen's Goal**: Match Manim's ergonomics while exceeding its capabilities for scientific computing.
 
 ---
 
@@ -762,4 +762,4 @@ visual.update_from_state(state)
 
 ---
 
-*This document represents the architectural vision for Kairo's visual/scene capabilities. Implementation details may evolve as the system develops.*
+*This document represents the architectural vision for Morphogen's visual/scene capabilities. Implementation details may evolve as the system develops.*

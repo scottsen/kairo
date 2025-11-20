@@ -22,8 +22,8 @@ from typing import Dict, List, Tuple
 # Add kairo to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from kairo.mlir.context import is_mlir_available, KairoMLIRContext
-from kairo.mlir.compiler_v2 import MLIRCompilerV2
+from morphogen.mlir.context import is_mlir_available, KairoMLIRContext
+from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
 
 class FieldOperationsBenchmark:

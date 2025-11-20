@@ -2,9 +2,9 @@
 Tests for cross-domain composition parser support.
 """
 
-from kairo.parser.parser import Parser
-from kairo.lexer.lexer import Lexer
-from kairo.ast.nodes import Compose, Link, Identifier
+from morphogen.parser.parser import Parser
+from morphogen.lexer.lexer import Lexer
+from morphogen.ast.nodes import Compose, Link, Identifier
 
 
 def test_parse_compose():

@@ -1,4 +1,4 @@
-# Kairo Domain Implementation Guide
+# Morphogen Domain Implementation Guide
 
 **Version:** 1.0
 **Date:** 2025-11-15
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This guide provides a **step-by-step process** for implementing a new domain in Kairo. It incorporates proven patterns from TiaCAD (geometry), RiffStack (audio), and Strudel (patterns).
+This guide provides a **step-by-step process** for implementing a new domain in Morphogen. It incorporates proven patterns from TiaCAD (geometry), RiffStack (audio), and Strudel (patterns).
 
 **What you'll learn:**
 1. Domain design checklist
@@ -31,7 +31,7 @@ Before implementing a domain, you should:
 - ✅ Read `ADR-002` (cross-domain architectural patterns)
 - ✅ Review existing domains: `kairo/stdlib/audio.py`, `kairo/stdlib/field.py`
 - ✅ Understand MLIR basics (dialects, operations, lowering)
-- ✅ Familiarize yourself with Kairo's type system (`docs/../specifications/type-system.md`)
+- ✅ Familiarize yourself with Morphogen's type system (`docs/../specifications/type-system.md`)
 
 ---
 
@@ -269,7 +269,7 @@ Defines types and operations for {domain-specific purpose}.
 
 from typing import List, Optional
 from dataclasses import dataclass
-from kairo.mlir.ir import (
+from morphogen.mlir.ir import (
     Dialect, Operation, Type, Attribute,
     OpView, register_op, register_type
 )
@@ -283,7 +283,7 @@ class {Domain}Dialect(Dialect):
     """MLIR dialect for {domain} operations."""
 
     name = "{domain}"
-    namespace = "kairo.{domain}"
+    namespace = "morphogen.{domain}"
 
 
 # ============================================================================
@@ -359,7 +359,7 @@ class {CompositeOp}Op(Operation):
 
 def create_{domain}_context():
     """Create MLIR context with {domain} dialect registered."""
-    from kairo.mlir.ir import MLIRContext
+    from morphogen.mlir.ir import MLIRContext
     ctx = MLIRContext()
     ctx.register_dialect({Domain}Dialect)
     return ctx
@@ -383,9 +383,9 @@ This module provides Layer 3 and Layer 4 operators for {domain}.
 
 from typing import List, Optional, Union
 from dataclasses import dataclass
-from kairo.ast.nodes import Node, Ref
-from kairo.ast.types import Type
-from kairo.stdlib.registry import operator, domain
+from morphogen.ast.nodes import Node, Ref
+from morphogen.ast.types import Type
+from morphogen.stdlib.registry import operator, domain
 
 
 # ============================================================================
@@ -534,9 +534,9 @@ This pass converts high-level {domain} operations to loops,
 conditionals, and arithmetic operations.
 """
 
-from kairo.mlir.dialects.{domain} import {Domain}Dialect, {Op1}Op, {Op2}Op
-from kairo.mlir.dialects.builtin import scf, arith, func
-from kairo.mlir.passes import LoweringPass
+from morphogen.mlir.dialects.{domain} import {Domain}Dialect, {Op1}Op, {Op2}Op
+from morphogen.mlir.dialects.builtin import scf, arith, func
+from morphogen.mlir.passes import LoweringPass
 
 
 class {Domain}ToSCFLoweringPass(LoweringPass):
@@ -589,8 +589,8 @@ Replaces non-symplectic integrators with symplectic equivalents
 for Hamiltonian systems to ensure energy conservation.
 """
 
-from kairo.mlir.passes import DomainPass
-from kairo.mlir.dialects.physics import IntegratorOp
+from morphogen.mlir.passes import DomainPass
+from morphogen.mlir.dialects.physics import IntegratorOp
 
 
 class SymplecticEnforcementPass(DomainPass):
@@ -636,7 +636,7 @@ Unit tests for {Domain}Domain operators.
 """
 
 import pytest
-from kairo.stdlib.{domain} import {op1}, {op2}, {Primary}Ref
+from morphogen.stdlib.{domain} import {op1}, {op2}, {Primary}Ref
 
 
 class Test{Domain}AtomicOps:
@@ -751,18 +751,18 @@ Before merging your domain into main:
 - [ ] Performance benchmarks run (if applicable)
 - [ ] Code review completed (2+ reviewers)
 
-### 5.2 Integration with Kairo Core
+### 5.2 Integration with Morphogen Core
 
 Update these core files:
 
 1. **`kairo/stdlib/__init__.py`**
    ```python
-   from kairo.stdlib.{domain} import *
+   from morphogen.stdlib.{domain} import *
    ```
 
 2. **`kairo/mlir/dialects/__init__.py`**
    ```python
-   from kairo.mlir.dialects.{domain} import {Domain}Dialect
+   from morphogen.mlir.dialects.{domain} import {Domain}Dialect
    ```
 
 3. **`docs/../architecture/domain-architecture.md`**
@@ -774,7 +774,7 @@ Update these core files:
 
 ### 5.3 Versioning
 
-Domain versions should follow Kairo's overall version:
+Domain versions should follow Morphogen's overall version:
 - **v0.8**: Core domains (Geometry, Audio, Fields)
 - **v0.9**: Next-wave domains (Physics, Finance, Graphics)
 - **v1.0**: Stable API for all core + next-wave domains
@@ -812,9 +812,9 @@ If your domain benefits from GPU:
 ### 6.3 Determinism Strategies
 
 Ensure deterministic execution:
-- **Fixed RNG seeds**: Use `kairo.random.deterministic_rng(seed)`
+- **Fixed RNG seeds**: Use `morphogen.random.deterministic_rng(seed)`
 - **Operator ordering**: Document order-of-operations dependencies
-- **Floating-point**: Use `kairo.math.deterministic_sum()` for reductions
+- **Floating-point**: Use `morphogen.math.deterministic_sum()` for reductions
 - **Profile**: Add determinism profile to SPEC
 
 ---
@@ -838,7 +838,7 @@ Ensure deterministic execution:
 **Get help:**
 - Review existing domains: `kairo/stdlib/audio.py`, `kairo/stdlib/field.py`
 - Read ADR-002 for architectural patterns
-- Ask questions in Kairo development discussions
+- Ask questions in Morphogen development discussions
 
 ---
 

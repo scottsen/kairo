@@ -9,7 +9,7 @@ Demonstrates creating and working with basic 2D geometric primitives:
 """
 
 import numpy as np
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     point2d, line2d, circle, rectangle, polygon, regular_polygon,
     area, perimeter, centroid, bounding_box
 )

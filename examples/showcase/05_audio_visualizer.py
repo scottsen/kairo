@@ -21,8 +21,8 @@ Creates beautiful visualizations that react to audio:
 import numpy as np
 import subprocess
 from pathlib import Path
-from kairo.stdlib import audio, field, cellular, palette, color, image, noise, visual, Visual
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import audio, field, cellular, palette, color, image, noise, visual, Visual
+from morphogen.stdlib.field import Field2D
 
 
 def get_palette(colormap_name: str, resolution: int = 256):

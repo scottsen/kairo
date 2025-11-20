@@ -17,7 +17,7 @@ Features:
 """
 
 import numpy as np
-from kairo.stdlib import cellular, visual, palette, image, color
+from morphogen.stdlib import cellular, visual, palette, image, color
 
 def create_glider(field, x, y):
     """Place a glider pattern at position (x, y)."""

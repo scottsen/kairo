@@ -1,4 +1,4 @@
-"""Setup configuration for Kairo."""
+"""Setup configuration for Morphogen."""
 
 from setuptools import setup, find_packages
 
@@ -6,8 +6,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="kairo",
-    version="0.10.0",
+    name="morphogen",
+    version="0.11.0",
     author="Scott Sen",
     description="A language of creative determinism for simulation, sound, and visual form",
     long_description=long_description,
@@ -51,7 +51,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "kairo=kairo.cli:main",
+            "morphogen=morphogen.cli:main",
         ],
     },
 )

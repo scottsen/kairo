@@ -15,7 +15,7 @@ Use cases demonstrated:
 
 import numpy as np
 import matplotlib.pyplot as plt
-from kairo.stdlib.acoustics import (
+from morphogen.stdlib.acoustics import (
     acoustics, create_pipe, create_expansion_chamber,
     SPEED_OF_SOUND
 )

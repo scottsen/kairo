@@ -6,8 +6,8 @@ These tests require MLIR Python bindings to be installed.
 
 import pytest
 import math
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
-from kairo.mlir.dialects.audio import (
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.dialects.audio import (
     AudioType, AudioDialect,
     AudioBufferCreateOp, AudioOscillatorOp, AudioEnvelopeOp,
     AudioFilterOp, AudioMixOp
@@ -636,7 +636,7 @@ class TestAudioCompilerIntegration:
 
     def test_compile_audio_program_simple(self):
         """Test compiling a simple audio program."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -657,7 +657,7 @@ class TestAudioCompilerIntegration:
 
     def test_compile_oscillator_program(self):
         """Test compiling oscillator program."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -684,7 +684,7 @@ class TestAudioCompilerIntegration:
 
     def test_compile_envelope_program(self):
         """Test compiling envelope program."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -714,7 +714,7 @@ class TestAudioCompilerIntegration:
 
     def test_compile_filter_program(self):
         """Test compiling filter program."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -744,7 +744,7 @@ class TestAudioCompilerIntegration:
 
     def test_compile_mix_program(self):
         """Test compiling mix program."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -781,7 +781,7 @@ class TestAudioCompilerIntegration:
 
     def test_compile_complex_audio_program(self):
         """Test compiling complex audio program with all operations."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -839,8 +839,8 @@ class TestAudioLoweringPass:
 
     def test_lowering_pass_runs(self):
         """Test that lowering pass runs without errors."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
-        from kairo.mlir.lowering import create_audio_to_scf_pass
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.lowering import create_audio_to_scf_pass
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)

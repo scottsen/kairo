@@ -1,8 +1,8 @@
-# Kairo v0.3.1 Runtime Implementation
+# Morphogen v0.3.1 Runtime Implementation
 
 ## Overview
 
-This document describes the runtime execution layer implementation for Kairo v0.3.1, enabling all newly-parsed language features to execute using Python-based interpretation.
+This document describes the runtime execution layer implementation for Morphogen v0.3.1, enabling all newly-parsed language features to execute using Python-based interpretation.
 
 ## Implementation Status
 
@@ -17,7 +17,7 @@ This document describes the runtime execution layer implementation for Kairo v0.
 - Supports recursion
 
 **Example:**
-```kairo
+```morphogen
 fn calculate_velocity(distance: f32[m], time: f32[s]) -> f32[m/s] {
     return distance / time
 }
@@ -33,7 +33,7 @@ velocity = calculate_velocity(10.0, 2.0)  # Returns 5.0 m/s
 - Nested function calls
 
 **Example:**
-```kairo
+```morphogen
 fn square(x) { return x * x }
 fn sum_of_squares(a, b) { return square(a) + square(b) }
 
@@ -47,7 +47,7 @@ result = sum_of_squares(3.0, 4.0)  # Returns 25.0
 - Error detection for returns outside functions
 
 **Example:**
-```kairo
+```morphogen
 fn abs_value(x) {
     return if x < 0.0 then -x else x
 }
@@ -60,7 +60,7 @@ fn abs_value(x) {
 - Works in all expression contexts
 
 **Example:**
-```kairo
+```morphogen
 result = if x > 10.0 then 1.0 else if x > 5.0 then 2.0 else 3.0
 ```
 
@@ -72,7 +72,7 @@ result = if x > 10.0 then 1.0 else if x > 5.0 then 2.0 else 3.0
 - Can be called like regular functions
 
 **Example:**
-```kairo
+```morphogen
 # Simple lambda
 double = |x| x * 2.0
 result = double(5.0)  # Returns 10.0
@@ -97,7 +97,7 @@ result = apply_twice(double, 3.0)  # Returns 12.0
 - Proper state variable handling with `@state` decorator
 
 **Example:**
-```kairo
+```morphogen
 @state position = 0.0
 
 flow(dt=0.1, steps=10, substeps=2) {
@@ -113,7 +113,7 @@ flow(dt=0.1, steps=10, substeps=2) {
 - Ready for instantiation (awaiting struct literal AST nodes)
 
 **Example:**
-```kairo
+```morphogen
 struct Particle {
     position: f32[m]
     velocity: f32[m/s]
@@ -181,7 +181,7 @@ Result
 
 ### Temporal Semantics
 
-Flow blocks implement Kairo's temporal execution model:
+Flow blocks implement Morphogen's temporal execution model:
 
 1. **State Variables** (`@state`):
    - Persist across iterations
@@ -227,7 +227,7 @@ Flow blocks implement Kairo's temporal execution model:
 ## Example Programs
 
 ### 1. Velocity Calculation with Functions
-```kairo
+```morphogen
 fn calculate_velocity(distance: f32[m], time: f32[s]) -> f32[m/s] {
     return distance / time
 }
@@ -238,7 +238,7 @@ flow(dt=0.1, steps=10) {
 ```
 
 ### 2. Lambdas with Closures
-```kairo
+```morphogen
 multiplier = 3.0
 scale = |x| x * multiplier
 
@@ -249,7 +249,7 @@ flow(dt=0.1, steps=5) {
 ```
 
 ### 3. Recursive Functions
-```kairo
+```morphogen
 fn factorial(n) {
     return if n <= 1.0 then 1.0 else n * factorial(n - 1.0)
 }
@@ -320,11 +320,11 @@ Programs can now:
 
 ## Conclusion
 
-The Kairo v0.3.1 runtime successfully implements all major language features, achieving:
+The Morphogen v0.3.1 runtime successfully implements all major language features, achieving:
 - ✅ **100% test coverage** for implemented features
 - ✅ **Full backward compatibility** with v0.2.x
 - ✅ **Production-ready quality** matching parser implementation
 - ✅ **Complete end-to-end examples** demonstrating real-world usage
 - ✅ **Comprehensive documentation**
 
-The runtime enables powerful new programming patterns while maintaining the simplicity and elegance of Kairo's temporal computation model.
+The runtime enables powerful new programming patterns while maintaining the simplicity and elegance of Morphogen's temporal computation model.

@@ -1,11 +1,11 @@
-# Strategic Next Steps for Kairo (Post-Geometry Domain)
+# Strategic Next Steps for Morphogen (Post-Geometry Domain)
 **Analysis Date:** November 19, 2025
 **Project Version:** v0.10.0
 **Project Grade:** A (94/100)
 
 ## Executive Summary
 
-Kairo has reached a significant milestone with 23 production-ready domains, comprehensive MLIR compilation (all 6 phases complete), and zero technical debt. The recent geometry domain implementation demonstrates exceptional development practices. The project is now positioned for:
+Morphogen has reached a significant milestone with 23 production-ready domains, comprehensive MLIR compilation (all 6 phases complete), and zero technical debt. The recent geometry domain implementation demonstrates exceptional development practices. The project is now positioned for:
 
 1. **Domain Expansion** - Implement specification-ready domains (Circuit, Fluid, Chemistry)
 2. **Community Growth** - PyPI release, contributor onboarding, showcase examples
@@ -209,7 +209,7 @@ Kairo has reached a significant milestone with 23 production-ready domains, comp
 **Deliverables:**
 - `/home/user/kairo/benchmarks/` directory with comprehensive suite
 - Performance regression tests in CI
-- Performance comparison report (Kairo vs. alternatives)
+- Performance comparison report (Morphogen vs. alternatives)
 - Optimization opportunities documented in domain code
 
 ---
@@ -245,13 +245,13 @@ Kairo has reached a significant milestone with 23 production-ready domains, comp
 **Rationale:** Lower barrier to entry, systematic onboarding for new users.
 
 **Content:**
-- Tutorial 1: "Hello Kairo" - Basic syntax, your first field
+- Tutorial 1: "Hello Morphogen" - Basic syntax, your first field
 - Tutorial 2: "Audio Synthesis 101" - Oscillators, envelopes, effects
 - Tutorial 3: "Cross-Domain Magic" - Agents sampling fields
 - Tutorial 4: "Physics Simulation" - Rigidbody basics, collisions
 - Tutorial 5: "Advanced Composition" - Multi-domain scene
 - Tutorial 6: "MLIR Compilation" - Understanding the stack
-- Tutorial 7: "Creating Custom Domains" - Extend Kairo
+- Tutorial 7: "Creating Custom Domains" - Extend Morphogen
 
 **Estimated Effort:** 7-10 days (1 day per tutorial + polish)
 
@@ -299,10 +299,10 @@ Kairo has reached a significant milestone with 23 production-ready domains, comp
 **Tasks:**
 - Distributed execution support (multi-node computation)
 - Cloud deployment tools (Docker, Kubernetes)
-- Web interface (Kairo Studio - browser-based IDE)
-- Version control for Kairo scenes (.kairo file diffing)
+- Web interface (Morphogen Studio - browser-based IDE)
+- Version control for Morphogen scenes (.kairo file diffing)
 - Collaboration features (shared state, real-time editing)
-- API server (REST/GraphQL for Kairo runtime)
+- API server (REST/GraphQL for Morphogen runtime)
 
 **Estimated Effort:** 25-30 days
 
@@ -392,7 +392,7 @@ Kairo has reached a significant milestone with 23 production-ready domains, comp
 
 ## Conclusion
 
-Kairo is at an inflection point: **technical excellence achieved, community growth needed**. The project has:
+Morphogen is at an inflection point: **technical excellence achieved, community growth needed**. The project has:
 
 ✅ Solid foundation (23 domains, MLIR complete, zero tech debt)
 ✅ Clear differentiation (unified multi-domain computation)
@@ -409,7 +409,7 @@ Kairo is at an inflection point: **technical excellence achieved, community grow
 2. Create one showcase example (suggest: Interactive Physics Sandbox)
 3. Draft CONTRIBUTING.md
 
-The next 3 months will determine whether Kairo becomes a niche tool or a platform that transforms how people think about computation across domains. The technical foundation is exceptional - now it's time to **ship, showcase, and scale**.
+The next 3 months will determine whether Morphogen becomes a niche tool or a platform that transforms how people think about computation across domains. The technical foundation is exceptional - now it's time to **ship, showcase, and scale**.
 
 ---
 

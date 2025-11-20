@@ -9,7 +9,7 @@
 
 ## Context
 
-Kairo's cross-domain operator architecture naturally supports audio synthesis, physical modeling, and spectral transforms. A critical gap exists: **timbre extraction and instrument modeling** — the ability to analyze an acoustic recording and create a reusable synthesis model.
+Morphogen's cross-domain operator architecture naturally supports audio synthesis, physical modeling, and spectral transforms. A critical gap exists: **timbre extraction and instrument modeling** — the ability to analyze an acoustic recording and create a reusable synthesis model.
 
 This is one of the **holy grails of audio DSP**:
 > Record acoustic guitar → extract timbre → synthesize new notes with the same sonic character
@@ -21,7 +21,7 @@ Real-world precedents exist:
 - **Modal synthesis** systems (IRCAM Modalys, 1990s)
 - **Additive resynthesis** tools (SPEAR, AudioSculpt, 2000s)
 
-**Kairo can unify all of these techniques** in a way that is:
+**Morphogen can unify all of these techniques** in a way that is:
 - Extensible (operator-driven)
 - Domain-aware (audio + physics + transforms)
 - GPU-accelerated (MLIR compilation)
@@ -75,7 +75,7 @@ Layer 7: InstrumentModeling (NEW)
 
 ### Core Type: InstrumentModel
 
-```kairo
+```morphogen
 type InstrumentModel {
   id: String                       // Identifier
   type: Enum                       // "modal_string", "additive", etc.
@@ -99,7 +99,7 @@ type InstrumentModel {
 
 ## Rationale
 
-### Why This is a Perfect Fit for Kairo
+### Why This is a Perfect Fit for Morphogen
 
 **1. Cross-Domain Composition**
 
@@ -109,7 +109,7 @@ Timbre extraction naturally uses multiple domains:
 - **Physics:** Modal decomposition, resonance analysis
 - **Audio:** Filters, synthesis, effects
 
-Kairo's operator architecture makes this composition **natural and type-safe**.
+Morphogen's operator architecture makes this composition **natural and type-safe**.
 
 ---
 
@@ -125,8 +125,8 @@ Key operators are embarrassingly parallel:
 **Example MLIR lowering:**
 ```mlir
 // Additive synthesis (sum of sinusoids)
-%harmonics = kairo.field.load %model.harmonics : !kairo.field<f32>
-%time = kairo.stream.time : !kairo.stream<f32>
+%harmonics = morphogen.field.load %model.harmonics : !morphogen.field<f32>
+%time = morphogen.stream.time : !morphogen.stream<f32>
 
 // Lower to parallel vector operations
 %result = linalg.generic {
@@ -189,10 +189,10 @@ This capability unlocks **high-value use cases**:
 ### Alternative 1: External Tool (e.g., SPEAR, AudioSculpt)
 
 **Rejected because:**
-- ❌ Breaks Kairo's unified workflow (external I/O, different language)
+- ❌ Breaks Morphogen's unified workflow (external I/O, different language)
 - ❌ No GPU acceleration
 - ❌ Not deterministic (different tools, different results)
-- ❌ Can't compose with Kairo's physics/fields
+- ❌ Can't compose with Morphogen's physics/fields
 
 ---
 
@@ -387,14 +387,14 @@ This capability unlocks **high-value use cases**:
 
 ### 2025-11-15: Initial Proposal
 - **Decision:** Add InstrumentModeling as Layer 7 domain
-- **Rationale:** Perfect fit for Kairo's cross-domain architecture
+- **Rationale:** Perfect fit for Morphogen's cross-domain architecture
 - **Status:** Proposed (awaiting implementation)
 
 ---
 
 ## Conclusion
 
-Adding an **InstrumentModeling domain** to Kairo is:
+Adding an **InstrumentModeling domain** to Morphogen is:
 
 ✅ **High-value** — Unlocks transformative use cases (MIDI instruments, timbre morphing, luthier tools)
 ✅ **Architecturally sound** — Composes existing domains (Audio, Transform, Physics)
@@ -403,7 +403,7 @@ Adding an **InstrumentModeling domain** to Kairo is:
 ✅ **Deterministic** — Reproducible results
 ✅ **Extensible** — Easy to add new methods
 
-**This is not just doable — it's a perfect showcase of Kairo's cross-domain operator model.**
+**This is not just doable — it's a perfect showcase of Morphogen's cross-domain operator model.**
 
 ---
 

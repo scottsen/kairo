@@ -20,12 +20,12 @@ from pathlib import Path
 from typing import List, Optional, Tuple, Dict, Any
 
 # Import cross-domain infrastructure
-from kairo.cross_domain.interface import FieldToAgentInterface, AgentToFieldInterface
-from kairo.cross_domain.registry import CrossDomainRegistry
+from morphogen.cross_domain.interface import FieldToAgentInterface, AgentToFieldInterface
+from morphogen.cross_domain.registry import CrossDomainRegistry
 
 # Import Kairo visualization
-from kairo.stdlib import visual, Visual
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import visual, Visual
+from morphogen.stdlib.field import Field2D
 
 # Optional: matplotlib for interactive visualization
 try:

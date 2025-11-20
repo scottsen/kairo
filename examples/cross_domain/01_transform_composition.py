@@ -12,7 +12,7 @@ in other platforms without extensive glue code.
 """
 
 import numpy as np
-from kairo.cross_domain import (
+from morphogen.cross_domain import (
     CrossDomainRegistry,
     TransformComposer,
     find_transform_path,

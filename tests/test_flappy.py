@@ -4,7 +4,7 @@ Tests for Flappy Bird game physics domain.
 
 import pytest
 import numpy as np
-from kairo.stdlib.flappy import (
+from morphogen.stdlib.flappy import (
     flappy, Bird, Pipe, GameState, FlappyOperations, random_controller
 )
 

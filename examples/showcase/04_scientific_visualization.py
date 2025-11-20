@@ -16,8 +16,8 @@ Creates publication-quality visualizations of:
 """
 
 import numpy as np
-from kairo.stdlib import sparse_linalg, field, palette, image, io_storage
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import sparse_linalg, field, palette, image, io_storage
+from morphogen.stdlib.field import Field2D
 
 
 def poisson_electrostatics():

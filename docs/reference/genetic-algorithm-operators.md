@@ -8,11 +8,11 @@
 
 ## 1. Overview
 
-This document catalogs the genetic algorithm operators needed for evolutionary computation in Kairo, with a focus on **neural network evolution** (neuroevolution) but generalizable to any optimization problem.
+This document catalogs the genetic algorithm operators needed for evolutionary computation in Morphogen, with a focus on **neural network evolution** (neuroevolution) but generalizable to any optimization problem.
 
-**Why GA operators in Kairo?**
+**Why GA operators in Morphogen?**
 
-Genetic algorithms are a natural fit for Kairo's operator paradigm:
+Genetic algorithms are a natural fit for Morphogen's operator paradigm:
 - **Deterministic** (with fixed RNG seed)
 - **Parallelizable** (population-level operations)
 - **Composable** (mix mutation, crossover, selection strategies)
@@ -882,7 +882,7 @@ def nsga2_select(population, objectives):
 ga.evaluate_population:
   inputs:
     - population: [[tensor]]
-    - evaluator: Graph  # Kairo graph for fitness evaluation
+    - evaluator: Graph  # Morphogen graph for fitness evaluation
     - parallel: bool
   outputs:
     - fitness_scores: [f32]
@@ -1117,7 +1117,7 @@ else:
 ## 10. Example: Complete GA Loop (Racing AI)
 
 ```yaml
-# Kairo GA configuration for racing AI
+# Morphogen GA configuration for racing AI
 
 ga_config:
   population_size: 64
@@ -1153,7 +1153,7 @@ ga_config:
     checkpoint_interval: 10
 ```
 
-**Kairo Operator Graph:**
+**Morphogen Operator Graph:**
 ```
 [Initialize Population] (64 random NNs)
         ↓
@@ -1249,9 +1249,9 @@ ga_config:
 
 ---
 
-## 13. Kairo-Specific Advantages
+## 13. Morphogen-Specific Advantages
 
-### Why GA in Kairo is Better
+### Why GA in Morphogen is Better
 
 1. **Unified with other domains**
    - GA ops compose with physics, NN, rendering
@@ -1281,7 +1281,7 @@ ga_config:
    - Hybrid evolution strategies
    - Multi-objective + speciation + adaptation
 
-**Kairo turns genetic algorithms from custom scripts into first-class, optimized, composable operators.**
+**Morphogen turns genetic algorithms from custom scripts into first-class, optimized, composable operators.**
 
 ---
 

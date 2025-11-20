@@ -4,9 +4,9 @@ import pytest
 import tempfile
 from pathlib import Path
 import numpy as np
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
-from kairo.runtime.runtime import ExecutionContext, Runtime
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
+from morphogen.runtime.runtime import ExecutionContext, Runtime
 
 
 @pytest.mark.integration
@@ -365,7 +365,7 @@ class TestGeometryFieldIntegration:
     def test_sample_field_along_path(self):
         """Test sampling field values along a geometric path."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, line_segment, sample_field_at_point
             )
         except ImportError:
@@ -399,7 +399,7 @@ class TestGeometryFieldIntegration:
     def test_field_driven_geometry_generation(self):
         """Test generating geometric shapes based on field values."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, circle, query_field_in_region, sample_field_at_point
             )
         except ImportError:
@@ -433,7 +433,7 @@ class TestGeometryFieldIntegration:
     def test_geometry_based_field_initialization(self):
         """Test initializing fields based on geometric regions."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, circle, rectangle, contains
             )
         except ImportError:
@@ -469,7 +469,7 @@ class TestGeometryFieldIntegration:
     def test_field_gradient_along_polygon(self):
         """Test computing field gradients along polygon edges."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, regular_polygon, sample_field_at_point
             )
         except ImportError:
@@ -512,10 +512,10 @@ class TestGeometryRigidbodyIntegration:
     def test_physics_scene_from_geometry(self):
         """Test creating a complete physics scene from geometric shapes."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, circle, rectangle, polygon, shape_to_rigidbody
             )
-            from kairo.stdlib.rigidbody import ShapeType
+            from morphogen.stdlib.rigidbody import ShapeType
         except ImportError:
             pytest.skip("Geometry or Rigidbody domain not available")
             return
@@ -549,7 +549,7 @@ class TestGeometryRigidbodyIntegration:
     def test_collision_mesh_generation_pipeline(self):
         """Test full pipeline of mesh creation and collision mesh generation."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 mesh, convex_hull, collision_mesh
             )
         except ImportError:
@@ -581,10 +581,10 @@ class TestGeometryRigidbodyIntegration:
     def test_multi_shape_rigidbody_conversion(self):
         """Test converting multiple geometric shapes for physics simulation."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, circle, regular_polygon, shape_to_rigidbody
             )
-            from kairo.stdlib.rigidbody import ShapeType
+            from morphogen.stdlib.rigidbody import ShapeType
         except ImportError:
             pytest.skip("Geometry or Rigidbody domain not available")
             return
@@ -618,7 +618,7 @@ class TestGeometryAlgorithmPipelines:
     def test_delaunay_voronoi_pipeline(self):
         """Test complete Delaunay triangulation to Voronoi diagram pipeline."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 delaunay_triangulation, voronoi_diagram
             )
         except ImportError:
@@ -654,7 +654,7 @@ class TestGeometryAlgorithmPipelines:
     def test_mesh_boolean_operations_chain(self):
         """Test chaining multiple mesh boolean operations."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 box3d, sphere, mesh_union, mesh_intersection
             )
         except ImportError:
@@ -662,7 +662,7 @@ class TestGeometryAlgorithmPipelines:
             return
 
         # Create two boxes
-        from kairo.stdlib.geometry import point3d
+        from morphogen.stdlib.geometry import point3d
         box1 = box3d(center=point3d(0.0, 0.0, 0.0), width=2.0, height=2.0, depth=2.0)
         box2 = box3d(center=point3d(1.0, 0.0, 0.0), width=2.0, height=2.0, depth=2.0)
 
@@ -678,7 +678,7 @@ class TestGeometryAlgorithmPipelines:
     def test_convex_hull_simplification_pipeline(self):
         """Test generating convex hull and simplifying for collision."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 convex_hull, collision_mesh
             )
         except ImportError:
@@ -721,10 +721,10 @@ class TestCrossTripleDomainIntegration:
     def test_field_driven_physics_objects(self):
         """Test creating physics objects based on field values."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, circle, sample_field_at_point, shape_to_rigidbody
             )
-            from kairo.stdlib.rigidbody import ShapeType
+            from morphogen.stdlib.rigidbody import ShapeType
         except ImportError:
             pytest.skip("Required domains not available")
             return
@@ -766,7 +766,7 @@ class TestCrossTripleDomainIntegration:
     def test_physics_simulation_visualization(self):
         """Test visualizing geometric shapes in a physics simulation."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, circle, rectangle, contains, shape_to_rigidbody
             )
         except ImportError:
@@ -816,7 +816,7 @@ class TestCrossTripleDomainIntegration:
     def test_geometric_field_sampling_for_collision(self):
         """Test using field values to determine collision properties."""
         try:
-            from kairo.stdlib.geometry import (
+            from morphogen.stdlib.geometry import (
                 point2d, box3d, collision_mesh, sample_field_at_point
             )
         except ImportError:
@@ -828,7 +828,7 @@ class TestCrossTripleDomainIntegration:
         hardness = field.diffuse(hardness, rate=0.2, dt=0.1, iterations=15)
 
         # Create geometric object
-        from kairo.stdlib.geometry import point3d
+        from morphogen.stdlib.geometry import point3d
         box = box3d(center=point3d(32.0, 32.0, 0.0), width=10.0, height=10.0, depth=10.0)
 
         # Generate collision mesh at different detail levels based on hardness

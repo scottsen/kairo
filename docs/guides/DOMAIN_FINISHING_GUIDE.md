@@ -10,7 +10,7 @@
 ## Executive Summary
 
 **The Problem:**
-We have 23 domains implemented, but most are "half-finished" — they work in Python but aren't fully integrated into Kairo/Morphogen as a platform.
+We have 23 domains implemented, but most are "half-finished" — they work in Python but aren't fully integrated into Morphogen/Morphogen as a platform.
 
 **The Solution:**
 This guide defines the **5 levels of completion** and provides a **clear roadmap** to finish what we started.
@@ -47,7 +47,7 @@ Each domain can be at one of 5 levels. **Production-ready means Level 5.**
 **Example:**
 ```python
 # This works
-from kairo.stdlib import graph
+from morphogen.stdlib import graph
 network = graph.create_empty(directed=False)
 ```
 
@@ -63,7 +63,7 @@ network = graph.create_empty(directed=False)
 - Type signatures defined
 
 **Example:**
-```kairo
+```morphogen
 # main.kairo
 use graph
 
@@ -85,7 +85,7 @@ network = graph.add_edge(network, 0, 1, weight=1.0)
 - Clear error messages
 
 **Example:**
-```kairo
+```morphogen
 # Type errors caught at compile-time
 let distance : f32 [m] = 10.0
 let time : f32 [s] = 2.0
@@ -111,7 +111,7 @@ let speed : f32 [m/s] = distance / time
 - Deterministic scheduling
 
 **Example:**
-```kairo
+```morphogen
 # Multiple rates working together
 @audio_rate(48000)
 flow audio_flow(dt) {
@@ -256,7 +256,7 @@ class DomainDescriptor:
 
 
 class DomainRegistry:
-    """Central registry for all Kairo domains."""
+    """Central registry for all Morphogen domains."""
 
     _domains: Dict[str, DomainDescriptor] = {}
 
@@ -301,28 +301,28 @@ class DomainRegistry:
 def register_stdlib_domains():
     """Register all built-in stdlib domains."""
     domains = [
-        ("field", "kairo.stdlib.field"),
-        ("agent", "kairo.stdlib.agents"),
-        ("audio", "kairo.stdlib.audio"),
-        ("visual", "kairo.stdlib.visual"),
-        ("rigidbody", "kairo.stdlib.rigidbody"),
-        ("integrators", "kairo.stdlib.integrators"),
-        ("graph", "kairo.stdlib.graph"),
-        ("signal", "kairo.stdlib.signal"),
-        ("statemachine", "kairo.stdlib.statemachine"),
-        ("terrain", "kairo.stdlib.terrain"),
-        ("vision", "kairo.stdlib.vision"),
-        ("cellular", "kairo.stdlib.cellular"),
-        ("optimization", "kairo.stdlib.optimization"),
-        ("neural", "kairo.stdlib.neural"),
-        ("sparse_linalg", "kairo.stdlib.sparse_linalg"),
-        ("io_storage", "kairo.stdlib.io_storage"),
-        ("acoustics", "kairo.stdlib.acoustics"),
-        ("noise", "kairo.stdlib.noise"),
-        ("color", "kairo.stdlib.color"),
-        ("image", "kairo.stdlib.image"),
-        ("palette", "kairo.stdlib.palette"),
-        ("genetic", "kairo.stdlib.genetic"),
+        ("field", "morphogen.stdlib.field"),
+        ("agent", "morphogen.stdlib.agents"),
+        ("audio", "morphogen.stdlib.audio"),
+        ("visual", "morphogen.stdlib.visual"),
+        ("rigidbody", "morphogen.stdlib.rigidbody"),
+        ("integrators", "morphogen.stdlib.integrators"),
+        ("graph", "morphogen.stdlib.graph"),
+        ("signal", "morphogen.stdlib.signal"),
+        ("statemachine", "morphogen.stdlib.statemachine"),
+        ("terrain", "morphogen.stdlib.terrain"),
+        ("vision", "morphogen.stdlib.vision"),
+        ("cellular", "morphogen.stdlib.cellular"),
+        ("optimization", "morphogen.stdlib.optimization"),
+        ("neural", "morphogen.stdlib.neural"),
+        ("sparse_linalg", "morphogen.stdlib.sparse_linalg"),
+        ("io_storage", "morphogen.stdlib.io_storage"),
+        ("acoustics", "morphogen.stdlib.acoustics"),
+        ("noise", "morphogen.stdlib.noise"),
+        ("color", "morphogen.stdlib.color"),
+        ("image", "morphogen.stdlib.image"),
+        ("palette", "morphogen.stdlib.palette"),
+        ("genetic", "morphogen.stdlib.genetic"),
     ]
 
     for name, module_path in domains:
@@ -333,7 +333,7 @@ def register_stdlib_domains():
 ```python
 # tests/test_domain_registry.py
 def test_register_domain():
-    DomainRegistry.register("field", "kairo.stdlib.field")
+    DomainRegistry.register("field", "morphogen.stdlib.field")
     assert "field" in DomainRegistry.list_domains()
 
 def test_get_domain_operators():
@@ -394,7 +394,7 @@ For each domain, create operator metadata:
 ```python
 # kairo/stdlib/graph.py
 
-from kairo.core.operator import operator, OpCategory
+from morphogen.core.operator import operator, OpCategory
 
 @operator(
     domain="graph",
@@ -1162,7 +1162,7 @@ A: Testing happens at every level:
 **Last Updated:** 2025-11-17
 **Status:** Active roadmap
 **Next Review:** End of Month 2 (after showcase validation)
-**Owner:** Kairo/Morphogen Project
+**Owner:** Morphogen/Morphogen Project
 
 ---
 

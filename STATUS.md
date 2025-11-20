@@ -1,4 +1,4 @@
-# Kairo — Implementation Status
+# Morphogen — Implementation Status
 
 **Last Updated:** 2025-11-19
 **Current Version:** v0.10.0
@@ -300,7 +300,7 @@ See `docs/DOMAIN_ARCHITECTURE.md` for complete vision.
 
 **Example:**
 ```python
-from kairo.stdlib.agents import agents
+from morphogen.stdlib.agents import agents
 
 # Create 1000 particles
 particles = agents.alloc(
@@ -398,7 +398,7 @@ visual.output(vis, "output.png")
 
 **Architecture:**
 ```
-Kairo AST → Field Dialect → FieldToSCFPass → SCF Loops + Memref → (Phase 4) LLVM → Native Code
+Morphogen AST → Field Dialect → FieldToSCFPass → SCF Loops + Memref → (Phase 4) LLVM → Native Code
 ```
 
 **Dependencies:**
@@ -492,7 +492,7 @@ Kairo AST → Field Dialect → FieldToSCFPass → SCF Loops + Memref → (Phase
 
 ### 6. Domain-Specific Dialects
 
-#### Audio Dialect (Kairo.Audio) ✅ **PRODUCTION READY** (NEW in v0.5.0!)
+#### Audio Dialect (Morphogen.Audio) ✅ **PRODUCTION READY** (NEW in v0.5.0!)
 **Status:** Complete audio synthesis and processing implementation
 
 **Implemented:**
@@ -527,7 +527,7 @@ Kairo AST → Field Dialect → FieldToSCFPass → SCF Loops + Memref → (Phase
 
 **Example:**
 ```python
-from kairo.stdlib.audio import audio
+from morphogen.stdlib.audio import audio
 
 # Plucked string synthesis
 exc = audio.noise(noise_type="white", seed=1, duration=0.01)
@@ -601,7 +601,7 @@ pytest -v
 **Implemented:**
 - ✅ `README.md` - Project overview and quick start
 - ✅ `SPECIFICATION.md` - Complete language specification (47KB)
-- ✅ `ARCHITECTURE.md` - Kairo Stack architecture
+- ✅ `ARCHITECTURE.md` - Morphogen Stack architecture
 - ✅ `ECOSYSTEM_MAP.md` - Comprehensive ecosystem roadmap
 - ✅ `AUDIO_SPECIFICATION.md` - Audio dialect specification
 - ✅ `docs/GETTING_STARTED.md` - User guide
@@ -621,7 +621,7 @@ pytest -v
 **Status:** Basic CLI working with core commands
 
 **Implemented:**
-- ✅ `kairo run <file>` - Execute Kairo programs
+- ✅ `kairo run <file>` - Execute Morphogen programs
 - ✅ `kairo parse <file>` - Show AST structure
 - ✅ `kairo check <file>` - Type checking (basic)
 - ✅ `kairo mlir <file>` - Generate MLIR-like text
@@ -640,7 +640,7 @@ kairo run examples/heat_diffusion.kairo
 ## What Works Right Now (v0.6.0)
 
 ### ✅ You Can:
-- Write Kairo programs with full v0.3.1 syntax
+- Write Morphogen programs with full v0.3.1 syntax
 - Parse them into AST
 - Type-check them
 - Execute them with Python/NumPy interpreter
@@ -678,7 +678,7 @@ kairo run examples/heat_diffusion.kairo
 **Update 2025-11-18: Domain Export Visibility Fix**
 - ✅ 10 previously hidden domains now properly exported in `stdlib/__init__.py`
 - ✅ Newly accessible: agents, audio, geometry, graph, optimization, signal, statemachine, temporal, terrain, vision
-- ✅ All 25 implemented domains now importable: `from kairo.stdlib import <domain>`
+- ✅ All 25 implemented domains now importable: `from morphogen.stdlib import <domain>`
 - ✅ Validated: All domains functional with comprehensive operator sets
 
 **Level 2 Integration - All 25 Domains:**
@@ -987,7 +987,7 @@ kairo run examples/heat_diffusion.kairo
 
 ## Summary
 
-**Kairo v0.6.0** is a **working, usable system** for:
+**Morphogen v0.6.0** is a **working, usable system** for:
 - Field-based simulations (heat, diffusion, fluids)
 - Agent-based modeling (particles, boids, N-body systems)
 - Audio synthesis and processing (deterministic music generation)

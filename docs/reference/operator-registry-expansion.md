@@ -1,4 +1,4 @@
-# Kairo Operator Registry Expansion: Seven Domains
+# Morphogen Operator Registry Expansion: Seven Domains
 
 **Version:** 1.0
 **Date:** 2025-11-15
@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document catalogs **seven priority domains** for Kairo operator registry expansion, based on architectural learnings from:
+This document catalogs **seven priority domains** for Morphogen operator registry expansion, based on architectural learnings from:
 - **TiaCAD** (geometry/CAD domain)
 - **RiffStack** (audio DSP domain)
 - **Strudel/TidalCycles** (pattern/sequencing domain)
@@ -39,13 +39,13 @@ Each domain follows the unified architecture defined in **ADR-002**:
 | **8. InstrumentModelingDomain** | **P1** | High | Audio, Transform, Stochastic | v0.9-v1.0 |
 
 **Priority Levels:**
-- **P0:** Critical for core Kairo platform
+- **P0:** Critical for core Morphogen platform
 - **P1:** High value, enables key use cases
 - **P2:** Advanced features, ecosystem expansion
 
 ---
 
-## 1. AudioDomain (RiffStack → Kairo.Audio)
+## 1. AudioDomain (RiffStack → Morphogen.Audio)
 
 ### 1.1 Overview
 
@@ -373,7 +373,7 @@ IntegratorRef.order → int                  # Order of accuracy (1, 2, 4, etc.)
 
 ---
 
-## 3. GeometryDomain (TiaCAD → Kairo.Geometry)
+## 3. GeometryDomain (TiaCAD → Morphogen.Geometry)
 
 ### 3.1 Overview
 
@@ -713,7 +713,7 @@ LayerRef.gradients → TensorRef
 
 ---
 
-## 7. PatternDomain (Strudel/TidalCycles → Kairo.Pattern)
+## 7. PatternDomain (Strudel/TidalCycles → Morphogen.Pattern)
 
 ### 7.1 Overview
 
@@ -1133,7 +1133,7 @@ string = physics.string(
 - **Serra & Smith (1990)** — Spectral Modeling Synthesis
 - **Engel et al. (2017)** — Neural Audio Synthesis (NSynth)
 
-#### Kairo Documentation
+#### Morphogen Documentation
 - **[../specifications/timbre-extraction.md](../../specifications/timbre-extraction.md)** — Full technical specification
 - **[ADR-003](../../adr/003-instrument-modeling-domain.md)** — Architectural decision record
 - **[../specifications/transform.md](../../specifications/transform.md)** — Transform operators (FFT, STFT)
@@ -1214,7 +1214,7 @@ string = physics.string(
 
 ## Conclusion
 
-These **eight domains** form the foundation of Kairo as a **multi-domain platform**:
+These **eight domains** form the foundation of Morphogen as a **multi-domain platform**:
 
 1. ✅ **AudioDomain** - Proven patterns from RiffStack
 2. ✅ **PhysicsDomain** - N-body, integrators, forces
@@ -1232,4 +1232,4 @@ These **eight domains** form the foundation of Kairo as a **multi-domain platfor
 - ✅ Plugin extensibility
 - ✅ Cross-domain composability
 
-**Kairo is not a library. Kairo is a platform.**
+**Morphogen is not a library. Morphogen is a platform.**

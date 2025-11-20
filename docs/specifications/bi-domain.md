@@ -9,17 +9,17 @@
 
 ## Overview
 
-This document specifies the **BIDomain** — Kairo's first GPU-first computational domain that brings Business Intelligence, analytical query engines, and semantic modeling into the Kairo ecosystem.
+This document specifies the **BIDomain** — Morphogen's first GPU-first computational domain that brings Business Intelligence, analytical query engines, and semantic modeling into the Morphogen ecosystem.
 
 ### Why BIDomain?
 
-BI represents a paradigm shift for Kairo because:
+BI represents a paradigm shift for Morphogen because:
 
 1. **GPU is not just an accelerator — it defines the semantics** — Dictionary encoding, bit-packing, and warp-level operations are intrinsic to the algorithm
 2. **Columnar compression is GPU-native** — VertiPaq-style encoding requires GPU memory layouts
 3. **Cross-domain analytics** — BI can drive simulation parameters, visualizations, ML pipelines, and procedural generation
-4. **Computational BI** — Unlike Power BI or Tableau, Kairo BI integrates with physics, rendering, and optimization
-5. **Declarative semantic layer** — KAX (Kairo Analytical eXpressions) provides DAX-like modeling on GPU primitives
+4. **Computational BI** — Unlike Power BI or Tableau, Morphogen BI integrates with physics, rendering, and optimization
+5. **Declarative semantic layer** — KAX (Morphogen Analytical eXpressions) provides DAX-like modeling on GPU primitives
 
 ### Applications
 
@@ -68,10 +68,10 @@ BI represents a paradigm shift for Kairo because:
 - ❌ Open architecture
 - ❌ Extensible type system
 
-**Kairo BI Advantages:**
+**Morphogen BI Advantages:**
 - ✅ GPU-first compression & scan kernels
 - ✅ Custom operator registration
-- ✅ Composable with all Kairo domains
+- ✅ Composable with all Morphogen domains
 - ✅ Open, extensible architecture
 - ✅ DAX-like semantics (KAX) on GPU primitives
 
@@ -93,7 +93,7 @@ BI represents a paradigm shift for Kairo because:
 - ❌ Integration with simulation or computational domains
 - ❌ Unified declarative operator system
 
-**Kairo BI Advantages:**
+**Morphogen BI Advantages:**
 - ✅ GPU-native dictionary encoding, compressed scans
 - ✅ KAX semantic layer for measures and calculated columns
 - ✅ Cross-domain composability
@@ -117,7 +117,7 @@ BI represents a paradigm shift for Kairo because:
 - ❌ Universal declarative layer
 - ❌ Composability with other computational domains
 
-**Kairo BI Advantages:**
+**Morphogen BI Advantages:**
 - ✅ KAX expression language (DAX-like on GPU)
 - ✅ Unified operator model across all domains
 - ✅ Composable workflows (BI + graphics + ML + physics)
@@ -128,7 +128,7 @@ BI represents a paradigm shift for Kairo because:
 
 ## The GPU-First Paradigm Shift
 
-Until BIDomain, Kairo's GPU abstraction was:
+Until BIDomain, Morphogen's GPU abstraction was:
 
 > "Operators auto-lower to GPU when beneficial for performance."
 
@@ -167,7 +167,7 @@ BIDomain introduces:
 
 Examples of GPU-first operators:
 
-```kairo
+```morphogen
 gpu.dict_encode      // Dictionary encoding
 gpu.segmented_groupby // Segmented aggregation
 gpu.bitmap_filter    // Compressed filtering
@@ -176,7 +176,7 @@ gpu.prefix_sum_warp  // Warp-level scan
 gpu.hash_join_segmented // GPU-native join
 ```
 
-These operators have **no meaningful CPU equivalents** in the traditional Kairo sense.
+These operators have **no meaningful CPU equivalents** in the traditional Morphogen sense.
 
 ---
 
@@ -184,7 +184,7 @@ These operators have **no meaningful CPU equivalents** in the traditional Kairo 
 
 ### Domain Definition
 
-```kairo
+```morphogen
 domain: BI
 device: gpu
 ```
@@ -202,7 +202,7 @@ CPU-backed BI is considered separately as `BICPU` domain (if needed).
 
 ### Base Types
 
-```kairo
+```morphogen
 // Core GPU columnar types
 type GpuColumn<T> {
     data: GpuBuffer<T>,
@@ -262,7 +262,7 @@ Tables are:
 
 ### Compression & Encoding
 
-```kairo
+```morphogen
 // Dictionary encode a column
 op gpu.dict_encode<T>(
     col: GpuColumn<T>
@@ -284,7 +284,7 @@ op gpu.bitpack(
 
 ### Filtering
 
-```kairo
+```morphogen
 // Create bitmap from predicate
 op gpu.predicate<T>(
     col: GpuColumn<T>,
@@ -310,7 +310,7 @@ op gpu.bitmap_combine(
 
 ### Aggregation
 
-```kairo
+```morphogen
 // Segmented group-by aggregation
 op gpu.segmented_groupby<K, V>(
     keys: GpuColumn<K>,
@@ -341,7 +341,7 @@ op gpu.agg_max<T>(col: GpuColumn<T>) -> T
 
 ### Sorting
 
-```kairo
+```morphogen
 // GPU radix sort (stable)
 op gpu.sort_radix<T>(
     col: GpuColumn<T>
@@ -363,7 +363,7 @@ op gpu.argsort<T>(
 
 ### Joins
 
-```kairo
+```morphogen
 // Hash join on GPU
 op gpu.hash_join<K, V1, V2>(
     left: GpuTable,
@@ -392,7 +392,7 @@ op gpu.hash_join_segmented<K, V1, V2>(
 
 ### Scanning & Reduction
 
-```kairo
+```morphogen
 // Warp-level prefix sum
 op gpu.scan_warp(
     col: GpuColumn<i32>
@@ -413,7 +413,7 @@ op gpu.prefix_sum(
 
 ### Measure Evaluation
 
-```kairo
+```morphogen
 // Evaluate a KAX measure expression
 op gpu.measure(
     table: GpuTable,
@@ -435,7 +435,7 @@ op gpu.calc_column(
 
 ### BI → Visualization
 
-```kairo
+```morphogen
 // Generate GPU heatmap from BI aggregation
 let sales_by_region = gpu.segmented_groupby(
     keys: Sales[Region],
@@ -455,7 +455,7 @@ render.gpu(heatmap)
 
 ### BI → Simulation
 
-```kairo
+```morphogen
 // Use BI to parameterize physics simulation
 let avg_temp = gpu.agg_avg(SensorData[Temperature])
 let std_temp = gpu.agg_stddev(SensorData[Temperature])
@@ -471,7 +471,7 @@ let thermal_sim = physics.thermal_ode(
 
 ### BI ↔ ML
 
-```kairo
+```morphogen
 // Feature engineering with BI, then ML training
 let features = gpu.calc_column(
     table: Customers,
@@ -493,7 +493,7 @@ let model = ml.train_gpu(
 
 ### BI → Procedural Generation
 
-```kairo
+```morphogen
 // Data-driven geometry generation
 let city_populations = gpu.segmented_groupby(
     keys: Cities[Name],
@@ -512,15 +512,15 @@ render.gpu(buildings)
 
 ---
 
-## KAX: Kairo Analytical eXpressions
+## KAX: Morphogen Analytical eXpressions
 
 See **kax-language.md** for full details.
 
-KAX is Kairo's DAX-like semantic expression language:
+KAX is Morphogen's DAX-like semantic expression language:
 
 ### Measures
 
-```kairo
+```morphogen
 Sales[TotalAmount] := SUM(Sales[Amount])
 
 Sales[MarginPct] := DIVIDE(Sales[Profit], Sales[Revenue])
@@ -528,13 +528,13 @@ Sales[MarginPct] := DIVIDE(Sales[Profit], Sales[Revenue])
 
 ### Calculated Columns
 
-```kairo
+```morphogen
 Orders[DayOfWeek] := WEEKDAY(Orders[Date])
 ```
 
 ### Filter Context
 
-```kairo
+```morphogen
 Sales[2024Revenue] := CALCULATE(
     SUM(Sales[Amount]),
     Year = 2024
@@ -543,7 +543,7 @@ Sales[2024Revenue] := CALCULATE(
 
 ### Time Intelligence
 
-```kairo
+```morphogen
 Sales[YoY] :=
     Sales[TotalAmount] -
     CALCULATE(
@@ -556,7 +556,7 @@ Sales[YoY] :=
 
 KAX expressions compile into GPU operator graphs:
 
-```kairo
+```morphogen
 CALCULATE(SUM(Sales[Amount]), Year = 2024)
 ```
 
@@ -589,16 +589,16 @@ CUDA Kernels
 GPU Results
 ```
 
-The Kairo scheduler orchestrates this pipeline just like it does for physics, rendering, or audio tasks.
+The Morphogen scheduler orchestrates this pipeline just like it does for physics, rendering, or audio tasks.
 
 ---
 
-## Why Kairo Should Own BI
+## Why Morphogen Should Own BI
 
-Kairo is uniquely positioned because:
+Morphogen is uniquely positioned because:
 
 1. **Composability across domains** — BI integrates with simulation, ML, rendering, physics
-2. **GPU-centered execution** — BIDomain leverages Kairo's GPU infrastructure
+2. **GPU-centered execution** — BIDomain leverages Morphogen's GPU infrastructure
 3. **Declarative + procedural blending** — KAX + custom operators
 4. **Operator registration** — Extensible BI operators
 5. **No legacy constraints** — Clean slate design
@@ -612,7 +612,7 @@ Kairo is uniquely positioned because:
 - **Data-driven design** — BI guides procedural modeling
 
 This is not Power BI, not Tableau, not DuckDB, not RAPIDS —
-**Kairo becomes a Computational BI Engine.**
+**Morphogen becomes a Computational BI Engine.**
 
 ---
 
@@ -715,15 +715,15 @@ This is not Power BI, not Tableau, not DuckDB, not RAPIDS —
 
 ## Summary
 
-The **BIDomain** represents a fundamental shift in Kairo's architecture:
+The **BIDomain** represents a fundamental shift in Morphogen's architecture:
 
 ✅ **First GPU-first domain** — GPU is semantic, not just acceleration
 ✅ **Columnar GPU data structures** — Dictionary encoding, bitmaps, segments
 ✅ **KAX semantic layer** — DAX-like expressions on GPU primitives
-✅ **Cross-domain composability** — BI integrates with all Kairo domains
+✅ **Cross-domain composability** — BI integrates with all Morphogen domains
 ✅ **Computational BI** — BI fused with simulation, ML, rendering, physics
 
-With BIDomain, Kairo becomes a **universal computational platform** that handles:
+With BIDomain, Morphogen becomes a **universal computational platform** that handles:
 
 - Business Intelligence & Analytics
 - GPU-accelerated simulation
@@ -742,7 +742,7 @@ With BIDomain, Kairo becomes a **universal computational platform** that handles
 - **../adr/007-gpu-first-domains.md:** GPU-First Domains Architecture Decision
 - **kax-language.md:** KAX Expression Language Specification
 - **operator-registry.md:** Operator registration and extensibility
-- **scheduler.md:** Kairo scheduling and execution model
+- **scheduler.md:** Morphogen scheduling and execution model
 - **../architecture/gpu-mlir-principles.md:** GPU lowering and MLIR integration
 
 ---

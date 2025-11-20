@@ -13,7 +13,7 @@ Implemented 7 portfolio examples from Phase 1 of EXAMPLE_PORTFOLIO_PLAN.md. All 
 
 #### 01_hello_heat.kairo ⭐ HIGHEST PRIORITY
 - **Status:** Complete with visual output
-- **Purpose:** First Kairo program - heat diffusion introduction
+- **Purpose:** First Morphogen program - heat diffusion introduction
 - **Features:** Field allocation, diffusion, visual colorization
 - **Output:** 4 frames showing heat spreading from center hotspot
 - **Files:**
@@ -147,7 +147,7 @@ According to EXAMPLE_PORTFOLIO_PLAN.md Phase 1, remaining priorities:
 - ✅ Documentation is comprehensive and well-structured
 
 ### Parser Integration:
-The examples use Kairo v0.3.1 syntax features:
+The examples use Morphogen v0.3.1 syntax features:
 - `use field, visual` directives
 - `@state` variable declarations
 - `flow(dt, steps)` blocks
@@ -203,7 +203,7 @@ All generated images show expected behavior:
 ## Success Metrics (from EXAMPLE_PORTFOLIO_PLAN.md)
 
 - ✅ Visual outputs are "shareable" (social media worthy)
-- ✅ Examples cover major Kairo features (fields, diffusion, Laplacian, visual)
+- ✅ Examples cover major Morphogen features (fields, diffusion, Laplacian, visual)
 - ✅ Clear progression from beginner to intermediate
 - ✅ Each example has comprehensive documentation
 - ✅ Parameter guides for experimentation

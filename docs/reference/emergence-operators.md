@@ -9,13 +9,13 @@
 
 ## Overview
 
-This document provides a **complete, implementation-ready catalog** of all operators in Kairo's EmergenceDomain. For each operator, we specify:
+This document provides a **complete, implementation-ready catalog** of all operators in Morphogen's EmergenceDomain. For each operator, we specify:
 
 - **Signature** — Type-safe function signature
 - **Parameters** — All tunable parameters with defaults and ranges
 - **Semantics** — What the operator does algorithmically
 - **Use Cases** — Where this operator should be used
-- **Examples** — Concrete Kairo code snippets
+- **Examples** — Concrete Morphogen code snippets
 - **Cross-Domain Integration** — How this connects to other domains
 - **Implementation Notes** — GPU/CPU considerations, performance tips
 
@@ -38,7 +38,7 @@ This catalog is organized by sub-domain:
 
 **Create CA grid**
 
-```kairo
+```morphogen
 ca.create(
     width: i32,
     height: i32,
@@ -64,7 +64,7 @@ ca.create(
 - Load predefined patterns (gliders, spaceships, etc.)
 
 **Example:**
-```kairo
+```morphogen
 // Game of Life grid
 let grid = ca.create(
     width = 512,
@@ -85,7 +85,7 @@ let grid = ca.create(
 
 **Evolve CA one generation**
 
-```kairo
+```morphogen
 ca.step(
     grid: CAGrid2D<T>,
     rule: CARule
@@ -107,7 +107,7 @@ ca.step(
 - Pattern analysis
 
 **Example:**
-```kairo
+```morphogen
 let life_rule = ca.rule_preset("life")
 let evolved = ca.step(grid, rule=life_rule)
 ```
@@ -125,7 +125,7 @@ let evolved = ca.step(grid, rule=life_rule)
 
 **Evolve CA n generations**
 
-```kairo
+```morphogen
 ca.step_n(
     grid: CAGrid2D<T>,
     rule: CARule,
@@ -138,7 +138,7 @@ ca.step_n(
 - Generate final patterns without intermediate states
 
 **Example:**
-```kairo
+```morphogen
 let final = ca.step_n(grid, rule=life_rule, steps=1000)
 ```
 
@@ -150,7 +150,7 @@ let final = ca.step_n(grid, rule=life_rule, steps=1000)
 
 **Create common CA rules**
 
-```kairo
+```morphogen
 ca.rule_preset(name: String) -> CARule
 ```
 
@@ -168,7 +168,7 @@ ca.rule_preset(name: String) -> CARule
 | `"lenia_preset"` | Lenia continuous CA | Gaussian kernel + growth function |
 
 **Example:**
-```kairo
+```morphogen
 // Wireworld electronic circuit
 let circuit_rule = ca.rule_preset("wireworld")
 let circuit = ca.create(128, 128, states=4, init="wireworld_circuit")
@@ -181,7 +181,7 @@ let evolved = ca.step(circuit, rule=circuit_rule)
 
 **Continuous cellular automaton (Lenia)**
 
-```kairo
+```morphogen
 ca.lenia(
     state: Field2D<f32>,
     kernel: String = "gaussian",
@@ -207,7 +207,7 @@ ca.lenia(
 - Continuous evolution (smoother than discrete CA)
 
 **Example:**
-```kairo
+```morphogen
 let state = field.create(256, 256, 0.0)
 state = field.set_region(state, center=(128, 128), radius=10, value=1.0)
 
@@ -230,7 +230,7 @@ out visual = visual.colorize(state, palette="viridis")
 
 **Convert CA grid to continuous field**
 
-```kairo
+```morphogen
 ca.to_field(grid: CAGrid2D<i32>) -> Field2D<f32>
 ```
 
@@ -240,7 +240,7 @@ ca.to_field(grid: CAGrid2D<i32>) -> Field2D<f32>
 - Cross-domain coupling (CA → RD, CA → Physics)
 
 **Example:**
-```kairo
+```morphogen
 let ca = ca.step_n(grid, rule=life_rule, steps=100)
 let field = ca.to_field(ca)
 let heightmap = field * 10.0  // Scale for extrusion
@@ -253,7 +253,7 @@ let geometry = geom.extrude(heightmap, height=heightmap)
 
 **Convert field to CA grid (thresholding)**
 
-```kairo
+```morphogen
 ca.from_field(
     field: Field2D<f32>,
     threshold: f32 = 0.5,
@@ -271,7 +271,7 @@ ca.from_field(
 
 **Add diffusion to continuous CA**
 
-```kairo
+```morphogen
 ca.diffuse(
     grid: CAGrid2D<f32>,
     coeff: f32,
@@ -284,7 +284,7 @@ ca.diffuse(
 - Hybrid CA-RD systems
 
 **Example:**
-```kairo
+```morphogen
 state = ca.lenia(state, ...)
 state = ca.diffuse(state, coeff=0.1, dt=0.01)
 ```
@@ -295,7 +295,7 @@ state = ca.diffuse(state, coeff=0.1, dt=0.01)
 
 **Detect known patterns (gliders, oscillators)**
 
-```kairo
+```morphogen
 ca.pattern_detect(
     grid: CAGrid2D<i32>,
     pattern: String
@@ -317,7 +317,7 @@ ca.pattern_detect(
 
 **Create agent population**
 
-```kairo
+```morphogen
 agent.create<A>(
     count: i32,
     bounds: BoundingBox,
@@ -335,7 +335,7 @@ agent.create<A>(
 - `init_fn` — Custom initialization function
 
 **Example:**
-```kairo
+```morphogen
 let boids = agent.create(
     count = 500,
     bounds = box(100m, 100m),
@@ -352,7 +352,7 @@ let boids = agent.create(
 
 **Flocking behavior (Reynolds boids)**
 
-```kairo
+```morphogen
 agent.boids(
     agents: Agents<BoidState>,
     separation: f32 = 1.0,
@@ -388,7 +388,7 @@ agent.boids(
 - Visual effects
 
 **Example:**
-```kairo
+```morphogen
 scene Flocking {
     let boids = agent.create(count=1000, bounds=box(200m, 200m), seed=42)
 
@@ -421,7 +421,7 @@ scene Flocking {
 
 **Vicsek model (active matter physics)**
 
-```kairo
+```morphogen
 agent.vicsek(
     agents: Agents<VicsekState>,
     speed: f32<m/s>,
@@ -448,7 +448,7 @@ agent.vicsek(
 - Simplified flocking (no cohesion/separation)
 
 **Example:**
-```kairo
+```morphogen
 let agents = agent.create(count=5000, bounds=box(100m, 100m), seed=42)
 
 agents = agent.vicsek(
@@ -468,7 +468,7 @@ agents = agent.vicsek(
 
 **Schelling segregation model**
 
-```kairo
+```morphogen
 agent.schelling(
     agents: Agents<SchellingState>,
     threshold: f32 = 0.3,
@@ -494,7 +494,7 @@ agent.schelling(
 - Educational demos (emergence of segregation from mild preferences)
 
 **Example:**
-```kairo
+```morphogen
 let agents = agent.create(count=1000, bounds=grid(50, 50), seed=42)
 
 agents = agent.schelling(
@@ -511,7 +511,7 @@ agents = agent.schelling(
 
 **Predator-prey ecology (Lotka-Volterra ABM)**
 
-```kairo
+```morphogen
 agent.predator_prey(
     prey: Agents<PreyState>,
     predators: Agents<PredatorState>,
@@ -535,7 +535,7 @@ agent.predator_prey(
 - Educational simulations
 
 **Example:**
-```kairo
+```morphogen
 let prey = agent.create(count=500, bounds=box(100m, 100m), seed=42)
 let predators = agent.create(count=50, bounds=box(100m, 100m), seed=43)
 
@@ -554,7 +554,7 @@ let predators = agent.create(count=50, bounds=box(100m, 100m), seed=43)
 
 **Crowd simulation (social forces model)**
 
-```kairo
+```morphogen
 agent.crowd_dynamics(
     agents: Agents<CrowdState>,
     goals: Array<Vec2<m>>,
@@ -576,7 +576,7 @@ agent.crowd_dynamics(
 
 **Integrate agent dynamics (generic ODE/SDE solver)**
 
-```kairo
+```morphogen
 agent.integrate(
     agents: Agents<A>,
     forces: Fn(Agent<A>, neighbors) -> Vec2<N>,
@@ -598,7 +598,7 @@ agent.integrate(
 
 **Rasterize agents to field (particle-in-cell)**
 
-```kairo
+```morphogen
 agent.to_field<A>(
     agents: Agents<A>,
     property: String,
@@ -618,7 +618,7 @@ agent.to_field<A>(
 - Sonification (density → audio)
 
 **Example:**
-```kairo
+```morphogen
 let density = agent.to_field(boids, property="density", resolution=(512, 512))
 out visual = visual.colorize(density, palette="inferno")
 ```
@@ -629,7 +629,7 @@ out visual = visual.colorize(density, palette="inferno")
 
 **Sample field at agent positions**
 
-```kairo
+```morphogen
 agent.from_field<A>(
     agents: Agents<A>,
     field: Field2D<f32>,
@@ -643,7 +643,7 @@ agent.from_field<A>(
 - Environmental influences
 
 **Example:**
-```kairo
+```morphogen
 // Temperature field affects agent speed
 let temperature = field.laplacian(heat_source, dt=0.01)
 agents = agent.from_field(agents, field=temperature, target_attr="speed")
@@ -655,7 +655,7 @@ agents = agent.from_field(agents, field=temperature, target_attr="speed")
 
 **Find neighbors within radius**
 
-```kairo
+```morphogen
 agent.neighbors<A>(
     agents: Agents<A>,
     radius: f32<m>,
@@ -678,7 +678,7 @@ agent.neighbors<A>(
 
 **Remove agents by predicate**
 
-```kairo
+```morphogen
 agent.remove<A>(
     agents: Agents<A>,
     predicate: Fn(Agent<A>) -> bool
@@ -686,7 +686,7 @@ agent.remove<A>(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Remove agents outside bounds
 agents = agent.remove(agents, |a| a.position.x > 100m)
 ```
@@ -697,7 +697,7 @@ agents = agent.remove(agents, |a| a.position.x > 100m)
 
 **Spawn new agents**
 
-```kairo
+```morphogen
 agent.spawn<A>(
     agents: Agents<A>,
     new_agents: Array<Agent<A>>
@@ -716,7 +716,7 @@ agent.spawn<A>(
 
 **Gray-Scott reaction-diffusion**
 
-```kairo
+```morphogen
 rd.gray_scott(
     u: Field2D<f32>,
     v: Field2D<f32>,
@@ -755,7 +755,7 @@ rd.gray_scott(
 - Procedural design
 
 **Example:**
-```kairo
+```morphogen
 let u = field.create(256, 256, 1.0)
 let v = field.create(256, 256, 0.0)
 v = field.set_region(v, center=(128, 128), radius=10, value=1.0)
@@ -780,7 +780,7 @@ out visual = visual.colorize(v, palette="magma")
 
 **General Turing pattern system**
 
-```kairo
+```morphogen
 rd.turing(
     field: Field2D<f32>,
     a: f32,
@@ -807,7 +807,7 @@ rd.turing(
 
 **Belousov-Zhabotinsky reaction**
 
-```kairo
+```morphogen
 rd.belousov_zhabotinsky(
     u: Field2D<f32>,
     v: Field2D<f32>,
@@ -827,7 +827,7 @@ rd.belousov_zhabotinsky(
 
 **Convert RD pattern to geometry (marching cubes)**
 
-```kairo
+```morphogen
 rd.to_geometry(
     field: Field2D<f32>,
     threshold: f32 = 0.5
@@ -839,7 +839,7 @@ rd.to_geometry(
 - Procedural modeling
 
 **Example:**
-```kairo
+```morphogen
 (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 let mesh = rd.to_geometry(v, threshold=0.5)
 let surface = geom.from_mesh(mesh)
@@ -851,7 +851,7 @@ let surface = geom.from_mesh(mesh)
 
 **Initialize RD system**
 
-```kairo
+```morphogen
 rd.init(
     width: i32,
     height: i32,
@@ -874,7 +874,7 @@ rd.init(
 
 **Create L-system**
 
-```kairo
+```morphogen
 lsys.create(
     axiom: String,
     rules: Map<Char, String>,
@@ -884,7 +884,7 @@ lsys.create(
 ```
 
 **Example:**
-```kairo
+```morphogen
 let koch = lsys.create(
     axiom = "F",
     rules = {'F': "F+F-F-F+F"},
@@ -899,7 +899,7 @@ let koch = lsys.create(
 
 **Evolve L-system string n generations**
 
-```kairo
+```morphogen
 lsys.evolve(
     lsys: LSystem,
     iterations: i32
@@ -907,7 +907,7 @@ lsys.evolve(
 ```
 
 **Example:**
-```kairo
+```morphogen
 let evolved = lsys.evolve(koch, iterations=4)
 ```
 
@@ -919,7 +919,7 @@ let evolved = lsys.evolve(koch, iterations=4)
 
 **Interpret L-system as turtle graphics → 3D geometry**
 
-```kairo
+```morphogen
 lsys.to_geometry(
     state: LSystemState,
     angle: f32<deg>,
@@ -937,7 +937,7 @@ lsys.to_geometry(
 - `]` — Pop state
 
 **Example:**
-```kairo
+```morphogen
 let tree = lsys.create(
     axiom = "F",
     rules = {'F': "FF+[+F-F-F]-[-F+F+F]"},
@@ -962,7 +962,7 @@ let mesh = lsys.to_geometry(
 
 **L-system presets**
 
-```kairo
+```morphogen
 lsys.preset(name: String) -> LSystem
 ```
 
@@ -979,7 +979,7 @@ lsys.preset(name: String) -> LSystem
 
 **Parametric L-system (parameters in rules)**
 
-```kairo
+```morphogen
 lsys.parametric(
     axiom: String,
     rules: Map<Char, Fn(params) -> String>,
@@ -988,7 +988,7 @@ lsys.parametric(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Branch length decreases with depth
 let tree = lsys.parametric(
     axiom = "F(1.0)",
@@ -1005,7 +1005,7 @@ let tree = lsys.parametric(
 
 **3D L-system (rotations in X, Y, Z)**
 
-```kairo
+```morphogen
 lsys.3d(
     axiom: String,
     rules: Map<Char, String>,
@@ -1026,7 +1026,7 @@ lsys.3d(
 
 **Ant Colony Optimization (ACO)**
 
-```kairo
+```morphogen
 swarm.ants(
     graph: Graph,
     start: NodeRef,
@@ -1060,7 +1060,7 @@ swarm.ants(
 - Network routing
 
 **Example:**
-```kairo
+```morphogen
 let graph = graph.from_geometry(pcb_layout)
 let (path, pheromones) = swarm.ants(
     graph,
@@ -1082,7 +1082,7 @@ out geometry = geom.from_path(path, width=0.2mm)
 
 **Physarum polycephalum network formation**
 
-```kairo
+```morphogen
 swarm.slime_mold(
     field: Field2D<f32>,
     food_sources: Array<Vec2<m>>,
@@ -1104,7 +1104,7 @@ swarm.slime_mold(
 - Procedural vascular systems
 
 **Example:**
-```kairo
+```morphogen
 // Generate road network connecting cities
 let field = field.create(512, 512, 0.0)
 let cities = [vec2(100, 100), vec2(400, 100), vec2(250, 400)]
@@ -1128,7 +1128,7 @@ out geometry = geom.from_graph(roads, diameter=2m)
 
 **Firefly algorithm**
 
-```kairo
+```morphogen
 swarm.firefly(
     objective: Fn(Vec<f32>) -> f32,
     bounds: Array<(f32, f32)>,
@@ -1151,7 +1151,7 @@ swarm.firefly(
 
 **Artificial Bee Colony (ABC)**
 
-```kairo
+```morphogen
 swarm.bees(
     objective: Fn(Vec<f32>) -> f32,
     bounds: Array<(f32, f32)>,
@@ -1168,7 +1168,7 @@ swarm.bees(
 
 **Fish School Search (FSS)**
 
-```kairo
+```morphogen
 swarm.fish_school(
     objective: Fn(Vec<f32>) -> f32,
     bounds: Array<(f32, f32)>,
@@ -1186,7 +1186,7 @@ swarm.fish_school(
 
 **Visualize emergence system**
 
-```kairo
+```morphogen
 emergence.visualize(
     system: CAGrid2D | Agents | Field2D,
     palette: String = "viridis",
@@ -1200,7 +1200,7 @@ emergence.visualize(
 
 **Animate emergence system evolution**
 
-```kairo
+```morphogen
 emergence.animate(
     system: CAGrid2D | Agents,
     rule: Rule,
@@ -1215,7 +1215,7 @@ emergence.animate(
 
 **Export emergence result as geometry**
 
-```kairo
+```morphogen
 emergence.export_geometry(
     system: CAGrid2D | Field2D,
     method: String = "extrude",
@@ -1234,7 +1234,7 @@ emergence.export_geometry(
 
 **Sonify emergence system**
 
-```kairo
+```morphogen
 emergence.sonify(
     system: CAGrid2D | Agents,
     mapping: String = "density_to_freq",
@@ -1253,7 +1253,7 @@ emergence.sonify(
 
 **Couple emergence system to field**
 
-```kairo
+```morphogen
 emergence.couple_field(
     agents: Agents<A>,
     field: Field2D<f32>,
@@ -1272,7 +1272,7 @@ emergence.couple_field(
 
 **Measure emergence metrics**
 
-```kairo
+```morphogen
 emergence.measure(
     system: CAGrid2D | Agents,
     metric: String
@@ -1290,7 +1290,7 @@ emergence.measure(
 
 **Save emergence system state**
 
-```kairo
+```morphogen
 emergence.save(
     system: CAGrid2D | Agents,
     path: String
@@ -1303,7 +1303,7 @@ emergence.save(
 
 **Load emergence system state**
 
-```kairo
+```morphogen
 emergence.load(
     path: String
 ) -> CAGrid2D | Agents
@@ -1317,7 +1317,7 @@ emergence.load(
 
 **CA/RD Pattern → 3D Surface**
 
-```kairo
+```morphogen
 // 1. Generate pattern
 let (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 
@@ -1338,7 +1338,7 @@ io.export_stl(surface, "organic_pattern.stl")
 
 **Slime Mold Network → Structural Analysis**
 
-```kairo
+```morphogen
 // 1. Generate network
 let network = swarm.slime_mold(field, food_sources=anchor_points)
 
@@ -1358,7 +1358,7 @@ out visual = visual.render_stress(stress, palette="plasma")
 
 **Boids → Sonification**
 
-```kairo
+```morphogen
 scene BoidsAudio {
     let boids = agent.create(count=100, bounds=box(100m, 100m), seed=42)
 
@@ -1383,7 +1383,7 @@ scene BoidsAudio {
 
 **PSO Visualization (from OptimizationDomain)**
 
-```kairo
+```morphogen
 // Run PSO
 let result = opt.particle_swarm(
     objective = |params| chamber_efficiency(params),
@@ -1404,7 +1404,7 @@ out visual = visual.animate_agents(swarm_agents)
 
 **Swarm → Acoustic Scattering**
 
-```kairo
+```morphogen
 scene SwarmScattering {
     let boids = agent.create(count=1000, bounds=box(50m, 50m), seed=42)
     let source = acoustic.point_source(position=vec3(0, 0, 0), freq=1000Hz)
@@ -1471,7 +1471,7 @@ scene SwarmScattering {
 # Testing Strategy
 
 ## Determinism Tests
-```kairo
+```morphogen
 // CA determinism
 let ca1 = ca.create(128, 128, seed=42)
 let ca2 = ca.create(128, 128, seed=42)
@@ -1484,7 +1484,7 @@ assert_eq!(boids1, boids2)
 ```
 
 ## Conservation Tests
-```kairo
+```morphogen
 // Momentum conservation (boids)
 let p_before = agent.total_momentum(boids)
 boids = agent.boids(boids, dt=0.1s)
@@ -1493,7 +1493,7 @@ assert_approx_eq!(p_before, p_after, tol=1e-6)
 ```
 
 ## Pattern Recognition Tests
-```kairo
+```morphogen
 // Life: glider moves diagonally
 let glider = ca.load_pattern("glider")
 let evolved = ca.step_n(glider, rule=life_rule, steps=4)

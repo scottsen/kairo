@@ -1,6 +1,6 @@
-# ⚡ Kairo.Circuit Specification v1.0
+# ⚡ Morphogen.Circuit Specification v1.0
 
-**A declarative circuit simulation and analog modeling dialect built on the Kairo kernel.**
+**A declarative circuit simulation and analog modeling dialect built on the Morphogen kernel.**
 
 **Inspired by SPICE, nodal analysis, and modern circuit simulation techniques.**
 
@@ -8,12 +8,12 @@
 
 ## 0. Overview
 
-Kairo.Circuit is a typed, declarative circuit simulation dialect layered on the Kairo kernel.
+Morphogen.Circuit is a typed, declarative circuit simulation dialect layered on the Morphogen kernel.
 It provides deterministic semantics, electrical component primitives, and composable circuit constructs.
 It is an intermediate layer that sits between:
 
 - **User applications** — Circuit design, PCB layout, analog audio modeling, power electronics, RF design
-- **Kairo Core** — the deterministic MLIR-based execution kernel
+- **Morphogen Core** — the deterministic MLIR-based execution kernel
 - **Backend engines** — ngspice, custom ODE solvers, GPU-accelerated linear algebra
 
 **Unique capabilities:**
@@ -75,7 +75,7 @@ All circuit types are defined in the kernel's type system with explicit electric
 
 Defines a self-contained circuit block.
 
-```kairo
+```morphogen
 circuit RC_LowPass {
     params:
         R: f32<Ω> = 1000
@@ -114,7 +114,7 @@ circuit RC_LowPass {
 
 Encapsulates reusable circuit blocks (like SPICE .subckt).
 
-```kairo
+```morphogen
 subcircuit OpAmpInverting {
     params:
         gain: f32 = -10
@@ -145,7 +145,7 @@ subcircuit OpAmpInverting {
 ```
 
 **Usage:**
-```kairo
+```morphogen
 circuit AudioPreamp {
     components:
         stage1 = OpAmpInverting(gain=-10)
@@ -164,12 +164,12 @@ circuit AudioPreamp {
 
 Interoperability with SPICE and other simulators.
 
-```kairo
+```morphogen
 import spice("amplifier.cir")           # Import SPICE netlist
 import touchstone("filter.s2p")         # Import S-parameters (2-port)
 
 export spice("output.cir", circuit=AudioPreamp)
-export yaml("circuit.kairo.yaml", circuit=AudioPreamp)
+export yaml("circuit.morphogen.yaml", circuit=AudioPreamp)
 ```
 
 **Supported formats:**
@@ -182,7 +182,7 @@ export yaml("circuit.kairo.yaml", circuit=AudioPreamp)
 
 ## 4. Reference System: CircuitRef
 
-Following Kairo's unified reference pattern, the Circuit domain uses **`CircuitRef`** as its primary reference type.
+Following Morphogen's unified reference pattern, the Circuit domain uses **`CircuitRef`** as its primary reference type.
 
 **CircuitRef targets:**
 ```
@@ -242,7 +242,7 @@ Every circuit component auto-generates typed anchors:
 
 ### 4.2 Example: Auto-Anchor Usage
 
-```kairo
+```morphogen
 # Define components
 r1 = resistor(R=1kΩ)
 c1 = capacitor(C=10µF)
@@ -280,7 +280,7 @@ Circuit operators are organized in **4 layers** (atomic → composite → constr
 ### 5.1 Layer 1: Atomic Components
 
 **Linear Passive Components:**
-```kairo
+```morphogen
 resistor(R: f32<Ω>) -> Component
 capacitor(C: f32<F>) -> Component
 inductor(L: f32<H>) -> Component
@@ -289,7 +289,7 @@ mutual_inductor(L1: f32<H>, L2: f32<H>, M: f32<H>) -> Component
 ```
 
 **Independent Sources:**
-```kairo
+```morphogen
 voltage_source(V: f32<V>, type: Enum["dc", "ac", "pulse", "sine"]) -> Component
 current_source(I: f32<A>, type: Enum["dc", "ac", "pulse", "sine"]) -> Component
 
@@ -299,7 +299,7 @@ voltage_pulse(V_low: f32<V>, V_high: f32<V>, period: f32<s>, duty_cycle: f32) ->
 ```
 
 **Dependent Sources (controlled sources):**
-```kairo
+```morphogen
 vcvs(gain: f32) -> Component  # Voltage-controlled voltage source (E)
 vccs(gm: f32<A/V>) -> Component  # Voltage-controlled current source (G) - transconductance
 ccvs(rm: f32<V/A>) -> Component  # Current-controlled voltage source (H) - transresistance
@@ -307,7 +307,7 @@ cccs(gain: f32) -> Component  # Current-controlled current source (F)
 ```
 
 **Nonlinear Semiconductors:**
-```kairo
+```morphogen
 diode(Is: f32<A>, n: f32, Vt: f32<V> = 26mV) -> Component  # Shockley equation
 zener_diode(Vz: f32<V>, Iz: f32<A>) -> Component
 
@@ -319,14 +319,14 @@ mosfet_p(Vth: f32<V>, kp: f32, lambda: f32) -> Component  # P-channel
 ```
 
 **Integrated Components:**
-```kairo
+```morphogen
 op_amp(model: str, gain: f32 = 1e6, bandwidth: f32<Hz> = 1MHz) -> Component
 comparator(model: str, vref: f32<V>) -> Component
 voltage_regulator(Vin: f32<V>, Vout: f32<V>, Imax: f32<A>) -> Component
 ```
 
 **Examples:**
-```kairo
+```morphogen
 r1 = resistor(R=1kΩ)
 c1 = capacitor(C=100nF)
 l1 = inductor(L=10mH)
@@ -341,7 +341,7 @@ u1 = op_amp(model="tl072")
 ### 5.2 Layer 2: Composite Circuit Blocks
 
 **Passive Networks:**
-```kairo
+```morphogen
 voltage_divider(R1: f32<Ω>, R2: f32<Ω>) -> Component
 current_divider(R1: f32<Ω>, R2: f32<Ω>) -> Component
 rc_filter(R: f32<Ω>, C: f32<F>, type: Enum["lpf", "hpf"]) -> Component
@@ -350,19 +350,19 @@ rlc_resonator(R: f32<Ω>, L: f32<H>, C: f32<F>, type: Enum["series", "parallel"]
 ```
 
 **Biasing Networks:**
-```kairo
+```morphogen
 dc_bias_network(Vcc: f32<V>, Vbias: f32<V>, Ibias: f32<A>) -> Component
 voltage_reference(Vref: f32<V>, tolerance: f32) -> Component
 ```
 
 **Matching Networks (RF):**
-```kairo
+```morphogen
 pi_matching(Zin: Complex<Ω>, Zout: Complex<Ω>, freq: f32<Hz>) -> Component
 t_matching(Zin: Complex<Ω>, Zout: Complex<Ω>, freq: f32<Hz>) -> Component
 ```
 
 **Examples:**
-```kairo
+```morphogen
 divider = voltage_divider(R1=10kΩ, R2=10kΩ)  # 50% divider
 lpf = rc_filter(R=1kΩ, C=100nF, type="lpf")    # Cutoff ≈ 1.6kHz
 resonator = rlc_resonator(R=10Ω, L=10mH, C=100nF, type="series")
@@ -373,7 +373,7 @@ resonator = rlc_resonator(R=10Ω, L=10mH, C=100nF, type="series")
 ### 5.3 Layer 3: Circuit Constructs
 
 **Analog Audio Circuits:**
-```kairo
+```morphogen
 opamp_inverting_amp(gain: f32, Rin: f32<Ω>) -> Circuit
 opamp_non_inverting_amp(gain: f32, Rin: f32<Ω>) -> Circuit
 opamp_summing_amp(num_inputs: i32, gain: f32) -> Circuit
@@ -386,7 +386,7 @@ state_variable_filter(fc: f32<Hz>, Q: f32) -> Circuit  # Simultaneous LP/BP/HP o
 ```
 
 **Power Electronics:**
-```kairo
+```morphogen
 buck_converter(Vin: f32<V>, Vout: f32<V>, Iout: f32<A>, fsw: f32<Hz>) -> Circuit
 boost_converter(Vin: f32<V>, Vout: f32<V>, Iout: f32<A>, fsw: f32<Hz>) -> Circuit
 buck_boost_converter(Vin: f32<V>, Vout: f32<V>, Iout: f32<A>, fsw: f32<Hz>) -> Circuit
@@ -394,7 +394,7 @@ ldo_regulator(Vin: f32<V>, Vout: f32<V>, Imax: f32<A>, dropout: f32<V>) -> Circu
 ```
 
 **Oscillators:**
-```kairo
+```morphogen
 rc_oscillator(freq: f32<Hz>, amplitude: f32<V>) -> Circuit
 wien_bridge_oscillator(freq: f32<Hz>) -> Circuit
 colpitts_oscillator(freq: f32<Hz>, L: f32<H>) -> Circuit
@@ -403,7 +403,7 @@ relaxation_oscillator(freq: f32<Hz>, duty_cycle: f32) -> Circuit
 ```
 
 **RF Circuits:**
-```kairo
+```morphogen
 bandpass_filter_butterworth(fc: f32<Hz>, bw: f32<Hz>, order: i32) -> Circuit
 lowpass_filter_chebyshev(fc: f32<Hz>, ripple_db: f32, order: i32) -> Circuit
 rf_mixer(lo_freq: f32<Hz>, if_freq: f32<Hz>) -> Circuit
@@ -411,14 +411,14 @@ lna(gain_db: f32, noise_figure_db: f32, freq: f32<Hz>) -> Circuit  # Low-noise a
 ```
 
 **Tube Amplifiers (Nonlinear Modeling):**
-```kairo
+```morphogen
 triode_stage(tube_model: str, bias_voltage: f32<V>, plate_load: f32<Ω>) -> Circuit
 pentode_output_stage(tube_model: str, class: Enum["A", "AB", "B"]) -> Circuit
 cathode_follower(tube_model: str, bias_voltage: f32<V>) -> Circuit
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Op-amp non-inverting amplifier (gain = 11)
 amp = opamp_non_inverting_amp(gain=11, Rin=10kΩ)
 
@@ -437,7 +437,7 @@ preamp = triode_stage(tube_model="12ax7", bias_voltage=-1.5V, plate_load=100kΩ)
 ### 5.4 Layer 4: Circuit Presets
 
 **Guitar Pedals:**
-```kairo
+```morphogen
 guitar_pedal_overdrive(drive: f32, tone: f32, level: f32) -> Circuit
 guitar_pedal_distortion(distortion: f32, tone: f32, level: f32) -> Circuit
 guitar_pedal_fuzz(fuzz: f32, tone: f32, level: f32) -> Circuit
@@ -446,14 +446,14 @@ guitar_pedal_delay(delay_time: f32<s>, feedback: f32, mix: f32) -> Circuit
 ```
 
 **Tube Amplifiers:**
-```kairo
+```morphogen
 tube_amp_preamp(channels: i32, gain_stages: i32, eq_bands: i32) -> Circuit
 tube_amp_power_stage(power_watts: f32, class: Enum["A", "AB", "B"], tubes: str) -> Circuit
 tube_amp_reverb_tank(springs: i32, decay_time: f32<s>) -> Circuit
 ```
 
 **Synthesizer Modules:**
-```kairo
+```morphogen
 synth_vcf_moog(cutoff: f32<Hz>, resonance: f32) -> Circuit  # Moog ladder filter
 synth_vcf_roland(cutoff: f32<Hz>, resonance: f32) -> Circuit  # Roland IR3109
 synth_vco(freq: f32<Hz>, waveform: Enum["saw", "square", "triangle", "sine"]) -> Circuit
@@ -461,13 +461,13 @@ synth_adsr(attack: f32<s>, decay: f32<s>, sustain: f32, release: f32<s>) -> Circ
 ```
 
 **Audio Mixer:**
-```kairo
+```morphogen
 mixer_channel_strip(eq_bands: i32, dynamics: bool, fx_sends: i32) -> Circuit
 mixer_master_bus(num_channels: i32, dynamics: bool, metering: bool) -> Circuit
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Tube Screamer-style overdrive pedal
 pedal = guitar_pedal_overdrive(drive=0.7, tone=0.5, level=0.8)
 
@@ -488,7 +488,7 @@ Circuit simulation requires multiple analysis types (DC, AC, transient, etc.).
 
 Solve for steady-state (DC) voltages and currents.
 
-```kairo
+```morphogen
 dc_operating_point(circuit: Circuit) -> StateVector
 
 # Example:
@@ -505,7 +505,7 @@ print(op.component["q1"].Ic)     # DC collector current
 
 Compute frequency response (Bode plot).
 
-```kairo
+```morphogen
 ac_sweep(
     circuit: Circuit,
     freq_start: f32<Hz>,
@@ -531,7 +531,7 @@ plot(response.frequency, response.phase_deg)     # Bode phase
 
 Simulate time-domain response.
 
-```kairo
+```morphogen
 transient(
     circuit: Circuit,
     duration: f32<s>,
@@ -565,7 +565,7 @@ plot(output.time, output.net["vout"].voltage)  # Oscilloscope trace
 
 For RF circuits and oscillators (periodic steady-state).
 
-```kairo
+```morphogen
 harmonic_balance(
     circuit: Circuit,
     fundamental_freq: f32<Hz>,
@@ -582,7 +582,7 @@ solution = harmonic_balance(colpitts_osc, fundamental_freq=10MHz, num_harmonics=
 
 Compute noise spectral density.
 
-```kairo
+```morphogen
 noise_analysis(
     circuit: Circuit,
     freq_start: f32<Hz>,
@@ -601,7 +601,7 @@ print(noise.total_rms_voltage)  # Integrated noise (V_rms)
 
 Compute parameter sensitivity (∂V/∂R, etc.).
 
-```kairo
+```morphogen
 sensitivity_analysis(
     circuit: Circuit,
     output: NodeRef,
@@ -646,7 +646,7 @@ Time Integrators (transient analysis):
 
 ### 7.2 Auto-Solver Selection
 
-Kairo automatically selects the best solver based on circuit characteristics:
+Morphogen automatically selects the best solver based on circuit characteristics:
 
 ```python
 def select_solver(circuit: Circuit):
@@ -676,7 +676,7 @@ def select_solver(circuit: Circuit):
 
 Large circuits benefit from GPU-accelerated linear algebra:
 
-```kairo
+```morphogen
 transient(
     circuit=large_circuit,
     duration=1ms,
@@ -693,13 +693,13 @@ transient(
 
 ## 8. Multi-Domain Integration
 
-Circuit domain integrates with other Kairo domains.
+Circuit domain integrates with other Morphogen domains.
 
 ### 8.1 Circuit ↔ Geometry (PCB Layout)
 
 **PCB trace modeling:**
 
-```kairo
+```morphogen
 # Geometry: PCB layout
 pcb = GeometryDomain.rectangle(width=100mm, height=60mm)
 
@@ -735,7 +735,7 @@ output = transient(amp, duration=1ms)
 
 **Guitar pedal simulation:**
 
-```kairo
+```morphogen
 # Circuit: Tube Screamer-style overdrive
 pedal = CircuitDomain.guitar_pedal_overdrive(drive=0.7, tone=0.5, level=0.8)
 
@@ -765,7 +765,7 @@ AudioDomain.export(final, "pedal_output.wav")
 
 **Power amplifier thermal simulation:**
 
-```kairo
+```morphogen
 # Circuit: Class AB power amplifier
 amp = CircuitDomain.class_ab_amplifier(power=100W)
 
@@ -805,7 +805,7 @@ op_point_hot = dc_operating_point(amp)
 
 **PWM-driven buck converter:**
 
-```kairo
+```morphogen
 # Pattern: PWM generator (Strudel-like pattern domain)
 pwm = PatternDomain.pwm(
     frequency=100kHz,
@@ -834,7 +834,7 @@ plot(output_voltage.time, output_voltage.net["vout"].voltage)
 
 **Gradient-based filter optimization:**
 
-```kairo
+```morphogen
 # Circuit: RC filter
 filter = CircuitDomain.rc_filter(R=1kΩ, C=100nF, type="lpf")
 
@@ -973,7 +973,7 @@ Circuit simulation must be deterministic for reproducibility.
 
 ### 11.1 RC Low-Pass Filter
 
-```kairo
+```morphogen
 circuit RC_LPF {
     params:
         R: f32<Ω> = 1000
@@ -1007,7 +1007,7 @@ circuit RC_LPF {
 
 ### 11.2 Op-Amp Inverting Amplifier
 
-```kairo
+```morphogen
 circuit InvertingAmp {
     params:
         gain: f32 = -10
@@ -1042,7 +1042,7 @@ circuit InvertingAmp {
 
 ### 11.3 Guitar Pedal (Tube Screamer)
 
-```kairo
+```morphogen
 circuit TubeScreamer {
     params:
         drive: f32 = 0.7      # 0.0 to 1.0
@@ -1119,7 +1119,7 @@ circuit TubeScreamer {
 
 ## Appendix: Comparison with SPICE
 
-| Feature | SPICE | Kairo.Circuit |
+| Feature | SPICE | Morphogen.Circuit |
 |---------|-------|---------------|
 | **Netlist format** | Text-based, manual node numbering | YAML/declarative, auto-generated nodes |
 | **Component library** | Extensive (decades of models) | Growing (import SPICE models) |
@@ -1133,4 +1133,4 @@ circuit TubeScreamer {
 | **GPU acceleration** | Limited | Planned |
 | **Extensibility** | `.subckt`, models | Operator registry, plugins |
 
-**Key advantage:** Kairo unifies circuit + PCB + audio + physics in one framework.
+**Key advantage:** Morphogen unifies circuit + PCB + audio + physics in one framework.

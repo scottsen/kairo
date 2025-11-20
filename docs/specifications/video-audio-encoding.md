@@ -1,6 +1,6 @@
-# 🎬 Kairo.Video & Audio Encoding Specification v1.0
+# 🎬 Morphogen.Video & Audio Encoding Specification v1.0
 
-**A declarative video encoding, audio/video filtering, and sync correction dialect built on the Kairo kernel.**
+**A declarative video encoding, audio/video filtering, and sync correction dialect built on the Morphogen kernel.**
 
 **Inspired by ffmpeg, DaVinci Resolve, and modern media processing pipelines.**
 
@@ -8,27 +8,27 @@
 
 ## 0. Overview
 
-Kairo.Video is a typed, declarative video and audio processing dialect layered on the Kairo kernel. It provides deterministic semantics for video encoding, filtering, transcoding, audio leveling, and synchronization operations. It represents a natural extension of Kairo's operator DAG paradigm to multimedia streams.
+Morphogen.Video is a typed, declarative video and audio processing dialect layered on the Morphogen kernel. It provides deterministic semantics for video encoding, filtering, transcoding, audio leveling, and synchronization operations. It represents a natural extension of Morphogen's operator DAG paradigm to multimedia streams.
 
-**Why Video Belongs in Kairo:**
+**Why Video Belongs in Morphogen:**
 
 Video processing is fundamentally:
 - **Stream-based** — continuous data flows through operator pipelines
 - **Operator-based** — filters, codecs, and transformations as composable ops
-- **Filter-based** — ffmpeg-style filter graphs map directly to Kairo DAGs
+- **Filter-based** — ffmpeg-style filter graphs map directly to Morphogen DAGs
 - **Parameterizable** — every operation has typed parameters (CRF, bitrate, preset)
 - **Batchable** — apply pipelines to multiple files in parallel
 - **GPU-accelerable** — hardware-accelerated encoding/decoding fits naturally
 - **Graph-representable** — video = operator DAG on AV streams
 
-**This is literally Kairo's native shape.**
+**This is literally Morphogen's native shape.**
 
 ```
-Kairo = operator DAG on structured data
+Morphogen = operator DAG on structured data
 Video = operator DAG on AV streams
 ```
 
-Video fits Kairo as naturally as audio, fields, or physics — perhaps **more naturally** than any of them, because ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs.
+Video fits Morphogen as naturally as audio, fields, or physics — perhaps **more naturally** than any of them, because ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs.
 
 ---
 
@@ -43,7 +43,7 @@ Video fits Kairo as naturally as audio, fields, or physics — perhaps **more na
 | **GPU-aware execution** | Automatically leverage hardware encoders (NVENC, QuickSync, AMF). |
 | **Cross-domain integration** | Video ↔ Audio ↔ Vision ↔ Geometry (overlay, 3D rendering). |
 | **Unit safety** | Frame rates (fps), bitrates (kbps), time codes (ms, frames). |
-| **Filter graph equivalence** | ffmpeg filter graphs map one-to-one to Kairo pipelines. |
+| **Filter graph equivalence** | ffmpeg filter graphs map one-to-one to Morphogen pipelines. |
 
 **Key insight:** Video processing pipelines are **typed operator DAGs** with **temporal constraints** (sync, frame rate, time alignment).
 
@@ -79,7 +79,7 @@ All video/audio types are defined in the kernel's type system with explicit mult
 
 ## 3. Proposed Domains
 
-Kairo.Video introduces four interconnected domains for comprehensive multimedia processing.
+Morphogen.Video introduces four interconnected domains for comprehensive multimedia processing.
 
 ### 3.1 VideoDomain
 
@@ -90,13 +90,13 @@ Kairo.Video introduces four interconnected domains for comprehensive multimedia 
 **Operators:**
 
 **Decoding & Encoding:**
-```kairo
+```morphogen
 video.decode(path: String) -> VideoStream
 video.encode(stream: VideoStream, codec: Codec, path: String) -> File
 ```
 
 **Transformation:**
-```kairo
+```morphogen
 video.scale(stream: VideoStream, width: u32, height: u32) -> VideoStream
 video.crop(stream: VideoStream, x: u32, y: u32, w: u32, h: u32) -> VideoStream
 video.fps(stream: VideoStream, rate: f32) -> VideoStream
@@ -104,20 +104,20 @@ video.rotate(stream: VideoStream, degrees: f32) -> VideoStream
 ```
 
 **Composition:**
-```kairo
+```morphogen
 video.concat(streams: List<VideoStream>) -> VideoStream
 video.overlay(base: VideoStream, overlay: VideoStream, x: u32, y: u32) -> VideoStream
 video.blend(a: VideoStream, b: VideoStream, mode: String, opacity: f32) -> VideoStream
 ```
 
 **Text & Graphics:**
-```kairo
+```morphogen
 video.draw_text(stream: VideoStream, text: String, font: Font, pos: Vec2) -> VideoStream
 video.draw_box(stream: VideoStream, rect: Rect, color: Color) -> VideoStream
 ```
 
 **Conversion:**
-```kairo
+```morphogen
 video.to_audio(stream: VideoStream) -> AudioStream
 video.from_frames(frames: List<Frame>) -> VideoStream
 video.to_frames(stream: VideoStream) -> List<Frame>
@@ -125,7 +125,7 @@ video.color_convert(stream: VideoStream, format: String) -> VideoStream
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Decode, scale, crop, encode pipeline
 pipeline:
   - input = video.decode("input.mp4")
@@ -146,7 +146,7 @@ pipeline:
 **Operators:**
 
 **Loudness & Normalization:**
-```kairo
+```morphogen
 audio.normalize(stream: AudioStream, target: f32) -> AudioStream
 audio.loudnorm(stream: AudioStream, lufs: f32 = -14.0) -> AudioStream  # EBU R128
 audio.measure_loudness(stream: AudioStream) -> f32 [LUFS]
@@ -154,14 +154,14 @@ audio.match_loudness(stream: AudioStream, reference: AudioStream) -> AudioStream
 ```
 
 **Dynamics:**
-```kairo
+```morphogen
 audio.compress(stream: AudioStream, ratio: f32, threshold: f32) -> AudioStream
 audio.limiter(stream: AudioStream, threshold: f32) -> AudioStream
 audio.gate(stream: AudioStream, threshold: f32, ratio: f32) -> AudioStream
 ```
 
 **Timing:**
-```kairo
+```morphogen
 audio.delay(stream: AudioStream, ms: f32) -> AudioStream
 audio.trim(stream: AudioStream, start: f32, end: f32) -> AudioStream
 audio.fade_in(stream: AudioStream, duration: f32) -> AudioStream
@@ -169,20 +169,20 @@ audio.fade_out(stream: AudioStream, duration: f32) -> AudioStream
 ```
 
 **Equalization:**
-```kairo
+```morphogen
 audio.equalize(stream: AudioStream, bands: List<EQBand>) -> AudioStream
 audio.bass_boost(stream: AudioStream, gain: f32) -> AudioStream
 audio.treble_boost(stream: AudioStream, gain: f32) -> AudioStream
 ```
 
 **Conversion:**
-```kairo
+```morphogen
 audio.resample(stream: AudioStream, rate: f32) -> AudioStream
 audio.channel_mix(stream: AudioStream, layout: String) -> AudioStream  # stereo→mono, 5.1→stereo
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Normalize and compress audio track
 pipeline:
   - input = audio.decode("dialogue.wav")
@@ -202,7 +202,7 @@ pipeline:
 **Operators:**
 
 **Spatial Filters:**
-```kairo
+```morphogen
 filter.blur(stream: VideoStream, sigma: f32) -> VideoStream
 filter.sharpen(stream: VideoStream, amount: f32) -> VideoStream
 filter.unsharp(stream: VideoStream, amount: f32) -> VideoStream
@@ -210,7 +210,7 @@ filter.denoise(stream: VideoStream, method: String = "nlmeans") -> VideoStream
 ```
 
 **Color Correction:**
-```kairo
+```morphogen
 filter.brightness(stream: VideoStream, amount: f32) -> VideoStream
 filter.contrast(stream: VideoStream, amount: f32) -> VideoStream
 filter.saturation(stream: VideoStream, amount: f32) -> VideoStream
@@ -220,28 +220,28 @@ filter.white_balance(stream: VideoStream, mode: String = "auto") -> VideoStream
 ```
 
 **Artistic Effects:**
-```kairo
+```morphogen
 filter.vignette(stream: VideoStream, intensity: f32) -> VideoStream
 filter.bloom(stream: VideoStream, threshold: f32, radius: f32) -> VideoStream
 filter.chromatic_aberration(stream: VideoStream, amount: f32) -> VideoStream
 ```
 
 **Temporal Effects:**
-```kairo
+```morphogen
 filter.time_blend(stream: VideoStream, mode: String = "average") -> VideoStream
 filter.deflicker(stream: VideoStream) -> VideoStream
 filter.stabilize(stream: VideoStream, smoothness: f32 = 10.0) -> VideoStream
 ```
 
 **Quality:**
-```kairo
+```morphogen
 filter.deband(stream: VideoStream) -> VideoStream
 filter.deinterlace(stream: VideoStream) -> VideoStream
 filter.upscale(stream: VideoStream, factor: f32, model: String = "lanczos") -> VideoStream
 ```
 
 **Example:**
-```kairo
+```morphogen
 # ffmpeg equivalent: -vf "scale=1920:-1, unsharp=5:5:1.5"
 pipeline:
   - input = video.decode("raw.mp4")
@@ -261,7 +261,7 @@ pipeline:
 **Operators:**
 
 **Video Codecs:**
-```kairo
+```morphogen
 codec.h264(crf: f32 = 23, preset: String = "medium", profile: String = "high") -> Codec
 codec.h265(crf: f32 = 28, preset: String = "medium", tune: String = "none") -> Codec
 codec.av1(crf: f32 = 30, speed: u32 = 6) -> Codec
@@ -271,7 +271,7 @@ codec.dnxhd(profile: String = "1080p_36") -> Codec
 ```
 
 **Image Codecs:**
-```kairo
+```morphogen
 codec.jpeg(quality: u32 = 90) -> Codec
 codec.png(compression: u32 = 6) -> Codec
 codec.webp(quality: u32 = 90, lossless: bool = false) -> Codec
@@ -280,7 +280,7 @@ codec.gif(dither: String = "sierra2_4a") -> Codec
 ```
 
 **Audio Codecs:**
-```kairo
+```morphogen
 codec.aac(bitrate: u32 = 192) -> Codec  # kbps
 codec.opus(bitrate: u32 = 128) -> Codec
 codec.mp3(bitrate: u32 = 320) -> Codec
@@ -288,7 +288,7 @@ codec.flac(compression: u32 = 5) -> Codec
 ```
 
 **Hardware Acceleration:**
-```kairo
+```morphogen
 codec.h264_nvenc(crf: f32 = 23, preset: String = "p4") -> Codec  # Nvidia
 codec.h265_nvenc(crf: f32 = 28, preset: String = "p4") -> Codec
 codec.h264_qsv(crf: f32 = 23) -> Codec  # Intel QuickSync
@@ -296,7 +296,7 @@ codec.h264_amf(crf: f32 = 23) -> Codec  # AMD
 ```
 
 **Example:**
-```kairo
+```morphogen
 # High-quality ProRes export
 codec = codec.prores(profile="hq")
 video.encode(stream, codec, "output.mov")
@@ -310,9 +310,9 @@ video.encode(stream, codec, "output.mp4")
 
 ## 4. Audio/Video Synchronization (SyncDomain)
 
-**Kairo's Sweet Spot:** Time-domain alignment, signal processing, phase correction, and offset detection.
+**Morphogen's Sweet Spot:** Time-domain alignment, signal processing, phase correction, and offset detection.
 
-Kairo already treats **time domains**, **signals**, **phases**, **offsets**, and **transforms** as first-class objects. This makes sync correction natural.
+Morphogen already treats **time domains**, **signals**, **phases**, **offsets**, and **transforms** as first-class objects. This makes sync correction natural.
 
 ### 4.1 Common Sync Problems
 
@@ -326,13 +326,13 @@ Video lagging behind audio (or vice versa) by a fixed amount.
 - Cross-spectrum analysis
 
 **Operators:**
-```kairo
+```morphogen
 sync.detect_constant_offset(video: VideoStream, audio: AudioStream) -> f32 [ms]
 sync.apply_offset(stream: AudioStream, offset: f32 [ms]) -> AudioStream
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Detect and fix constant sync drift
 offset = sync.detect_constant_offset(video, audio)  # Returns: +143ms
 audio_fixed = sync.apply_offset(audio, offset)
@@ -356,14 +356,14 @@ offset(t) = spline(t)  (nonlinear drift)
 ```
 
 **Operators:**
-```kairo
+```morphogen
 sync.detect_drift(video: VideoStream, audio: AudioStream) -> SyncMap
 sync.timewarp(stream: AudioStream, map: SyncMap) -> AudioStream
 sync.resample_with_drift_compensation(stream: AudioStream, map: SyncMap) -> AudioStream
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Detect and fix progressive drift
 drift_map = sync.detect_drift(video, audio)  # Returns: SyncMap(linear, a=0.02, b=100)
 audio_fixed = sync.timewarp(audio, drift_map)
@@ -376,14 +376,14 @@ audio_fixed = sync.timewarp(audio, drift_map)
 Automatically align video flash with audio clap.
 
 **Operators:**
-```kairo
+```morphogen
 vision.detect_flash(video: VideoStream) -> f32 [frames]
 audio.detect_clap(audio: AudioStream) -> f32 [samples]
 sync.align_events(visual_event: f32, audio_event: f32) -> f32 [ms]
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Automatic clapboard sync
 flash_frame = vision.detect_flash(video)
 clap_sample = audio.detect_clap(audio)
@@ -398,14 +398,14 @@ audio_synced = sync.apply_offset(audio, offset)
 Detect mouth movement and align with audio envelope.
 
 **Operators:**
-```kairo
+```morphogen
 vision.detect_mouth_open(video: VideoStream) -> TimeSeries<bool>
 audio.envelope(audio: AudioStream) -> TimeSeries<f32>
 sync.align_signals(visual: TimeSeries<T>, audio: TimeSeries<U>) -> SyncMap
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Lip-sync alignment
 mouth_events = vision.detect_mouth_open(video)
 audio_env = audio.envelope(audio)
@@ -417,10 +417,10 @@ audio_synced = sync.timewarp(audio, sync_map)
 
 ### 4.2 Audio Level Matching / Loudness Correction
 
-ffmpeg supports EBU R128 loudness normalization, but it's cumbersome. Kairo makes it first-class.
+ffmpeg supports EBU R128 loudness normalization, but it's cumbersome. Morphogen makes it first-class.
 
 **Operators:**
-```kairo
+```morphogen
 audio.measure_loudness(stream: AudioStream) -> f32 [LUFS]
 audio.loudnorm_to(stream: AudioStream, target: f32 [LUFS]) -> AudioStream
 audio.match_loudness(stream: AudioStream, reference: AudioStream) -> AudioStream
@@ -429,7 +429,7 @@ audio.auto_mix(streams: List<AudioStream>) -> AudioStream
 ```
 
 **Smart logic:**
-```kairo
+```morphogen
 # Detect quiet dialogue and boost speech frequencies
 dialogue = audio.detect_speech_regions(stream)
 boosted = audio.equalize(dialogue, bands=[
@@ -442,7 +442,7 @@ music_ducked = audio.duck(music, dialogue, threshold=-30.0, ratio=0.3)
 ```
 
 **Example:**
-```kairo
+```morphogen
 # Normalize all audio tracks to -14 LUFS (broadcast standard)
 dialogue = audio.loudnorm_to(dialogue_raw, -14.0)
 music = audio.loudnorm_to(music_raw, -14.0)
@@ -454,11 +454,11 @@ mixed = audio.auto_mix([dialogue, music, sfx])
 
 ---
 
-## 5. Filter Graphs as Kairo Pipelines
+## 5. Filter Graphs as Morphogen Pipelines
 
-ffmpeg filter graphs map **one-to-one** to Kairo pipelines.
+ffmpeg filter graphs map **one-to-one** to Morphogen pipelines.
 
-### 5.1 ffmpeg → Kairo Equivalence
+### 5.1 ffmpeg → Morphogen Equivalence
 
 **ffmpeg:**
 ```bash
@@ -468,8 +468,8 @@ ffmpeg -i input.mp4 \
   output.mp4
 ```
 
-**Kairo:**
-```kairo
+**Morphogen:**
+```morphogen
 pipeline:
   - input = video.decode("input.mp4")
   - scaled = video.scale(input, width=1920, height=-1)
@@ -494,8 +494,8 @@ ffmpeg -i video.mp4 -i watermark.png \
   -map "[output]" output.mp4
 ```
 
-**Kairo:**
-```kairo
+**Morphogen:**
+```morphogen
 pipeline:
   - video = video.decode("video.mp4")
   - watermark = video.decode("watermark.png")
@@ -508,11 +508,11 @@ pipeline:
 
 ## 6. Batch Processing
 
-Kairo excels at batch pipelines with parallel execution.
+Morphogen excels at batch pipelines with parallel execution.
 
 ### 6.1 Batch Operators
 
-```kairo
+```morphogen
 batch.apply_to_files(pattern: String, pipeline: Pipeline) -> List<File>
 batch.parallel(n: u32, pipelines: List<Pipeline>) -> List<Result>
 batch.map(files: List<File>, fn: (File) -> File) -> List<File>
@@ -521,7 +521,7 @@ batch.map(files: List<File>, fn: (File) -> File) -> List<File>
 ### 6.2 Use Cases
 
 **Encode entire folder:**
-```kairo
+```morphogen
 # Transcode all MP4s in a folder to H.265
 batch.apply_to_files("videos/*.mp4", pipeline=[
     video.decode,
@@ -530,7 +530,7 @@ batch.apply_to_files("videos/*.mp4", pipeline=[
 ```
 
 **Re-sync all videos:**
-```kairo
+```morphogen
 # Detect and fix sync issues in all files
 batch.map("footage/*.mp4", fn=(file) => {
     video = video.decode(file)
@@ -542,7 +542,7 @@ batch.map("footage/*.mp4", fn=(file) => {
 ```
 
 **Replace audio tracks:**
-```kairo
+```morphogen
 # Replace audio in all videos with processed versions
 batch.parallel(n=8, [
     for file in glob("videos/*.mp4"):
@@ -554,7 +554,7 @@ batch.parallel(n=8, [
 ```
 
 **Normalize all loudness:**
-```kairo
+```morphogen
 # Normalize all audio files to -16 LUFS
 batch.apply_to_files("audio/*.wav", pipeline=[
     audio.decode,
@@ -567,11 +567,11 @@ batch.apply_to_files("audio/*.wav", pipeline=[
 
 ## 7. GPU Acceleration
 
-Kairo maps naturally to GPU-accelerated codecs.
+Morphogen maps naturally to GPU-accelerated codecs.
 
 ### 7.1 GPU Operators
 
-```kairo
+```morphogen
 gpu.accelerate(codec: Codec, backend: String = "auto") -> Codec
 gpu.filter(filter: Filter, backend: String = "auto") -> Filter
 ```
@@ -585,7 +585,7 @@ gpu.filter(filter: Filter, backend: String = "auto") -> Filter
 
 ### 7.2 Example
 
-```kairo
+```morphogen
 # Automatically use GPU if available
 codec = codec.h265(crf=23, preset="medium")
 codec_gpu = gpu.accelerate(codec, backend="auto")
@@ -603,16 +603,16 @@ denoised = gpu.filter(filter.denoise(stream, method="nlmeans"))
 
 ## 8. Magic "Fix My Video" Operator
 
-Kairo can build a high-level convenience operator that automatically fixes common issues.
+Morphogen can build a high-level convenience operator that automatically fixes common issues.
 
 ### 8.1 Operator
 
-```kairo
+```morphogen
 video.fix(input: String, output: String, options: FixOptions = {}) -> File
 ```
 
 **FixOptions:**
-```kairo
+```morphogen
 struct FixOptions {
     detect_sync: bool = true
     detect_color_cast: bool = true
@@ -628,7 +628,7 @@ struct FixOptions {
 
 ### 8.2 Implementation
 
-```kairo
+```morphogen
 fn video.fix(input: String, output: String, options: FixOptions) -> File {
     # Decode
     video = video.decode(input)
@@ -678,7 +678,7 @@ fn video.fix(input: String, output: String, options: FixOptions) -> File {
 
 ### 8.3 Usage
 
-```kairo
+```morphogen
 # One-liner to fix common issues
 video.fix("raw_footage.mp4", "fixed_footage.mp4")
 
@@ -696,7 +696,7 @@ video.fix("raw_footage.mp4", "fixed_footage.mp4", options={
 
 ---
 
-## 9. What Kairo Gains
+## 9. What Morphogen Gains
 
 ### 9.1 New Major Domains
 
@@ -728,16 +728,16 @@ video.fix("raw_footage.mp4", "fixed_footage.mp4", options={
 
 ### 9.3 Cross-Domain Integration
 
-Kairo.Video naturally integrates with existing domains:
+Morphogen.Video naturally integrates with existing domains:
 
 **Video ↔ Audio:**
-```kairo
+```morphogen
 audio = video.to_audio(video_stream)
 video = video.add_audio(video_stream, audio_stream)
 ```
 
 **Video ↔ Vision:**
-```kairo
+```morphogen
 frames = video.to_frames(video_stream)
 analysis = vision.detect_objects(frames)
 annotated = vision.draw_bboxes(frames, analysis)
@@ -745,7 +745,7 @@ video_out = video.from_frames(annotated)
 ```
 
 **Video ↔ Geometry (3D rendering):**
-```kairo
+```morphogen
 # Render 3D scene to video frames
 geometry = geometry.load("model.obj")
 camera = camera.orbit(center=(0,0,0), radius=5.0, frames=300)
@@ -755,7 +755,7 @@ video.encode(video, codec.h264(crf=18), "render.mp4")
 ```
 
 **Video ↔ Fields (Fluid overlay):**
-```kairo
+```morphogen
 # Render fluid simulation as video overlay
 @state vel : Field2D<Vec2<f32>> = zeros((1920, 1080))
 
@@ -799,18 +799,18 @@ composited = video.overlay(base, video, x=0, y=0, opacity=0.5)
 
 ## 11. ffmpeg Integration Strategy
 
-Kairo doesn't need to reimplement ffmpeg — it can **orchestrate** ffmpeg as a backend.
+Morphogen doesn't need to reimplement ffmpeg — it can **orchestrate** ffmpeg as a backend.
 
 ### 11.1 Backend Architecture
 
 ```
-Kairo Pipeline → Graph IR → Backend Compiler → ffmpeg command
+Morphogen Pipeline → Graph IR → Backend Compiler → ffmpeg command
 ```
 
 **Example:**
 
-**Kairo code:**
-```kairo
+**Morphogen code:**
+```morphogen
 pipeline:
   - input = video.decode("input.mp4")
   - scaled = video.scale(input, width=1920, height=1080)
@@ -829,15 +829,15 @@ ffmpeg -i input.mp4 \
 ### 11.2 Advantages
 
 - **No reimplementation:** Leverage ffmpeg's 20+ years of codec/filter development
-- **Type safety:** Kairo validates parameters at compile time
+- **Type safety:** Morphogen validates parameters at compile time
 - **Composability:** Pipelines are first-class objects
-- **Determinism:** Same Kairo code → same ffmpeg command → same output
-- **Optimization:** Kairo can optimize filter graphs before compilation
-- **GPU awareness:** Kairo can auto-select hardware codecs based on system
+- **Determinism:** Same Morphogen code → same ffmpeg command → same output
+- **Optimization:** Morphogen can optimize filter graphs before compilation
+- **GPU awareness:** Morphogen can auto-select hardware codecs based on system
 
 ### 11.3 Alternative Backends
 
-For performance-critical or embedded use cases, Kairo can also target:
+For performance-critical or embedded use cases, Morphogen can also target:
 
 - **Custom C++ backend:** Direct codec/filter implementation
 - **GStreamer:** Alternative multimedia framework
@@ -852,8 +852,8 @@ For performance-critical or embedded use cases, Kairo can also target:
 
 **Problem:** Prepare raw footage for YouTube upload (1080p, H.264, stereo audio, normalized loudness).
 
-**Kairo solution:**
-```kairo
+**Morphogen solution:**
+```morphogen
 pipeline:
   - video = video.decode("raw_footage.mov")
   - audio = video.to_audio(video)
@@ -879,8 +879,8 @@ pipeline:
 
 **Problem:** Normalize loudness, remove background noise, add intro/outro music.
 
-**Kairo solution:**
-```kairo
+**Morphogen solution:**
+```morphogen
 pipeline:
   - dialogue = audio.decode("raw_dialogue.wav")
   - intro = audio.decode("intro_music.wav")
@@ -909,8 +909,8 @@ pipeline:
 
 **Problem:** Sync 3 camera angles from a concert (different start times, slight drift).
 
-**Kairo solution:**
-```kairo
+**Morphogen solution:**
+```morphogen
 pipeline:
   - cam1 = video.decode("cam1.mp4")
   - cam2 = video.decode("cam2.mp4")
@@ -947,8 +947,8 @@ pipeline:
 
 **Problem:** Convert 500 old MOV files (ProRes) to modern H.265 (HEVC) for storage.
 
-**Kairo solution:**
-```kairo
+**Morphogen solution:**
+```morphogen
 # Parallel batch processing (8 concurrent encodes)
 batch.parallel(n=8,
   batch.map("archive/*.mov", fn=(file) => {
@@ -965,8 +965,8 @@ batch.parallel(n=8,
 
 **Problem:** Upscale 720p footage to 4K using ESRGAN model.
 
-**Kairo solution:**
-```kairo
+**Morphogen solution:**
+```morphogen
 pipeline:
   - video = video.decode("720p_source.mp4")
   - frames = video.to_frames(video)
@@ -997,19 +997,19 @@ pipeline:
 | Sync detection | Reproducible | May vary with algorithm parameters |
 | Batch processing | Order-independent | Parallel execution, deterministic results |
 
-\* **Note:** Some encoders (e.g., x264, x265) are deterministic if run single-threaded. Multi-threaded encoding may introduce non-determinism. Kairo can enforce single-threaded mode for strict determinism.
+\* **Note:** Some encoders (e.g., x264, x265) are deterministic if run single-threaded. Multi-threaded encoding may introduce non-determinism. Morphogen can enforce single-threaded mode for strict determinism.
 
 ### 13.2 Performance Optimization
 
 **Pipeline fusion:**
-```kairo
+```morphogen
 # Before fusion (3 passes):
 scaled = video.scale(input, width=1920, height=1080)
 sharpened = filter.unsharp(scaled, amount=1.5)
 brightened = filter.brightness(sharpened, amount=0.1)
 
 # After fusion (1 pass):
-# Kairo optimizer merges filters into single pass
+# Morphogen optimizer merges filters into single pass
 output = video.apply_filters(input, [
     scale(1920, 1080),
     unsharp(1.5),
@@ -1018,7 +1018,7 @@ output = video.apply_filters(input, [
 ```
 
 **GPU offloading:**
-```kairo
+```morphogen
 # Automatically detect GPU and offload heavy operations
 config = gpu.auto_detect()  # Returns: {backend: "nvenc", available: true}
 
@@ -1030,7 +1030,7 @@ if config.available {
 ```
 
 **Parallel batch processing:**
-```kairo
+```morphogen
 # Process 100 videos using all CPU cores
 batch.parallel(n=cpu.cores(),
     batch.map("videos/*.mp4", encode_pipeline)
@@ -1039,13 +1039,13 @@ batch.parallel(n=cpu.cores(),
 
 ---
 
-## 14. Integration with Existing Kairo Domains
+## 14. Integration with Existing Morphogen Domains
 
 ### 14.1 Audio Domain
 
 **Already implemented in v0.5.0 and v0.6.0!**
 
-Kairo.Video extends the existing Audio domain with filtering and sync operations.
+Morphogen.Video extends the existing Audio domain with filtering and sync operations.
 
 **Existing operators:**
 - `audio.play()` — Real-time playback
@@ -1053,19 +1053,19 @@ Kairo.Video extends the existing Audio domain with filtering and sync operations
 - `audio.load()` — Load audio files
 - `audio.record()` — Microphone recording
 
-**New operators (Kairo.Video):**
+**New operators (Morphogen.Video):**
 - `audio.loudnorm()` — EBU R128 loudness normalization
 - `audio.compress()` — Dynamics compression
 - `audio.delay()` — Time delay
 - `audio.sync_to()` — Sync to video stream
 
 **Cross-domain example:**
-```kairo
+```morphogen
 # Load video, process audio with existing Audio domain
 video = video.decode("concert.mp4")
 audio = video.to_audio(video)
 
-# Use Kairo.Audio operators
+# Use Morphogen.Audio operators
 audio = audio |> reverb(mix=0.2) |> limiter(threshold=-1.0)
 
 # Add back to video
@@ -1079,19 +1079,19 @@ video.encode(video, codec.h264(crf=18), "concert_processed.mp4")
 
 **Already implemented in v0.6.0!**
 
-Kairo.Video extends the Visual domain to export video instead of static images.
+Morphogen.Video extends the Visual domain to export video instead of static images.
 
 **Existing operators:**
 - `visual.save()` — PNG/JPEG export
 - `visual.show()` — Interactive display
 - `visual.video()` — MP4/GIF export (NEW in v0.6.0!)
 
-**New operators (Kairo.Video):**
+**New operators (Morphogen.Video):**
 - `visual.to_video_stream()` — Convert frame generator to VideoStream
 - `visual.from_video_stream()` — Convert VideoStream to frames
 
 **Cross-domain example:**
-```kairo
+```morphogen
 # Render field simulation as video
 @state temp : Field2D<f32> = random_normal(seed=42, shape=(512, 512))
 
@@ -1104,7 +1104,7 @@ flow(dt=0.01, steps=300) {
 # Export as video (existing v0.6.0 feature)
 visual.video(output_frames, "heat_diffusion.mp4", fps=30)
 
-# Or use new Kairo.Video operators
+# Or use new Morphogen.Video operators
 video = visual.to_video_stream(output_frames, fps=30)
 video = filter.sharpen(video, amount=1.2)  # Apply video filter
 video.encode(video, codec.h265(crf=20), "heat_diffusion_hq.mp4")
@@ -1116,10 +1116,10 @@ video.encode(video, codec.h265(crf=20), "heat_diffusion_hq.mp4")
 
 **Already implemented!**
 
-Kairo.Video can use Transform domain for audio/video analysis.
+Morphogen.Video can use Transform domain for audio/video analysis.
 
 **Cross-domain example:**
-```kairo
+```morphogen
 # Detect sync using cross-correlation (FFT-based)
 audio1_fft = fft(audio1.samples)
 audio2_fft = fft(audio2.samples)
@@ -1135,7 +1135,7 @@ audio2_synced = sync.apply_offset(audio2, offset)
 
 **Example: Particle overlay on video**
 
-```kairo
+```morphogen
 # Simulate particles and render onto video
 @state particles : Agents<Particle> = alloc(count=1000, init=spawn_particle)
 
@@ -1161,7 +1161,7 @@ video.encode(composited, codec.h264(crf=18), "particles_overlay.mp4")
 
 ## 15. Why This Matters
 
-**Kairo becomes the only platform that unifies:**
+**Morphogen becomes the only platform that unifies:**
 
 ✅ **Audio synthesis** (oscillators, filters, effects, physical modeling)
 ✅ **Video encoding** (codecs, filters, transcoding, batch processing)
@@ -1179,7 +1179,7 @@ video.encode(composited, codec.h264(crf=18), "particles_overlay.mp4")
 - Deterministic execution model
 - Cross-domain operators
 
-**This positions Kairo as:**
+**This positions Morphogen as:**
 
 🎬 **Universal multimedia processing platform** (ffmpeg + DaVinci Resolve + Audacity)
 🎛️ **Creative computation kernel** (generative art, music, video)
@@ -1210,28 +1210,28 @@ video.encode(composited, codec.h264(crf=18), "particles_overlay.mp4")
 
 ## 17. Conclusion
 
-**Video encoding, audio/video filtering, sync correction, and ffmpeg-style pipelines fit Kairo perfectly.**
+**Video encoding, audio/video filtering, sync correction, and ffmpeg-style pipelines fit Morphogen perfectly.**
 
-In fact, they map onto Kairo's architecture **better than audio or physics**, because ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs.
+In fact, they map onto Morphogen's architecture **better than audio or physics**, because ffmpeg already behaves like a domain-specific operator graph with streams, filters, and codecs.
 
-**Kairo = operator DAG on structured data**
+**Morphogen = operator DAG on structured data**
 **Video = operator DAG on AV streams**
 
-By adding VideoDomain, AudioFilterDomain, FilterDomain, CodecDomain, SyncDomain, and BatchDomain, Kairo becomes:
+By adding VideoDomain, AudioFilterDomain, FilterDomain, CodecDomain, SyncDomain, and BatchDomain, Morphogen becomes:
 
 ✅ **Cleaner than ffmpeg** (typed operators, composable pipelines)
 ✅ **More powerful than ffmpeg** (GPU-aware, cross-domain integration, AI upscaling)
 ✅ **More deterministic than ffmpeg** (same code → same output, always)
 ✅ **More accessible than DaVinci Resolve** (scripted, batchable, version-controllable)
 
-**This is a huge new slice of capability — but one that fits perfectly with Kairo's core architecture.**
+**This is a huge new slice of capability — but one that fits perfectly with Morphogen's core architecture.**
 
-**Video belongs in Kairo. Let's build it.**
+**Video belongs in Morphogen. Let's build it.**
 
 ---
 
 **Version:** 1.0
 **Status:** Specification (Ready for Implementation)
 **Last Updated:** 2025-11-15
-**Author:** Kairo Architecture Team
+**Author:** Morphogen Architecture Team
 **Related Specs:** transform.md, circuit.md, timbre-extraction.md, ../architecture/domain-architecture.md
