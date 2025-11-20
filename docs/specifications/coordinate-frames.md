@@ -9,7 +9,7 @@
 
 ## Overview
 
-This specification defines **coordinate frames** and **anchors** as first-class concepts in Kairo, providing a unified system for spatial, temporal, and structural reference across all domains.
+This specification defines **coordinate frames** and **anchors** as first-class concepts in Morphogen, providing a unified system for spatial, temporal, and structural reference across all domains.
 
 **Key insight from TiaCAD:** Reference-based composition (via anchors) is more compositional, declarative, and robust than hierarchical nesting. This pattern applies far beyond geometry.
 
@@ -17,14 +17,14 @@ This specification defines **coordinate frames** and **anchors** as first-class 
 
 ## Motivation
 
-Across domains, Kairo programs need to:
+Across domains, Morphogen programs need to:
 
 1. **Reference locations** — in space, time, signal chains, or abstract graphs
 2. **Compose transformations** — rotations, translations, warps, with clear origins
 3. **Express intent declaratively** — "align these two points" rather than "translate by (compute offset)"
 4. **Maintain determinism** — explicit frames prevent hidden state and frame-of-reference bugs
 
-**Problem:** Current Kairo has implicit coordinate systems. Fields assume global grids. Transforms lack explicit origins. Composition is manual.
+**Problem:** Current Morphogen has implicit coordinate systems. Fields assume global grids. Transforms lack explicit origins. Composition is manual.
 
 **Solution:** Introduce frames and anchors as typed, first-class objects that work uniformly across geometry, audio, physics, agents, fields, and visuals.
 
@@ -47,7 +47,7 @@ A **coordinate frame** is a local coordinate system defined by:
 - Frames carry metadata (bounds, centering, units)
 
 **Type signature:**
-```kairo
+```morphogen
 Frame<Dim, CoordType, Units>
   Dim: 1 | 2 | 3 | Time | Frequency | ...
   CoordType: Cartesian | Polar | Spherical | Cylindrical | ...
@@ -55,7 +55,7 @@ Frame<Dim, CoordType, Units>
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # 2D Cartesian frame with meter units
 let world_frame = Frame<2, Cartesian, m>(
     origin = (0.0, 0.0),
@@ -94,7 +94,7 @@ An **anchor** is a named reference point within an object or field, defined in a
 | **Visuals** | `.pivot`, `.camera`, `.light_source`, `.layer_origin` |
 
 **Type signature:**
-```kairo
+```morphogen
 Anchor<Frame, T>
   Frame: Coordinate frame the anchor is defined in
   T: Type of anchored object (Mesh, Signal, Body, Agent, Field, ...)
@@ -107,7 +107,7 @@ Anchor<Frame, T>
 - Anchors are **named** and **queryable**
 
 **Examples:**
-```kairo
+```morphogen
 # Geometric anchors (auto-generated for meshes)
 let box = mesh.box(width=10, height=5, depth=3)
 let top_face = box.anchor("face_top")      # Returns Anchor<3, Mesh>
@@ -134,7 +134,7 @@ let sensor = robot.anchor("lidar")
 ### 3. Reference-Based Composition
 
 **Traditional hierarchical composition** (problematic):
-```kairo
+```morphogen
 # Implicit parent-child nesting
 scene.add_child(part_A)
 part_A.add_child(part_B)  # B's position depends on A's transform
@@ -147,7 +147,7 @@ part_A.rotate(45)          # Implicitly affects B (hidden coupling)
 - Hard to refactor (changing hierarchy breaks everything)
 
 **Reference-based composition** (TiaCAD model):
-```kairo
+```morphogen
 # Flat object registry + explicit references
 let part_A = mesh.box(...)
 let part_B = mesh.cylinder(...)
@@ -187,7 +187,7 @@ All transformations must specify:
 | Warp | `mapping: Field<Dim, Dim>` | Repro (if field is repro) |
 
 **Examples:**
-```kairo
+```morphogen
 # Rotation with explicit origin
 let rotated = transform.affine(
     mesh,
@@ -213,7 +213,7 @@ let new_frame = frame.transform(
 ```
 
 **Contrast with implicit transforms:**
-```kairo
+```morphogen
 # ❌ Implicit origin (ambiguous!)
 let rotated = transform.rotate(mesh, 45 deg)  # Rotate around what?
 
@@ -231,7 +231,7 @@ let rotated = transform.rotate(
 
 ### Frame Types
 
-```kairo
+```morphogen
 # Generic frame
 Frame<Dim, CoordType, Units>
 
@@ -244,7 +244,7 @@ Frame<Frequency, Log, Hz>          # Log-frequency frame (audio)
 
 ### Anchor Types
 
-```kairo
+```morphogen
 # Generic anchor
 Anchor<Frame, T>
 
@@ -256,7 +256,7 @@ Anchor<Frame<2, Cartesian, m>, Agent>    # 2D agent position anchor
 
 ### Transform Types
 
-```kairo
+```morphogen
 # Transform between frames
 Transform<Frame_A, Frame_B>
 
@@ -276,7 +276,7 @@ CoordConversion<CoordType_A, CoordType_B>
 
 #### Frame Management
 
-```kairo
+```morphogen
 frame.create(
     dim: Int,
     coord_type: CoordType,
@@ -287,14 +287,14 @@ frame.create(
 ) -> Frame<Dim, CoordType, Units>
 ```
 
-```kairo
+```morphogen
 frame.transform(
     frame: Frame<Dim, CT, U>,
     operations: [(TransformOp, Params)]
 ) -> Frame<Dim, CT, U>
 ```
 
-```kairo
+```morphogen
 frame.to_parent(
     child_frame: Frame<Dim, CT, U>,
     point: Vec<Dim>
@@ -304,7 +304,7 @@ frame.to_parent(
 
 #### Anchor Operations
 
-```kairo
+```morphogen
 anchor.create(
     name: String,
     object: T,
@@ -313,7 +313,7 @@ anchor.create(
 ) -> Anchor<Frame<Dim, _, _>, T>
 ```
 
-```kairo
+```morphogen
 anchor.resolve(
     object: T,
     name: String | Pattern
@@ -321,7 +321,7 @@ anchor.resolve(
 # Query anchor by name (e.g., "face_top", ">Z" for highest Z face)
 ```
 
-```kairo
+```morphogen
 anchor.position(anchor: Anchor<F, T>) -> Vec<Dim>
 anchor.orientation(anchor: Anchor<F, T>) -> Mat<Dim, Dim>
 anchor.frame(anchor: Anchor<F, T>) -> F
@@ -329,7 +329,7 @@ anchor.frame(anchor: Anchor<F, T>) -> F
 
 #### Placement & Alignment
 
-```kairo
+```morphogen
 object.place(
     object: T,
     anchor: Anchor<F, T>,
@@ -339,7 +339,7 @@ object.place(
 # Place object such that its anchor coincides with target
 ```
 
-```kairo
+```morphogen
 object.align(
     objects: [T],
     anchors: [Anchor<F, T>],
@@ -350,7 +350,7 @@ object.align(
 
 #### Coordinate Conversions
 
-```kairo
+```morphogen
 transform.to_coord(
     field: Field<T, Frame<Dim, CT_A, U>>,
     coord_type: CT_B
@@ -360,7 +360,7 @@ transform.to_coord(
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Cartesian to polar
 let polar_field = transform.to_coord(
     cartesian_field,
@@ -382,7 +382,7 @@ let spherical = transform.to_coord(
 
 **Use case:** Assemble parts declaratively
 
-```kairo
+```morphogen
 let base = mesh.box(width=10, height=2, depth=10)
 let column = mesh.cylinder(radius=1, height=8)
 let top = mesh.cone(radius=2, height=3)
@@ -407,7 +407,7 @@ let tower = [
 
 **Use case:** Align beats, onsets, or markers
 
-```kairo
+```morphogen
 let kick = audio.load("kick.wav")
 let snare = audio.load("snare.wav")
 
@@ -432,7 +432,7 @@ let aligned = signal.place(
 
 **Use case:** Define joints between bodies
 
-```kairo
+```morphogen
 let body_A = physics.rigid_body(shape=box_A)
 let body_B = physics.rigid_body(shape=box_B)
 
@@ -457,7 +457,7 @@ let joint = physics.hinge_joint(
 
 **Use case:** Sensor placement, waypoints
 
-```kairo
+```morphogen
 let robot = agent.create(model="quadrotor")
 
 # Define sensor anchors
@@ -481,7 +481,7 @@ let camera_frame = robot.anchor("camera").frame()
 
 **Use case:** Sample points, boundary conditions
 
-```kairo
+```morphogen
 let temperature_field = field.zeros(shape=(100, 100))
 
 # Define boundary anchors
@@ -508,7 +508,7 @@ temperature_field = field.set(
 
 **Use case:** Pivot points, camera frames
 
-```kairo
+```morphogen
 let sprite = visual.load("character.png")
 
 # Rotate around custom pivot (not top-left corner)
@@ -559,7 +559,7 @@ let rendered = visual.render(
 
 Support flexible anchor queries:
 
-```kairo
+```morphogen
 # Direct name lookup
 box.anchor("face_top")
 
@@ -605,8 +605,8 @@ All frame/anchor operations respect determinism profiles:
 
 ### 5. MLIR Lowering
 
-**Kairo IR (frontend):**
-```kairo
+**Morphogen IR (frontend):**
+```morphogen
 let placed = mesh.place(
     part,
     anchor = part.anchor("base"),
@@ -633,7 +633,7 @@ let placed = mesh.place(
 
 ---
 
-## Integration with Existing Kairo Dialects
+## Integration with Existing Morphogen Dialects
 
 ### Transform Dialect
 
@@ -645,7 +645,7 @@ let placed = mesh.place(
 - Explicit origin for all affine transforms
 
 **Example:**
-```kairo
+```morphogen
 # Old (implicit)
 let rotated = transform.rotate(mesh, 45 deg)  # Rotate around origin?
 
@@ -665,7 +665,7 @@ let rotated = transform.rotate(
 
 Fields now carry explicit coordinate frames:
 
-```kairo
+```morphogen
 # Field with Cartesian frame
 let cartesian_field: Field<f64, Frame<2, Cartesian, m>> = field.zeros(
     shape = (100, 100),
@@ -683,7 +683,7 @@ let polar_field: Field<f64, Frame<2, Polar, (m, rad)>> = transform.to_coord(
 
 Add frame/anchor types:
 
-```kairo
+```morphogen
 # New primitive types
 Frame<Dim, CoordType, Units>
 Anchor<Frame, T>
@@ -701,7 +701,7 @@ Frame<Frequency, Log, Hz>    # Frequency units
 
 ### Example 1: CAD Assembly (Geometry)
 
-```kairo
+```morphogen
 # Define parts
 let base_plate = mesh.box(width=20, depth=20, height=2)
 let pillar = mesh.cylinder(radius=1.5, height=10)
@@ -738,7 +738,7 @@ let rotated_assembly = assembly |> map(λ part:
 
 ### Example 2: Beat-Aligned Audio (Audio)
 
-```kairo
+```morphogen
 # Load samples
 let kick = audio.load("kick.wav")
 let snare = audio.load("snare.wav")
@@ -761,7 +761,7 @@ let mixed = signal.mix(pattern)
 
 ### Example 3: Physics Joint (Physics)
 
-```kairo
+```morphogen
 # Create rigid bodies
 let body_A = physics.rigid_body(
     shape = mesh.box(width=5, height=2, depth=3),
@@ -794,7 +794,7 @@ let sim = physics.simulate(
 
 ### Example 4: Agent Sensors (Agents)
 
-```kairo
+```morphogen
 # Create agent
 let drone = agent.create(model="quadrotor")
 
@@ -824,7 +824,7 @@ let camera_view = visual.render(
 
 ### Example 5: Field Boundary Conditions (Fields)
 
-```kairo
+```morphogen
 # Create temperature field
 let temp = field.zeros(shape=(100, 100), frame=cartesian_2d)
 
@@ -866,7 +866,7 @@ let center_temp = field.sample(steady_state, at=.anchor("center"))
 
 All operations must pass golden tests:
 
-```kairo
+```morphogen
 # Frame creation is deterministic
 assert_eq!(
     frame.create(dim=2, coord_type=Cartesian),
@@ -890,7 +890,7 @@ assert_mesh_eq!(placed_1, placed_2, tolerance=1e-12)
 
 Verify composition is explicit and ordered:
 
-```kairo
+```morphogen
 # Order matters
 let A = mesh |> translate(...) |> rotate(...)
 let B = mesh |> rotate(...) |> translate(...)
@@ -910,7 +910,7 @@ assert_position_eq!(
 
 ### 1. Anchor Arithmetic
 
-```kairo
+```morphogen
 # Midpoint between two anchors
 let mid = anchor.midpoint(anchor_A, anchor_B)
 
@@ -920,7 +920,7 @@ let offset = anchor.offset(anchor, delta=(1, 0, 0))
 
 ### 2. Constraint-Based Placement
 
-```kairo
+```morphogen
 # Solve for positions satisfying constraints
 let positioned = constraint.solve([
     distance(part_A.anchor("center"), part_B.anchor("center")) == 10.0,
@@ -931,7 +931,7 @@ let positioned = constraint.solve([
 
 ### 3. Dynamic Anchors
 
-```kairo
+```morphogen
 # Anchor that tracks moving object
 let trajectory = physics.simulate(body)
 let moving_anchor = anchor.dynamic(
@@ -943,7 +943,7 @@ let moving_anchor = anchor.dynamic(
 
 ### 4. Anchor Visualization (Debug)
 
-```kairo
+```morphogen
 # Render anchors for debugging
 let debug_view = visual.render(
     mesh,
@@ -974,7 +974,7 @@ let debug_view = visual.render(
 4. **Type safety** — frames/anchors are typed, preventing frame-of-reference bugs
 5. **Better UX** — users think in terms of "align these points", not "compute offset and apply"
 
-This system is inspired by TiaCAD's reference-based composition model, generalized to all Kairo domains.
+This system is inspired by TiaCAD's reference-based composition model, generalized to all Morphogen domains.
 
 **Key insight:** Anchors unify positional (geometry), temporal (audio), structural (graphs), and abstract (latent spaces) references into a single coherent model.
 

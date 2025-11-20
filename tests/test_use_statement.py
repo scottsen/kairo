@@ -1,11 +1,11 @@
 """Tests for the use statement functionality."""
 
 import pytest
-from kairo.lexer.lexer import Lexer, TokenType
-from kairo.parser.parser import Parser
-from kairo.ast.nodes import Use, Program
-from kairo.runtime.runtime import Runtime, ExecutionContext
-from kairo.core.domain_registry import DomainRegistry
+from morphogen.lexer.lexer import Lexer, TokenType
+from morphogen.parser.parser import Parser
+from morphogen.ast.nodes import Use, Program
+from morphogen.runtime.runtime import Runtime, ExecutionContext
+from morphogen.core.domain_registry import DomainRegistry
 
 
 class TestUseLexer:

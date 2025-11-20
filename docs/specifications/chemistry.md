@@ -1,4 +1,4 @@
-# Kairo Chemistry Domain Specification
+# Morphogen Chemistry Domain Specification
 
 **Version**: 1.0
 **Status**: Proposed
@@ -8,9 +8,9 @@
 
 ## Overview
 
-This document specifies the **Chemistry and Chemical Engineering domain** for Kairo. It defines eight sub-domains covering molecular simulation, reaction kinetics, quantum chemistry, transport phenomena, multiphase systems, thermodynamics, catalysis, and electrochemistry.
+This document specifies the **Chemistry and Chemical Engineering domain** for Morphogen. It defines eight sub-domains covering molecular simulation, reaction kinetics, quantum chemistry, transport phenomena, multiphase systems, thermodynamics, catalysis, and electrochemistry.
 
-The chemistry domain leverages Kairo's existing infrastructure:
+The chemistry domain leverages Morphogen's existing infrastructure:
 - **Operator graph paradigm** to wrap external solvers
 - **Field operators** for PDEs (diffusion, advection, reaction)
 - **Agent operators** for particle-based methods
@@ -41,7 +41,7 @@ Represent, manipulate, and analyze molecular structures. Perform classical molec
 
 ### Types
 
-```kairo
+```morphogen
 struct Molecule {
     atoms: Vec<Atom>,
     bonds: Vec<Bond>,
@@ -81,7 +81,7 @@ struct ForceField {
 
 #### 1.1 Loading & Conversion
 
-```kairo
+```morphogen
 # Load from various formats
 molecule = molecular.load_smiles("CCO")  # SMILES string
 molecule = molecular.load_pdb("protein.pdb")  # PDB file
@@ -100,7 +100,7 @@ molecule = molecular.generate_3d(molecule, force_field="uff")
 
 #### 1.2 Molecular Properties
 
-```kairo
+```morphogen
 # Basic properties
 mw = molecular.molecular_weight(molecule) -> f32 [g/mol]
 formula = molecular.molecular_formula(molecule) -> String
@@ -125,7 +125,7 @@ hbond_acceptors = molecular.count_hbond_acceptors(molecule) -> u32
 
 #### 1.3 Force Field Calculations
 
-```kairo
+```morphogen
 # Energy calculation
 energy = molecular.compute_energy(
     molecule,
@@ -149,7 +149,7 @@ electrostatic = molecular.electrostatic_energy(molecule, force_field)
 
 #### 1.4 Geometry Optimization
 
-```kairo
+```morphogen
 # Minimize energy
 molecule_opt = molecular.optimize_geometry(
     molecule,
@@ -172,7 +172,7 @@ molecule_opt = molecular.optimize_constrained(
 
 #### 1.5 Conformer Generation
 
-```kairo
+```morphogen
 # Generate conformers
 conformers = molecular.generate_conformers(
     molecule,
@@ -192,7 +192,7 @@ clusters = molecular.cluster_conformers(
 
 #### 1.6 Molecular Dynamics
 
-```kairo
+```morphogen
 # Neighbor list (for efficient force calculation)
 neighbors = molecular.compute_neighbor_list(
     molecule,
@@ -242,7 +242,7 @@ trajectory = molecular.md_simulate(
 
 #### 1.7 Trajectory Analysis
 
-```kairo
+```morphogen
 # RMSD
 rmsd = molecular.rmsd(molecule1, molecule2, align=true) -> f32 [Angstrom]
 rmsd_traj = molecular.rmsd_trajectory(trajectory, reference=trajectory.frames[0])
@@ -270,7 +270,7 @@ Model chemical reaction rates, reactor behavior, and reaction networks.
 
 ### Types
 
-```kairo
+```morphogen
 struct Reaction {
     reactants: Map<String, f32>,  # species -> stoichiometry
     products: Map<String, f32>,
@@ -303,7 +303,7 @@ enum ReactorType {
 
 #### 2.1 Rate Laws
 
-```kairo
+```morphogen
 # Arrhenius kinetics
 k = kinetics.arrhenius(
     temp=350.0 [K],
@@ -329,7 +329,7 @@ K_eq = kinetics.vant_hoff(
 
 #### 2.2 Reaction Networks
 
-```kairo
+```morphogen
 # Define reaction network
 reactions = [
     kinetics.reaction(
@@ -363,7 +363,7 @@ conc_new = kinetics.integrate_ode(
 
 #### 2.3 Ideal Reactors
 
-```kairo
+```morphogen
 # Batch reactor
 result = kinetics.batch_reactor(
     initial_conc={"A": 1.0 [mol/L]},
@@ -394,7 +394,7 @@ conc_profile = kinetics.pfr(
 
 #### 2.4 Non-Ideal Reactors
 
-```kairo
+```morphogen
 # Mass-transfer-limited reaction
 k_eff = kinetics.mass_transfer_limited(
     k_intrinsic=1e6 [1/s],
@@ -423,7 +423,7 @@ Interface with quantum chemistry codes (DFT, ab initio) and ML surrogate models.
 
 #### 3.1 DFT Calculations
 
-```kairo
+```morphogen
 # Single-point energy
 energy = qchem.dft_energy(
     molecule,
@@ -465,7 +465,7 @@ ts_molecule, energy = qchem.find_transition_state(
 
 #### 3.2 Semi-Empirical Methods
 
-```kairo
+```morphogen
 # Faster, less accurate methods
 energy = qchem.semi_empirical(
     molecule,
@@ -475,7 +475,7 @@ energy = qchem.semi_empirical(
 
 #### 3.3 ML Potential Energy Surfaces
 
-```kairo
+```morphogen
 # Predict energy with neural network
 energy = qchem.ml_pes(
     molecule,
@@ -513,7 +513,7 @@ Heat transfer, mass diffusion, convection, and porous media transport.
 
 #### 4.1 Heat Transfer
 
-```kairo
+```morphogen
 # Conduction (Fourier's law)
 q = transport.conduction(
     temp_gradient=10.0 [K/m],
@@ -547,7 +547,7 @@ h = transport.nusselt_correlation(
 
 #### 4.2 Mass Transfer
 
-```kairo
+```morphogen
 # Fickian diffusion
 flux = transport.fickian_diffusion(
     conc_gradient=0.1 [mol/(m³·m)],
@@ -580,7 +580,7 @@ k_L = transport.sherwood_correlation(
 
 #### 4.3 Porous Media
 
-```kairo
+```morphogen
 # Effective diffusivity
 D_eff = transport.effective_diffusivity(
     D_molecular=1e-9 [m²/s],
@@ -608,7 +608,7 @@ Vapor-liquid equilibrium, gas-liquid reactions, multiphase flow.
 
 #### 5.1 Vapor-Liquid Equilibrium
 
-```kairo
+```morphogen
 # Flash calculation
 y_vapor, x_liquid = multiphase.vle_flash(
     feed_composition=[0.5, 0.5],
@@ -632,7 +632,7 @@ temp_dew = multiphase.dew_point(
 
 #### 5.2 Gas-Liquid Reactions
 
-```kairo
+```morphogen
 # Volumetric mass transfer coefficient
 k_L_a = multiphase.volumetric_mass_transfer(
     bubble_diameter=1.0 [mm],
@@ -660,7 +660,7 @@ Equations of state, activity coefficients, thermodynamic properties.
 
 ### Operators
 
-```kairo
+```morphogen
 # Peng-Robinson EOS
 Z = thermo.peng_robinson(
     temp=350.0 [K],
@@ -704,7 +704,7 @@ Heterogeneous catalysis, surface reactions, catalyst characterization.
 
 #### 7.1 Surface Kinetics
 
-```kairo
+```morphogen
 # Langmuir-Hinshelwood mechanism
 rate = catalysis.langmuir_hinshelwood(
     coverage_A=0.5,
@@ -731,7 +731,7 @@ coverage_new = catalysis.surface_coverage_step(
 
 #### 7.2 Catalyst Characterization
 
-```kairo
+```morphogen
 # BET surface area
 surface_area = catalysis.bet_surface_area(
     adsorption_isotherm=[...],
@@ -755,7 +755,7 @@ Batteries, fuel cells, electrolysis, corrosion.
 
 ### Operators
 
-```kairo
+```morphogen
 # Butler-Volmer kinetics
 i = electrochem.butler_volmer(
     overpotential=0.1 [V],
@@ -784,13 +784,13 @@ voltage = electrochem.battery_discharge(
 
 ---
 
-## Integration with Existing Kairo Domains
+## Integration with Existing Morphogen Domains
 
 ### Field Domain (Already Exists)
 
 Chemistry leverages existing field operators for spatially-resolved simulations:
 
-```kairo
+```morphogen
 use field, kinetics
 
 # Reaction-diffusion in 3D reactor
@@ -814,7 +814,7 @@ flow(dt=0.1 [s]) {
 
 Chemistry uses existing optimization operators for design:
 
-```kairo
+```morphogen
 use optimization, molecular
 
 # Optimize catalyst structure
@@ -840,7 +840,7 @@ pareto_front = optimize.nsga2(
 
 Chemistry adds ML operators for surrogate models and generative design:
 
-```kairo
+```morphogen
 # Train surrogate model
 surrogate = ml.train_surrogate(
     expensive_dft_calculation,
@@ -907,7 +907,7 @@ new_molecules = generator.sample(n=100)
 - **ORCA/Psi4/Q-Chem** — Quantum chemistry (external executables)
 - **SchNet/TorchMD** — ML potential energy surfaces
 
-### Kairo Core (Required)
+### Morphogen Core (Required)
 
 - Field operators (diffusion, advection, Laplacian)
 - Agent operators (particle systems)
@@ -921,7 +921,7 @@ new_molecules = generator.sample(n=100)
 
 ### Example 1: Catalyst Design with ML
 
-```kairo
+```morphogen
 use molecular, qchem, ml, optimization
 
 # Define objective: catalyst activity
@@ -952,7 +952,7 @@ final_activity = catalyst_activity(best_catalyst)
 
 ### Example 2: Multiphysics Reactor Simulation
 
-```kairo
+```morphogen
 use field, kinetics, transport, visual
 
 @state conc : Field3D<f32 [mol/m³]> = uniform(1.0)
@@ -986,7 +986,7 @@ flow(dt=0.01 [s], steps=10000) {
 - **Specification**: COMPLETE
 - **Implementation**: NOT STARTED
 - **Dependencies**: RDKit, SciPy, optional external QM codes
-- **Target**: Kairo v0.9.0+
+- **Target**: Morphogen v0.9.0+
 
 ---
 

@@ -18,7 +18,7 @@ Key Rules:
 """
 
 import numpy as np
-from kairo.stdlib import cellular, visual, palette, image, color
+from morphogen.stdlib import cellular, visual, palette, image, color
 
 def visualize_wolfram_history(history, colormap='binary'):
     """Visualize Wolfram CA evolution history as a 2D image.

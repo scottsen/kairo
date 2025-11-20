@@ -15,7 +15,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.optimization import (
+from morphogen.stdlib.optimization import (
     DifferentialEvolution,
     CMAES,
     ParticleSwarmOptimization,

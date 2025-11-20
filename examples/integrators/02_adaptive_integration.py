@@ -8,7 +8,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.integrators import adaptive_integrate, rk4
+from morphogen.stdlib.integrators import adaptive_integrate, rk4
 
 
 def van_der_pol(t, state):

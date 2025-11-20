@@ -24,12 +24,12 @@ Run: python examples/audio_visualizer/real_time_demo.py
 
 import numpy as np
 from pathlib import Path
-from kairo.stdlib import (
+from morphogen.stdlib import (
     audio, field, cellular, palette, visual,
     signal, noise, image, color
 )
-from kairo.stdlib.field import Field2D
-from kairo.stdlib.audio import AudioBuffer
+from morphogen.stdlib.field import Field2D
+from morphogen.stdlib.audio import AudioBuffer
 
 
 # ============================================================================

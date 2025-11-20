@@ -2,8 +2,8 @@
 
 import pytest
 import numpy as np
-from kairo.stdlib.agents import agents, particle_behaviors, Agents
-from kairo.stdlib.visual import visual, Visual
+from morphogen.stdlib.agents import agents, particle_behaviors, Agents
+from morphogen.stdlib.visual import visual, Visual
 
 
 class TestParticleEmission:

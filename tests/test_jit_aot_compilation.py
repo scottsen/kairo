@@ -22,14 +22,14 @@ from pathlib import Path
 
 # Try to import MLIR components
 try:
-    from kairo.mlir.context import KairoMLIRContext
-    from kairo.mlir.lowering import (
+    from morphogen.mlir.context import KairoMLIRContext
+    from morphogen.mlir.lowering import (
         SCFToLLVMPass,
         create_scf_to_llvm_pass,
         lower_to_llvm,
         MLIR_AVAILABLE
     )
-    from kairo.mlir.codegen import (
+    from morphogen.mlir.codegen import (
         KairoJIT,
         KairoAOT,
         ExecutionEngine,

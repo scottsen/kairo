@@ -1,10 +1,10 @@
-# Getting Started with Kairo
+# Getting Started with Morphogen
 
-Welcome to Kairo! This guide will help you get up and running in under 30 minutes.
+Welcome to Morphogen! This guide will help you get up and running in under 30 minutes.
 
-## What is Kairo?
+## What is Morphogen?
 
-**Kairo** is a typed, deterministic domain-specific language for creative computation. It unifies **simulation**, **sound**, **visualization**, and **procedural design** within a single, reproducible execution model.
+**Morphogen** is a typed, deterministic domain-specific language for creative computation. It unifies **simulation**, **sound**, **visualization**, and **procedural design** within a single, reproducible execution model.
 
 ### Key Features
 
@@ -28,14 +28,14 @@ Welcome to Kairo! This guide will help you get up and running in under 30 minute
 
 ```bash
 # Clone the repository
-git clone https://github.com/scottsen/kairo.git
+git clone https://github.com/scottsen/morphogen.git
 cd kairo
 
 # Install the package
 pip install -e .
 ```
 
-This will install Kairo and its core dependencies:
+This will install Morphogen and its core dependencies:
 - **numpy** - For numerical operations
 - **pillow** - For image output
 
@@ -60,7 +60,7 @@ This adds:
 kairo --version
 
 # You should see:
-# Kairo v0.6.0 (stable) / v0.7.0-dev (development)
+# Morphogen v0.6.0 (stable) / v0.7.0-dev (development)
 ```
 
 ---
@@ -73,7 +73,7 @@ Let's create a simple heat diffusion simulation to understand the basics.
 
 Create a new file called `hello.kairo`:
 
-```kairo
+```morphogen
 # hello.kairo - Heat diffusion simulation
 
 use field, visual
@@ -107,9 +107,9 @@ You should see a visualization of heat spreading across the field, smoothing out
 
 ### 1. Temporal Model - `flow` blocks
 
-Kairo programs describe time-evolving systems through `flow` blocks:
+Morphogen programs describe time-evolving systems through `flow` blocks:
 
-```kairo
+```morphogen
 flow(dt=0.01, steps=1000) {
     # This block executes 1000 times with timestep 0.01
     temp = diffuse(temp, rate=0.1, dt)
@@ -125,7 +125,7 @@ flow(dt=0.01, steps=1000) {
 
 Persistent variables are declared with `@state`:
 
-```kairo
+```morphogen
 @state vel : Field2D<Vec2<f32>> = zeros((256, 256))
 @state agents : Agents<Particle> = alloc(count=1000)
 
@@ -141,7 +141,7 @@ flow(dt=0.01) {
 
 Types can carry dimensional information:
 
-```kairo
+```morphogen
 temp : Field2D<f32 [K]>           # Temperature in Kelvin
 pos : Vec2<f32 [m]>               # Position in meters
 vel : Vec2<f32 [m/s]>             # Velocity in m/s
@@ -156,7 +156,7 @@ speed = dist / time               # Implicitly: f32 [m/s]
 
 All randomness is explicit via seeded functions:
 
-```kairo
+```morphogen
 @state field : Field2D<f32> = random_normal(
     seed=42,      # Explicit seed
     shape=(100, 100),
@@ -175,7 +175,7 @@ All randomness is explicit via seeded functions:
 
 For simulations on spatial grids (PDEs, fluid dynamics, reaction-diffusion):
 
-```kairo
+```morphogen
 use field
 
 @state temp : Field2D<f32> = random_normal(seed=42, shape=(256, 256))
@@ -204,7 +204,7 @@ flow(dt=0.1, steps=100) {
 
 For agent-based simulations (particles, boids, crowds):
 
-```kairo
+```morphogen
 use agent
 
 struct Boid {
@@ -235,7 +235,7 @@ flow(dt=0.01, steps=1000) {
 
 For audio synthesis and processing:
 
-```kairo
+```morphogen
 use audio
 
 # Simple synthesis
@@ -263,7 +263,7 @@ audio.save(final, "output.wav")
 
 For visualization and video export:
 
-```kairo
+```morphogen
 use visual
 
 # Colorize fields
@@ -303,7 +303,7 @@ output combined
 
 Create `grayscott.kairo`:
 
-```kairo
+```morphogen
 use field, visual
 
 @state u : Field2D<f32> = ones((256, 256))
@@ -336,7 +336,7 @@ kairo run grayscott.kairo
 
 Create `particles.kairo`:
 
-```kairo
+```morphogen
 use agent, visual
 
 struct Particle {
@@ -379,7 +379,7 @@ flow(dt=0.01, steps=1000) {
 
 Create `synth.kairo`:
 
-```kairo
+```morphogen
 use audio
 
 # Generate a plucked string sound
@@ -398,7 +398,7 @@ audio.save(final, "pluck.wav")
 
 ## Project Structure
 
-A typical Kairo project:
+A typical Morphogen project:
 
 ```
 my-project/
@@ -416,7 +416,7 @@ my-project/
 
 ---
 
-## Running Kairo Programs
+## Running Morphogen Programs
 
 ### Basic Execution
 
@@ -459,7 +459,7 @@ For complete language reference:
 ### 3. Understand the Architecture
 
 For implementors and advanced users:
-- **[ARCHITECTURE.md](../ARCHITECTURE.md)** - Kairo Stack architecture
+- **[ARCHITECTURE.md](../ARCHITECTURE.md)** - Morphogen Stack architecture
 - **[docs/v0.7.0_DESIGN.md](v0.7.0_DESIGN.md)** - MLIR integration roadmap
 
 ### 4. Join the Community
@@ -496,7 +496,7 @@ For implementors and advanced users:
    - 100,000+ agents: Consider spatial hashing optimizations
 
 2. **Force Calculations**: Use spatial hashing for N-body forces
-   ```kairo
+   ```morphogen
    forces = compute_pairwise_forces(
        agents,
        radius=5.0,  # Interaction radius
@@ -535,7 +535,7 @@ MLIR compilation requires additional setup:
 pip install mlir -f https://github.com/makslevental/mlir-wheels/releases/expanded_assets/latest
 ```
 
-If MLIR is not available, Kairo falls back to Python NumPy interpreter.
+If MLIR is not available, Morphogen falls back to Python NumPy interpreter.
 
 ### Simulation Too Slow
 
@@ -580,7 +580,7 @@ See [docs/v0.7.0_DESIGN.md](v0.7.0_DESIGN.md) for the complete roadmap.
 
 ---
 
-**Congratulations!** You're now ready to create your own simulations, sounds, and visualizations with Kairo. Happy coding! 🎨🎵🔬
+**Congratulations!** You're now ready to create your own simulations, sounds, and visualizations with Morphogen. Happy coding! 🎨🎵🔬
 
 ---
 

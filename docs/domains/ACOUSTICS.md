@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Acoustics Domain provides tools for modeling sound wave propagation, resonance, and impedance in 1D, 2D, and 3D acoustic systems. This is a key differentiator for Kairo, bridging physics simulation (fields, fluids) to audio output.
+The Acoustics Domain provides tools for modeling sound wave propagation, resonance, and impedance in 1D, 2D, and 3D acoustic systems. This is a key differentiator for Morphogen, bridging physics simulation (fields, fluids) to audio output.
 
 **Phase 1 Status (v1.0):** 1D waveguide acoustics - COMPLETE ✅
 
@@ -35,14 +35,14 @@ The Acoustics Domain provides tools for modeling sound wave propagation, resonan
 Build digital waveguide from pipe geometry.
 
 ```python
-from kairo.stdlib.acoustics import acoustics, create_pipe
+from morphogen.stdlib.acoustics import acoustics, create_pipe
 
 # Simple pipe
 pipe = create_pipe(diameter=0.025, length=1.0)  # 25mm x 1m
 wg = acoustics.waveguide_from_geometry(pipe, discretization=0.01)
 
 # Expansion chamber (muffler)
-from kairo.stdlib.acoustics import create_expansion_chamber
+from morphogen.stdlib.acoustics import create_expansion_chamber
 chamber = create_expansion_chamber(
     inlet_diameter=0.04,
     belly_diameter=0.12,
@@ -175,7 +175,7 @@ resonances = acoustics.resonant_frequencies(response, threshold_db=-3.0)
 Represents pipe geometry for acoustic modeling.
 
 ```python
-from kairo.stdlib.acoustics import PipeGeometry
+from morphogen.stdlib.acoustics import PipeGeometry
 
 # Uniform pipe
 pipe = PipeGeometry(diameter=0.025, length=1.0)
@@ -225,7 +225,7 @@ print(f"Phase: {response.phase} (rad)")
 ### Example 1: Open Pipe Resonance
 
 ```python
-from kairo.stdlib.acoustics import acoustics, create_pipe
+from morphogen.stdlib.acoustics import acoustics, create_pipe
 
 # Create 1m open pipe
 pipe = create_pipe(diameter=0.025, length=1.0)
@@ -244,7 +244,7 @@ print(f"Resonances: {resonances}")
 ### Example 2: Expansion Chamber (Muffler)
 
 ```python
-from kairo.stdlib.acoustics import acoustics, create_expansion_chamber
+from morphogen.stdlib.acoustics import acoustics, create_expansion_chamber
 
 # Create expansion chamber
 chamber = create_expansion_chamber(
@@ -334,7 +334,7 @@ Tests cover:
 
 ## Cross-Domain Integration
 
-The Acoustics domain is designed to integrate seamlessly with other Kairo domains:
+The Acoustics domain is designed to integrate seamlessly with other Morphogen domains:
 
 **Geometry → Acoustics:**
 ```python

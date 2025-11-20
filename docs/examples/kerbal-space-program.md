@@ -1,29 +1,29 @@
-# Kerbal Space Program Physics: A Multi-Domain Orbital Simulation Example for Kairo
+# Kerbal Space Program Physics: A Multi-Domain Orbital Simulation Example for Morphogen
 
 **Version:** 1.0
 **Status:** Design Document
 **Last Updated:** 2025-11-15
-**Authors:** Kairo Architecture Team
+**Authors:** Morphogen Architecture Team
 
 ---
 
 ## Overview
 
-Kerbal Space Program (KSP) is not just a game — it's a brilliant example of multi-domain physics simulation that maps perfectly onto Kairo's operator graph architecture. This document demonstrates how Kairo can model KSP-style physics (orbital mechanics, aerodynamics, rocket staging, part assembly, and more) and potentially become a framework for building similar simulations.
+Kerbal Space Program (KSP) is not just a game — it's a brilliant example of multi-domain physics simulation that maps perfectly onto Morphogen's operator graph architecture. This document demonstrates how Morphogen can model KSP-style physics (orbital mechanics, aerodynamics, rocket staging, part assembly, and more) and potentially become a framework for building similar simulations.
 
 ### What This Document Demonstrates
 
-1. **Game-to-Simulation Mapping** — How KSP's gameplay mechanics map to Kairo domains
+1. **Game-to-Simulation Mapping** — How KSP's gameplay mechanics map to Morphogen domains
 2. **Multi-Domain Physics Pipeline** — Orbital, aerodynamic, propulsion, and structural domains working together
-3. **Part-Based Assembly System** — Component composition using Kairo's graph architecture
+3. **Part-Based Assembly System** — Component composition using Morphogen's graph architecture
 4. **Real-Time Simulation** — Physics stepping with GPU acceleration options
 5. **Cross-Domain Integration** — Geometry, physics, audio, and visualization working in concert
-6. **Educational Platform** — Kairo as a tool for teaching orbital mechanics and aerospace engineering
+6. **Educational Platform** — Morphogen as a tool for teaching orbital mechanics and aerospace engineering
 
 ### Why This Matters
 
-KSP demonstrates that Kairo's vision extends beyond niche engineering:
-- It shows Kairo can handle **real-time game physics**
+KSP demonstrates that Morphogen's vision extends beyond niche engineering:
+- It shows Morphogen can handle **real-time game physics**
 - It validates the **part-assembly paradigm** for complex systems
 - It proves **multi-physics integration** at interactive framerates
 - It opens educational and scientific computing use cases
@@ -61,12 +61,12 @@ This is **exactly** an operator graph problem.
 
 ---
 
-### 1.2 The Kairo Opportunity
+### 1.2 The Morphogen Opportunity
 
-**Can Kairo simulate KSP-style physics?**
+**Can Morphogen simulate KSP-style physics?**
 👉 **Yes** — and potentially better than Unity physics.
 
-**Can Kairo become a framework for aerospace simulations?**
+**Can Morphogen become a framework for aerospace simulations?**
 👉 **Absolutely** — with clear advantages:
 - Declarative YAML assembly
 - Modular operator domains
@@ -78,15 +78,15 @@ This is **exactly** an operator graph problem.
 
 ---
 
-## 2. Domain Mapping: KSP → Kairo
+## 2. Domain Mapping: KSP → Morphogen
 
-Let's map KSP's systems onto Kairo domains:
+Let's map KSP's systems onto Morphogen domains:
 
 ### 2.1 Orbital Mechanics Domain
 
 **KSP Feature:** Patched conics orbital prediction
 
-**Kairo Domain:** `OrbitalMechanicsDomain`
+**Morphogen Domain:** `OrbitalMechanicsDomain`
 
 **What It Does:**
 - Solve Kepler's equation for orbital position
@@ -97,7 +97,7 @@ Let's map KSP's systems onto Kairo domains:
 - Calculate delta-v requirements
 
 **Key Operators:**
-```kairo
+```morphogen
 orbit.kepler_solve(M, e) -> E           // Eccentric anomaly
 orbit.state_to_elements(r, v, μ) -> OrbitalElements
 orbit.elements_to_state(elements, t) -> (r, v)
@@ -120,7 +120,7 @@ orbit.soi_transition(state, body_from, body_to) -> state_new
 
 **KSP Feature:** Drag cubes + occlusion model
 
-**Kairo Domain:** `AerodynamicsDomain`
+**Morphogen Domain:** `AerodynamicsDomain`
 
 **What It Does:**
 - Compute drag based on shape and occlusion
@@ -130,7 +130,7 @@ orbit.soi_transition(state, body_from, body_to) -> state_new
 - Handle supersonic/hypersonic regimes
 
 **Key Operators:**
-```kairo
+```morphogen
 aero.atmosphere(altitude, body) -> (ρ, P, T)
 aero.drag(velocity, area, Cd, ρ) -> F_drag
 aero.drag_cube(parts, velocity, ρ) -> F_drag
@@ -154,7 +154,7 @@ aero.shock_heating(Mach, ρ) -> Q_shock
 
 **KSP Feature:** Delta-v calculations, staging, Isp
 
-**Kairo Domain:** `RocketEquationDomain`
+**Morphogen Domain:** `RocketEquationDomain`
 
 **What It Does:**
 - Compute delta-v from Tsiolkovsky equation
@@ -164,7 +164,7 @@ aero.shock_heating(Mach, ρ) -> Q_shock
 - Optimize staging sequences
 
 **Key Operators:**
-```kairo
+```morphogen
 rocket.delta_v(m_wet, m_dry, Isp, g0) -> Δv
 rocket.delta_v_stages(stages[]) -> Δv_total
 rocket.mass_flow(thrust, Isp, g0) -> ṁ
@@ -187,7 +187,7 @@ rocket.thrust_curve(engine_type, throttle, altitude) -> thrust
 
 **KSP Feature:** Modular rocket construction
 
-**Kairo Domain:** `PartsAssemblyDomain`
+**Morphogen Domain:** `PartsAssemblyDomain`
 
 **What It Does:**
 - Define part types (engines, tanks, structure, etc.)
@@ -197,7 +197,7 @@ rocket.thrust_curve(engine_type, throttle, altitude) -> thrust
 - Handle part failures and decouplers
 
 **Key Types:**
-```kairo
+```morphogen
 type Part {
     mass: f32<kg>,
     cost: f32,
@@ -230,7 +230,7 @@ type Stage {
 ```
 
 **Key Operators:**
-```kairo
+```morphogen
 assembly.create_vessel(parts[], connections[]) -> Vessel
 assembly.compute_mass(vessel) -> (mass_total, mass_fuel, mass_dry)
 assembly.compute_com(vessel) -> center_of_mass
@@ -241,7 +241,7 @@ assembly.structural_integrity(vessel, forces) -> stress_map
 ```
 
 **Integration with TiaCAD:**
-```kairo
+```morphogen
 // Each part has geometry from TiaCAD
 let engine = tiacad.load("kerbal_parts/engine_mainsail.yaml")
 let tank = tiacad.load("kerbal_parts/fuel_tank_jumbo.yaml")
@@ -258,7 +258,7 @@ vessel.attach(engine, tank.anchor("bottom_node"))
 
 **KSP Feature:** Real-time physics integration
 
-**Kairo Domain:** `PhysicsIntegrationDomain`
+**Morphogen Domain:** `PhysicsIntegrationDomain`
 
 **What It Does:**
 - Integrate forces → accelerations → velocities → positions
@@ -268,7 +268,7 @@ vessel.attach(engine, tank.anchor("bottom_node"))
 - Update state at fixed timestep (0.02s typical)
 
 **Key Operators:**
-```kairo
+```morphogen
 physics.gravity_accel(position, bodies[]) -> a_gravity
 physics.sum_forces(vessel, state, control_input) -> F_total
 physics.sum_torques(vessel, state, control_input) -> τ_total
@@ -286,7 +286,7 @@ physics.detect_collisions(vessel, terrain) -> collision_events
 - **Verlet** — Position-based (good for constraints)
 
 **GPU Acceleration:**
-```kairo
+```morphogen
 // Option to run on GPU for N-body or particle systems
 physics.integrate_gpu(states[], forces_fn, dt, backend="cuda") -> states_new[]
 ```
@@ -297,7 +297,7 @@ physics.integrate_gpu(states[], forces_fn, dt, backend="cuda") -> states_new[]
 
 **KSP Feature:** Parts explode under excessive stress
 
-**Kairo Domain:** `FailureMechanicsDomain`
+**Morphogen Domain:** `FailureMechanicsDomain`
 
 **What It Does:**
 - Monitor G-forces, heat, pressure, torque
@@ -306,7 +306,7 @@ physics.integrate_gpu(states[], forces_fn, dt, backend="cuda") -> states_new[]
 - Handle cascading failures
 
 **Key Operators:**
-```kairo
+```morphogen
 failure.g_force_limit(part_type) -> g_max
 failure.thermal_limit(part_type) -> T_max
 failure.pressure_limit(part_type) -> q_max  // Dynamic pressure
@@ -327,7 +327,7 @@ failure.cascade_check(vessel, failed_parts[]) -> additional_failures[]
 
 **KSP Feature:** Various engine types
 
-**Kairo Extension:** Real propulsion models from J-tube experiments!
+**Morphogen Extension:** Real propulsion models from J-tube experiments!
 
 **What It Enables:**
 - **Liquid engines** — RP-1/LOX, LH2/LOX
@@ -339,7 +339,7 @@ failure.cascade_check(vessel, failed_parts[]) -> additional_failures[]
 - **Acoustic modeling** — Engine sounds from AudioDomain
 
 **Integration:**
-```kairo
+```morphogen
 // Define engine using combustion physics
 let engine = propulsion.liquid_engine(
     propellants = ["RP-1", "LOX"],
@@ -370,7 +370,7 @@ let engine_sound = audio.engine_noise(
 
 Here's how all domains work together:
 
-```kairo
+```morphogen
 scene KerbalLaunch {
     // === PART ASSEMBLY ===
 
@@ -654,7 +654,7 @@ scene KerbalLaunch {
 
 #### Core Types
 
-```kairo
+```morphogen
 type OrbitalElements {
     a: f32<m>,           // Semi-major axis
     e: f32,              // Eccentricity
@@ -775,7 +775,7 @@ type Transfer {
 
 #### Core Types
 
-```kairo
+```morphogen
 type AtmosphereModel {
     density_curve: Fn(altitude: f32<m>) -> f32<kg/m³>,
     pressure_curve: Fn(altitude: f32<m>) -> f32<Pa>,
@@ -866,7 +866,7 @@ type AeroForces {
 
 #### Core Types
 
-```kairo
+```morphogen
 type Engine {
     thrust_vac: f32<N>,
     thrust_sl: f32<N>,
@@ -1019,13 +1019,13 @@ type Stage {
 
 ---
 
-## 5. Integration with Existing Kairo Domains
+## 5. Integration with Existing Morphogen Domains
 
 ### 5.1 Geometry (TiaCAD)
 
 **Use:** Part geometry and collision meshes
 
-```kairo
+```morphogen
 // Load part geometry
 let engine = tiacad.load("parts/engine_vector.step")
 let tank = tiacad.load("parts/tank_s3_14400.step")
@@ -1045,7 +1045,7 @@ let drag_cube = aero.drag_cube_from_geometry(engine.geometry)
 
 **Use:** Engine sounds, aerodynamic noise, explosions
 
-```kairo
+```morphogen
 // Engine sound synthesis
 let engine_audio = audio.synthesize(
     type = "broadband_noise",
@@ -1077,7 +1077,7 @@ let total_audio = audio.mix([engine_audio, aero_audio, explosion_audio])
 
 **Use:** Render orbits, vessels, trajectories
 
-```kairo
+```morphogen
 // Render orbit prediction
 let orbit_viz = visual.orbit_path(
     elements = current_orbit,
@@ -1118,7 +1118,7 @@ let maneuver_viz = visual.maneuver_node(
 
 **Use:** Realistic engine modeling
 
-```kairo
+```morphogen
 // Model a liquid rocket engine with actual combustion
 let engine = propulsion.liquid_engine(
     propellants = ["RP-1", "LOX"],
@@ -1150,16 +1150,16 @@ let pulse_jet = propulsion.pulse_jet(
 
 ---
 
-## 6. Why Kairo Excels at KSP-Style Simulations
+## 6. Why Morphogen Excels at KSP-Style Simulations
 
 ### 6.1 Declarative Assembly
 
 **KSP Problem:** Building rockets in code is tedious
 
-**Kairo Solution:** YAML-based part assembly
+**Morphogen Solution:** YAML-based part assembly
 
 ```yaml
-# rocket.kairo.yaml
+# rocket.morphogen.yaml
 vessel:
   name: "Kerbal X"
   parts:
@@ -1188,9 +1188,9 @@ vessel:
 
 **KSP Problem:** Physics bottleneck with large vessels
 
-**Kairo Solution:** Automatic GPU offload
+**Morphogen Solution:** Automatic GPU offload
 
-```kairo
+```morphogen
 // Option 1: Explicit GPU backend
 physics.integrate_gpu(
     states = vessel_states,
@@ -1214,9 +1214,9 @@ physics.integrate(
 
 **KSP Problem:** N-body gravity too slow, patched conics inaccurate
 
-**Kairo Solution:** Switchable physics models
+**Morphogen Solution:** Switchable physics models
 
-```kairo
+```morphogen
 // Far from planets: cheap patched conics
 let gravity = if distance_to_nearest_body > 100 * body.radius {
     orbit.gravity_patched_conics(state.position, bodies)
@@ -1235,7 +1235,7 @@ let gravity = if distance_to_nearest_body > 100 * body.radius {
 
 **Example:** Audio + Physics + Visualization all integrated
 
-```kairo
+```morphogen
 scene LaunchWithFullExperience {
     // Physics
     let sim = kerbal_launch_simulation()
@@ -1271,7 +1271,7 @@ scene LaunchWithFullExperience {
 
 **Scenario:** Students learn Hohmann transfers
 
-```kairo
+```morphogen
 lesson HohmannTransfer {
     // Setup: spacecraft in 200 km circular orbit
     let orbit_initial = orbit.circular(
@@ -1307,7 +1307,7 @@ lesson HohmannTransfer {
 
 **Scenario:** Students design rocket to reach orbit with minimum fuel
 
-```kairo
+```morphogen
 challenge ReachOrbit {
     // Constraints
     let max_cost = 50000  // Budget limit
@@ -1356,7 +1356,7 @@ challenge ReachOrbit {
 
 **Optimizations:**
 
-```kairo
+```morphogen
 // 1. Batch force computation
 let forces = physics.batch_forces_gpu(
     vessels = [vessel1, vessel2, ...],
@@ -1389,7 +1389,7 @@ let dt = if in_atmosphere {
 
 **Solution:** Hierarchical rigid bodies
 
-```kairo
+```morphogen
 // Treat docked vessels as single rigid body
 let station = assembly.merge_rigid_bodies([
     vessel1,
@@ -1406,7 +1406,7 @@ let station = assembly.merge_rigid_bodies([
 
 **Use Case:** Many vessels in physics range
 
-```kairo
+```morphogen
 // Simulate multiple vessels in parallel
 let vessels = [vessel1, vessel2, ..., vessel_n]
 let states = [state1, state2, ..., state_n]
@@ -1426,9 +1426,9 @@ let states_new = physics.simulate_parallel(
 
 ### 9.1 Multiplayer / Distributed Simulation
 
-**Idea:** Kairo as server for multiplayer KSP-like game
+**Idea:** Morphogen as server for multiplayer KSP-like game
 
-```kairo
+```morphogen
 server MultiplayerOrbit {
     // Each player's vessel
     let vessels = players.vessels()
@@ -1448,9 +1448,9 @@ server MultiplayerOrbit {
 
 ### 9.2 Mission Planning Tools
 
-**Idea:** Kairo as mission design software (like STK, GMAT)
+**Idea:** Morphogen as mission design software (like STK, GMAT)
 
-```kairo
+```morphogen
 mission MarsTransfer {
     // Earth departure
     let earth_orbit = orbit.circular(300 km, earth)
@@ -1484,7 +1484,7 @@ mission MarsTransfer {
 
 **Idea:** Generate planets with realistic properties
 
-```kairo
+```morphogen
 planet ProceduralEarthLike {
     // Physical parameters
     let radius = param(6371 km, range=[1000 km, 20000 km])
@@ -1523,9 +1523,9 @@ planet ProceduralEarthLike {
 
 ---
 
-## 10. Comparison: Kairo vs. Unity Physics (KSP's Engine)
+## 10. Comparison: Morphogen vs. Unity Physics (KSP's Engine)
 
-| Feature | Unity Physics (KSP) | Kairo |
+| Feature | Unity Physics (KSP) | Morphogen |
 |---------|---------------------|-------|
 | **Physics Backend** | PhysX (closed source) | Open, modular operators |
 | **Part Assembly** | GameObject hierarchy | YAML + operator graph |
@@ -1539,7 +1539,7 @@ planet ProceduralEarthLike {
 | **Multi-domain** | Hard (separate systems) | Native (operator graph) |
 | **Educational Use** | Mod-based (limited) | First-class (declarative) |
 
-**Conclusion:** Kairo offers more flexibility, better multi-domain integration, GPU acceleration, and determinism — perfect for serious simulation and education.
+**Conclusion:** Morphogen offers more flexibility, better multi-domain integration, GPU acceleration, and determinism — perfect for serious simulation and education.
 
 ---
 
@@ -1555,10 +1555,10 @@ planet ProceduralEarthLike {
 6. **Performance Strategy** — GPU acceleration, LOD physics, adaptive timesteps
 7. **Future Extensions** — Multiplayer, mission planning, procedural generation
 
-### Why This Validates Kairo
+### Why This Validates Morphogen
 
 - **KSP is the perfect benchmark** — Complex, multi-domain, real-time physics
-- **Kairo handles it naturally** — Operator graphs map directly to game systems
+- **Morphogen handles it naturally** — Operator graphs map directly to game systems
 - **Beyond games** — Education, aerospace research, mission planning
 - **Reusable domains** — OrbitalMechanics, Aerodynamics, RocketEquation are broadly useful
 - **Integration wins** — Geometry (TiaCAD) + Audio + Combustion (J-tube!) all compose
@@ -1570,13 +1570,13 @@ planet ProceduralEarthLike {
 3. **Build example mission** — Simple orbital insertion
 4. **Integration tests** — Cross-domain flows (geometry → aero, physics → visuals)
 5. **Educational tools** — Interactive lessons on orbital mechanics
-6. **Performance benchmarks** — Compare Kairo vs. Unity/Unreal for physics
+6. **Performance benchmarks** — Compare Morphogen vs. Unity/Unreal for physics
 
 ---
 
 ## 12. Related Documentation
 
-### Kairo Documentation
+### Morphogen Documentation
 
 - **[architecture/domain-architecture.md](../architecture/domain-architecture.md)** — Complete domain vision
 - **[ADR-002: Cross-Domain Architectural Patterns](../adr/002-cross-domain-architectural-patterns.md)** — Reference systems and operator composition
@@ -1596,22 +1596,22 @@ planet ProceduralEarthLike {
 
 ## Conclusion
 
-**Kerbal Space Program proves that Kairo's operator graph paradigm extends to real-time game physics.**
+**Kerbal Space Program proves that Morphogen's operator graph paradigm extends to real-time game physics.**
 
-By implementing domains like OrbitalMechanics, Aerodynamics, RocketEquation, and PartsAssembly, Kairo becomes a **powerful platform for aerospace simulation** — useful for:
+By implementing domains like OrbitalMechanics, Aerodynamics, RocketEquation, and PartsAssembly, Morphogen becomes a **powerful platform for aerospace simulation** — useful for:
 
 - **Games** (KSP-like spaceflight sims)
 - **Education** (teaching orbital mechanics)
 - **Research** (mission planning, trajectory optimization)
 - **Industry** (satellite constellation design, launch analysis)
 
-**And here's the kicker:** With Kairo's cross-domain integration, you can add:
+**And here's the kicker:** With Morphogen's cross-domain integration, you can add:
 - **Realistic combustion** (from J-tube domain!)
 - **Engine acoustics** (from AudioDomain)
 - **Procedural planets** (from NoiseDomain)
 - **Part CAD** (from TiaCAD/GeometryDomain)
 
-**Kairo isn't just a simulation framework — it's a multi-physics platform that can build KSP... and so much more.**
+**Morphogen isn't just a simulation framework — it's a multi-physics platform that can build KSP... and so much more.**
 
 ---
 

@@ -7,7 +7,7 @@ Demonstrates conversions between coordinate systems:
 """
 
 import numpy as np
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     point2d, point3d,
     cartesian_to_polar, polar_to_cartesian,
     cartesian_to_spherical, spherical_to_cartesian,

@@ -67,7 +67,7 @@ For current documentation, see:
 
 Archived documents are kept indefinitely for historical reference. They may be removed if:
 1. The information is fully integrated into current docs
-2. The content is no longer relevant to understanding Kairo's evolution
+2. The content is no longer relevant to understanding Morphogen's evolution
 3. Disk space becomes a concern (unlikely)
 
 ---

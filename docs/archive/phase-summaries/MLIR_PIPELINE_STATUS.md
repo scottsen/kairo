@@ -1,4 +1,4 @@
-# Kairo MLIR Compilation Pipeline - STATUS
+# Morphogen MLIR Compilation Pipeline - STATUS
 
 **Last Updated:** 2025-11-07
 **Pipeline Status:** ✅ **100% COMPLETE**
@@ -7,7 +7,7 @@
 
 ## Quick Summary
 
-The Kairo MLIR compilation pipeline is **fully complete** with all 5 phases implemented, tested, and working.
+The Morphogen MLIR compilation pipeline is **fully complete** with all 5 phases implemented, tested, and working.
 
 **Key Metrics:**
 - ✅ 72 MLIR tests passing (100%)
@@ -35,7 +35,7 @@ The Kairo MLIR compilation pipeline is **fully complete** with all 5 phases impl
 - Type system integration
 
 **Example:**
-```kairo
+```morphogen
 fn add(a: f32, b: f32) -> f32 {
     return a + b
 }
@@ -57,7 +57,7 @@ fn add(a: f32, b: f32) -> f32 {
 - Struct type checking
 
 **Example:**
-```kairo
+```morphogen
 struct Point {
     x: f32
     y: f32
@@ -84,7 +84,7 @@ fn max(a: f32, b: f32) -> f32 {
 - dt parameter handling
 
 **Example:**
-```kairo
+```morphogen
 @state x = 0.0
 
 flow(dt=0.1, steps=10) {
@@ -108,7 +108,7 @@ flow(dt=0.1, steps=10) {
 - Nested lambdas
 
 **Example:**
-```kairo
+```morphogen
 fn apply_twice(x: f32) -> f32 {
     double = |n| n * 2.0
     return double(double(x))
@@ -252,7 +252,7 @@ kairo run examples/v0_3_1_velocity_calculation.kairo
 ## Architecture
 
 ```
-Kairo Source (.kairo)
+Morphogen Source (.kairo)
     ↓
 Parser (Lark-based)
     ↓
@@ -400,7 +400,7 @@ From PROJECT_REVIEW_AND_NEXT_STEPS.md:
 - [Phase 5 Documentation](docs/MLIR_PHASE5_COMPLETION.md)
 - [Phase 3 Documentation](docs/KAIRO_MLIR_PHASE3_PROMPT.md)
 - [Project Review](PROJECT_REVIEW_AND_NEXT_STEPS.md)
-- [Kairo Specification](SPECIFICATION.md)
+- [Morphogen Specification](SPECIFICATION.md)
 
 ---
 
@@ -409,4 +409,4 @@ From PROJECT_REVIEW_AND_NEXT_STEPS.md:
 **Completion:** 100%
 **Next Steps:** Real MLIR integration, LLVM lowering, native code generation
 
-🎉 **Kairo MLIR Pipeline - COMPLETE!** 🎉
+🎉 **Morphogen MLIR Pipeline - COMPLETE!** 🎉

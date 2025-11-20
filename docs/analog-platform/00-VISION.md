@@ -54,7 +54,7 @@ A **modular analog computing platform** that enables:
 
 ## The Bridge Between Two Worlds
 
-### Kairo (Software/Digital)
+### Morphogen (Software/Digital)
 - Unified digital computation kernel
 - Cross-domain deterministic simulation
 - Type-safe, multi-rate scheduling

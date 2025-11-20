@@ -1,4 +1,4 @@
-# Kairo v0.10.0 Language Specification
+# Morphogen v0.10.0 Language Specification
 
 **A Language of Creative Determinism**
 
@@ -28,7 +28,7 @@
 8. [Determinism and RNG](#8-determinism-and-rng)
 9. [Field Dialect](#9-field-dialect)
 10. [Agent Dialect](#10-agent-dialect)
-11. [Audio Dialect (Kairo.Audio)](#11-audio-dialect-kairoaudio)
+11. [Audio Dialect (Morphogen.Audio)](#11-audio-dialect-kairoaudio)
 12. [Visual Dialect](#12-visual-dialect)
 13. [Profile System](#13-profile-system)
 14. [Module System](#14-module-system)
@@ -42,19 +42,19 @@
 
 ## 1. Introduction
 
-### 1.1 What is Kairo?
+### 1.1 What is Morphogen?
 
-**Kairo** is a typed, deterministic domain-specific language for creative computation. It unifies the domains of **simulation**, **sound**, **visualization**, and **procedural design** within a single, reproducible execution model.
+**Morphogen** is a typed, deterministic domain-specific language for creative computation. It unifies the domains of **simulation**, **sound**, **visualization**, and **procedural design** within a single, reproducible execution model.
 
-Kairo programs describe time-evolving systems through:
+Morphogen programs describe time-evolving systems through:
 - **Explicit temporal structure** via `flow` blocks
 - **Declarative state management** via `@state` annotations
 - **Deterministic randomness** via explicit RNG objects
 - **Unified semantics** across fields, agents, signals, and visuals
 
-### 1.2 Why Kairo?
+### 1.2 Why Morphogen?
 
-| Problem | Traditional Approach | Kairo Approach |
+| Problem | Traditional Approach | Morphogen Approach |
 |---------|---------------------|----------------|
 | **Reproducibility** | Random seeds scattered everywhere | Explicit RNG with deterministic policy |
 | **Time** | Hidden global timestep | Explicit `flow(dt)` blocks |
@@ -64,7 +64,7 @@ Kairo programs describe time-evolving systems through:
 
 ### 1.3 Evolution from v0.2.2
 
-Kairo has evolved from Creative Computation DSL v0.2.2 through several iterations:
+Morphogen has evolved from Creative Computation DSL v0.2.2 through several iterations:
 
 | Aspect | v0.2.2 | v0.3.0 | v0.3.1 | v0.6.0 |
 |--------|--------|--------|--------|--------|
@@ -130,19 +130,19 @@ Kairo has evolved from Creative Computation DSL v0.2.2 through several iteration
 
 ### 3.1 Hello, World
 
-```kairo
-# hello.kairo - Your first Kairo program
+```morphogen
+# hello.kairo - Your first Morphogen program
 
 use visual
 
 flow(dt=1.0, steps=1) {
-    output text("Hello, Kairo!")
+    output text("Hello, Morphogen!")
 }
 ```
 
 ### 3.2 Simple Diffusion
 
-```kairo
+```morphogen
 # diffusion.kairo - Heat spreading over time
 
 use field, visual
@@ -157,7 +157,7 @@ flow(dt=0.1, steps=100) {
 
 ### 3.3 Particle System
 
-```kairo
+```morphogen
 # particles.kairo - Simple particle physics
 
 use agent, visual
@@ -227,14 +227,14 @@ flow(dt=0.01, steps=1000) {
 
 Fixed-length numeric vectors:
 
-```kairo
+```morphogen
 Vec2<f32>      # 2D vector
 Vec3<f64>      # 3D vector
 Vec4<i32>      # 4D integer vector
 ```
 
 Operations:
-```kairo
+```morphogen
 a : Vec2<f32> = Vec2(1.0, 2.0)
 b : Vec2<f32> = Vec2(3.0, 4.0)
 
@@ -249,20 +249,20 @@ g = normalize(a)       # Unit vector → Vec2<f32>
 
 Dense grid data over 2D or 3D space:
 
-```kairo
+```morphogen
 Field2D<T>     # 2D grid of type T
 Field3D<T>     # 3D grid of type T
 ```
 
 Examples:
-```kairo
+```morphogen
 temp : Field2D<f32 [K]>              # Temperature field
 vel : Field2D<Vec2<f32 [m/s]>>       # Velocity field
 density : Field3D<f32 [kg/m³]>       # 3D density
 ```
 
 Creation:
-```kairo
+```morphogen
 zeros((256, 256))                    # All zeros
 ones((256, 256))                     # All ones
 fill((256, 256), value=42.0)         # Fill with value
@@ -274,12 +274,12 @@ random_normal(seed=42, shape=(256, 256), mean=0.0, std=1.0)
 
 Sparse collections of structured records:
 
-```kairo
+```morphogen
 Agents<T>      # Collection of agent records of type T
 ```
 
 Agents must be defined as structs:
-```kairo
+```morphogen
 struct Boid {
     pos: Vec2<f32 [m]>
     vel: Vec2<f32 [m/s]>
@@ -293,12 +293,12 @@ agents : Agents<Boid>
 
 Time-domain functions for audio and control:
 
-```kairo
+```morphogen
 Signal<T>      # Time-varying signal of type T
 ```
 
 Examples:
-```kairo
+```morphogen
 audio : Signal<f32>              # Audio signal
 control : Signal<Vec2<f32>>      # 2D control signal
 ```
@@ -307,7 +307,7 @@ control : Signal<Vec2<f32>>      # 2D control signal
 
 Opaque renderable objects:
 
-```kairo
+```morphogen
 Visual         # Image, video frame, or visual composition
 ```
 
@@ -317,7 +317,7 @@ Visuals are created by dialect operations and composed via layers.
 
 Types can carry physical units:
 
-```kairo
+```morphogen
 temp : f32 [K]                   # Temperature in Kelvin
 pos : Vec2<f32 [m]>              # Position in meters
 vel : Vec2<f32 [m/s]>            # Velocity in m/s
@@ -325,14 +325,14 @@ force : Vec2<f32 [N]>            # Force in Newtons
 ```
 
 **Unit promotion** is safe:
-```kairo
+```morphogen
 a : f32 [m] = 10.0
 b : f32 [m] = 20.0
 c = a + b                        # OK: m + m = m
 ```
 
 **Unit conversion** must be explicit:
-```kairo
+```morphogen
 time : f32 [s] = 10.0
 freq : f32 [Hz] = 1.0 / time     # OK: 1/s = Hz
 
@@ -346,7 +346,7 @@ x = temp + dist                  # ERROR: K + m is invalid
 
 Types can be inferred from context:
 
-```kairo
+```morphogen
 # Explicit
 temp : Field2D<f32> = zeros((256, 256))
 
@@ -374,7 +374,7 @@ vel2 = advect(vel, vel, dt=0.1)             # Inferred: same type as vel
 
 ### 5.1 Comments
 
-```kairo
+```morphogen
 # Single-line comment
 
 # Multi-line comments
@@ -385,27 +385,27 @@ vel2 = advect(vel, vel, dt=0.1)             # Inferred: same type as vel
 ### 5.2 Declarations
 
 #### Variables
-```kairo
+```morphogen
 x = 42.0                         # Inferred type
 y : f32 = 42.0                   # Explicit type
 z : f32 [m/s] = 10.0             # With units
 ```
 
 #### State
-```kairo
+```morphogen
 @state temp : Field2D<f32> = zeros((256, 256))
 @state agents : Agents<Particle> = alloc(count=100)
 ```
 
 #### Constants
-```kairo
+```morphogen
 const GRAVITY : f32 [m/s²] = 9.8
 const GRID_SIZE : u32 = 256
 ```
 
 ### 5.3 Functions
 
-```kairo
+```morphogen
 # Simple function
 fn double(x: f32) -> f32 {
     return x * 2.0
@@ -430,7 +430,7 @@ fn print_stats(field: Field2D<f32>) {
 
 ### 5.4 Lambdas
 
-```kairo
+```morphogen
 # Single expression
 field.map(|x| x * 2.0)
 
@@ -454,7 +454,7 @@ agents.map(|a| {
 ### 5.5 Control Flow
 
 #### If/Else Expressions
-```kairo
+```morphogen
 # Simple if/else
 color = if temp > 100.0 { "red" } else { "blue" }
 
@@ -479,7 +479,7 @@ result = if condition {
 ```
 
 #### Iterate (Dynamic Loops)
-```kairo
+```morphogen
 # Iterate until convergence
 pressure = iterate(max_iter=100, tolerance=1e-6) {
     let p_next = relax(pressure)
@@ -491,7 +491,7 @@ pressure = iterate(max_iter=100, tolerance=1e-6) {
 ### 5.6 Operators
 
 #### Arithmetic
-```kairo
+```morphogen
 a + b          # Addition
 a - b          # Subtraction
 a * b          # Multiplication
@@ -501,7 +501,7 @@ a % b          # Modulo
 ```
 
 #### Comparison
-```kairo
+```morphogen
 a == b         # Equal
 a != b         # Not equal
 a < b          # Less than
@@ -511,21 +511,21 @@ a >= b         # Greater than or equal
 ```
 
 #### Logical
-```kairo
+```morphogen
 a && b         # Logical AND
 a || b         # Logical OR
 !a             # Logical NOT
 ```
 
 #### Field Access
-```kairo
+```morphogen
 particle.pos          # Field access
 particle.vel.x        # Nested field access
 ```
 
 ### 5.7 Structs
 
-```kairo
+```morphogen
 # Definition
 struct Particle {
     pos: Vec2<f32 [m]>
@@ -548,7 +548,7 @@ p2 = Particle { pos: Vec2(1.0, 1.0), ..p }  # Update pos, keep rest
 
 ### 5.8 Use Statements
 
-```kairo
+```morphogen
 use field                        # Import field dialect
 use field, agent, visual         # Multiple imports
 use signal as sig                # Aliased import (future)
@@ -561,7 +561,7 @@ use signal as sig                # Aliased import (future)
 ### 6.1 Flow Blocks
 
 **Syntax:**
-```kairo
+```morphogen
 flow(dt, steps, substeps) {
     # body
 }
@@ -573,7 +573,7 @@ flow(dt, steps, substeps) {
 - `substeps` - Inner iterations per step (optional, default: 1)
 
 **Examples:**
-```kairo
+```morphogen
 # Fixed number of steps
 flow(dt=0.01, steps=1000) {
     temp = diffuse(temp, rate=0.1, dt)
@@ -595,7 +595,7 @@ flow(dt=0.1, substeps=10) {  # Inner dt = 0.01
 
 Flows can be nested for hierarchical time:
 
-```kairo
+```morphogen
 flow(dt=0.1, steps=100) {
     # Outer timestep
 
@@ -614,7 +614,7 @@ flow(dt=0.1, steps=100) {
 ### 6.3 Timestep Access
 
 Within a flow block:
-```kairo
+```morphogen
 flow(dt=0.01, steps=100) {
     step       # Current iteration number (0-based)
     time       # Current simulation time (step * dt)
@@ -629,12 +629,12 @@ flow(dt=0.01, steps=100) {
 ### 7.1 State Declarations
 
 **Syntax:**
-```kairo
+```morphogen
 @state name : Type = initializer
 ```
 
 **Examples:**
-```kairo
+```morphogen
 @state temp : Field2D<f32> = zeros((256, 256))
 @state vel : Field2D<Vec2<f32>> = random_normal(seed=1, shape=(256, 256))
 @state agents : Agents<Particle> = alloc(count=1000)
@@ -646,7 +646,7 @@ flow(dt=0.01, steps=100) {
 - **Double-buffered** - Reads from current, writes to next
 - **Immutable per-step** - State values don't change mid-step
 - **Explicit updates** - Must reassign to update:
-  ```kairo
+  ```morphogen
   @state x : f32 = 0.0
 
   flow(dt=0.1) {
@@ -658,7 +658,7 @@ flow(dt=0.01, steps=100) {
 
 Non-state variables are **local to each flow iteration**:
 
-```kairo
+```morphogen
 flow(dt=0.1) {
     # Local - recomputed each step
     let dx = gradient(temp)
@@ -672,7 +672,7 @@ flow(dt=0.1) {
 ### 7.4 State Initialization
 
 State can be initialized from:
-```kairo
+```morphogen
 # Literal values
 @state count : u32 = 0
 
@@ -702,7 +702,7 @@ fn spawn_random(id: u32, rng: RNG) -> Particle {
 
 ### 8.1 Determinism Guarantee
 
-Kairo guarantees **bitwise-identical** results when:
+Morphogen guarantees **bitwise-identical** results when:
 1. Same source code
 2. Same input data
 3. Same profile settings
@@ -717,7 +717,7 @@ This holds across:
 
 **All randomness is explicit** via RNG objects:
 
-```kairo
+```morphogen
 # Create RNG with seed
 rng = random(seed=42)
 
@@ -742,7 +742,7 @@ v = rng.uniform_vec2(min=(0, 0), max=(10, 10))
 
 ### 8.4 Field Random Initialization
 
-```kairo
+```morphogen
 # Uniform distribution
 field = random_uniform(seed=42, shape=(256, 256), min=0.0, max=1.0)
 
@@ -752,7 +752,7 @@ field = random_normal(seed=42, shape=(256, 256), mean=0.0, std=1.0)
 
 ### 8.5 Agent Random Initialization
 
-```kairo
+```morphogen
 @state agents : Agents<Particle> = alloc(count=100, init=spawn_random)
 
 fn spawn_random(id: u32, rng: RNG) -> Particle {
@@ -770,7 +770,7 @@ Each agent gets a **unique deterministic RNG** derived from:
 
 ### 8.6 RNG Algorithm
 
-Kairo uses **Philox 4×32-10** (counter-based RNG):
+Morphogen uses **Philox 4×32-10** (counter-based RNG):
 - Deterministic
 - Parallel-friendly
 - No shared state
@@ -784,7 +784,7 @@ Fields represent dense grids over 2D or 3D space.
 
 ### 9.1 Creation
 
-```kairo
+```morphogen
 use field
 
 # Allocation
@@ -805,7 +805,7 @@ load_field("data/heightmap.png")
 
 ### 9.2 Element-wise Operations
 
-```kairo
+```morphogen
 # Map (unary operation)
 field.map(|x| x * 2.0)
 field.map(|x| sin(x))
@@ -825,7 +825,7 @@ field * other_field                # Multiply fields
 ### 9.3 PDE Operations
 
 #### Diffusion
-```kairo
+```morphogen
 # Basic diffusion
 diffuse(field, rate, dt)
 
@@ -843,7 +843,7 @@ diffuse(field, rate, dt,
 - `cg` - Conjugate gradient, best for large systems
 
 #### Advection
-```kairo
+```morphogen
 # Semi-Lagrangian advection
 advect(field, velocity, dt)
 
@@ -861,7 +861,7 @@ advect(field, velocity, dt,
 - `bfecc` - Best accuracy, most expensive
 
 #### Projection (Divergence-Free)
-```kairo
+```morphogen
 # Make velocity field divergence-free
 velocity = project(velocity)
 
@@ -876,7 +876,7 @@ velocity = project(velocity,
 
 ### 9.4 Stencil Operations
 
-```kairo
+```morphogen
 # Built-in stencils
 gradient(field)                    # ∇f → Field2D<Vec2>
 divergence(vector_field)           # ∇·v → Field2D<f32>
@@ -897,7 +897,7 @@ stencil(field, radius=1, |neighbors, center| {
 
 ### 9.5 Sampling
 
-```kairo
+```morphogen
 # Sample at normalized coordinates
 sample(field, pos=(0.5, 0.5))              # Returns: T
 sample(field, pos=(0.5, 0.5),
@@ -911,7 +911,7 @@ sample_grad(field, pos=(0.5, 0.5))         # Returns: (value, gradient)
 
 ### 9.6 Reduction Operations
 
-```kairo
+```morphogen
 sum(field)                         # Sum all elements
 mean(field)                        # Average value
 min(field)                         # Minimum value
@@ -921,7 +921,7 @@ norm(field)                        # L2 norm
 
 ### 9.7 Boundary Conditions
 
-```kairo
+```morphogen
 @boundary(field) = reflect         # Mirror at edges
 @boundary(field) = periodic        # Wrap around
 @boundary(field) = clamp           # Extend edge values
@@ -930,7 +930,7 @@ norm(field)                        # L2 norm
 
 ### 9.8 Example: Fluid Simulation
 
-```kairo
+```morphogen
 use field, visual
 
 @state vel : Field2D<Vec2<f32 [m/s]>> = zeros((256, 256))
@@ -972,7 +972,7 @@ Agents are sparse collections of structured records.
 
 ### 10.1 Agent Definition
 
-```kairo
+```morphogen
 struct Particle {
     pos: Vec2<f32 [m]>
     vel: Vec2<f32 [m/s]>
@@ -983,7 +983,7 @@ struct Particle {
 
 ### 10.2 Creation
 
-```kairo
+```morphogen
 use agent
 
 # Allocate empty
@@ -1012,7 +1012,7 @@ fn spawn_random(id: u32, rng: RNG) -> Particle {
 
 ### 10.3 Per-Agent Transformations
 
-```kairo
+```morphogen
 # Map - transform each agent
 agents = agents.map(|a| {
     vel: a.vel + force * dt,
@@ -1035,7 +1035,7 @@ agents = agents.map(|a| {
 
 ### 10.4 Force Calculations
 
-```kairo
+```morphogen
 # Compute pairwise forces
 forces = force_sum(agents, rule=gravity_force)
 
@@ -1060,7 +1060,7 @@ agents = integrate(agents, forces, dt, method="verlet")
 
 ### 10.5 Field Interaction
 
-```kairo
+```morphogen
 # Sample field at agent positions
 agents = sample_field(agents, temp, |a, t| {
     energy: a.energy + t * dt
@@ -1081,7 +1081,7 @@ density_field = deposit(agents, shape=(256, 256),
 
 ### 10.6 Spawning and Removal
 
-```kairo
+```morphogen
 # Spawn new agents
 agents = spawn(agents, count=10, init=spawn_particle)
 
@@ -1097,7 +1097,7 @@ agents = agents.filter(|a| in_bounds(a.pos))
 
 ### 10.7 Reductions
 
-```kairo
+```morphogen
 # Count
 n = agents.count()
 
@@ -1113,7 +1113,7 @@ com = agents.sum(|a| a.pos * a.mass) / agents.sum(|a| a.mass)
 
 ### 10.8 Example: Flocking
 
-```kairo
+```morphogen
 use agent, visual
 
 struct Boid {
@@ -1160,13 +1160,13 @@ flow(dt=0.01, steps=1000) {
 
 ---
 
-## 11. Audio Dialect (Kairo.Audio)
+## 11. Audio Dialect (Morphogen.Audio)
 
-**Kairo.Audio** is a compositional, deterministic audio language built as a first-class dialect of the Kairo kernel. It provides stream-based audio computation with physical modeling primitives, expressive control, and deterministic execution semantics.
+**Morphogen.Audio** is a compositional, deterministic audio language built as a first-class dialect of the Morphogen kernel. It provides stream-based audio computation with physical modeling primitives, expressive control, and deterministic execution semantics.
 
 ### 11.1 Core Concepts
 
-Kairo.Audio extends Kairo with audio-specific types and constructs:
+Morphogen.Audio extends Morphogen with audio-specific types and constructs:
 
 - **Stream Types**: `Sig` (audio-rate), `Ctl` (control-rate), `Evt<A>` (events)
 - **Compositional Structure**: `scene` and `module` constructs
@@ -1176,7 +1176,7 @@ Kairo.Audio extends Kairo with audio-specific types and constructs:
 
 ### 11.2 Quick Example
 
-```kairo
+```morphogen
 scene PluckDemo {
   let note = note("D3")
   let env  = adsr(5ms, 60ms, 0.6, 200ms)
@@ -1188,7 +1188,7 @@ scene PluckDemo {
 ### 11.3 Key Features
 
 **Oscillators and Synthesis:**
-```kairo
+```morphogen
 sine(freq=440Hz, phase=0)
 saw(freq=440Hz, blep=true)
 square(freq=440Hz, pwm=0.5)
@@ -1196,7 +1196,7 @@ noise(type="white", seed=0)
 ```
 
 **Filters and Effects:**
-```kairo
+```morphogen
 lpf(cutoff=2kHz, q=0.707)
 reverb(mix=0.12, size=0.8)
 delay(time=300ms, feedback=0.3)
@@ -1204,14 +1204,14 @@ drive(amount=0.5, shape="tanh")
 ```
 
 **Physical Modeling:**
-```kairo
+```morphogen
 string(freq, t60=1.5s, damp=0.3) (exc: Sig)
 amp(model="brown", drive=0.6)
 cab(ir="4x12.ir", mic="sm57")
 ```
 
 **Event Scheduling:**
-```kairo
+```morphogen
 let seq = score [
   at 0s note("A3",1,0.5s),
   at 0.5s note("C4",0.8,0.5s)
@@ -1221,7 +1221,7 @@ let poly = spawn(seq, voice, max_voices=8)
 
 ### 11.4 Complete Specification
 
-For the complete Kairo.Audio language specification, including:
+For the complete Morphogen.Audio language specification, including:
 - Detailed type system and rate model
 - Comprehensive operator reference
 - Physical modeling extensions
@@ -1234,7 +1234,7 @@ See **[AUDIO_SPECIFICATION.md](AUDIO_SPECIFICATION.md)**
 
 **Real-time playback and file I/O** for audio buffers:
 
-```kairo
+```morphogen
 # Play audio in real-time
 audio.play(buffer, blocking=true)
 
@@ -1265,7 +1265,7 @@ recording = audio.record(
 - `scipy`: Fallback for WAV support
 
 **Example Workflow:**
-```kairo
+```morphogen
 # Synthesize audio
 tone = audio.sine(freq=440.0, duration=1.0)
 processed = audio.reverb(tone, mix=0.2)
@@ -1282,9 +1282,9 @@ filtered = audio.lowpass(loaded, cutoff=2000.0)
 audio.save(filtered, "filtered.wav")
 ```
 
-### 11.6 Integration with Kairo Core
+### 11.6 Integration with Morphogen Core
 
-Kairo.Audio seamlessly integrates with other Kairo dialects:
+Morphogen.Audio seamlessly integrates with other Morphogen dialects:
 - Audio can drive visual parameters via cross-rate sampling
 - Field data can modulate audio parameters
 - Agent systems can trigger audio events
@@ -1299,7 +1299,7 @@ Visual operations convert numeric data to images and support multi-layer composi
 
 ### 12.1 Field Visualization
 
-```kairo
+```morphogen
 use visual
 
 # Colorize scalar field
@@ -1316,7 +1316,7 @@ visual.colorize(field, palette="fire", vmin=0.0, vmax=100.0)
 
 **Render agents as particles** with property-based styling:
 
-```kairo
+```morphogen
 # Basic agent rendering
 visual.agents(
     agents,
@@ -1367,7 +1367,7 @@ visual.agents(
 
 **Create and compose visual layers:**
 
-```kairo
+```morphogen
 # Create empty layer
 layer = visual.layer(width=512, height=512, background=(0, 0, 0))
 
@@ -1392,7 +1392,7 @@ result = visual.composite(
 
 ### 12.4 Layer Composition Examples
 
-```kairo
+```morphogen
 # Field + Agents composition
 field_visual = visual.colorize(temperature, palette="fire")
 agent_visual = visual.agents(
@@ -1421,7 +1421,7 @@ final = visual.composite(
 
 **Export animations as video files:**
 
-```kairo
+```morphogen
 # Export from frame list
 frames = [frame1, frame2, frame3, ...]
 visual.video(
@@ -1460,7 +1460,7 @@ visual.video(frames, path="output.gif", fps=15)  # GIF
 
 ### 12.6 Output Operations
 
-```kairo
+```morphogen
 # Display in interactive window (Pygame)
 visual.display(visual, window_size=(512, 512))
 
@@ -1472,7 +1472,7 @@ visual.output(visual, path="output.png", format="png")  # Explicit
 
 ### 12.7 Complete Animation Example
 
-```kairo
+```morphogen
 use field, agent, visual
 
 @state temp : Field2D<f32> = random_normal(seed=42, shape=(256, 256))
@@ -1516,7 +1516,7 @@ Profiles define solver configuration and precision policy.
 
 ### 13.1 Built-in Profiles
 
-```kairo
+```morphogen
 # Fast - Low precision, fast iteration
 profile fast {
     precision = f32
@@ -1547,7 +1547,7 @@ profile accurate {
 
 ### 13.2 Custom Profiles
 
-```kairo
+```morphogen
 profile my_profile {
     precision = f32
     determinism = "bitexact"
@@ -1565,7 +1565,7 @@ profile my_profile {
 
 ### 13.3 Using Profiles
 
-```kairo
+```morphogen
 # Module-level
 @profile(accurate)
 module fluid_sim {
@@ -1596,7 +1596,7 @@ flow(dt=0.01) {
 
 ### 14.1 Module Declaration
 
-```kairo
+```morphogen
 module fluid_sim
 
 use field, visual
@@ -1606,7 +1606,7 @@ use field, visual
 
 ### 14.2 Exports
 
-```kairo
+```morphogen
 module math_utils
 
 # Private function (not exported)
@@ -1626,7 +1626,7 @@ export fn cube(x: f32) -> f32 {
 
 ### 14.3 Imports
 
-```kairo
+```morphogen
 module main
 
 use field, visual
@@ -1639,7 +1639,7 @@ flow(dt=0.1) {
 
 ### 14.4 Module Parameterization
 
-```kairo
+```morphogen
 module fluid_sim
 
 # Module parameters
@@ -1653,7 +1653,7 @@ export fn simulate(vel: Field2D<Vec2<f32>>, dt: f32) -> Field2D<Vec2<f32>> {
 ```
 
 Usage:
-```kairo
+```morphogen
 use fluid_sim with { viscosity: 0.01, diffusion: 0.001 }
 
 vel = fluid_sim.simulate(vel, dt=0.01)
@@ -1665,7 +1665,7 @@ vel = fluid_sim.simulate(vel, dt=0.01)
 
 ### 15.1 Loading Data
 
-```kairo
+```morphogen
 # Load field from image
 temp = load_field("data/initial.png")
 
@@ -1678,7 +1678,7 @@ config = load_config("config.toml")
 
 ### 15.2 Saving Data
 
-```kairo
+```morphogen
 # Save visual
 save_visual(visual, "output/frame.png")
 save_visual(visual, "output/frame.exr", format="exr")
@@ -1696,7 +1696,7 @@ flow(dt=0.01, steps=100) {
 
 ### 15.3 Console I/O
 
-```kairo
+```morphogen
 # Print values
 print("Temperature:", mean(temp))
 print("Step {step}, Time {time:.2f}")
@@ -1748,7 +1748,7 @@ For interactive development:
 
 ### 17.1 Dialect Mapping
 
-| Kairo | MLIR Dialect | Purpose |
+| Morphogen | MLIR Dialect | Purpose |
 |-------|--------------|---------|
 | `flow` | `scf.for`, `scf.while` | Loop structure |
 | Field ops | `linalg`, `affine` | Dense tensor ops |
@@ -1760,7 +1760,7 @@ For interactive development:
 ### 17.2 Lowering Pipeline
 
 ```
-Kairo AST
+Morphogen AST
     ↓ Type checking
 Typed AST
     ↓ Lowering
@@ -1787,7 +1787,7 @@ Native code
 
 ### 18.1 Heat Diffusion
 
-```kairo
+```morphogen
 # diffusion.kairo - Simple heat diffusion
 
 use field, visual
@@ -1809,7 +1809,7 @@ flow(dt=0.01, steps=500) {
 
 ### 18.2 Smoke Simulation
 
-```kairo
+```morphogen
 # smoke.kairo - Incompressible fluid with density
 
 use field, visual
@@ -1870,7 +1870,7 @@ fn add_source(field: Field2D<f32>, pos: (f32, f32), radius: f32, amount: f32) ->
 
 ### 18.3 Reaction-Diffusion (Gray-Scott)
 
-```kairo
+```morphogen
 # gray_scott.kairo - Pattern formation
 
 use field, visual
@@ -1917,7 +1917,7 @@ fn add_circle(field: Field2D<f32>, center: (f32, f32), radius: f32, value: f32) 
 
 ### 18.4 Flocking (Boids)
 
-```kairo
+```morphogen
 # boids.kairo - Flocking behavior
 
 use agent, visual
@@ -2183,7 +2183,7 @@ signal_type = "Signal" "<" type ">"
 
 ## Appendix C: Comparison Matrix
 
-| Feature | Kairo v0.3.1 | Python+NumPy | GLSL | Faust |
+| Feature | Morphogen v0.3.1 | Python+NumPy | GLSL | Faust |
 |---------|--------------|--------------|------|-------|
 | **Deterministic** | ✅ Yes | ⚠️ Partial | ❌ No | ✅ Yes |
 | **Multi-domain** | ✅ Fields+Agents+Signals | ⚠️ Via libraries | ❌ Graphics only | ❌ Audio only |
@@ -2198,27 +2198,27 @@ signal_type = "Signal" "<" type ">"
 ## Appendix D: Future Extensions (v0.4+)
 
 ### Space Abstraction
-```kairo
+```morphogen
 space fluid = Space(dim=2, size=(256, 256), boundary=reflect)
 
 @state temp : Field<f32> in fluid
 ```
 
 ### Streaming I/O
-```kairo
+```morphogen
 audio_in = stream<Signal<f32>>("microphone")
 video_out = stream<Visual>("display")
 ```
 
 ### Generic Types
-```kairo
+```morphogen
 fn interpolate<T: Numeric>(a: T, b: T, t: f32) -> T {
     return a * (1.0 - t) + b * t
 }
 ```
 
 ### Error Handling
-```kairo
+```morphogen
 fn load_field(path: str) -> Result<Field2D<f32>, IOError> {
     # ...
 }
@@ -2229,7 +2229,7 @@ field = try load_field("data.png") catch {
 ```
 
 ### Match Expressions
-```kairo
+```morphogen
 state = match agent.state {
     Idle => wander(),
     Hunting => chase(),
@@ -2279,4 +2279,4 @@ state = match agent.state {
 
 ---
 
-**End of Kairo v0.6.0 Specification**
+**End of Morphogen v0.6.0 Specification**

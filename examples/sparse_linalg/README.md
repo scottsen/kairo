@@ -128,7 +128,7 @@ python 03_solver_comparison.py
 ### Sparse Matrix Creation
 
 ```python
-from kairo.stdlib.sparse_linalg import csr_matrix, csc_matrix, coo_matrix
+from morphogen.stdlib.sparse_linalg import csr_matrix, csc_matrix, coo_matrix
 
 # From dense array
 A_dense = np.array([[1, 0, 2], [0, 3, 0], [4, 0, 5]])
@@ -144,7 +144,7 @@ A_coo = coo_matrix((data, (rows, cols)), shape=(3, 3))
 ### Iterative Solvers
 
 ```python
-from kairo.stdlib.sparse_linalg import solve_cg, solve_bicgstab, solve_gmres
+from morphogen.stdlib.sparse_linalg import solve_cg, solve_bicgstab, solve_gmres
 
 # Conjugate Gradient (SPD matrices only)
 x, iterations, residual = solve_cg(A, b, tol=1e-8)
@@ -156,14 +156,14 @@ x, iterations, residual = solve_bicgstab(A, b, tol=1e-8)
 x, iterations, residual = solve_gmres(A, b, tol=1e-8, restart=20)
 
 # Automatic selection
-from kairo.stdlib.sparse_linalg import solve_sparse
+from morphogen.stdlib.sparse_linalg import solve_sparse
 x = solve_sparse(A, b, method="auto")  # Chooses best method
 ```
 
 ### Discrete Operators
 
 ```python
-from kairo.stdlib.sparse_linalg import laplacian_2d, gradient_2d, divergence_2d
+from morphogen.stdlib.sparse_linalg import laplacian_2d, gradient_2d, divergence_2d
 
 # 2D Laplacian operator
 lap = laplacian_2d(64, 64, bc="dirichlet")  # ∇² operator
@@ -265,7 +265,7 @@ V, _, _ = solve_sparse(G, I, method="bicgstab")
 
 ### 2. Preconditioners
 ```python
-from kairo.stdlib.sparse_linalg import incomplete_cholesky, incomplete_lu
+from morphogen.stdlib.sparse_linalg import incomplete_cholesky, incomplete_lu
 
 # For SPD matrices
 M = incomplete_cholesky(A)

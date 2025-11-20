@@ -1,8 +1,8 @@
-# Comprehensive Agents Domain Analysis - Kairo DSL
+# Comprehensive Agents Domain Analysis - Morphogen DSL
 
 ## Executive Summary
 
-The Kairo agents domain is a **sparse particle/agent simulation system** built with NumPy backend and MLIR dialect support. It provides foundation-level operations for agent allocation, property mapping, filtering, force calculations, and field coupling, but currently lacks advanced **visual effects (VFX) and particle effect systems**.
+The Morphogen agents domain is a **sparse particle/agent simulation system** built with NumPy backend and MLIR dialect support. It provides foundation-level operations for agent allocation, property mapping, filtering, force calculations, and field coupling, but currently lacks advanced **visual effects (VFX) and particle effect systems**.
 
 ---
 
@@ -71,14 +71,14 @@ Core operations available through `agents.*`:
 ### 2.2 MLIR Dialect (`agent.py`)
 
 #### High-Level Operations
-- `kairo.agent.spawn`: Create agents with initial properties
-- `kairo.agent.update`: Modify agent properties (position, velocity, state)
-- `kairo.agent.query`: Read agent property values
-- `kairo.agent.behavior`: Apply movement/interaction rules
+- `morphogen.agent.spawn`: Create agents with initial properties
+- `morphogen.agent.update`: Modify agent properties (position, velocity, state)
+- `morphogen.agent.query`: Read agent property values
+- `morphogen.agent.behavior`: Apply movement/interaction rules
 
 #### Type System
 ```
-AgentType: !kairo.agent<T>
+AgentType: !morphogen.agent<T>
   - Phase 4: Opaque type (UnrealizedConversionCast)
   - Future: Proper IRDL dialect definition
 ```
@@ -99,10 +99,10 @@ Agent Properties (5 base):
 Transforms high-level agent ops to executable code:
 
 ```
-kairo.agent.spawn → memref.alloc + initialization loop
-kairo.agent.update → memref.store (in-place mutation)
-kairo.agent.query → memref.load
-kairo.agent.behavior → scf.for loop + behavior logic
+morphogen.agent.spawn → memref.alloc + initialization loop
+morphogen.agent.update → memref.store (in-place mutation)
+morphogen.agent.query → memref.load
+morphogen.agent.behavior → scf.for loop + behavior logic
 ```
 
 #### Behavior Types Implemented
@@ -354,10 +354,10 @@ for step in range(steps):
 ### Current Phase 4 Agents
 ```
 Operations:
-  ✓ kairo.agent.spawn - Allocate agents with properties
-  ✓ kairo.agent.update - Modify properties
-  ✓ kairo.agent.query - Read properties
-  ✓ kairo.agent.behavior - Apply rules
+  ✓ morphogen.agent.spawn - Allocate agents with properties
+  ✓ morphogen.agent.update - Modify properties
+  ✓ morphogen.agent.query - Read properties
+  ✓ morphogen.agent.behavior - Apply rules
   
 Behaviors:
   ✓ move - position += velocity
@@ -521,8 +521,8 @@ def test_filter_out_of_bounds_particles():
 
 ### Current Usage Pattern
 ```python
-from kairo.stdlib.agents import agents
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.agents import agents
+from morphogen.stdlib.visual import visual
 import numpy as np
 
 # Create 100 agents
@@ -646,4 +646,4 @@ Key ratios:
 - Together: 11% of stdlib
 ```
 
-This analysis provides a complete roadmap for integrating particle effects into the Kairo agents domain.
+This analysis provides a complete roadmap for integrating particle effects into the Morphogen agents domain.

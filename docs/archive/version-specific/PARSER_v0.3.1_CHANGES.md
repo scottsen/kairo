@@ -1,11 +1,11 @@
-# Kairo v0.3.1 Parser Updates
+# Morphogen v0.3.1 Parser Updates
 
 **Date**: 2025-11-07
 **Status**: Complete
 
 ## Overview
 
-This document describes the parser updates implemented for Kairo v0.3.1, which introduces new syntax for temporal flow control, functions, lambdas, and conditional expressions.
+This document describes the parser updates implemented for Morphogen v0.3.1, which introduces new syntax for temporal flow control, functions, lambdas, and conditional expressions.
 
 ---
 
@@ -17,7 +17,7 @@ This document describes the parser updates implemented for Kairo v0.3.1, which i
 **Status**: ✅ Complete
 
 **Syntax**:
-```kairo
+```morphogen
 flow(dt=0.01, steps=1000) {
     temp = diffuse(temp, rate=0.1, dt)
 }
@@ -45,7 +45,7 @@ flow(dt=0.01, steps=1000) {
 **Status**: ✅ Complete
 
 **Syntax**:
-```kairo
+```morphogen
 fn clamp(x: f32, min: f32, max: f32) -> f32 {
     return max(min, min(x, max))
 }
@@ -76,7 +76,7 @@ fn clamp(x: f32, min: f32, max: f32) -> f32 {
 **Status**: ✅ Complete
 
 **Syntax**:
-```kairo
+```morphogen
 field.map(|x| x * 2.0)
 agents.map(|a| a.pos + a.vel * dt)
 combine(a, b, |x, y| x + y)
@@ -107,7 +107,7 @@ constant = || 42  # No-param lambdas supported
 **Status**: ✅ Complete
 
 **Syntax**:
-```kairo
+```morphogen
 # Inline syntax
 color = if temp > 100.0 then "red" else "blue"
 
@@ -140,7 +140,7 @@ speed = if vel > 10.0 then "fast" else if vel > 5.0 then "medium" else "slow"
 **Status**: ✅ Complete
 
 **Syntax**:
-```kairo
+```morphogen
 struct Particle {
     pos: Vec2<f32>
     vel: Vec2<f32>
@@ -170,7 +170,7 @@ struct Particle {
 **Status**: ✅ Already existed, verified compatibility
 
 **Syntax**:
-```kairo
+```morphogen
 @state temp : Field2D<f32> = zeros((256, 256))
 @state energy : f32[J] = 100.0
 ```
@@ -296,7 +296,7 @@ All 16 original tests still pass:
 
 v0.2.2 code will continue to work. Users can migrate incrementally:
 
-```kairo
+```morphogen
 # Old v0.2.2 syntax (still works)
 step {
     temp = diffuse(temp, rate=0.1, dt=0.1)
@@ -312,7 +312,7 @@ flow(dt=0.1, steps=1000) {
 
 ## Example: Complete v0.3.1 Program
 
-```kairo
+```morphogen
 # Particle system using all new v0.3.1 features
 
 struct Particle {

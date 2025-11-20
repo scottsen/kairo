@@ -211,7 +211,7 @@ Everything in analog and digital signal processing reduces to:
 | Nonlinearity | Transistor activation |
 | Event | Spike detection |
 
-### Kairo (Software)
+### Morphogen (Software)
 | Primitive | Implementation |
 |-----------|---------------|
 | Sum | Linear transform, convolution |
@@ -380,4 +380,4 @@ Infinite emergence.
 
 - `04-MODULES.md` - Specific module implementations
 - `05-PROTOCOL.md` - How modules communicate
-- `06-KAIRO-BRIDGE.md` - Mapping primitives between hardware and Kairo
+- `06-KAIRO-BRIDGE.md` - Mapping primitives between hardware and Morphogen

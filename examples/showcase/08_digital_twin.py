@@ -21,9 +21,9 @@ Creates digital twin simulations:
 """
 
 import numpy as np
-from kairo.stdlib import field, integrators, sparse_linalg, palette, image, visual, io_storage
-from kairo.stdlib.field import Field2D
-from kairo.stdlib.visual import Visual
+from morphogen.stdlib import field, integrators, sparse_linalg, palette, image, visual, io_storage
+from morphogen.stdlib.field import Field2D
+from morphogen.stdlib.visual import Visual
 import time
 
 

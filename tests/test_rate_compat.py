@@ -1,7 +1,7 @@
 """Tests for rate compatibility checking system."""
 
 import pytest
-from kairo.types.rate_compat import (
+from morphogen.types.rate_compat import (
     Rate,
     RateInfo,
     RateCompatibilityError,

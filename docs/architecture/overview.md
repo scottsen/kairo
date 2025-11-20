@@ -131,7 +131,7 @@ Vectorized waveform generation
 
 **GPU Lowering Principles**
 
-Kairo's MLIR lowering follows structured patterns that ensure efficient GPU execution while maintaining determinism. The compiler pipeline implements:
+Morphogen's MLIR lowering follows structured patterns that ensure efficient GPU execution while maintaining determinism. The compiler pipeline implements:
 
 1. **Structured Parallelism** — All operations expose explicit iteration spaces for GPU block/thread mapping
 2. **Memory Hierarchy Management** — Explicit modeling of global/shared/register memory tiers

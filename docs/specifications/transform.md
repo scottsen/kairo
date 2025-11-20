@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Transform Dialect makes **domain changes** a first-class operation in Kairo. Transforms are not special-cased utilities; they are core grammatical elements with strict semantics, deterministic behavior, and profile-driven tuning.
+The Transform Dialect makes **domain changes** a first-class operation in Morphogen. Transforms are not special-cased utilities; they are core grammatical elements with strict semantics, deterministic behavior, and profile-driven tuning.
 
 **Design Principle:** FFT is not special — it's one instance of `transform.to(domain="frequency")`. All transforms follow the same pattern.
 
@@ -29,7 +29,7 @@ Convert stream `x` to a different domain representation.
 **Returns:** `Stream<T',D',R'>` in target domain
 
 **Example:**
-```kairo
+```morphogen
 let spec = transform.to(signal, domain="frequency", method="fft", window="hann")
 ```
 
@@ -48,7 +48,7 @@ Convert stream `x` back from a domain representation.
 **Returns:** `Stream<T,D,R>` in original domain
 
 **Example:**
-```kairo
+```morphogen
 let signal = transform.from(spectrum, domain="frequency", method="ifft")
 ```
 
@@ -65,7 +65,7 @@ Apply a coordinate transformation without changing domain.
 **Returns:** `Stream<T,D,R>` with transformed coordinates
 
 **Example:**
-```kairo
+```morphogen
 # Mel-frequency warping
 let mel_spec = transform.reparam(spectrum, mapping=mel_scale(n_mels=128))
 ```
@@ -79,7 +79,7 @@ let mel_spec = transform.reparam(spectrum, mapping=mel_scale(n_mels=128))
 **Forward Transforms:**
 
 #### FFT (Fast Fourier Transform)
-```kairo
+```morphogen
 transform.to(sig, domain="frequency", method="fft",
              window="hann",      # Window function
              nfft=null,          # FFT size (default: signal length)
@@ -98,7 +98,7 @@ transform.to(sig, domain="frequency", method="fft",
 ---
 
 #### STFT (Short-Time Fourier Transform)
-```kairo
+```morphogen
 transform.to(sig, domain="frequency", method="stft",
              window="hann",
              n_fft=2048,
@@ -120,7 +120,7 @@ transform.to(sig, domain="frequency", method="stft",
 
 **Inverse Transforms:**
 
-```kairo
+```morphogen
 # IFFT
 transform.from(spec, domain="frequency", method="ifft",
                length=null,  # Output length (default: infer from spectrum)
@@ -139,7 +139,7 @@ transform.from(stft, domain="frequency", method="istft",
 ### 2. Time ↔ Cepstral
 
 #### DCT (Discrete Cosine Transform)
-```kairo
+```morphogen
 transform.to(sig, domain="cepstral", method="dct",
              type=2,      # DCT type (1-4)
              norm="ortho")
@@ -148,7 +148,7 @@ transform.to(sig, domain="cepstral", method="dct",
 **Use cases:** Compression, MFCC computation, cepstral analysis
 
 **Inverse:**
-```kairo
+```morphogen
 transform.from(ceps, domain="cepstral", method="idct", type=2, norm="ortho")
 ```
 
@@ -157,7 +157,7 @@ transform.from(ceps, domain="cepstral", method="idct", type=2, norm="ortho")
 ### 3. Time ↔ Wavelet
 
 #### Wavelet Transform
-```kairo
+```morphogen
 transform.to(sig, domain="wavelet", method="cwt",
              wavelet="morlet",   # Wavelet family
              scales=[1..128],    # Scale values
@@ -169,7 +169,7 @@ transform.to(sig, domain="wavelet", method="cwt",
 **Returns:** `Stream<Complex<f32>, 2D, audio>` (scale × time)
 
 **Inverse:**
-```kairo
+```morphogen
 transform.from(cwt, domain="wavelet", method="icwt", wavelet="morlet")
 ```
 
@@ -179,7 +179,7 @@ transform.from(cwt, domain="wavelet", method="icwt", wavelet="morlet")
 
 For 2D/3D fields (PDEs, images, volumes):
 
-```kairo
+```morphogen
 # 2D Fourier transform (spatial → k-space)
 let k_field = transform.to(field, domain="k-space", method="fft2d",
                             norm="ortho")
@@ -198,7 +198,7 @@ let filtered = transform.from(filtered_k, domain="k-space", method="ifft2d")
 ### 5. Linear ↔ Perceptual
 
 #### Mel Scale (Frequency Warping)
-```kairo
+```morphogen
 # Frequency → Mel frequency
 let mel_spec = transform.reparam(spectrum, mapping=mel_scale(
     n_mels=128,
@@ -218,7 +218,7 @@ let lin_spec = transform.reparam(mel_spec, mapping=inverse_mel_scale())
 
 For graph/network data:
 
-```kairo
+```morphogen
 # Graph Laplacian eigenbasis
 let spectral = transform.to(graph, domain="spectral", method="laplacian",
                              k=50)  # Number of eigenvectors
@@ -288,14 +288,14 @@ Standard window functions for all time-frequency transforms:
 ## Error Handling
 
 ### Type Errors
-```kairo
+```morphogen
 # ERROR: Cannot FFT a 2D field
 let spec = transform.to(field2d, domain="frequency", method="fft")
 # → Use method="fft2d" for 2D data
 ```
 
 ### Domain Mismatches
-```kairo
+```morphogen
 # ERROR: Inverse domain must match forward domain
 let spec = transform.to(sig, domain="frequency", method="fft")
 let back = transform.from(spec, domain="wavelet", method="icwt")
@@ -303,7 +303,7 @@ let back = transform.from(spec, domain="wavelet", method="icwt")
 ```
 
 ### Attribute Validation
-```kairo
+```morphogen
 # ERROR: hop_length must divide n_fft evenly for perfect reconstruction
 transform.to(sig, domain="frequency", method="stft", n_fft=2048, hop_length=513)
 ```
@@ -333,7 +333,7 @@ transform.to(sig, domain="frequency", method="stft", n_fft=2048, hop_length=513)
 ## Examples
 
 ### Example 1: Spectral Filtering
-```kairo
+```morphogen
 scene SpectralFilter {
   let sig = sine(440Hz) + sine(880Hz) + noise(seed=42) * 0.1
 
@@ -351,7 +351,7 @@ scene SpectralFilter {
 ```
 
 ### Example 2: STFT-based Processing
-```kairo
+```morphogen
 scene VocoderEffect {
   let voice = input_mono()
 
@@ -371,7 +371,7 @@ scene VocoderEffect {
 ```
 
 ### Example 3: Mel-Frequency Features
-```kairo
+```morphogen
 scene MelFeatures {
   let audio = input_mono()
 
@@ -411,7 +411,7 @@ Affine transforms preserve parallel lines and include translation, rotation, sca
 
 #### Translation
 
-```kairo
+```morphogen
 transform.translate(object, offset: Vec<Dim>)
 ```
 
@@ -422,7 +422,7 @@ transform.translate(object, offset: Vec<Dim>)
 **Returns:** Transformed object
 
 **Example:**
-```kairo
+```morphogen
 let field = field.zeros(shape=(100, 100))
 let moved = transform.translate(field, offset=(10, 5))
 
@@ -437,7 +437,7 @@ let moved_mesh = transform.translate(mesh, offset=(10mm, 0, 5mm))
 
 #### Rotation
 
-```kairo
+```morphogen
 transform.rotate(object, angle, axis="z", origin=Anchor | Vec<Dim>)
 ```
 
@@ -450,7 +450,7 @@ transform.rotate(object, angle, axis="z", origin=Anchor | Vec<Dim>)
 **Returns:** Rotated object
 
 **Examples:**
-```kairo
+```morphogen
 # 2D rotation around center (EXPLICIT origin)
 let box = geom.box(10mm, 10mm, 10mm)
 let rotated = transform.rotate(
@@ -479,7 +479,7 @@ let bad = transform.rotate(mesh, 45 deg)  # Compiler error: origin required
 
 #### Scale
 
-```kairo
+```morphogen
 transform.scale(object, factor: f64 | Vec<Dim>, origin=Anchor | Vec<Dim>)
 ```
 
@@ -491,7 +491,7 @@ transform.scale(object, factor: f64 | Vec<Dim>, origin=Anchor | Vec<Dim>)
 **Returns:** Scaled object
 
 **Examples:**
-```kairo
+```morphogen
 # Uniform scale from center
 let scaled = transform.scale(
     mesh,
@@ -513,7 +513,7 @@ let stretched = transform.scale(
 
 #### Shear
 
-```kairo
+```morphogen
 transform.shear(object, axis, angle, origin=Anchor | Vec<Dim>)
 ```
 
@@ -524,7 +524,7 @@ transform.shear(object, axis, angle, origin=Anchor | Vec<Dim>)
 - `origin`: Shear reference point
 
 **Example:**
-```kairo
+```morphogen
 # Shear in X direction
 let sheared = transform.shear(field, axis="x", angle=15 deg, origin=(0,0))
 ```
@@ -535,7 +535,7 @@ let sheared = transform.shear(field, axis="x", angle=15 deg, origin=(0,0))
 
 #### Mirror
 
-```kairo
+```morphogen
 transform.mirror(object, plane: String | Vec<Dim>)
 ```
 
@@ -544,7 +544,7 @@ transform.mirror(object, plane: String | Vec<Dim>)
 - `plane`: Mirror plane (`"xy"`, `"xz"`, `"yz"` or normal vector)
 
 **Example:**
-```kairo
+```morphogen
 # Mirror across XY plane
 let mirrored = transform.mirror(mesh, plane="xy")
 
@@ -558,7 +558,7 @@ let mirrored_custom = transform.mirror(mesh, plane=(1, 1, 0))  # Diagonal
 
 #### Generic Affine Transform
 
-```kairo
+```morphogen
 transform.affine(object, matrix: Mat<Dim+1, Dim+1>)
 ```
 
@@ -569,7 +569,7 @@ Apply arbitrary affine transformation via matrix.
 - `matrix`: (Dim+1)×(Dim+1) homogeneous transformation matrix
 
 **Example:**
-```kairo
+```morphogen
 # Compose rotation + translation manually
 let mat = affine_matrix(
     rotation = rotation_matrix(angle=45 deg, axis="z"),
@@ -592,7 +592,7 @@ Convert between different coordinate representations (Cartesian, polar, spherica
 
 #### Cartesian ↔ Polar (2D)
 
-```kairo
+```morphogen
 # Cartesian → Polar
 let polar_field = transform.to_coord(
     cartesian_field,
@@ -623,7 +623,7 @@ let cartesian = transform.to_coord(
 
 #### Cartesian ↔ Spherical (3D)
 
-```kairo
+```morphogen
 # Cartesian → Spherical
 let spherical = transform.to_coord(
     cartesian_field_3d,
@@ -654,7 +654,7 @@ let cartesian = transform.to_coord(
 
 #### Cartesian ↔ Cylindrical (3D)
 
-```kairo
+```morphogen
 # Cartesian → Cylindrical
 let cylindrical = transform.to_coord(
     cartesian_field,
@@ -679,7 +679,7 @@ Projective transforms include perspective projection and homography.
 
 #### Perspective Projection
 
-```kairo
+```morphogen
 transform.projection(
     object_3d,
     method = "perspective",
@@ -700,7 +700,7 @@ transform.projection(
 
 #### Homography (2D Perspective Warp)
 
-```kairo
+```morphogen
 transform.homography(image, matrix: Mat<3,3>)
 ```
 
@@ -722,7 +722,7 @@ Transformations integrate with the coordinate frame system (see coordinate-frame
 
 **Frame transformations:**
 
-```kairo
+```morphogen
 # Create frame
 let frame_A = Frame<3, Cartesian, m>(
     origin = (0, 0, 0),
@@ -751,7 +751,7 @@ let point_in_B = frame.to_frame(point_in_A, from=frame_A, to=frame_B)
 
 Transforms can be composed explicitly:
 
-```kairo
+```morphogen
 # Sequential composition (order matters!)
 let transformed = object
     |> transform.translate(offset=(10, 0, 0))
@@ -774,7 +774,7 @@ assert_ne!(A, B)  # Different results!
 
 **Extended usage for spatial fields:**
 
-```kairo
+```morphogen
 # Define warp function
 let warp = λ (x, y): (x + 0.1 * sin(y), y + 0.1 * cos(x))
 
@@ -818,7 +818,7 @@ let unwrapped = transform.reparam(
 
 #### Example 1: Rotate Field Around Custom Origin
 
-```kairo
+```morphogen
 scene RotatedField {
     # Create 2D field
     let field = field.from_function(
@@ -841,7 +841,7 @@ scene RotatedField {
 
 #### Example 2: Cartesian to Polar Conversion
 
-```kairo
+```morphogen
 scene PolarView {
     # Create Cartesian field (grid)
     let cartesian = field.from_function(
@@ -872,7 +872,7 @@ scene PolarView {
 
 #### Example 3: Transform Chain (Geometry)
 
-```kairo
+```morphogen
 part TransformedBracket {
     # Start with simple box
     let base = geom.box(20mm, 10mm, 5mm)
@@ -899,7 +899,7 @@ part TransformedBracket {
 
 #### Example 4: Fisheye Warp
 
-```kairo
+```morphogen
 scene FisheyeEffect {
     let image = field.load("input.png")
 
@@ -925,7 +925,7 @@ scene FisheyeEffect {
 
 #### Example 5: Frame Conversion (3D CAD)
 
-```kairo
+```morphogen
 assembly RobotArm {
     # Define frames for each link
     let base_frame = Frame<3, Cartesian, mm>(origin=(0,0,0))
@@ -997,7 +997,7 @@ The Transform Dialect provides:
 ✅ **Explicit origins** (TiaCAD principle: no implicit rotation/scale centers)
 ✅ **Frame integration** (works with coordinate-frames.md)
 
-Transforms are the bridge between Kairo's multi-domain vision and practical computation.
+Transforms are the bridge between Morphogen's multi-domain vision and practical computation.
 
 ---
 

@@ -9,7 +9,7 @@ This example demonstrates the new geometry domain enhancements:
 
 import numpy as np
 
-from kairo.stdlib.geometry import (
+from morphogen.stdlib.geometry import (
     # 3D primitives
     point3d,
     box3d,
@@ -143,7 +143,7 @@ def demo_field_integration():
     print("=" * 60)
 
     try:
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
 
         # Create a field with a gradient
         print("\n1. Creating a 2D field with gradient:")
@@ -191,7 +191,7 @@ def demo_rigidbody_integration():
     print("=" * 60)
 
     try:
-        from kairo.stdlib.rigidbody import ShapeType, RigidBody2D
+        from morphogen.stdlib.rigidbody import ShapeType, RigidBody2D
 
         # Convert circle to rigidbody shape
         print("\n1. Converting Circle to RigidBody:")

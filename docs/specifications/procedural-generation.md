@@ -12,14 +12,14 @@ This document specifies the **ProceduralDomain** — a unified layer for synthes
 
 ### Why ProceduralDomain?
 
-Procedural generation is a natural fit for Kairo because:
+Procedural generation is a natural fit for Morphogen because:
 
 1. **SpeedTree proves the market** — Industry-standard vegetation tool, but limited to trees and offline workflows
 2. **Cross-domain potential** — ProceduralDomain integrates with Geometry, Physics, Acoustics, Optimization, Materials
 3. **Creative + Commercial applications** — Games, film, architecture, generative art all benefit
 4. **GPU-accelerable** — Noise, meshing, instancing are massively parallel
 5. **Novel synthesis** — No existing tool unifies procedural generation + physics + audio + geometry
-6. **Kairo can exceed SpeedTree** — Add real physics, cross-domain workflows, GPU real-time generation
+6. **Morphogen can exceed SpeedTree** — Add real physics, cross-domain workflows, GPU real-time generation
 
 ### Applications
 
@@ -88,7 +88,7 @@ The EmergenceDomain (ADR-004, emergence.md) includes basic L-systems for string 
 
 ### 1.1 Core Types
 
-```kairo
+```morphogen
 // L-system definition
 type LSystem {
     axiom: String,
@@ -148,7 +148,7 @@ type Context {
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Simple tree grammar
 let tree = lsystem.define(
     name = "tree",
@@ -190,7 +190,7 @@ let tree = lsystem.define(
 ```
 
 **Example:**
-```kairo
+```morphogen
 let tree_string = lsystem.expand(tree, iterations=6, seed=42)
 ```
 
@@ -202,7 +202,7 @@ let tree_string = lsystem.expand(tree, iterations=6, seed=42)
 
 Parametric L-systems allow rules to depend on numerical parameters that evolve during expansion.
 
-```kairo
+```morphogen
 // Example: branch thickness decreases with depth
 let param_tree = lsystem.parametric(
     axiom = "F(1.0)",
@@ -219,7 +219,7 @@ let param_tree = lsystem.parametric(
 
 **Stochastic L-system with probabilistic rules**
 
-```kairo
+```morphogen
 // Example: random branching
 let stochastic_tree = lsystem.stochastic(
     axiom = "F",
@@ -241,7 +241,7 @@ let stochastic_tree = lsystem.stochastic(
 
 **Common L-system patterns:**
 
-```kairo
+```morphogen
 lsystem.preset(name: String) -> LSystem
 ```
 
@@ -266,7 +266,7 @@ Presets:
 
 ### 2.1 Core Types
 
-```kairo
+```morphogen
 type Branch {
     id: u64,
     parent: Option<u64>,
@@ -328,7 +328,7 @@ enum SplineType {
 ```
 
 **Example:**
-```kairo
+```morphogen
 let tree_string = lsystem.expand(grammar, iterations=7)
 let branches = branches.from_lsystem(
     tree_string,
@@ -404,7 +404,7 @@ let branches = branches.from_lsystem(
 ```
 
 **Example:**
-```kairo
+```morphogen
 let mesh = branches.to_mesh(
     branches,
     radial_segments = 8,
@@ -446,7 +446,7 @@ let mesh = branches.to_mesh(
 ```
 
 **Example:**
-```kairo
+```morphogen
 branches = branches.randomize_angles(
     branches,
     noise_fn = "simplex3d",
@@ -520,7 +520,7 @@ This algorithm generates trees by iteratively growing branches toward "attractio
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Generate crown-shaped tree
 let crown_points = noise.distribute_in_sphere(
     center = vec3(0, 10, 0),
@@ -570,7 +570,7 @@ let tree = growth.space_colonization(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Phototropism (grow toward light)
 tree = growth.tropism(tree, direction=vec3(0.2, 1, 0), weight=0.3)
 
@@ -652,7 +652,7 @@ tree = growth.tropism(tree, direction=vec3(0, -1, 0), weight=0.1)
 
 ### 3.1 Core Types
 
-```kairo
+```morphogen
 type NoiseConfig {
     type: NoiseType,
     frequency: f32,
@@ -705,7 +705,7 @@ enum NoiseType {
 ```
 
 **Example:**
-```kairo
+```morphogen
 let n = noise.perlin3d(position=vec3(x, y, z), frequency=1.0, seed=42)
 ```
 
@@ -768,7 +768,7 @@ let n = noise.perlin3d(position=vec3(x, y, z), frequency=1.0, seed=42)
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Multi-scale terrain
 let height = noise.fbm(
     position = vec3(x, 0, z),
@@ -810,7 +810,7 @@ let height = noise.fbm(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Cellular stone pattern
 let (f1, f2) = noise.worley(position=vec3(x, y, z), frequency=2.0, seed=42)
 let cell_pattern = f2 - f1  // Edge highlighting
@@ -849,7 +849,7 @@ Curl noise is essential for:
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Wood grain pattern
 let curl = noise.curl3d(position=vec3(x, y, z), frequency=5.0, seed=42)
 let flow_pattern = curl.x  // Extract one component for texture
@@ -861,14 +861,14 @@ let flow_pattern = curl.x  // Extract one component for texture
 
 **Turbulence (absolute value of noise)**
 
-```kairo
+```morphogen
 noise.turbulence(position: Vec3<m>, octaves: i32, seed: u64) -> f32
 ```
 
 Turbulence is `abs(noise)` summed over multiple octaves — creates sharp, chaotic patterns.
 
 **Example:**
-```kairo
+```morphogen
 // Marble texture
 let turb = noise.turbulence(position=vec3(x, y, z), octaves=6, seed=42)
 let marble = sin(x * 0.1 + turb * 5.0)
@@ -903,7 +903,7 @@ let marble = sin(x * 0.1 + turb * 5.0)
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Distribute trees in forest
 let tree_positions = random.distribute(
     bounds = box(1000m, 1000m, 100m),
@@ -957,7 +957,7 @@ let tree_positions = random.distribute(
 ```
 
 **Example:**
-```kairo
+```morphogen
 let leaf_mesh = geom.plane(0.1m, 0.1m)  // Simple leaf quad
 let leaves = foliage.scatter_on_branches(
     tree,
@@ -975,7 +975,7 @@ let leaves = foliage.scatter_on_branches(
 
 **Align foliage to branch normals or custom direction**
 
-```kairo
+```morphogen
 foliage.align_to_normal(
     instances: Array<Instance>,
     alignment: String  // "branch_normal", "up", "random"
@@ -1010,7 +1010,7 @@ foliage.align_to_normal(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Render 100,000 trees efficiently
 let oak_mesh = branches.to_mesh(oak_tree)
 let transforms = forest_positions.map(|pos| mat4.translate(pos))
@@ -1028,7 +1028,7 @@ let forest = instancing.create(
 
 **Level-of-detail management**
 
-```kairo
+```morphogen
 instancing.lod(
     instances: InstanceCollection,
     camera: CameraRef,
@@ -1074,7 +1074,7 @@ Automatically switches between detail levels based on distance from camera.
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Autumn tree colors
 let autumn = palette.gradient(stops=[
     (0.0, rgb(0.2, 0.5, 0.1)),   // Dark green
@@ -1089,7 +1089,7 @@ let autumn = palette.gradient(stops=[
 
 **Map height to color gradient**
 
-```kairo
+```morphogen
 palette.map_height(
     mesh: Mesh,
     gradient: Gradient,
@@ -1098,7 +1098,7 @@ palette.map_height(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Color tree by height (green at bottom, yellow at top)
 let colored_tree = palette.map_height(
     tree_mesh,
@@ -1113,7 +1113,7 @@ let colored_tree = palette.map_height(
 
 **Map curvature to color (highlight edges, crevices)**
 
-```kairo
+```morphogen
 palette.map_curvature(
     mesh: Mesh,
     gradient: Gradient
@@ -1154,7 +1154,7 @@ Useful for:
 ```
 
 **Example:**
-```kairo
+```morphogen
 let bark = material.bark(
     scale = 2.0,
     roughness = 0.9,
@@ -1172,7 +1172,7 @@ let tree_mesh = branches.to_mesh(tree, bark_texture=bark)
 
 **Procedural stone texture**
 
-```kairo
+```morphogen
 material.stone(
     type: String,  // "granite", "marble", "sandstone"
     scale: f32,
@@ -1186,7 +1186,7 @@ material.stone(
 
 **Procedural wood grain**
 
-```kairo
+```morphogen
 material.wood(
     grain_direction: Vec3<1>,
     ring_frequency: f32,
@@ -1201,7 +1201,7 @@ material.wood(
 
 **PBR material from procedural maps**
 
-```kairo
+```morphogen
 material.pbr(
     base_color: Color | Texture,
     roughness: f32 | Texture,
@@ -1222,7 +1222,7 @@ material.pbr(
 
 ### 6.1 Core Types
 
-```kairo
+```morphogen
 type Terrain {
     heightfield: Field2D<f32<m>>,
     resolution: (i32, i32),
@@ -1281,7 +1281,7 @@ enum BiomeType {
 ```
 
 **Example:**
-```kairo
+```morphogen
 let terrain = terrain.fractal(
     size = (1000m, 1000m),
     resolution = (1024, 1024),
@@ -1326,7 +1326,7 @@ let terrain = terrain.fractal(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Hydraulic erosion creates realistic valleys and rivers
 terrain = terrain.erode(
     terrain,
@@ -1368,7 +1368,7 @@ terrain = terrain.erode(
 ```
 
 **Example:**
-```kairo
+```morphogen
 let biomes = terrain.biome_map(
     terrain,
     moisture_scale = 150.0,
@@ -1383,7 +1383,7 @@ let biomes = terrain.biome_map(
 
 **Convert heightfield to mesh**
 
-```kairo
+```morphogen
 terrain.to_mesh(terrain: Terrain) -> Mesh
 ```
 
@@ -1420,7 +1420,7 @@ terrain.to_mesh(terrain: Terrain) -> Mesh
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Define species rules
 let species = [
     {mesh: oak_tree, biomes: ["forest"], slope_max: 30deg, density: 0.5},
@@ -1478,7 +1478,7 @@ let vegetation = vegetation.distribute(
 ```
 
 **Example:**
-```kairo
+```morphogen
 scene TreeAnimation {
     let tree = lsystem.expand(oak_grammar, iterations=7)
     let branches = branches.from_lsystem(tree)
@@ -1533,7 +1533,7 @@ scene TreeAnimation {
 
 **Weight-based bending (heavier branches bend more)**
 
-```kairo
+```morphogen
 wind.branch_weighting(
     tree: BranchTree,
     wind_force: Vec3<N>,
@@ -1547,7 +1547,7 @@ wind.branch_weighting(
 
 **Bake wind animation into mesh vertex animation**
 
-```kairo
+```morphogen
 wind.apply_to_mesh(
     mesh: Mesh,
     wind_fn: Fn(Vec3<m>, Time) -> Vec3<m>,
@@ -1562,7 +1562,7 @@ wind.apply_to_mesh(
 
 **Use FluidDomain wind simulation for realistic animation**
 
-```kairo
+```morphogen
 // Cross-domain: FluidDomain → ProceduralDomain
 let wind_field = fluid.wind_simulation(...)
 let animated_tree = wind.from_fluid(tree, wind_field, time=t)
@@ -1574,7 +1574,7 @@ let animated_tree = wind.from_fluid(tree, wind_field, time=t)
 
 **Animate seasonal color changes**
 
-```kairo
+```morphogen
 seasonal.color_transition(
     tree: BranchTree,
     season: f32,  // 0=spring, 0.25=summer, 0.5=autumn, 0.75=winter
@@ -1583,7 +1583,7 @@ seasonal.color_transition(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Animate through seasons
 let tree = seasonal.color_transition(
     tree,
@@ -1603,7 +1603,7 @@ let tree = seasonal.color_transition(
 
 **Purpose:** Generate buildings, cities, road networks
 
-**Why:** Extends Kairo beyond nature into urban environments.
+**Why:** Extends Morphogen beyond nature into urban environments.
 
 ---
 
@@ -1641,7 +1641,7 @@ let tree = seasonal.color_transition(
 
 **Subdivide city blocks into lots**
 
-```kairo
+```morphogen
 urban.lot_subdivision(
     roads: Graph,
     min_lot_size: f32<m^2>,
@@ -1683,7 +1683,7 @@ urban.lot_subdivision(
 
 **Generate parametric building facade**
 
-```kairo
+```morphogen
 arch.facade(
     wall: Polygon,
     window_pattern: String,
@@ -1699,7 +1699,7 @@ arch.facade(
 ### ProceduralDomain → GeometryDomain
 
 **L-system → Mesh:**
-```kairo
+```morphogen
 let tree_string = lsystem.expand(grammar, iterations=7)
 let branches = branches.from_lsystem(tree_string)
 let mesh = branches.to_mesh(branches)
@@ -1707,7 +1707,7 @@ let solid = geom.from_mesh(mesh)  // GeometryDomain
 ```
 
 **Terrain → Surface:**
-```kairo
+```morphogen
 let terrain = terrain.fractal(size=1000m, octaves=8)
 let mesh = terrain.to_mesh(terrain)
 let surface = geom.from_mesh(mesh)
@@ -1718,7 +1718,7 @@ let surface = geom.from_mesh(mesh)
 ### ProceduralDomain → PhysicsDomain
 
 **Wind Simulation:**
-```kairo
+```morphogen
 // Generate forest
 let forest = vegetation.distribute(terrain, species=[oak, pine])
 
@@ -1730,7 +1730,7 @@ forest = vegetation.apply_wind(forest, wind_field)
 ```
 
 **Structural Analysis:**
-```kairo
+```morphogen
 // Generate tree
 let tree = growth.space_colonization(...)
 let mesh = branches.to_mesh(tree)
@@ -1747,7 +1747,7 @@ tree = branches.reinforce(tree, stress_threshold=10MPa)
 ### ProceduralDomain → AcousticsDomain
 
 **Forest Acoustic Scattering:**
-```kairo
+```morphogen
 // Generate forest
 let forest = vegetation.distribute(terrain, count=10000)
 
@@ -1769,7 +1769,7 @@ out audio = acoustic.listener(scattered, position=vec3(100, 2, 0))
 ### ProceduralDomain → OptimizationDomain
 
 **Optimize Tree Growth:**
-```kairo
+```morphogen
 // Optimize branch angles for structural integrity
 let optimal_tree = opt.minimize(
     objective = |params| {
@@ -1788,7 +1788,7 @@ let optimal_tree = opt.minimize(
 
 ### Example 1: SpeedTree-Quality Birch Tree
 
-```kairo
+```morphogen
 scene BirchTree {
     // Define L-system grammar
     let grammar = lsystem.define(
@@ -1873,7 +1873,7 @@ scene BirchTree {
 
 ### Example 2: Realistic Terrain with Vegetation
 
-```kairo
+```morphogen
 scene ProceduralLandscape {
     // Generate base terrain
     let terrain = terrain.fractal(
@@ -1926,7 +1926,7 @@ scene ProceduralLandscape {
 
 ### Example 3: Physics-Based Tree Growth
 
-```kairo
+```morphogen
 scene PhysicsTree {
     // Space colonization with light simulation
     let light_field = field.directional_light(direction=vec3(0.2, 1, 0))
@@ -1962,7 +1962,7 @@ scene PhysicsTree {
 
 ### Example 4: Procedural City with Acoustic Simulation
 
-```kairo
+```morphogen
 scene ProceduralCity {
     // Generate road network
     let roads = urban.road_network(
@@ -2048,7 +2048,7 @@ scene ProceduralCity {
 ## 12. Testing Strategy
 
 ### Determinism Tests
-```kairo
+```morphogen
 // Grammar expansion must be bit-exact
 let tree1 = lsystem.expand(grammar, iterations=7, seed=42)
 let tree2 = lsystem.expand(grammar, iterations=7, seed=42)
@@ -2061,7 +2061,7 @@ assert_eq!(n1, n2)
 ```
 
 ### Visual Regression Tests
-```kairo
+```morphogen
 // Render tree and compare to reference image
 let tree = procedural.birch_tree(seed=42)
 let rendered = visual.render(tree, camera=ref_camera)
@@ -2069,7 +2069,7 @@ assert_image_similar(rendered, "ref_birch_tree.png", threshold=0.95)
 ```
 
 ### Performance Tests
-```kairo
+```morphogen
 // 100k instances should render at 60 FPS
 let forest = instancing.create(oak_mesh, transforms=100000)
 let fps = visual.benchmark(forest, duration=10s)
@@ -2087,7 +2087,7 @@ assert!(fps >= 60)
 - [ ] Real-time generation (100k+ tree instances at 60 FPS)
 
 **Creative:**
-- [ ] "Kairo Trees" demo rivals SpeedTree in quality
+- [ ] "Morphogen Trees" demo rivals SpeedTree in quality
 - [ ] 20+ cross-domain examples
 - [ ] Gallery of outputs (trees, terrains, cities)
 
@@ -2132,7 +2132,7 @@ The **ProceduralDomain** provides:
 ✅ **Cross-domain integration** — Seamless composition with Geometry, Physics, Audio, Optimization
 ✅ **Deterministic** — Strict/repro guarantees for reproducible results
 
-This makes Kairo a **unified procedural generation platform** — no other tool combines procedural content creation with physics, acoustics, geometry, and optimization in one coherent, GPU-accelerated, deterministic system.
+This makes Morphogen a **unified procedural generation platform** — no other tool combines procedural content creation with physics, acoustics, geometry, and optimization in one coherent, GPU-accelerated, deterministic system.
 
 ---
 

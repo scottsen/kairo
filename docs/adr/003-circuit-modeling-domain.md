@@ -2,7 +2,7 @@
 
 **Status:** PROPOSED
 **Date:** 2025-11-15
-**Authors:** Kairo Architecture Team
+**Authors:** Morphogen Architecture Team
 **Supersedes:** N/A
 **Related:** ADR-002 (Cross-Domain Patterns), ../specifications/circuit.md
 
@@ -10,7 +10,7 @@
 
 ## Context
 
-The circuit modeling domain represents one of the most natural fits for Kairo's multi-domain architecture. Electrical engineering inherently combines:
+The circuit modeling domain represents one of the most natural fits for Morphogen's multi-domain architecture. Electrical engineering inherently combines:
 
 - **Differential equations** (transient analysis, state-space models)
 - **Spatial geometry** (PCB traces, component placement, routing)
@@ -29,7 +29,7 @@ Current tools in this space are fragmented:
 
 **No existing tool unifies**: circuit simulation + PCB geometry + electromagnetics + audio modeling + pattern generation in a single declarative framework.
 
-Kairo can fill this gap by treating circuits as **typed operator graphs** with **multi-physics coupling**, **geometry integration**, and **cross-domain flows**.
+Morphogen can fill this gap by treating circuits as **typed operator graphs** with **multi-physics coupling**, **geometry integration**, and **cross-domain flows**.
 
 ---
 
@@ -319,7 +319,7 @@ class PCBGeometryToEMFieldPass(LoweringPass):
 
 ### 5. Multi-Domain Integration
 
-Circuit domain integrates seamlessly with other Kairo domains:
+Circuit domain integrates seamlessly with other Morphogen domains:
 
 #### **Circuit ↔ Geometry (PCB Layout)**
 
@@ -500,7 +500,7 @@ class CircuitToGPUPass(LoweringPass):
 #### **1. Unified Analog/Digital/Audio/Geometry Simulation**
 
 ```yaml
-# Kairo circuit specification (YAML syntax)
+# Morphogen circuit specification (YAML syntax)
 
 pcb:
   shape: rect [100, 60]
@@ -735,7 +735,7 @@ assert waveform.overshoot < 0.1  # < 10% overshoot
 1. **Unique Positioning**
    - Only tool to unify circuit + PCB + audio + EM in one framework
    - Enables workflows impossible in SPICE, CAD, or audio tools alone
-   - Natural fit for Kairo's operator graph architecture
+   - Natural fit for Morphogen's operator graph architecture
 
 2. **Cross-Domain Synergy**
    - Audio domain benefits from physical circuit modeling
@@ -840,7 +840,7 @@ The Circuit domain will be considered successful if:
 ## References
 
 - **ADR-002:** Cross-Domain Architectural Patterns
-- **../architecture/domain-architecture.md:** Kairo domain vision
+- **../architecture/domain-architecture.md:** Morphogen domain vision
 - **../specifications/operator-registry.md:** Operator metadata schema
 - **../specifications/circuit.md:** Circuit domain specification (to be written)
 - **ngspice:** Open-source SPICE simulator (reference implementation)
@@ -849,7 +849,7 @@ The Circuit domain will be considered successful if:
 
 ---
 
-## Appendix: Why EE/Circuit Modeling is Perfect for Kairo
+## Appendix: Why EE/Circuit Modeling is Perfect for Morphogen
 
 ### 1. Circuits Are Operator Graphs
 
@@ -864,7 +864,7 @@ Each component:
 - Has **constraints** (KCL: sum of currents = 0, KVL: sum of voltages = 0)
 - Has **internal relations** (I = C dV/dt, V = L di/dt, nonlinear transfer functions)
 
-This is **identical** to Kairo's operator registry design:
+This is **identical** to Morphogen's operator registry design:
 - Operators have typed inputs/outputs
 - Operators have constraints (unit compatibility)
 - Operators have internal transformations
@@ -877,7 +877,7 @@ Circuit simulation requires:
 - **Nonlinear system solving** (Newton-Raphson for diodes, transistors)
 - **Multi-physics coupling** (thermal, EM fields, mechanical vibration)
 
-Kairo's Layer 4 (Physics/Fields) provides:
+Morphogen's Layer 4 (Physics/Fields) provides:
 - PDE/ODE solvers
 - Integrators (Euler, RK4, implicit methods)
 - Constraint solvers
@@ -910,7 +910,7 @@ Analog audio circuits (guitar pedals, tube amps, synthesizers) require:
 - **DSP** (filtering, modulation, reverb)
 - **Real-time processing** (audio-rate sample generation)
 
-Kairo can unify:
+Morphogen can unify:
 - **CircuitDomain:** Physical circuit modeling (SPICE-like)
 - **AudioDomain:** DSP effects, filters, oscillators
 - **Cross-domain flow:** Circuit output → Audio post-processing
@@ -923,11 +923,11 @@ output = pedal.process(guitar)  # Circuit simulation
 reverb = AudioDomain.reverb(output, mix=0.3)  # DSP post-processing
 ```
 
-**Only Kairo can do this seamlessly.**
+**Only Morphogen can do this seamlessly.**
 
 ### 5. Exploration + Optimization
 
-Kairo's cross-domain flows enable **novel workflows**:
+Morphogen's cross-domain flows enable **novel workflows**:
 
 **Circuit → ML Optimization:**
 ```python
@@ -972,13 +972,13 @@ buck.switch_control = pwm
 
 **Conclusion:**
 
-Circuit modeling is **the most natural domain for Kairo** outside of geometry and audio, because it:
-1. Perfectly matches Kairo's operator graph architecture
+Circuit modeling is **the most natural domain for Morphogen** outside of geometry and audio, because it:
+1. Perfectly matches Morphogen's operator graph architecture
 2. Requires multi-domain physics (ODEs, linear systems, nonlinear solvers)
 3. Integrates seamlessly with geometry (PCB layout)
 4. Integrates seamlessly with audio (analog modeling)
 5. Enables novel cross-domain workflows (ML optimization, thermal coupling, pattern-driven modulation)
 
-**No existing tool can compete with Kairo's unified architecture for circuit modeling.**
+**No existing tool can compete with Morphogen's unified architecture for circuit modeling.**
 
-This is Kairo's **killer app** for the EE and analog audio communities.
+This is Morphogen's **killer app** for the EE and analog audio communities.

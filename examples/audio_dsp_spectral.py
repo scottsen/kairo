@@ -15,7 +15,7 @@ Usage:
 """
 
 import numpy as np
-from kairo.stdlib.audio import audio
+from morphogen.stdlib.audio import audio
 
 
 def example_1_buffer_operations():
@@ -163,7 +163,7 @@ def example_4_stft_time_frequency_analysis():
     f0, f1 = 200.0, 2000.0
     chirp = np.sin(2 * np.pi * (f0 * t + (f1 - f0) * t**2 / (2 * duration)))
 
-    from kairo.stdlib.audio import AudioBuffer
+    from morphogen.stdlib.audio import AudioBuffer
     signal = AudioBuffer(data=chirp, sample_rate=sample_rate)
     print(f"✓ Created chirp signal: {f0}Hz → {f1}Hz over {duration}s")
 
@@ -337,7 +337,7 @@ def example_7_convolution_reverb():
     decay = np.exp(-np.arange(ir_samples - decay_start) / 5000.0)
     impulse_response_data[decay_start:] += decay * 0.2
 
-    from kairo.stdlib.audio import AudioBuffer
+    from morphogen.stdlib.audio import AudioBuffer
     impulse_response = AudioBuffer(data=impulse_response_data, sample_rate=44100)
 
     print(f"✓ Created impulse response: {impulse_response.duration:.2f}s")

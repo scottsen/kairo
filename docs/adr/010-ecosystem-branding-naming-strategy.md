@@ -10,10 +10,10 @@
 
 ## Note: Project Naming Decision
 
-**This ADR originally proposed naming conventions for "Kairo" but the project has been renamed.**
+**This ADR originally proposed naming conventions for "Morphogen" but the project has been renamed.**
 
 **See [ADR-011](011-project-renaming-morphogen-philbrick.md) for:**
-- Digital platform: **Kairo → Morphogen** (honors Turing's morphogenesis)
+- Digital platform: **Morphogen → Morphogen** (honors Turing's morphogenesis)
 - Analog platform: **Philbrick** (honors George A. Philbrick)
 - Modules: **Philbricks** (composable function blocks)
 
@@ -23,7 +23,7 @@
 - Domain renames (rigidbody→rigid, sparse_linalg→linalg, etc.)
 
 **Update all references below:**
-- "Kairo" → "Morphogen" (for digital platform)
+- "Morphogen" → "Morphogen" (for digital platform)
 - Add "Philbrick" (for analog platform)
 
 ---
@@ -32,7 +32,7 @@
 
 ## Context
 
-Morphogen (formerly Kairo) has evolved from a single-domain DSL (Creative Computation DSL) into a multi-domain platform with:
+Morphogen (formerly Morphogen) has evolved from a single-domain DSL (Creative Computation DSL) into a multi-domain platform with:
 - 23+ domain libraries (field, agent, audio, visual, rigid body, graph, signal, etc.)
 - Multiple abstraction layers (kernel, domains, frontends)
 - Two user-facing surfaces (Morphogen.Audio, RiffStack)
@@ -62,7 +62,7 @@ This ADR establishes a coherent naming strategy that:
 #### What Exists (November 2025)
 
 **User-Facing Surfaces:**
-- `Morphogen.Audio` - Compositional audio DSL ✅ (formerly Kairo.Audio)
+- `Morphogen.Audio` - Compositional audio DSL ✅ (formerly Morphogen.Audio)
 - `RiffStack` - Live performance environment ✅ (separate brand, working)
 
 **Domain Libraries (kairo/stdlib/):**
@@ -138,10 +138,10 @@ From ARCHITECTURE.md, ECOSYSTEM_MAP.md, and related docs:
 
 #### Layer 1: Platform & User Surfaces
 
-**Pattern:** `Morphogen.X` for user-facing DSLs (updated from Kairo per ADR-011)
+**Pattern:** `Morphogen.X` for user-facing DSLs (updated from Morphogen per ADR-011)
 
 ```
-Morphogen                # Platform brand (formerly Kairo)
+Morphogen                # Platform brand (formerly Morphogen)
 ├── Morphogen.Audio      # Compositional audio DSL (implemented)
 ├── Morphogen.Physics    # Future: Physics simulation DSL
 ├── Morphogen.Visual     # Future: Visual composition DSL
@@ -343,7 +343,7 @@ Agents<T>                # Particle collections ✅
 
 ### Phase 2: Kernel Namespace (v0.11) - Weeks 2-3
 
-**Goal:** Create `kairo.internal` namespace and reorganize kernel code.
+**Goal:** Create `morphogen.internal` namespace and reorganize kernel code.
 
 **Tasks:**
 1. Create `kairo/internal/` directory
@@ -391,8 +391,8 @@ This module is being renamed:
   New: rigid
 
 Both imports work in v0.11:
-  from kairo.stdlib import rigidbody  # Deprecated
-  from kairo.stdlib import rigid      # Preferred
+  from morphogen.stdlib import rigidbody  # Deprecated
+  from morphogen.stdlib import rigid      # Preferred
 
 The old name will be removed in v1.0.
 """
@@ -435,10 +435,10 @@ Update your imports:
 
 ```python
 # Old (v0.10)
-from kairo.stdlib import rigidbody, sparse_linalg, statemachine
+from morphogen.stdlib import rigidbody, sparse_linalg, statemachine
 
 # New (v1.0)
-from kairo.stdlib import rigid, linalg, state
+from morphogen.stdlib import rigid, linalg, state
 ```
 
 All functionality is identical, only names changed.
@@ -461,7 +461,7 @@ All functionality is identical, only names changed.
 ✅ **Professional** - Consistent, Unix-like aesthetic
 ✅ **Discoverable** - Users can guess domain names
 ✅ **Memorable** - Short, distinctive names (`rigid`, `linalg`, `optimize`)
-✅ **Distinctive** - "Kairo.Audio" + domain composition is unique branding
+✅ **Distinctive** - "Morphogen.Audio" + domain composition is unique branding
 ✅ **Pythonic** - Follows Python ecosystem conventions
 
 ### Negative
@@ -495,12 +495,12 @@ All functionality is identical, only names changed.
 
 ---
 
-### Alternative 2: Aggressive Namespacing (kairo.domain.X)
+### Alternative 2: Aggressive Namespacing (morphogen.domain.X)
 
 ```python
-from kairo.domain.field import *
-from kairo.domain.agent import *
-from kairo.kernel.types import Stream
+from morphogen.domain.field import *
+from morphogen.domain.agent import *
+from morphogen.kernel.types import Stream
 ```
 
 **Pros:**
@@ -509,7 +509,7 @@ from kairo.kernel.types import Stream
 
 **Cons:**
 - Verbose imports
-- Not ergonomic for DSL use case (`use field` > `use kairo.domain.field`)
+- Not ergonomic for DSL use case (`use field` > `use morphogen.domain.field`)
 - Overthinking the problem
 
 **Verdict:** Rejected - Too heavy for benefit.
@@ -529,13 +529,13 @@ Just improve domain naming, leave kernel code where it is.
 - No clear boundary for advanced users
 - Harder to document "what's kernel vs domain"
 
-**Verdict:** Rejected - `kairo.internal` provides clarity worth the effort.
+**Verdict:** Rejected - `morphogen.internal` provides clarity worth the effort.
 
 ---
 
 ### Alternative 4: Different Domain Taxonomy
 
-Group domains differently (e.g., `kairo.physics.*`, `kairo.media.*`).
+Group domains differently (e.g., `morphogen.physics.*`, `morphogen.media.*`).
 
 **Pros:**
 - Logical groupings
@@ -552,11 +552,11 @@ Group domains differently (e.g., `kairo.physics.*`, `kairo.media.*`).
 
 ## Cross-Domain Composition Branding
 
-This naming strategy supports Kairo's **killer differentiator** - cross-domain composition.
+This naming strategy supports Morphogen's **killer differentiator** - cross-domain composition.
 
 **Marketing Examples:**
 
-```kairo
+```morphogen
 # Three domains, one program, zero glue code
 use fluid, acoustic, audio
 
@@ -565,7 +565,7 @@ let sound = fluid.simulate(engine_pulse)
            |> audio.synthesize(mic_position)
 ```
 
-```kairo
+```morphogen
 # Circuit → Audio synthesis (impossible elsewhere)
 use circuit, audio
 
@@ -576,7 +576,7 @@ let tone = audio.apply_circuit(guitar_signal, pedal_response)
 **Taglines:**
 - "Circuit → Audio. Fluid → Acoustic. Geometry → Fields."
 - "Three domains. One program. Zero glue code."
-- "Kairo: Where domains compose."
+- "Morphogen: Where domains compose."
 
 ---
 
@@ -591,7 +591,7 @@ let tone = audio.apply_circuit(guitar_signal, pedal_response)
 ### Updates Required
 
 1. **README.md** - Add clear layer hierarchy visualization
-2. **ARCHITECTURE.md** - Reference `kairo.internal` namespace
+2. **ARCHITECTURE.md** - Reference `morphogen.internal` namespace
 3. **ECOSYSTEM_MAP.md** - Use new domain names throughout
 4. **All example files** - Update to new import patterns
 5. **CONTRIBUTING.md** - Add domain naming rules
@@ -601,7 +601,7 @@ let tone = audio.apply_circuit(guitar_signal, pedal_response)
 ## Success Metrics
 
 **After Phase 2 (Kernel Namespace):**
-- [ ] All kernel code in `kairo.internal/`
+- [ ] All kernel code in `morphogen.internal/`
 - [ ] Clear import patterns documented
 - [ ] Zero confusion about "what's kernel vs domain"
 
@@ -620,7 +620,7 @@ let tone = audio.apply_circuit(guitar_signal, pedal_response)
 ## References
 
 **Architecture Documents:**
-- [ARCHITECTURE.md](../../ARCHITECTURE.md) - Kairo Stack architecture
+- [ARCHITECTURE.md](../../ARCHITECTURE.md) - Morphogen Stack architecture
 - [ECOSYSTEM_MAP.md](../../ECOSYSTEM_MAP.md) - Complete domain map
 - [ROADMAP.md](../../ROADMAP.md) - Development roadmap
 
@@ -686,7 +686,7 @@ let tone = audio.apply_circuit(guitar_signal, pedal_response)
 ### Beginner Level
 ```python
 # Simple domain usage
-from kairo.stdlib import field, agent, audio
+from morphogen.stdlib import field, agent, audio
 
 # Use domains directly
 sim = field.diffuse(temperature, rate=0.1, dt=0.01)
@@ -698,7 +698,7 @@ sound = audio.sine(freq=440)
 ```python
 # Types + domains
 from kairo import Stream, Field, Evt
-from kairo.stdlib import field, agent, audio
+from morphogen.stdlib import field, agent, audio
 
 # Create typed variables
 temp: Field[float] = field.zeros(shape=(256, 256))
@@ -708,8 +708,8 @@ sig: Stream[float] = audio.sine(freq=440)
 ### Advanced Level
 ```python
 # Kernel access
-from kairo.internal import scheduler, transform, registry
-from kairo.stdlib import field, audio
+from morphogen.internal import scheduler, transform, registry
+from morphogen.stdlib import field, audio
 
 # Customize scheduler
 scheduler.set_rates(audio=48000, control=1000)
@@ -721,9 +721,9 @@ spectrum = transform.fft(audio_signal)
 ### Framework Developer Level
 ```python
 # Full access
-from kairo.internal import *
-from kairo.compiler import dialects, passes
-from kairo.stdlib import field, audio
+from morphogen.internal import *
+from morphogen.compiler import dialects, passes
+from morphogen.stdlib import field, audio
 
 # Extend compiler
 @passes.register_pass("custom_fusion")

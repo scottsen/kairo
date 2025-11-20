@@ -15,7 +15,7 @@ import numpy as np
 
 sys.path.insert(0, '../..')
 
-from kairo.stdlib.rigidbody import (
+from morphogen.stdlib.rigidbody import (
     PhysicsWorld2D,
     create_circle_body,
     step_world,

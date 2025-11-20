@@ -10,7 +10,7 @@ import time
 
 # Add kairo to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 
 def heat_diffusion_step(field, dt, diffusivity=0.1):

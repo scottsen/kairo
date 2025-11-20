@@ -16,7 +16,7 @@ Validates:
 
 import pytest
 import numpy as np
-from kairo.stdlib.optimization import (
+from morphogen.stdlib.optimization import (
     DifferentialEvolution,
     CMAES,
     ParticleSwarmOptimization,

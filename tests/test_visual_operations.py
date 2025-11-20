@@ -5,8 +5,8 @@ import numpy as np
 import tempfile
 import os
 from pathlib import Path
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual, Visual
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual, Visual
 
 
 class TestVisualColorize:

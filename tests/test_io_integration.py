@@ -5,10 +5,10 @@ import numpy as np
 import tempfile
 import os
 
-from kairo.stdlib.audio import audio, AudioBuffer
-from kairo.stdlib.visual import visual, Visual
-from kairo.stdlib.field import field
-from kairo.stdlib.agents import Agents, agents
+from morphogen.stdlib.audio import audio, AudioBuffer
+from morphogen.stdlib.visual import visual, Visual
+from morphogen.stdlib.field import field
+from morphogen.stdlib.agents import Agents, agents
 
 
 class TestAudioVisualIntegration:
@@ -24,7 +24,7 @@ class TestAudioVisualIntegration:
         waveform = tone.data[:1000].reshape(10, 100)
 
         # Create field and visualize
-        from kairo.stdlib.field import Field2D
+        from morphogen.stdlib.field import Field2D
         field_data = Field2D(data=waveform)
         vis = visual.colorize(field_data, palette="coolwarm")
 

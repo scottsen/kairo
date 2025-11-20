@@ -1,6 +1,6 @@
-# 📐 Kairo.Geometry Specification v1.0
+# 📐 Morphogen.Geometry Specification v1.0
 
-**A declarative geometry and mesh processing dialect built on the Kairo kernel.**
+**A declarative geometry and mesh processing dialect built on the Morphogen kernel.**
 
 **Inspired by TiaCAD's reference-based composition model.**
 
@@ -8,12 +8,12 @@
 
 ## 0. Overview
 
-Kairo.Geometry is a typed, declarative geometry computation dialect layered on the Kairo kernel.
+Morphogen.Geometry is a typed, declarative geometry computation dialect layered on the Morphogen kernel.
 It provides deterministic semantics, parametric modeling primitives, and composable spatial constructs.
 It is an intermediate layer that sits between:
 
 - **User applications** — CAD tools, 3D printing, computational geometry, simulation preprocessing
-- **Kairo Core** — the deterministic MLIR-based execution kernel
+- **Morphogen Core** — the deterministic MLIR-based execution kernel
 - **Backend engines** — CadQuery, CGAL, OpenCASCADE, or custom GPU mesh kernels
 
 ---
@@ -62,7 +62,7 @@ Type safety prevents mixing incompatible operations (e.g., can't extrude a `Soli
 
 Defines a self-contained geometric component.
 
-```kairo
+```morphogen
 part Bracket {
     let base = sketch.rectangle(width=50mm, height=30mm)
         |> extrude(height=5mm)
@@ -82,7 +82,7 @@ part Bracket {
 
 Composes multiple parts using reference-based placement.
 
-```kairo
+```morphogen
 assembly Tower {
     let base = part.call(Bracket, width=100mm)
     let pillar = geom.cylinder(radius=10mm, height=200mm)
@@ -104,7 +104,7 @@ assembly Tower {
 
 Interoperability with standard formats.
 
-```kairo
+```morphogen
 import step("bracket.step")       # Import STEP CAD file
 import stl("mesh.stl")            # Import STL mesh
 export step("output.step", assembly=Tower)
@@ -126,7 +126,7 @@ See **coordinate-frames.md** for full details.
 **Default frame:** Right-handed Cartesian (XYZ), origin at (0,0,0), units in `mm`.
 
 **Frame conversions:**
-```kairo
+```morphogen
 # Cartesian to cylindrical
 let cylindrical = transform.to_coord(solid, coord_type=Cylindrical)
 
@@ -142,7 +142,7 @@ Each operator is a pure function from one or more geometric objects to one or mo
 
 ### 5.1 Primitives (3D Solids)
 
-```kairo
+```morphogen
 geom.box(width, height, depth, centered=true)
 geom.sphere(radius)
 geom.cylinder(radius, height, centered=true)
@@ -152,7 +152,7 @@ geom.wedge(dx, dy, dz, xmin, zmin, xmax, zmax)  # Tapered box
 ```
 
 **Examples:**
-```kairo
+```morphogen
 let cube = geom.box(10mm, 10mm, 10mm)
 let ball = geom.sphere(5mm)
 let pipe = geom.cylinder(radius=3mm, height=20mm)
@@ -168,7 +168,7 @@ let pipe = geom.cylinder(radius=3mm, height=20mm)
 
 Sketches are 2D planar constructions (on XY plane by default).
 
-```kairo
+```morphogen
 sketch.rectangle(width, height, centered=true)
 sketch.circle(radius)
 sketch.ellipse(major, minor)
@@ -180,7 +180,7 @@ sketch.text(string, font, size)
 ```
 
 **Sketch boolean ops:**
-```kairo
+```morphogen
 sketch.union(s1, s2, ...)
 sketch.difference(s1, s2)
 sketch.intersection(s1, s2)
@@ -188,7 +188,7 @@ sketch.offset(sketch, distance)  # Parallel offset
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Rectangle with circular hole
 let plate = sketch.rectangle(50mm, 30mm)
 let hole = sketch.circle(5mm)
@@ -204,7 +204,7 @@ let rounded = sketch.rectangle(40mm, 20mm)
 
 ### 5.3 Extrusion & Revolution (2D → 3D)
 
-```kairo
+```morphogen
 extrude(sketch, height)
 extrude_along(sketch, path: Wire)
 revolve(sketch, axis="z", angle=360deg)
@@ -213,7 +213,7 @@ sweep(profile: Sketch, path: Wire, twist=0deg)
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Simple extrusion
 let block = sketch.rectangle(20mm, 10mm)
     |> extrude(height=5mm)
@@ -237,7 +237,7 @@ let spring = sweep(circle_profile, path=helix_path)
 
 ### 5.4 Boolean Operations (3D)
 
-```kairo
+```morphogen
 geom.union(s1, s2, ...)         # Combine solids
 geom.difference(s1, s2)         # Subtract s2 from s1
 geom.intersection(s1, s2)       # Common volume
@@ -245,14 +245,14 @@ geom.symmetric_difference(s1, s2)  # XOR
 ```
 
 **Operator overloading:**
-```kairo
+```morphogen
 let combined = solid_A + solid_B       # Union
 let subtracted = solid_A - solid_B     # Difference
 let intersect = solid_A & solid_B      # Intersection
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Bracket with hole
 let base = geom.box(50mm, 30mm, 5mm)
 let hole = geom.cylinder(radius=3mm, height=5mm)
@@ -267,7 +267,7 @@ let rounded_union = geom.union(part_A, part_B, fillet=2mm)
 
 ### 5.5 Finishing Operations
 
-```kairo
+```morphogen
 geom.fillet(solid, edges: [Edge], radius)    # Round edges
 geom.chamfer(solid, edges: [Edge], distance)  # Bevel edges
 geom.shell(solid, faces: [Face], thickness)   # Hollow out
@@ -275,7 +275,7 @@ geom.draft(solid, faces: [Face], angle, neutral_plane)  # Taper for molding
 ```
 
 **Edge/face selection:**
-```kairo
+```morphogen
 # Select edges by filter
 let top_edges = solid.edges(filter = λ e: e.center().z > 10mm)
 
@@ -288,7 +288,7 @@ solid.faces("|Z")   # Faces parallel to Z axis
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Fillet all top edges
 let rounded = geom.box(20mm, 20mm, 10mm)
     |> geom.fillet(edges=.edges(">Z"), radius=2mm)
@@ -306,7 +306,7 @@ let hollow_box = geom.box(30mm, 30mm, 30mm)
 
 ### 5.6 Pattern Operations
 
-```kairo
+```morphogen
 pattern.linear(object, direction, count, spacing)
 pattern.circular(object, axis, count, angle=360deg)
 pattern.grid(object, rows, cols, row_spacing, col_spacing)
@@ -314,7 +314,7 @@ pattern.along_path(object, path: Wire, count, align=true)
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Linear array
 let hole = geom.cylinder(radius=2mm, height=5mm)
 let holes_linear = pattern.linear(
@@ -350,7 +350,7 @@ let pin_grid = pattern.grid(
 
 See **transform.md** and **coordinate-frames.md**.
 
-```kairo
+```morphogen
 transform.translate(object, offset: Vec3)
 transform.rotate(object, angle, axis, origin=.center)
 transform.scale(object, factor, origin=.center)
@@ -359,7 +359,7 @@ transform.affine(object, matrix: Mat4)
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Translate
 let moved = geom.box(10mm, 10mm, 10mm)
     |> transform.translate((20mm, 0, 0))
@@ -384,7 +384,7 @@ let stretched = box
 
 ### 5.8 Measurement & Query
 
-```kairo
+```morphogen
 geom.measure.volume(solid: Solid) -> f64[m³]
 geom.measure.area(face: Face) -> f64[m²]
 geom.measure.length(edge: Edge) -> f64[m]
@@ -395,7 +395,7 @@ geom.measure.distance(obj_a, obj_b) -> f64
 ```
 
 **Examples:**
-```kairo
+```morphogen
 let box = geom.box(10mm, 20mm, 30mm)
 let vol = geom.measure.volume(box)  # Returns 6000 mm³
 
@@ -414,7 +414,7 @@ let distance = geom.measure.distance(solid_a, solid_b)
 
 Discrete mesh processing (for STL, OBJ, analysis).
 
-```kairo
+```morphogen
 mesh.from_solid(solid, tolerance=0.01mm) -> Mesh<Vertex>
 mesh.subdivide(mesh, method="catmull-clark|loop", iterations=1)
 mesh.smooth(mesh, iterations=1)
@@ -425,7 +425,7 @@ mesh.normals(mesh) -> Mesh<Vec3>
 ```
 
 **Examples:**
-```kairo
+```morphogen
 # Convert solid to mesh
 let solid = geom.sphere(10mm)
 let mesh = mesh.from_solid(solid, tolerance=0.1mm)
@@ -445,7 +445,7 @@ let temp_mesh = mesh.sample(mesh, temperature_field)
 
 ### 5.10 Advanced Operations
 
-```kairo
+```morphogen
 geom.offset(solid, distance)  # Offset surface (positive = expand)
 geom.thicken(face, thickness)  # Convert face to solid
 geom.project(wire, face) -> Wire  # Project curve onto surface
@@ -473,7 +473,7 @@ Every geometric object automatically provides anchors:
 
 ### Anchor Queries
 
-```kairo
+```morphogen
 # Direct name lookup
 box.anchor("face_top")
 
@@ -486,7 +486,7 @@ solid.anchor("face", filter = λ f: f.area() > 100mm²)
 
 ### Placement via Anchors
 
-```kairo
+```morphogen
 let part_B = mesh.place(
     part_B,
     anchor = part_B.anchor("bottom"),
@@ -499,7 +499,7 @@ let part_B = mesh.place(
 
 ## 7. Determinism & Profiles
 
-All geometry operations respect Kairo's determinism profiles:
+All geometry operations respect Morphogen's determinism profiles:
 
 | Operation | Profile | Notes |
 |-----------|---------|-------|
@@ -511,7 +511,7 @@ All geometry operations respect Kairo's determinism profiles:
 | Loft/sweep | Repro | Spline fitting |
 
 **Profile annotations:**
-```kairo
+```morphogen
 @determinism(strict)
 let box = geom.box(10mm, 10mm, 10mm)
 
@@ -523,7 +523,7 @@ let filleted = geom.fillet(box, edges=..., radius=2mm)
 
 ## 8. Backend Integration
 
-Kairo.Geometry is backend-neutral. Operations are semantically defined; lowering varies by backend.
+Morphogen.Geometry is backend-neutral. Operations are semantically defined; lowering varies by backend.
 
 | Backend | Status | Capabilities |
 |---------|--------|--------------|
@@ -548,7 +548,7 @@ operator:
 ```
 
 **Backend selection:**
-```kairo
+```morphogen
 @backend(cadquery)
 let solid = geom.box(...) + geom.sphere(...)
 
@@ -562,7 +562,7 @@ let field = field.from_solid(solid)  # Converts to SDF
 
 ### 9.1 Fields (CFD, Heat Transfer)
 
-```kairo
+```morphogen
 # Convert geometry to signed distance field
 let solid = geom.sphere(10mm)
 let sdf = field.from_solid(solid, bounds=..., resolution=(100,100,100))
@@ -574,7 +574,7 @@ let surface_temp = mesh.sample(mesh.from_solid(solid), temperature)
 
 ### 9.2 Physics (Collision, Dynamics)
 
-```kairo
+```morphogen
 # Create rigid body from geometry
 let solid = geom.box(10mm, 10mm, 10mm)
 let body = physics.rigid_body(
@@ -586,7 +586,7 @@ let body = physics.rigid_body(
 
 ### 9.3 Visuals (Rendering)
 
-```kairo
+```morphogen
 # Render geometry
 let rendered = visual.render(
     solid,
@@ -602,7 +602,7 @@ let rendered = visual.render(
 
 ### Example 1: Parametric Bracket
 
-```kairo
+```morphogen
 part Bracket(width=50mm, height=30mm, thickness=5mm, hole_radius=3mm) {
     # Base plate
     let base = sketch.rectangle(width, height)
@@ -630,7 +630,7 @@ let large = Bracket(width=80mm, height=60mm, hole_radius=5mm)
 
 ### Example 2: Assembly with Reference-Based Placement
 
-```kairo
+```morphogen
 assembly RobotArm {
     let base = geom.cylinder(radius=30mm, height=20mm)
     let link_1 = geom.box(10mm, 10mm, 100mm)
@@ -665,7 +665,7 @@ assembly RobotArm {
 
 ### Example 3: Circular Pattern (Bolt Holes)
 
-```kairo
+```morphogen
 part FlangePlate(radius=50mm, thickness=10mm, bolt_count=8, bolt_radius=4mm) {
     # Main disc
     let disc = sketch.circle(radius)
@@ -693,7 +693,7 @@ part FlangePlate(radius=50mm, thickness=10mm, bolt_count=8, bolt_radius=4mm) {
 
 ### Example 4: Lofted Shape (Vase)
 
-```kairo
+```morphogen
 part Vase(base_radius=30mm, top_radius=20mm, height=100mm, n_sections=5) {
     # Create profile sections
     let sections = (0..n_sections).map(λ i: {
@@ -712,7 +712,7 @@ part Vase(base_radius=30mm, top_radius=20mm, height=100mm, n_sections=5) {
 
 ### Example 5: Mesh Processing & Analysis
 
-```kairo
+```morphogen
 # Load STL, smooth, and analyze
 let raw_mesh = import("scan.stl")
 
@@ -744,7 +744,7 @@ visual.render(colored_mesh, colormap="viridis")
 
 All geometric operations must pass golden tests:
 
-```kairo
+```morphogen
 # Primitives are deterministic
 assert_eq!(
     geom.box(10mm, 10mm, 10mm),
@@ -767,7 +767,7 @@ assert_eq!(
 
 Verify geometric properties:
 
-```kairo
+```morphogen
 let cube = geom.box(10mm, 10mm, 10mm)
 assert_approx_eq!(geom.measure.volume(cube), 1000.0 mm³, tol=1e-9)
 
@@ -783,7 +783,7 @@ assert_approx_eq!(
 
 Verify explicit origins:
 
-```kairo
+```morphogen
 # Rotation around center preserves center position
 let box = geom.box(10mm, 10mm, 10mm)
 let rotated = transform.rotate(box, 45deg, axis="z", origin=.center)
@@ -798,7 +798,7 @@ assert_vec_eq!(
 
 Verify different backends produce equivalent results:
 
-```kairo
+```morphogen
 @backend(cadquery)
 let result_cq = geom.box(10mm, 10mm, 10mm) + geom.sphere(5mm)
 
@@ -814,7 +814,7 @@ assert_solid_equivalent!(result_cq, result_cgal, tolerance=1e-6)
 
 ### 12.1 NURBS & Splines
 
-```kairo
+```morphogen
 nurbs.surface(control_points, u_degree, v_degree, u_knots, v_knots)
 nurbs.curve(control_points, degree, knots)
 bezier.curve(control_points)
@@ -822,7 +822,7 @@ bezier.curve(control_points)
 
 ### 12.2 Topology Optimization
 
-```kairo
+```morphogen
 optimize.topology(
     domain = bounding_box,
     loads = [...],
@@ -834,7 +834,7 @@ optimize.topology(
 
 ### 12.3 Generative Design
 
-```kairo
+```morphogen
 generate.lattice(
     unit_cell = "gyroid",
     bounds = bounding_box,
@@ -844,7 +844,7 @@ generate.lattice(
 
 ### 12.4 Sheet Metal Operations
 
-```kairo
+```morphogen
 sheet.bend(face, angle, radius)
 sheet.unfold(solid) -> Sketch
 ```
@@ -884,7 +884,7 @@ See **operator-registry.md** for full registry integration.
 
 ## Summary
 
-Kairo.Geometry provides:
+Morphogen.Geometry provides:
 
 1. **Declarative CAD** — Describe what to build, not how
 2. **Reference-based composition** — Anchors replace hierarchies (TiaCAD model)

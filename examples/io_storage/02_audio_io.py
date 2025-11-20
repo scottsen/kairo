@@ -9,7 +9,7 @@ from pathlib import Path
 
 # Add kairo to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 
 def generate_sine_wave(freq, duration, sample_rate=44100, amplitude=0.5):

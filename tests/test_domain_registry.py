@@ -9,8 +9,8 @@ Tests cover:
 """
 
 import pytest
-from kairo.core.domain_registry import DomainRegistry, DomainDescriptor, register_stdlib_domains
-from kairo.core.operator import operator, OpCategory, get_operator_metadata
+from morphogen.core.domain_registry import DomainRegistry, DomainDescriptor, register_stdlib_domains
+from morphogen.core.operator import operator, OpCategory, get_operator_metadata
 
 
 class TestOperatorDecorator:

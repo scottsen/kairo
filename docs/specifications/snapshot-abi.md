@@ -8,7 +8,7 @@
 
 ## Overview
 
-The **Snapshot ABI** defines how Kairo captures and restores execution state, enabling:
+The **Snapshot ABI** defines how Morphogen captures and restores execution state, enabling:
 
 1. **Hot reload** — Update code without restarting execution
 2. **State persistence** — Save/load sessions
@@ -22,7 +22,7 @@ The **Snapshot ABI** defines how Kairo captures and restores execution state, en
 
 ## What is State?
 
-In Kairo, **state** includes:
+In Morphogen, **state** includes:
 
 1. **Operator state** — Internal buffers (delays, filters, integrators, RNGs)
 2. **Buffer contents** — Current audio/control/visual data
@@ -480,13 +480,13 @@ Snapshots include **version fields**:
 ```json
 {
   "version": "1.0",           // Snapshot format version
-  "kairo_version": "0.4.0"    // Kairo runtime version
+  "kairo_version": "0.4.0"    // Morphogen runtime version
 }
 ```
 
 **Forward compatibility:**
-- Older Kairo versions reject newer snapshot formats (error)
-- Newer Kairo versions can load older snapshots (with migration)
+- Older Morphogen versions reject newer snapshot formats (error)
+- Newer Morphogen versions can load older snapshots (with migration)
 
 **Migration example:**
 ```python

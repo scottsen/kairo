@@ -1,14 +1,14 @@
-# Kairo Output Generation Guide 🎨
+# Morphogen Output Generation Guide 🎨
 
-**How to create stunning, compelling outputs that showcase Kairo's unique value**
+**How to create stunning, compelling outputs that showcase Morphogen's unique value**
 
-This guide covers the philosophy, techniques, and best practices for generating high-quality outputs from Kairo examples that demonstrate the platform's power and uniqueness.
+This guide covers the philosophy, techniques, and best practices for generating high-quality outputs from Morphogen examples that demonstrate the platform's power and uniqueness.
 
 ---
 
 ## Table of Contents
 
-1. [Philosophy: What Makes Kairo Outputs Special](#philosophy-what-makes-kairo-outputs-special)
+1. [Philosophy: What Makes Morphogen Outputs Special](#philosophy-what-makes-kairo-outputs-special)
 2. [Output Types & Formats](#output-types--formats)
 3. [The Output Generation Pipeline](#the-output-generation-pipeline)
 4. [Cross-Domain Output Recipes](#cross-domain-output-recipes)
@@ -21,11 +21,11 @@ This guide covers the philosophy, techniques, and best practices for generating 
 
 ---
 
-## Philosophy: What Makes Kairo Outputs Special
+## Philosophy: What Makes Morphogen Outputs Special
 
-### The Kairo Difference
+### The Morphogen Difference
 
-Unlike other creative coding platforms (Processing, p5.js, TouchDesigner), Kairo's outputs are unique because:
+Unlike other creative coding platforms (Processing, p5.js, TouchDesigner), Morphogen's outputs are unique because:
 
 **1. True Multi-Domain Integration** 🔗
 ```
@@ -53,13 +53,13 @@ You literally cannot do "rigid body physics that generates spatial audio" or "fl
 
 ### Output Generation Goals
 
-When creating Kairo outputs, aim for:
+When creating Morphogen outputs, aim for:
 
 1. **Visual Impact** - Immediate "wow, what is that?" reaction
 2. **Technical Demonstration** - Shows something impossible elsewhere
 3. **Shareability** - Right format/duration for target platform
 4. **Reproducibility** - Deterministic and documented
-5. **Educational Value** - Teaches Kairo's capabilities
+5. **Educational Value** - Teaches Morphogen's capabilities
 
 ---
 
@@ -67,7 +67,7 @@ When creating Kairo outputs, aim for:
 
 ### Visual Outputs
 
-| Format | Use Case | Kairo API | Quality Settings |
+| Format | Use Case | Morphogen API | Quality Settings |
 |--------|----------|-----------|------------------|
 | **PNG** | High-res stills, thumbnails | `visual.output()` | Lossless, gamma-corrected |
 | **JPEG** | Web images, social media | `visual.output()` | 8-bit, adjustable quality |
@@ -76,7 +76,7 @@ When creating Kairo outputs, aim for:
 
 ### Audio Outputs
 
-| Format | Use Case | Kairo API | Quality Settings |
+| Format | Use Case | Morphogen API | Quality Settings |
 |--------|----------|-----------|------------------|
 | **WAV** | Lossless audio | `audio.save()` | 44.1kHz, 16/24-bit |
 | **FLAC** | Compressed lossless | `audio.save()` | 44.1kHz, lossless compression |
@@ -84,7 +84,7 @@ When creating Kairo outputs, aim for:
 
 ### Interactive Outputs
 
-| Type | Use Case | Kairo API |
+| Type | Use Case | Morphogen API |
 |------|----------|-----------|
 | **Live Display** | Development, demos | `visual.display()` |
 | **Real-time Audio** | Sound design | `audio.play()` |
@@ -144,7 +144,7 @@ audio.save(np.concatenate(audio_samples), "output.wav")
 
 ```python
 import numpy as np
-from kairo.stdlib import visual, field
+from morphogen.stdlib import visual, field
 
 # Quick parameter exploration
 def prototype():
@@ -262,7 +262,7 @@ ffmpeg -i input.mp4 -vf "eq=contrast=1.1:brightness=0.05" graded.mp4
 **Domains**: Physics + Audio + Visual
 
 ```python
-from kairo.stdlib import rigidbody, audio, visual
+from morphogen.stdlib import rigidbody, audio, visual
 
 def singing_physics():
     """Physics simulation that generates music."""
@@ -335,7 +335,7 @@ def singing_physics():
 **Domains**: Fluids + Audio + Visual + Agents
 
 ```python
-from kairo.stdlib import field, audio, visual, agents
+from morphogen.stdlib import field, audio, visual, agents
 
 def turbulent_tones():
     """Fluid simulation controls synthesizer parameters."""
@@ -421,7 +421,7 @@ def turbulent_tones():
 **Domains**: Fields + Audio + Visual
 
 ```python
-from kairo.stdlib import field, audio, visual
+from morphogen.stdlib import field, audio, visual
 
 def living_patterns():
     """Gray-Scott reaction-diffusion generates evolving soundscape."""
@@ -509,7 +509,7 @@ def living_patterns():
 **The Power of Blend Modes**
 
 ```python
-from kairo.stdlib import visual, field
+from morphogen.stdlib import visual, field
 
 def advanced_composition():
     """Multi-layer visual composition with blend modes."""
@@ -643,7 +643,7 @@ def synchronized_av():
 **Variant**: Drive visuals from audio analysis
 
 ```python
-from kairo.stdlib import audio
+from morphogen.stdlib import audio
 
 def audio_reactive_visuals():
     """Create visuals that respond to audio."""
@@ -717,7 +717,7 @@ Before releasing an output, verify:
   - Audio: AAC for web, FLAC for lossless
 
 - [ ] **Color**: Properly gamma-corrected
-  - Kairo handles this automatically via `visual.output()`
+  - Morphogen handles this automatically via `visual.output()`
   - Verify no color banding
 
 ### Content Quality
@@ -763,9 +763,9 @@ Before releasing an output, verify:
   }
   ```
 
-- [ ] **Version tracked**: Kairo version noted
+- [ ] **Version tracked**: Morphogen version noted
   ```python
-  # Tested with Kairo v0.8.2
+  # Tested with Morphogen v0.8.2
   ```
 
 ---
@@ -1052,7 +1052,7 @@ visual.video(frame_generator(), "output.mp4", fps=30)
 *Cause*: Color space / gamma issues
 
 *Solution*:
-- Kairo uses linear RGB internally and converts to sRGB for output
+- Morphogen uses linear RGB internally and converts to sRGB for output
 - Ensure you're using `visual.output()` or `visual.video()` (handles gamma)
 - Don't manually manipulate pixel values after colorization
 
@@ -1060,7 +1060,7 @@ visual.video(frame_generator(), "output.mp4", fps=30)
 
 ## Conclusion
 
-Creating compelling Kairo outputs is about:
+Creating compelling Morphogen outputs is about:
 
 1. **Showcasing uniqueness** - Do what other platforms can't
 2. **Cross-domain magic** - Combine domains in surprising ways
@@ -1072,7 +1072,7 @@ Creating compelling Kairo outputs is about:
 
 > *"Wait, how did you do that? I didn't know that was possible!"*
 
-That's when you know you've captured Kairo's unique value.
+That's when you know you've captured Morphogen's unique value.
 
 ---
 
@@ -1088,4 +1088,4 @@ That's when you know you've captured Kairo's unique value.
 **Happy Creating!** 🚀
 
 *Last Updated: 2025-11-16*
-*Kairo Version: v0.8.0+*
+*Morphogen Version: v0.8.0+*

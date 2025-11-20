@@ -8,7 +8,7 @@
 
 ## Overview
 
-The **Kairo Scheduler** is the heart of deterministic multirate execution. It coordinates operators running at different rates (audio, control, visual, sim) while maintaining:
+The **Morphogen Scheduler** is the heart of deterministic multirate execution. It coordinates operators running at different rates (audio, control, visual, sim) while maintaining:
 
 1. **Sample-accurate timing** — Events fire at exact sample boundaries
 2. **Deterministic ordering** — Identical runs produce identical results
@@ -22,7 +22,7 @@ The **Kairo Scheduler** is the heart of deterministic multirate execution. It co
 
 ## Rate System
 
-Kairo defines **four execution rates** forming a partial order:
+Morphogen defines **four execution rates** forming a partial order:
 
 | Rate | Typical Frequency | Block Size | Use Case |
 |------|-------------------|------------|----------|
@@ -198,7 +198,7 @@ When an audio-rate operator reads from a control-rate operator, **explicit resam
 | `sinc` | Windowed sinc | High-quality audio resampling |
 
 **Example:**
-```kairo
+```morphogen
 scene CrossRate {
   let env: Stream<f32, time, control> = adsr(...)  // 1kHz
   let osc: Stream<f32, time, audio> = sine(440Hz)  // 48kHz
@@ -643,7 +643,7 @@ def test_hot_reload():
 
 ## Summary
 
-The Kairo Scheduler provides:
+The Morphogen Scheduler provides:
 
 ✅ **Deterministic multirate execution** — Audio, control, visual, sim rates
 ✅ **Sample-accurate event fencing** — Events fire at exact boundaries
@@ -652,7 +652,7 @@ The Kairo Scheduler provides:
 ✅ **Double buffering** — Safe stateful operators
 ✅ **Hot reload support** — State snapshots and restoration
 
-This is the foundation for **rock-solid time handling** in Kairo.
+This is the foundation for **rock-solid time handling** in Morphogen.
 
 ---
 

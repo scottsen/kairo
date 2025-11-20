@@ -1,14 +1,14 @@
-# Architecture Decision Record — Unified Reference & Frame Model in Kairo
+# Architecture Decision Record — Unified Reference & Frame Model in Morphogen
 
 **Date:** 2025-11
 **Status:** 🚀 APPROVED – Begin Implementation
-**Decision:** Kairo will adopt a unified domain-agnostic reference system, auto-generated anchors, and first-class frames, replacing any prior ad-hoc reference semantics.
+**Decision:** Morphogen will adopt a unified domain-agnostic reference system, auto-generated anchors, and first-class frames, replacing any prior ad-hoc reference semantics.
 
 ---
 
 ## 1. Context
 
-During early Kairo design (kernel, Graph IR, operator registry), domains such as:
+During early Morphogen design (kernel, Graph IR, operator registry), domains such as:
 
 - audio
 - fields
@@ -33,13 +33,13 @@ This creates **fragmentation**:
 **TiaCAD v3.0 revealed a much cleaner approach:**
 One unified reference object (`SpatialRef`) with orientation-aware frames, auto-anchors, and pure-function resolution.
 
-This model is **domain-agnostic** and solves several problems Kairo has not yet solved.
+This model is **domain-agnostic** and solves several problems Morphogen has not yet solved.
 
 ---
 
 ## 2. Decision
 
-Kairo adopts a **unified, typed, pure, deterministic reference system** across all domains.
+Morphogen adopts a **unified, typed, pure, deterministic reference system** across all domains.
 
 The core components:
 
@@ -66,7 +66,7 @@ Frame {
 }
 ```
 
-`Frame` generalizes TiaCAD's orientation system and extends it into Kairo's multi-dimensional domains.
+`Frame` generalizes TiaCAD's orientation system and extends it into Morphogen's multi-dimensional domains.
 
 ### 3. Auto-generated anchors for every domain
 
@@ -95,7 +95,7 @@ Every `Stream<T,D,R>` / `Field<T>` / `Evt<A>` / visual clip / agent / geometry p
 - `.forward_axis`
 - `.sensor_frame('left_eye')`
 
-**Geometry (future Kairo extension)**
+**Geometry (future Morphogen extension)**
 - `.face_top`
 - `.edge(i)`
 - `.axis_z`
@@ -152,9 +152,9 @@ Everything flows through a **small, elegant `Ref` + `Frame` vocabulary**.
 
 #### 4. Powerful DSL ergonomics
 
-Kairo.Audio and RiffStack become dramatically clearer:
+Morphogen.Audio and RiffStack become dramatically clearer:
 
-```kairo
+```morphogen
 # align filter cutoff to spectral centroid
 cutoff = transform(spec.centroid).to("Hz")
 
@@ -192,7 +192,7 @@ frame: {...}
 
 #### 3. Frontends must update
 
-- Kairo.Audio must understand `.onsets`, `.beats`, `.frame`, etc.
+- Morphogen.Audio must understand `.onsets`, `.beats`, `.frame`, etc.
 - RiffStack must map controls to canonical references.
 
 #### 4. Operator registry requires rework
@@ -212,7 +212,7 @@ Ref { domain, type, payload, frame }
 Frame { origin, axes..., metadata }
 ```
 
-**Integration into Kairo Kernel**
+**Integration into Morphogen Kernel**
 
 - integrated into Types & Units
 - stored in Graph IR nodes
@@ -247,7 +247,7 @@ Frame { origin, axes..., metadata }
 
 ### Phase 4: Frontend updates (3 weeks)
 
-- Kairo.Audio: anchors and frame-aware transforms
+- Morphogen.Audio: anchors and frame-aware transforms
 - RiffStack: control anchoring, event alignment
 - Diagnostics for anchors & frames
 
@@ -268,7 +268,7 @@ Frame { origin, axes..., metadata }
 ## 7. Final Assessment
 
 This ADR is a **foundational improvement**.
-It gives Kairo:
+It gives Morphogen:
 
 - cleaner math
 - more expressive semantics
@@ -285,7 +285,7 @@ It gives Kairo:
 ## References
 
 - **TiaCAD v3.x** — Unified `SpatialRef` system with orientation-aware frames
-- **../specifications/coordinate-frames.md** — Kairo frame/anchor specification
+- **../specifications/coordinate-frames.md** — Morphogen frame/anchor specification
 - **../specifications/transform.md** — Frame-aware transformations
 - **../specifications/geometry.md** — Geometry domain with auto-generated anchors
 - **../architecture/domain-architecture.md** — Cross-domain reference model

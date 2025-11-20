@@ -1,4 +1,4 @@
-# Kairo v0.7.0 Phase 4: Agent Operations - Completion Summary
+# Morphogen v0.7.0 Phase 4: Agent Operations - Completion Summary
 
 **Status:** ✅ **COMPLETE**
 **Date:** November 14, 2025
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Phase 4 successfully implements the **Agent Operations dialect** for Kairo, enabling agent-based simulations with spawning, behavior trees, and property management. This phase builds on Phase 2 (Field Operations) and Phase 3 (Temporal Execution) to provide a complete framework for multi-agent simulations compiled through MLIR to efficient native code.
+Phase 4 successfully implements the **Agent Operations dialect** for Morphogen, enabling agent-based simulations with spawning, behavior trees, and property management. This phase builds on Phase 2 (Field Operations) and Phase 3 (Temporal Execution) to provide a complete framework for multi-agent simulations compiled through MLIR to efficient native code.
 
 ### Key Achievements
 
@@ -50,7 +50,7 @@ Phase 4 successfully implements the **Agent Operations dialect** for Kairo, enab
   - Extensible for custom behaviors
 
 **Type System:**
-- `!kairo.agent<T>`: Opaque agent collection type
+- `!morphogen.agent<T>`: Opaque agent collection type
 - Standard property layout: `[pos_x, pos_y, vel_x, vel_y, state]`
 - Indices: 0-4 for base properties
 
@@ -73,7 +73,7 @@ agent.behavior → scf.for with computations
 **Spawn Lowering:**
 ```mlir
 Input:
-  %agents = kairo.agent.spawn %count, %pos_x, %pos_y, %vel_x, %vel_y, %state
+  %agents = morphogen.agent.spawn %count, %pos_x, %pos_y, %vel_x, %vel_y, %state
 
 Output:
   %agents = memref.alloc(%count, %c5) : memref<?x5xf32>
@@ -89,7 +89,7 @@ Output:
 **Behavior Lowering (Move):**
 ```mlir
 Input:
-  %agents_new = kairo.agent.behavior %agents, "move"
+  %agents_new = morphogen.agent.behavior %agents, "move"
 
 Output:
   %count = memref.dim %agents, %c0
@@ -641,7 +641,7 @@ All examples completed successfully!
 
 ## Conclusion
 
-Phase 4 successfully delivers **Agent Operations** for Kairo v0.7.0, providing a complete framework for agent-based simulations compiled through MLIR. The implementation includes:
+Phase 4 successfully delivers **Agent Operations** for Morphogen v0.7.0, providing a complete framework for agent-based simulations compiled through MLIR. The implementation includes:
 
 - ✅ 4 core agent operations (spawn, update, query, behavior)
 - ✅ Efficient memref-based memory model

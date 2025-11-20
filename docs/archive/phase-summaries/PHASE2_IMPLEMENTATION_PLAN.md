@@ -1,4 +1,4 @@
-# Kairo v0.7.0 Phase 2: Field Operations Dialect - Implementation Plan
+# Morphogen v0.7.0 Phase 2: Field Operations Dialect - Implementation Plan
 
 **Status**: In Progress
 **Phase**: 2 of 4 (Months 4-6)
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Phase 2 implements the **Kairo Field Dialect** in real MLIR, providing high-level operations for spatial field computations with lowering to SCF (Structured Control Flow) loops. This is the first custom dialect implementation and demonstrates the full compilation pipeline.
+Phase 2 implements the **Morphogen Field Dialect** in real MLIR, providing high-level operations for spatial field computations with lowering to SCF (Structured Control Flow) loops. This is the first custom dialect implementation and demonstrates the full compilation pipeline.
 
 ---
 
@@ -34,7 +34,7 @@ Phase 2 implements the **Kairo Field Dialect** in real MLIR, providing high-leve
 ## Phase 2 Goals
 
 ### Primary Objectives
-1. **Custom Field Dialect**: Define `!kairo.field<T>` type and operations
+1. **Custom Field Dialect**: Define `!morphogen.field<T>` type and operations
 2. **Field Operations**: Implement 4 core operations (create, gradient, diffuse, laplacian)
 3. **Lowering Pass**: Transform field ops → SCF loops + memref
 4. **Performance Benchmarking**: Measure speedup vs NumPy interpreter
@@ -53,11 +53,11 @@ Phase 2 implements the **Kairo Field Dialect** in real MLIR, providing high-leve
 ### Compilation Pipeline
 
 ```
-Kairo AST (field.gradient(...))
+Morphogen AST (field.gradient(...))
     ↓
 Custom Field Dialect
-    %0 = kairo.field.create %w, %h : !kairo.field<f32>
-    %1 = kairo.field.gradient %0, %dir : !kairo.field<f32>
+    %0 = morphogen.field.create %w, %h : !morphogen.field<f32>
+    %1 = morphogen.field.gradient %0, %dir : !morphogen.field<f32>
     ↓
 FieldToSCFPass (Lowering)
     %mem = memref.alloc(%h, %w) : memref<?x?xf32>
@@ -78,32 +78,32 @@ Native Code
 
 **Type System:**
 ```mlir
-!kairo.field<T>          // Generic field type
-!kairo.field<f32>        // 32-bit float field
-!kairo.field<f64>        // 64-bit float field
-!kairo.field<i32>        // 32-bit integer field
+!morphogen.field<T>          // Generic field type
+!morphogen.field<f32>        // 32-bit float field
+!morphogen.field<f64>        // 64-bit float field
+!morphogen.field<i32>        // 32-bit integer field
 ```
 
 **Operations (Phase 2 MVP):**
 
-1. **kairo.field.create** - Allocate field
+1. **morphogen.field.create** - Allocate field
    ```mlir
-   %field = kairo.field.create %width, %height, %fill : !kairo.field<f32>
+   %field = morphogen.field.create %width, %height, %fill : !morphogen.field<f32>
    ```
 
-2. **kairo.field.gradient** - Compute spatial gradient (central difference)
+2. **morphogen.field.gradient** - Compute spatial gradient (central difference)
    ```mlir
-   %grad = kairo.field.gradient %field : !kairo.field<f32> -> !kairo.field<vector<2xf32>>
+   %grad = morphogen.field.gradient %field : !morphogen.field<f32> -> !morphogen.field<vector<2xf32>>
    ```
 
-3. **kairo.field.laplacian** - 5-point stencil Laplacian
+3. **morphogen.field.laplacian** - 5-point stencil Laplacian
    ```mlir
-   %lapl = kairo.field.laplacian %field : !kairo.field<f32>
+   %lapl = morphogen.field.laplacian %field : !morphogen.field<f32>
    ```
 
-4. **kairo.field.diffuse** - Jacobi diffusion solver
+4. **morphogen.field.diffuse** - Jacobi diffusion solver
    ```mlir
-   %diffused = kairo.field.diffuse %field, %rate, %dt, %iters : !kairo.field<f32>
+   %diffused = morphogen.field.diffuse %field, %rate, %dt, %iters : !morphogen.field<f32>
    ```
 
 ---
@@ -125,7 +125,7 @@ Native Code
 **Example**:
 ```python
 class FieldType:
-    """Wrapper for !kairo.field<T> type."""
+    """Wrapper for !morphogen.field<T> type."""
 
     @staticmethod
     def get(element_type, context):
@@ -134,7 +134,7 @@ class FieldType:
         return ir.OpaqueType.get("kairo", f"field<{element_type}>", context=context)
 
 class FieldCreateOp:
-    """kairo.field.create operation."""
+    """morphogen.field.create operation."""
 
     @staticmethod
     def create(width, height, fill_value, element_type, loc, ip):
@@ -166,7 +166,7 @@ class FieldCreateOp:
 
 *Input*:
 ```mlir
-%grad = kairo.field.gradient %field : !kairo.field<f32>
+%grad = morphogen.field.gradient %field : !morphogen.field<f32>
 ```
 
 *Output*:
@@ -248,7 +248,7 @@ def apply_lowering_passes(self, module: ir.Module):
 **File**: `benchmarks/field_operations_benchmark.py`
 
 **Metrics**:
-1. **Compilation Time**: Time to compile Kairo → MLIR IR
+1. **Compilation Time**: Time to compile Morphogen → MLIR IR
 2. **Execution Time**: Time to execute (Phase 4 with JIT)
 3. **Correctness**: Numerical accuracy vs NumPy reference
 4. **Memory Usage**: Peak memory consumption

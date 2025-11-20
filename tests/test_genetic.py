@@ -4,7 +4,7 @@ Tests for genetic algorithm domain.
 
 import pytest
 import numpy as np
-from kairo.stdlib.genetic import (
+from morphogen.stdlib.genetic import (
     genetic, Individual, Population, GeneticOperations, parallel_fitness_evaluation
 )
 

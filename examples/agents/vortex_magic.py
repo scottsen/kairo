@@ -4,8 +4,8 @@ Demonstrates vortex forces, attractors, rotation visualization, and trail effect
 """
 
 import numpy as np
-from kairo.stdlib.agents import agents, particle_behaviors
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.agents import agents, particle_behaviors
+from morphogen.stdlib.visual import visual
 
 
 def vortex_magic_demo():

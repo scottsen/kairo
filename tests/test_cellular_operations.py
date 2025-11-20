@@ -17,7 +17,7 @@ Validates:
 
 import pytest
 import numpy as np
-from kairo.stdlib.cellular import (
+from morphogen.stdlib.cellular import (
     cellular,
     CellularField2D,
     CellularField1D,

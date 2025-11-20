@@ -4,7 +4,7 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.sparse_linalg import (
+from morphogen.stdlib.sparse_linalg import (
     csr_matrix, csc_matrix, coo_matrix,
     solve_cg, solve_bicgstab, solve_gmres, solve_sparse,
     laplacian_1d, laplacian_2d, gradient_2d, divergence_2d

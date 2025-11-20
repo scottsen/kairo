@@ -15,8 +15,8 @@ import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
 from typing import Optional, List
 
-from kairo.stdlib.flappy import flappy, GameState
-from kairo.stdlib.neural import neural, MLP
+from morphogen.stdlib.flappy import flappy, GameState
+from morphogen.stdlib.neural import neural, MLP
 
 
 class FlappyBirdRenderer:

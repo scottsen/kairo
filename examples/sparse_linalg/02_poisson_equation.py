@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.sparse_linalg import (
+from morphogen.stdlib.sparse_linalg import (
     laplacian_2d,
     solve_cg,
     gradient_2d

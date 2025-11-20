@@ -629,7 +629,7 @@ This document catalogs all operators in the **ProceduralDomain**, organized by s
 - Noise (perlin, simplex, fbm, worley)
 - Space colonization algorithm
 
-**Deliverable:** "Kairo Trees v1" demo (basic but functional)
+**Deliverable:** "Morphogen Trees v1" demo (basic but functional)
 
 ---
 
@@ -640,7 +640,7 @@ This document catalogs all operators in the **ProceduralDomain**, organized by s
 - Terrain (fractal, erode, biome_map, vegetation.distribute)
 - Growth algorithms (tropism, gravity, collision_avoidance)
 
-**Deliverable:** "Kairo Trees v2" demo (production-ready) + "Kairo Terrain" demo
+**Deliverable:** "Morphogen Trees v2" demo (production-ready) + "Morphogen Terrain" demo
 
 ---
 
@@ -651,7 +651,7 @@ This document catalogs all operators in the **ProceduralDomain**, organized by s
 - Urban (roads, buildings, traffic)
 - Architectural (facades, modular assembly)
 
-**Deliverable:** "Kairo Procedural World" demo (trees + terrain + city + acoustics)
+**Deliverable:** "Morphogen Procedural World" demo (trees + terrain + city + acoustics)
 
 ---
 
@@ -660,7 +660,7 @@ This document catalogs all operators in the **ProceduralDomain**, organized by s
 ### Per-Operator Tests
 
 **Determinism:**
-```kairo
+```morphogen
 // Bit-exact reproducibility
 let result1 = operator(params, seed=42)
 let result2 = operator(params, seed=42)
@@ -668,7 +668,7 @@ assert_eq!(result1, result2)
 ```
 
 **Visual Regression:**
-```kairo
+```morphogen
 // Compare rendered output to reference image
 let tree = procedural.birch_tree(seed=42)
 let rendered = visual.render(tree)
@@ -676,7 +676,7 @@ assert_image_similar(rendered, "ref_birch.png", threshold=0.95)
 ```
 
 **Performance:**
-```kairo
+```morphogen
 // Ensure real-time performance
 let forest = instancing.create(tree_mesh, count=100000)
 let fps = visual.benchmark(forest)
@@ -699,7 +699,7 @@ assert!(fps >= 60)
 - [ ] Materials are production-ready (PBR)
 
 **Community:**
-- [ ] "Kairo Trees" becomes signature demo
+- [ ] "Morphogen Trees" becomes signature demo
 - [ ] Game developers adopt for procedural content
 - [ ] Film studios evaluate for environment generation
 - [ ] Academic papers cite ProceduralDomain

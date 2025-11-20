@@ -3,7 +3,7 @@ project: kairo
 type: strategic-planning
 status: active
 created: 2025-11-15
-purpose: "Evaluate and prioritize Kairo domains based on market value, technical feasibility, and strategic fit"
+purpose: "Evaluate and prioritize Morphogen domains based on market value, technical feasibility, and strategic fit"
 beth_topics:
 - kairo
 - domain-strategy
@@ -16,7 +16,7 @@ tags:
 - prioritization
 ---
 
-# Kairo Domain Value Analysis
+# Morphogen Domain Value Analysis
 
 **Purpose:** Strategic framework for evaluating which domains to prioritize for development, documentation, and market positioning.
 
@@ -30,8 +30,8 @@ Each domain is evaluated across 10 dimensions (1-5 scale):
 
 ### Core Technical Dimensions
 
-1. **Cross-Domain Synergy** - How much does this domain benefit from integration with other Kairo domains?
-2. **Technical Differentiation** - How unique is Kairo's approach vs. existing tools?
+1. **Cross-Domain Synergy** - How much does this domain benefit from integration with other Morphogen domains?
+2. **Technical Differentiation** - How unique is Morphogen's approach vs. existing tools?
 3. **Implementation Status** - How much is already built and working?
 4. **Time to Value** - How quickly can we deliver meaningful value to users?
 
@@ -123,20 +123,20 @@ Each domain is evaluated across 10 dimensions (1-5 scale):
 | Dimension | Score | Rationale |
 |-----------|-------|-----------|
 | **Cross-Domain Synergy** | 🟢 5 | THE killer cross-domain story (physics → acoustics → audio) |
-| **Technical Differentiation** | 🟢 5 | Physics-driven audio is Kairo's unique strength |
+| **Technical Differentiation** | 🟢 5 | Physics-driven audio is Morphogen's unique strength |
 | **Implementation Status** | 🟢 4 | Core working (v0.5.0+), needs more operators |
 | **Time to Value** | 🟢 4 | Can deliver unique value now |
 | **Market Size & Revenue** | 🟢 5 | Audio production $50B+, lutherie $1B+, game audio $15B+ |
 | **Market Readiness** | 🟢 5 | Instrument builders, audio researchers, game audio |
 | **Competitive Moats** | 🟢 5 | No competitor does physics → acoustics → audio integrated |
-| **Strategic Importance** | 🟢 5 | Crown jewel - positions Kairo as THE physics-audio platform |
+| **Strategic Importance** | 🟢 5 | Crown jewel - positions Morphogen as THE physics-audio platform |
 | **Ecosystem Potential** | 🟢 5 | VST/AU plugins, DAW integration, huge partnership potential |
 | **Adoption Enablement** | 🟢 5 | Audio is instantly understandable, shareable, compelling |
 
 **Total: 48/50**
 
 **Strategic Assessment:** ✅ **FLAGSHIP - MAXIMIZE INVESTMENT**
-- This is Kairo's killer app
+- This is Morphogen's killer app
 - No other platform does physics → acoustics → audio in one program
 - Clear market (lutherie, game audio, sound design, research)
 
@@ -200,7 +200,7 @@ Each domain is evaluated across 10 dimensions (1-5 scale):
 **Total: 44/50**
 
 **Strategic Assessment:** 🎯 **HIGH PRIORITY - INVEST HEAVILY**
-- This is THE domain that makes Kairo unique
+- This is THE domain that makes Morphogen unique
 - Enables: guitar body design, muffler acoustics, room acoustics, speaker design
 - Clear professional market (lutherie, automotive, architecture)
 
@@ -211,7 +211,7 @@ Each domain is evaluated across 10 dimensions (1-5 scale):
 4. **Phase 4:** Real-time room acoustics for architectural use
 
 **Why This Matters:**
-This domain transforms Kairo from "interesting DSL" to "essential tool for physical audio modeling."
+This domain transforms Morphogen from "interesting DSL" to "essential tool for physical audio modeling."
 
 ---
 
@@ -299,7 +299,7 @@ This domain transforms Kairo from "interesting DSL" to "essential tool for physi
 
 **Strategic Assessment:** ✅ **SUPPORTING - SHOWCASE VALUE**
 - Excellent for demos and education
-- Shows off Kairo's multi-domain integration
+- Shows off Morphogen's multi-domain integration
 - Use for marketing/education, not primary revenue driver
 
 **Best Applications:**
@@ -406,7 +406,7 @@ These domains were not in the original analysis but represent significant strate
 
 **Strategic Assessment:** 🎯 **HIGH PRIORITY - STRONG COMMERCIAL POTENTIAL**
 - **Applications:** Path planning, grasp simulation, sensor modeling, swarm robotics
-- **Kairo Advantage:** Integrated simulation of mechanics + sensors + control + environment
+- **Morphogen Advantage:** Integrated simulation of mechanics + sensors + control + environment
 - **Key Markets:** Industrial automation, autonomous vehicles, drones, research
 
 **Target Use Cases:**
@@ -434,16 +434,16 @@ These domains were not in the original analysis but represent significant strate
 | **Market Size & Revenue** | 🟢 5 | Digital twin market projected $100B+ by 2030 |
 | **Market Readiness** | 🟢 5 | **EXPLODING** - every manufacturing company wants digital twins |
 | **Competitive Moats** | 🟢 4 | Integration is moat; full-stack simulation is hard |
-| **Strategic Importance** | 🟢 5 | Positions Kairo for enterprise/industrial market |
+| **Strategic Importance** | 🟢 5 | Positions Morphogen for enterprise/industrial market |
 | **Ecosystem Potential** | 🟢 5 | IoT integration, cloud platforms, CAD partnerships |
 | **Adoption Enablement** | 🟢 4 | Virtual prototyping saves millions, easy ROI story |
 
 **Total: 44/50**
 
 **Strategic Assessment:** ⭐ **VERY HIGH PRIORITY - MASSIVE MARKET OPPORTUNITY**
-- This is potentially Kairo's enterprise play
+- This is potentially Morphogen's enterprise play
 - Digital twin market is exploding across all industries
-- Kairo's cross-domain integration is exactly what digital twins need
+- Morphogen's cross-domain integration is exactly what digital twins need
 
 **Applications:**
 1. **Virtual Prototyping:** Design → simulate → validate before physical build
@@ -461,11 +461,11 @@ These domains were not in the original analysis but represent significant strate
 **Partnership Opportunities:**
 - **CAD Integration:** SolidWorks, Fusion 360 plugins
 - **IoT Platforms:** AWS IoT, Azure Digital Twins
-- **Cloud Simulation:** Run Kairo simulations at scale
+- **Cloud Simulation:** Run Morphogen simulations at scale
 - **Industry Verticals:** Automotive, aerospace, manufacturing
 
 **Why This Matters:**
-Kairo's cross-domain integration is EXACTLY what digital twins need. Current digital twin tools require 5+ different software packages. Kairo can do thermal + structural + fluid + acoustics + circuits in ONE program.
+Morphogen's cross-domain integration is EXACTLY what digital twins need. Current digital twin tools require 5+ different software packages. Morphogen can do thermal + structural + fluid + acoustics + circuits in ONE program.
 
 ---
 
@@ -487,7 +487,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 **Total: 49/50** ⭐
 
 **Strategic Assessment:** ⭐ **CRITICAL STRATEGIC PRIORITY**
-- **This may be Kairo's go-to-market strategy**
+- **This may be Morphogen's go-to-market strategy**
 - Educational adoption creates long-term professional user base
 - Solves real problems: cost, reproducibility, accessibility
 
@@ -501,12 +501,12 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 
 **Problem 2: Reproducibility Crisis**
 - Scientific papers can't be reproduced due to software version differences
-- Kairo's determinism solves this: same code = exact same results
+- Morphogen's determinism solves this: same code = exact same results
 - Critical for research validation
 
 **Problem 3: Integration Tax**
 - Students learn MATLAB for math, COMSOL for physics, Python for data, Audacity for audio
-- Kairo can teach ALL of these in one consistent environment
+- Morphogen can teach ALL of these in one consistent environment
 
 **Target Markets:**
 1. **University Physics/Engineering Courses**
@@ -535,7 +535,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 - **Online Course Subscriptions:** Partner with platforms
 - **Educational Content Marketplace:** Sell curriculum, examples
 - **Grant Funding:** NSF SBIR, Dept. of Education grants
-- **Certification Programs:** Paid certification in Kairo
+- **Certification Programs:** Paid certification in Morphogen
 
 **Strategic Benefits:**
 - **User Pipeline:** Students become professional users
@@ -544,14 +544,14 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 - **Network Effects:** More universities → more content → more valuable
 
 **Competitive Positioning:**
-> "Kairo is what MATLAB would be if it was built today: affordable, integrated, reproducible, and designed for the physics-audio-visual computing that modern science needs."
+> "Morphogen is what MATLAB would be if it was built today: affordable, integrated, reproducible, and designed for the physics-audio-visual computing that modern science needs."
 
 **Priority Actions:**
 1. **Create educational pricing:** Free for students, affordable for universities
 2. **Build curriculum partnerships:** Physics, engineering, audio programs
-3. **Write textbook examples:** Replace MATLAB/COMSOL examples with Kairo
+3. **Write textbook examples:** Replace MATLAB/COMSOL examples with Morphogen
 4. **Apply for grants:** NSF SBIR for educational software
-5. **Online course:** "Computational Physics with Kairo" on Coursera
+5. **Online course:** "Computational Physics with Morphogen" on Coursera
 
 ---
 
@@ -568,7 +568,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 | **Market Size & Revenue** | 🟢 4 | Large market ($100B+) but... |
 | **Market Readiness** | 🟠 2 | Market exists but well-served by Python/R/Julia |
 | **Competitive Moats** | 🔴 1 | None - commoditized tools, no switching costs |
-| **Strategic Importance** | 🔴 1 | Doesn't leverage Kairo's core strengths |
+| **Strategic Importance** | 🔴 1 | Doesn't leverage Morphogen's core strengths |
 | **Ecosystem Potential** | 🔴 1 | Finance ecosystem is Python/R, not aligned |
 | **Adoption Enablement** | 🔴 1 | Financial models don't make compelling demos |
 
@@ -577,10 +577,10 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 **Strategic Assessment:** ❌ **LOW PRIORITY - AVOID**
 - Finance doesn't need cross-domain integration
 - Well-served by existing tools (Python, R, Julia, MATLAB)
-- Kairo's advantages (cross-domain, physics coupling) don't apply
+- Morphogen's advantages (cross-domain, physics coupling) don't apply
 - Better to focus on domains where integration is the killer feature
 
-**Recommendation:** Remove from professional applications section or reframe as "you COULD use Kairo for Monte Carlo, but that's not the point."
+**Recommendation:** Remove from professional applications section or reframe as "you COULD use Morphogen for Monte Carlo, but that's not the point."
 
 ---
 
@@ -595,14 +595,14 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 | **Market Size & Revenue** | 🟢 4 | Large market ($25B+) but completely saturated |
 | **Market Readiness** | 🔴 1 | Market saturated with mature tools |
 | **Competitive Moats** | 🔴 1 | Negative moats - switching costs favor incumbents |
-| **Strategic Importance** | 🔴 1 | Completely off-brand for Kairo |
+| **Strategic Importance** | 🔴 1 | Completely off-brand for Morphogen |
 | **Ecosystem Potential** | 🔴 1 | BI ecosystem locked into Tableau/PowerBI/Looker |
-| **Adoption Enablement** | 🔴 1 | Dashboards don't showcase Kairo's strengths |
+| **Adoption Enablement** | 🔴 1 | Dashboards don't showcase Morphogen's strengths |
 
 **Total: 13/50**
 
 **Strategic Assessment:** ❌ **AVOID ENTIRELY**
-- Zero alignment with Kairo's strengths
+- Zero alignment with Morphogen's strengths
 - Crowded market with entrenched tools
 - Cross-domain integration doesn't apply
 - Dilutes brand positioning
@@ -614,7 +614,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 ## Strategic Prioritization Matrix
 
 ### Tier S: Strategic Game-Changers (Maximum Priority)
-**These domains/markets could transform Kairo's trajectory**
+**These domains/markets could transform Morphogen's trajectory**
 
 1. **Education & Academia** (49/50) ⭐⭐⭐ - GO-TO-MARKET STRATEGY
    - Creates user pipeline (students → professionals)
@@ -624,7 +624,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 
 2. **Digital Twins & Product Development** (44/50) ⭐⭐⭐ - ENTERPRISE PLAY
    - $100B+ market, exploding demand
-   - Kairo's integration = exactly what's needed
+   - Morphogen's integration = exactly what's needed
    - High willingness to pay ($100K+ tools)
    - **Action:** Develop case studies, CAD partnerships, cloud platform
 
@@ -636,7 +636,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 
 **Total Investment: 50% of resources**
 
-**Rationale:** These three domains represent transformational opportunities that could each independently drive Kairo's success.
+**Rationale:** These three domains represent transformational opportunities that could each independently drive Morphogen's success.
 
 ---
 
@@ -747,7 +747,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 ### Current Positioning Issues
 
 ❌ **Too Broad:**
-> "Kairo addresses fundamental problems across professional fields: Engineering & Design, Audio Production, Scientific Computing, Creative Coding, Finance & Risk"
+> "Morphogen addresses fundamental problems across professional fields: Engineering & Design, Audio Production, Scientific Computing, Creative Coding, Finance & Risk"
 
 **Problem:** Trying to be everything to everyone dilutes the message.
 
@@ -757,7 +757,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 
 ✅ **Clear & Differentiated:**
 
-> **Kairo is the platform for physics-driven creative computation.**
+> **Morphogen is the platform for physics-driven creative computation.**
 >
 > Model a guitar string's vibration → simulate its acoustics → synthesize its sound.
 > Design an exhaust system → run fluid dynamics → hear the sound it makes.
@@ -774,7 +774,7 @@ Kairo's cross-domain integration is EXACTLY what digital twins need. Current dig
 6. **Architectural acoustics** (room design, concert halls)
 
 **Why This Works:**
-- Focuses on Kairo's UNIQUE cross-domain strength
+- Focuses on Morphogen's UNIQUE cross-domain strength
 - Clear use cases with real users who will pay
 - Avoids competing with established tools in their core domains
 
@@ -834,7 +834,7 @@ Plus: Consulting, training, support services (high margin)
 
 ### Ecosystem & Platform Strategy
 
-**Goal:** Transform Kairo from "a tool" to "a platform" with network effects
+**Goal:** Transform Morphogen from "a tool" to "a platform" with network effects
 
 **Ecosystem Components:**
 
@@ -842,13 +842,13 @@ Plus: Consulting, training, support services (high margin)
 - **Domain Plugins:** Community-contributed domains
 - **Operator Libraries:** User-created operators for each domain
 - **Integration Plugins:** CAD, DAW, game engine integrations
-- **Market Potential:** Marketplace for paid plugins (Kairo takes 30% cut)
+- **Market Potential:** Marketplace for paid plugins (Morphogen takes 30% cut)
 
 **2. Content Marketplace**
 - **Example Projects:** Downloadable simulation templates
 - **Educational Curriculum:** Pre-built courses, textbooks
 - **Industry Templates:** Automotive acoustics, lutherie, game audio setups
-- **Revenue Share:** 70% creator, 30% Kairo
+- **Revenue Share:** 70% creator, 30% Morphogen
 
 **3. Key Integrations (Partnership Opportunities)**
 
@@ -858,13 +858,13 @@ Plus: Consulting, training, support services (high margin)
 - Partnership: Collaborate with DAW developers
 
 **Game Development:**
-- Unity plugin for Kairo simulations
+- Unity plugin for Morphogen simulations
 - Unreal Engine integration
 - Godot export support
 - Partnership: Asset store listings
 
 **Engineering/CAD:**
-- SolidWorks plugin (export geometry → Kairo)
+- SolidWorks plugin (export geometry → Morphogen)
 - Fusion 360 integration
 - OnShape cloud CAD coupling
 - Partnership: Autodesk developer program
@@ -876,7 +876,7 @@ Plus: Consulting, training, support services (high margin)
 - Partnership: Cloud provider marketplaces
 
 **Education:**
-- Jupyter Notebook kernel for Kairo
+- Jupyter Notebook kernel for Morphogen
 - Google Colab integration
 - Coursera course platform
 - Partnership: University curriculum programs
@@ -919,9 +919,9 @@ Plus: Consulting, training, support services (high margin)
 - **Best Practices:** Community-generated patterns
 
 **Brand Moats:**
-- **Academic Credibility:** Published papers using Kairo
+- **Academic Credibility:** Published papers using Morphogen
 - **Industry Validation:** Case studies from real companies
-- **Community Identity:** "Kairo developer" becomes valuable skill
+- **Community Identity:** "Morphogen developer" becomes valuable skill
 
 ---
 
@@ -959,7 +959,7 @@ Plus: Consulting, training, support services (high margin)
 **Tier 3: Opportunistic Partnerships**
 
 7. **Online Education** (Coursera, Udemy)
-   - "Computational Physics with Kairo" course
+   - "Computational Physics with Morphogen" course
    - Goal: User acquisition, education revenue
 
 8. **Research Consortium** (NSF, national labs)
@@ -980,7 +980,7 @@ Plus: Consulting, training, support services (high margin)
 
 **Arguments For:**
 - **Immediate Market Fit:** Universities desperately need affordable MATLAB/COMSOL alternatives
-- **Reproducibility Crisis:** Kairo's determinism solves a real scientific problem
+- **Reproducibility Crisis:** Morphogen's determinism solves a real scientific problem
 - **User Pipeline:** Students → professional users → contributors (long-term moat)
 - **Recurring Revenue:** Site licenses provide predictable revenue ($5K-$50K/year per university)
 - **Can Start Now:** No new development needed, just educational framing and partnerships
@@ -1001,10 +1001,10 @@ Plus: Consulting, training, support services (high margin)
 - **Parallel:** Continue professional market development (audio, game dev)
 
 **Success Looks Like:**
-- 10+ universities using Kairo in curriculum by end of Year 1
+- 10+ universities using Morphogen in curriculum by end of Year 1
 - $100K+ ARR from educational site licenses by end of Year 1
-- 1000+ students trained on Kairo (future professional users)
-- 1-2 published papers using Kairo for validation
+- 1000+ students trained on Morphogen (future professional users)
+- 1-2 published papers using Morphogen for validation
 
 ---
 
@@ -1014,10 +1014,10 @@ Plus: Consulting, training, support services (high margin)
 
 **Arguments For:**
 - **Market Timing:** Digital twin market exploding NOW ($100B+ by 2030)
-- **Perfect Fit:** Kairo's cross-domain integration is EXACTLY what digital twins need
+- **Perfect Fit:** Morphogen's cross-domain integration is EXACTLY what digital twins need
 - **High Willingness to Pay:** Enterprises pay $100K+ for simulation tools
 - **Clear ROI:** One avoided prototype can save $100K-$1M
-- **Existing Capability:** Kairo can already do basic digital twins with current domains
+- **Existing Capability:** Morphogen can already do basic digital twins with current domains
 - **Multiple Verticals:** Automotive, manufacturing, aerospace, smart buildings
 
 **Arguments Against:**
@@ -1045,7 +1045,7 @@ Plus: Consulting, training, support services (high margin)
 **Decision Required:** Should acoustics be the #1 technical development priority?
 
 **Arguments For:**
-- Transforms Kairo from "interesting" to "essential" for target markets
+- Transforms Morphogen from "interesting" to "essential" for target markets
 - Creates unfair advantage - nobody else does physics → acoustics → audio
 - Clear professional market (lutherie, automotive, architecture)
 - Enables killer demos (guitar body design → sound output)
@@ -1071,7 +1071,7 @@ Plus: Consulting, training, support services (high margin)
 **Arguments For:**
 - Zero alignment with core strengths
 - Dilutes positioning
-- Confuses potential users about what Kairo is
+- Confuses potential users about what Morphogen is
 - No competitive advantage
 
 **Arguments Against:**
@@ -1079,7 +1079,7 @@ Plus: Consulting, training, support services (high margin)
 - Might attract broader audience?
 
 **Recommendation:** ✅ YES - Remove finance and BI
-- Replace with focused "What Kairo Is NOT" section
+- Replace with focused "What Morphogen Is NOT" section
 - Emphasize cross-domain physics/audio/creative focus
 - Avoid trying to be "universal computing platform"
 
@@ -1122,7 +1122,7 @@ Plus: Consulting, training, support services (high margin)
 
 ### Question 6: Should We Build a Platform or a Tool? ⭐ NEW
 
-**Decision Required:** Should Kairo be positioned as an extensible platform or a focused tool?
+**Decision Required:** Should Morphogen be positioned as an extensible platform or a focused tool?
 
 **Option A: Platform Play**
 - Plugin architecture from day 1
@@ -1223,21 +1223,21 @@ Plus: Consulting, training, support services (high margin)
 - [ ] **Procedural operators:** 20+ new operators for game dev use cases (12 months)
 
 ### Education & Academia Metrics (12 months)
-- [ ] **University partnerships:** 3-5 universities piloting Kairo in curriculum (6 months)
-- [ ] **University adoption:** 10+ universities using Kairo in courses (12 months)
-- [ ] **Student users:** 1000+ students trained on Kairo (12 months)
+- [ ] **University partnerships:** 3-5 universities piloting Morphogen in curriculum (6 months)
+- [ ] **University adoption:** 10+ universities using Morphogen in courses (12 months)
+- [ ] **Student users:** 1000+ students trained on Morphogen (12 months)
 - [ ] **Educational revenue:** $100K+ ARR from site licenses (12 months)
-- [ ] **Academic papers:** 2+ published papers using Kairo (12 months)
+- [ ] **Academic papers:** 2+ published papers using Morphogen (12 months)
 - [ ] **Grant funding:** 1+ NSF SBIR or similar grant awarded (12 months)
-- [ ] **Textbook integration:** Kairo examples in 1+ textbook (18 months)
-- [ ] **Online course:** "Computational Physics with Kairo" on Coursera/Udemy (12 months)
+- [ ] **Textbook integration:** Morphogen examples in 1+ textbook (18 months)
+- [ ] **Online course:** "Computational Physics with Morphogen" on Coursera/Udemy (12 months)
 
 ### Commercial & Enterprise Metrics (12-24 months)
-- [ ] **Instrument builders:** 3+ luthers using Kairo for design (12 months)
+- [ ] **Instrument builders:** 3+ luthers using Morphogen for design (12 months)
 - [ ] **Enterprise pilots:** 2+ enterprise digital twin pilot projects (12 months)
 - [ ] **Case study:** 1 published case study showing $500K+ savings (18 months)
 - [ ] **Enterprise revenue:** $500K+ from enterprise contracts (24 months)
-- [ ] **Game studios:** 5+ indie game studios using Kairo (12 months)
+- [ ] **Game studios:** 5+ indie game studios using Morphogen (12 months)
 - [ ] **Audio professionals:** 10+ audio engineers using for production (12 months)
 - [ ] **Paying customers:** 100+ paying individual/professional users (18 months)
 - [ ] **MRR/ARR:** $10K+ MRR or $120K+ ARR (18 months)
@@ -1263,7 +1263,7 @@ Plus: Consulting, training, support services (high margin)
 - [ ] **Third-party plugins:** 5+ community-created plugins (24 months)
 - [ ] **Content marketplace:** Live with 20+ paid items (24 months)
 - [ ] **Validation library:** 50+ validated benchmark cases (18 months)
-- [ ] **Integrations:** 10+ third-party tools using Kairo API (24 months)
+- [ ] **Integrations:** 10+ third-party tools using Morphogen API (24 months)
 
 ### Strategic Positioning Metrics (Immediate)
 - [ ] **Clear positioning:** Statement adopted across all docs (1 month)
@@ -1275,7 +1275,7 @@ Plus: Consulting, training, support services (high margin)
 ### Success Thresholds by Year
 
 **Year 1 Success:**
-- 10+ universities using Kairo
+- 10+ universities using Morphogen
 - $100K+ ARR from education
 - 500+ GitHub stars
 - 1+ academic paper published
@@ -1283,7 +1283,7 @@ Plus: Consulting, training, support services (high margin)
 - 1 instrument builder partnership
 
 **Year 2 Success:**
-- 50+ universities using Kairo
+- 50+ universities using Morphogen
 - $500K+ ARR (education + enterprise)
 - 2000+ GitHub stars
 - 5+ academic papers
@@ -1369,7 +1369,7 @@ Acoustics democratizes what was once the domain of well-funded labs and corporat
 
 **Humanitarian Impact Statement:**
 
-Audio production has enormous barriers to entry - expensive software, hardware, education. Kairo's open audio domain means a talented teenager in Nigeria can learn synthesis and create professional-quality music without pirating software or saving for years. Music therapy practitioners can create custom therapeutic soundscapes. Researchers studying sound perception can run experiments without grants for commercial tools.
+Audio production has enormous barriers to entry - expensive software, hardware, education. Morphogen's open audio domain means a talented teenager in Nigeria can learn synthesis and create professional-quality music without pirating software or saving for years. Music therapy practitioners can create custom therapeutic soundscapes. Researchers studying sound perception can run experiments without grants for commercial tools.
 
 **Specific Examples:**
 - **Economic mobility:** Aspiring musicians in low-income areas can develop skills and create music
@@ -1394,7 +1394,7 @@ Audio production has enormous barriers to entry - expensive software, hardware, 
 
 **Humanitarian Impact Statement:**
 
-Commercial physics simulation tools cost more than many universities' annual budgets in developing countries. Kairo makes computational fluid dynamics and thermal analysis accessible to anyone with a computer. A civil engineering student in Kenya can simulate building ventilation for passive cooling. Researchers in Bangladesh can model flood dynamics. Small manufacturers can optimize heat dissipation in solar electronics.
+Commercial physics simulation tools cost more than many universities' annual budgets in developing countries. Morphogen makes computational fluid dynamics and thermal analysis accessible to anyone with a computer. A civil engineering student in Kenya can simulate building ventilation for passive cooling. Researchers in Bangladesh can model flood dynamics. Small manufacturers can optimize heat dissipation in solar electronics.
 
 **Specific Examples:**
 - **Climate adaptation:** Engineers in developing countries model passive cooling for buildings
@@ -1420,7 +1420,7 @@ Commercial physics simulation tools cost more than many universities' annual bud
 
 **Humanitarian Impact Statement:**
 
-Agent-based modeling is crucial for understanding complex systems - from disease spread to ecological collapse. Commercial tools like NetLogo are good but limited. Kairo enables public health researchers to model disease transmission in refugee camps, ecologists to study wildlife corridors, urban planners to simulate pedestrian safety in informal settlements.
+Agent-based modeling is crucial for understanding complex systems - from disease spread to ecological collapse. Commercial tools like NetLogo are good but limited. Morphogen enables public health researchers to model disease transmission in refugee camps, ecologists to study wildlife corridors, urban planners to simulate pedestrian safety in informal settlements.
 
 **Specific Examples:**
 - **Public health:** Model disease spread and intervention strategies in underserved communities
@@ -1446,7 +1446,7 @@ Agent-based modeling is crucial for understanding complex systems - from disease
 
 **Humanitarian Impact Statement:**
 
-Chemistry simulation is critical for understanding everything from drug interactions to climate solutions, but commercial tools are prohibitively expensive. Kairo enables chemistry students in underfunded schools to visualize molecular dynamics. Researchers in Cuba or Iran (under sanctions) can pursue materials science for solar cells. Community organizations can model air pollution chemistry to advocate for environmental justice.
+Chemistry simulation is critical for understanding everything from drug interactions to climate solutions, but commercial tools are prohibitively expensive. Morphogen enables chemistry students in underfunded schools to visualize molecular dynamics. Researchers in Cuba or Iran (under sanctions) can pursue materials science for solar cells. Community organizations can model air pollution chemistry to advocate for environmental justice.
 
 **Specific Examples:**
 - **Drug access:** Researchers in developing countries study drug formulations, generics
@@ -1497,7 +1497,7 @@ Procedural generation democratizes creative tools that were once restricted to s
 
 **Humanitarian Impact Statement:**
 
-Electronics education is hampered by expensive lab equipment and software. Kairo enables students anywhere to learn circuit design through simulation before building physical circuits (saving money on components). Makers in hackerspaces can design open-source medical devices. Musicians can create custom electronic instruments. Solar technicians can design charge controllers for off-grid communities.
+Electronics education is hampered by expensive lab equipment and software. Morphogen enables students anywhere to learn circuit design through simulation before building physical circuits (saving money on components). Makers in hackerspaces can design open-source medical devices. Musicians can create custom electronic instruments. Solar technicians can design charge controllers for off-grid communities.
 
 **Specific Examples:**
 - **Appropriate technology:** Design solar charge controllers, LED drivers for off-grid communities
@@ -1523,7 +1523,7 @@ Electronics education is hampered by expensive lab equipment and software. Kairo
 
 **Humanitarian Impact Statement:**
 
-Understanding complex emergent systems - from forest ecosystems to disease spread to traffic flow - is crucial for solving global challenges. Kairo makes these simulations accessible to students, researchers, and communities without expensive commercial tools. Students can explore the beauty of emergence and complexity. Researchers can model social dynamics, ecological systems, urban planning scenarios.
+Understanding complex emergent systems - from forest ecosystems to disease spread to traffic flow - is crucial for solving global challenges. Morphogen makes these simulations accessible to students, researchers, and communities without expensive commercial tools. Students can explore the beauty of emergence and complexity. Researchers can model social dynamics, ecological systems, urban planning scenarios.
 
 **Specific Examples:**
 - **Education:** Students learn biology, ecology, complexity through visual, interactive simulation
@@ -1649,7 +1649,7 @@ These domains are important for:
 - Researchers under sanctions or in resource-limited settings
 - Students in underfunded schools
 
-**Kairo's open-source nature means global accessibility by default.**
+**Morphogen's open-source nature means global accessibility by default.**
 
 ---
 
@@ -1679,10 +1679,10 @@ These domains are important for:
 ## Reframing Success: Beyond Commercial Metrics
 
 ### Commercial Success Metric:
-> "If you're designing a guitar and want to hear how it sounds before building it, you use Kairo."
+> "If you're designing a guitar and want to hear how it sounds before building it, you use Morphogen."
 
 ### Humanitarian Success Metric:
-> **"A physics student in Kenya designs a passive cooling system for their school using Kairo's field operators. A lutherie student in Vietnam optimizes guitar acoustics without traveling to an expensive testing facility. A public health researcher in Brazil models disease transmission in a favela to advocate for better healthcare. An artisan in India preserves traditional instrument designs through acoustic modeling."**
+> **"A physics student in Kenya designs a passive cooling system for their school using Morphogen's field operators. A lutherie student in Vietnam optimizes guitar acoustics without traveling to an expensive testing facility. A public health researcher in Brazil models disease transmission in a favela to advocate for better healthcare. An artisan in India preserves traditional instrument designs through acoustic modeling."**
 
 **This is transformative humanitarian impact.**
 
@@ -1705,7 +1705,7 @@ These domains are important for:
 
 **Action:**
 - Reach out to universities in developing countries
-- Provide Kairo workshops and training
+- Provide Morphogen workshops and training
 - Highlight use cases relevant to local challenges (climate adaptation, water resources, etc.)
 
 **Impact:** Direct humanitarian benefit + community growth
@@ -1717,9 +1717,9 @@ These domains are important for:
 **Action:**
 - Document examples: solar charge controllers, passive cooling, water systems
 - Partner with appropriate technology organizations
-- Create case studies of Kairo enabling solutions for resource-limited contexts
+- Create case studies of Morphogen enabling solutions for resource-limited contexts
 
-**Impact:** Position Kairo as a tool for global development
+**Impact:** Position Morphogen as a tool for global development
 
 ---
 
@@ -1750,7 +1750,7 @@ These domains are important for:
 **Both commercial success and humanitarian impact matter:**
 
 ✅ **Commercial success** ensures:
-- Sustainability (developers can work on Kairo full-time)
+- Sustainability (developers can work on Morphogen full-time)
 - Resources for continued development
 - Professional-grade quality and support
 
@@ -1774,18 +1774,18 @@ These domains are important for:
 
 ## Conclusion: Dual Bottom Line
 
-**Kairo can succeed on two bottom lines:**
+**Morphogen can succeed on two bottom lines:**
 
 ### Commercial Bottom Line
-> "Kairo is the platform for physics-driven creative computation. For problems that span physics, acoustics, and audio, nothing else comes close."
+> "Morphogen is the platform for physics-driven creative computation. For problems that span physics, acoustics, and audio, nothing else comes close."
 
 ### Humanitarian Bottom Line
-> "Kairo democratizes tools that were once locked behind expensive licenses, enabling students, researchers, artisans, and makers worldwide to learn, create, discover, and solve problems that matter to their communities."
+> "Morphogen democratizes tools that were once locked behind expensive licenses, enabling students, researchers, artisans, and makers worldwide to learn, create, discover, and solve problems that matter to their communities."
 
 **What success looks like:**
-- ✅ Instrument builders in wealthy countries pay for Kairo support → sustainability
-- ✅ Students in Kenya learn physics through Kairo → humanitarian impact
-- ✅ Game audio professionals use Kairo for production → commercial validation
+- ✅ Instrument builders in wealthy countries pay for Morphogen support → sustainability
+- ✅ Students in Kenya learn physics through Morphogen → humanitarian impact
+- ✅ Game audio professionals use Morphogen for production → commercial validation
 - ✅ Public health researchers in Brazil model epidemics → lives saved
 - ✅ Artisans in Vietnam preserve traditional instruments → cultural preservation
 - ✅ Researchers worldwide publish reproducible science → knowledge advancement
@@ -1796,7 +1796,7 @@ These domains are important for:
 
 ## Conclusion
 
-**Kairo's competitive advantage is cross-domain integration, solving problems that require multiple tools today.**
+**Morphogen's competitive advantage is cross-domain integration, solving problems that require multiple tools today.**
 
 This conclusion synthesizes insights from both the commercial/market analysis and the humanitarian value framework above, providing a comprehensive strategic roadmap that honors both bottom lines.
 
@@ -1828,19 +1828,19 @@ This conclusion synthesizes insights from both the commercial/market analysis an
 ### What Success Looks Like - Multiple Winning Positions
 
 **Education Win:**
-> "Universities choose Kairo because it's what MATLAB should have been: affordable, reproducible, integrated. Students learn one tool for physics, audio, and visualization instead of five."
+> "Universities choose Morphogen because it's what MATLAB should have been: affordable, reproducible, integrated. Students learn one tool for physics, audio, and visualization instead of five."
 
 **Enterprise Win:**
-> "When automotive companies need digital twins that couple thermal + structural + fluid + acoustics, they use Kairo. One platform replaces five $100K licenses."
+> "When automotive companies need digital twins that couple thermal + structural + fluid + acoustics, they use Morphogen. One platform replaces five $100K licenses."
 
 **Audio Win:**
-> "If you're designing a guitar and want to hear how it sounds before building it, you use Kairo. Nothing else can do physics → acoustics → audio in one program."
+> "If you're designing a guitar and want to hear how it sounds before building it, you use Morphogen. Nothing else can do physics → acoustics → audio in one program."
 
 **Game Dev Win:**
-> "Game developers use Kairo for deterministic procedural generation + physics + audio. Same seed = exact same result, every time. Critical for debugging and version control."
+> "Game developers use Morphogen for deterministic procedural generation + physics + audio. Same seed = exact same result, every time. Critical for debugging and version control."
 
 **Platform Win:**
-> "Kairo isn't just a tool - it's a platform. Universities teach it, professionals use it, companies build on it. The ecosystem makes it irreplaceable."
+> "Morphogen isn't just a tool - it's a platform. Universities teach it, professionals use it, companies build on it. The ecosystem makes it irreplaceable."
 
 ---
 

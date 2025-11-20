@@ -26,7 +26,7 @@ python examples/optimization/basic_optimization_demo.py
 ### Basic Usage
 
 ```python
-from kairo.stdlib.optimization import minimize
+from morphogen.stdlib.optimization import minimize
 import numpy as np
 
 # Define objective function
@@ -48,7 +48,7 @@ print(f"Best fitness:  {result.best_fitness}")
 ### Algorithm-Specific Usage
 
 ```python
-from kairo.stdlib.optimization import (
+from morphogen.stdlib.optimization import (
     differential_evolution,
     cmaes,
     particle_swarm,
@@ -95,7 +95,7 @@ result_nm = nelder_mead(
 Test your optimizers with standard benchmarks:
 
 ```python
-from kairo.stdlib.optimization import BenchmarkFunctions
+from morphogen.stdlib.optimization import BenchmarkFunctions
 
 # Simple functions
 sphere = BenchmarkFunctions.sphere        # Unimodal, min at x=0
@@ -112,7 +112,7 @@ schwefel = BenchmarkFunctions.schwefel    # Deceptive landscape
 ### PID Controller Tuning
 
 ```python
-from kairo.stdlib.optimization import differential_evolution
+from morphogen.stdlib.optimization import differential_evolution
 
 def pid_cost(params):
     kp, ki, kd = params
@@ -136,7 +136,7 @@ print(f"Optimal: Kp={result.best_solution[0]:.2f}, "
 ### Parameter Fitting
 
 ```python
-from kairo.stdlib.optimization import cmaes
+from morphogen.stdlib.optimization import cmaes
 import numpy as np
 
 def fitting_error(params):
@@ -156,7 +156,7 @@ result = cmaes(
 ### Geometric Optimization
 
 ```python
-from kairo.stdlib.optimization import particle_swarm
+from morphogen.stdlib.optimization import particle_swarm
 
 def geometry_cost(params):
     length, width, height = params

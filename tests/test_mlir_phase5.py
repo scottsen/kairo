@@ -5,9 +5,9 @@ including constant folding, dead code elimination, and simplifications.
 """
 
 import unittest
-from kairo.parser.parser import parse
-from kairo.mlir.compiler import MLIRCompiler
-from kairo.mlir.optimizer import (
+from morphogen.parser.parser import parse
+from morphogen.mlir.compiler import MLIRCompiler
+from morphogen.mlir.optimizer import (
     ConstantFoldingPass,
     DeadCodeEliminationPass,
     SimplifyPass,

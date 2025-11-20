@@ -2,8 +2,8 @@
 
 import pytest
 import numpy as np
-from kairo.runtime.runtime import Runtime, ExecutionContext
-from kairo.stdlib.field import field, Field2D
+from morphogen.runtime.runtime import Runtime, ExecutionContext
+from morphogen.stdlib.field import field, Field2D
 
 
 class TestExecutionContext:

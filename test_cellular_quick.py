@@ -1,8 +1,8 @@
 """Quick sanity test for cellular domain."""
 
 import numpy as np
-from kairo.stdlib import cellular
-from kairo.stdlib.cellular import CellularField2D
+from morphogen.stdlib import cellular
+from morphogen.stdlib.cellular import CellularField2D
 
 print("Testing Cellular Automata Domain")
 print("=" * 60)

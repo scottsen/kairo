@@ -2,7 +2,7 @@
 
 **Status:** APPROVED
 **Date:** 2025-11-15
-**Authors:** Kairo Architecture Team
+**Authors:** Morphogen Architecture Team
 **Supersedes:** N/A
 **Related:** ADR-001 (Unified Reference Model)
 
@@ -10,7 +10,7 @@
 
 ## Context
 
-Kairo's evolution from a single-domain system to a multi-domain platform requires proven architectural patterns. We have analyzed three successful domain-specific systems:
+Morphogen's evolution from a single-domain system to a multi-domain platform requires proven architectural patterns. We have analyzed three successful domain-specific systems:
 
 1. **TiaCAD** - Parametric CAD with spatial references and geometry operators
 2. **RiffStack** - Audio DSP framework with extensible operator registry
@@ -23,7 +23,7 @@ Each system independently developed solutions to common architectural challenges
 - Multi-layer complexity models (beginner → expert)
 - Optimization passes and lowering strategies
 
-This ADR extracts and generalizes these patterns for Kairo's multi-domain architecture.
+This ADR extracts and generalizes these patterns for Morphogen's multi-domain architecture.
 
 ---
 
@@ -39,9 +39,9 @@ This ADR extracts and generalizes these patterns for Kairo's multi-domain archit
 - Domain-specific reference types (SpatialRef, AudioNodeRef, etc.)
 - Self-contained builder pipelines
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 ```
-Every Kairo domain MUST provide:
+Every Morphogen domain MUST provide:
 ├── Types (domain-specific primitives + reference types)
 ├── Operators (layered: atomic → composite → constructs → presets)
 ├── Passes (optimization + lowering strategies)
@@ -67,7 +67,7 @@ Every Kairo domain MUST provide:
 - Zero fragmentation: no separate FaceRef/EdgeRef/VertexRef in user code
 - Local frames for domain-relative transformations
 
-**Kairo Generalization:**
+**Morphogen Generalization:**
 ```
 Every domain MUST have:
 1. One primary reference type (e.g., PhysicsRef, AudioRef)
@@ -105,11 +105,11 @@ Every domain MUST have:
 - User extension folders (`~/.kairo/domains/{name}/ops/`)
 - No manual editing of central operator tables
 
-**Kairo Implementation:**
+**Morphogen Implementation:**
 ```python
 # User-defined operator in ~/.kairo/domains/physics/ops/custom_force.py
 
-@kairo.operator(
+@morphogen.operator(
     domain="physics",
     category="forces",
     layer=2,  # composite operator
@@ -133,7 +133,7 @@ def barnes_hut_gravity(
 4. Validate signatures and determinism profiles
 5. Enable IDE autocomplete and type checking
 
-**Result:** Kairo becomes a **platform**, not a library.
+**Result:** Morphogen becomes a **platform**, not a library.
 
 ---
 
@@ -151,7 +151,7 @@ Layer 3: Constructs/DSL   (reverb, sketch, heston_model)
 Layer 4: Presets          (studio_reverb, bolt_pattern, black_scholes)
 ```
 
-**Kairo Adoption:**
+**Morphogen Adoption:**
 Every domain implements this hierarchy to serve:
 - **Beginners:** Use Layer 4 presets
 - **Intermediate:** Compose Layer 3 constructs
@@ -185,7 +185,7 @@ Layer 4: solar_system_preset, molecular_dynamics, granular_flow
 - **RiffStack:** DSP passes (filter merging, node pruning, graph flattening)
 - **Insight:** Passes are **domain primitives**, not compiler-specific
 
-**Kairo Generalization:**
+**Morphogen Generalization:**
 ```
 Every domain needs its own pass system:
 ├── Validation Passes   (type checking, constraint solving)
@@ -251,7 +251,7 @@ cylinder = Cylinder(height=10, radius=5)
 box = Box().place_on(cylinder.face_top)  # Automatic!
 ```
 
-**Kairo Generalization:**
+**Morphogen Generalization:**
 Auto-anchors apply to **every domain**:
 
 **Physics Domain:**
@@ -305,7 +305,7 @@ particle_emitter.spawn_at(mesh.local_transform.origin)
 **Pattern:** Strict domain isolation with well-defined inter-domain interfaces.
 
 **Key Insight:**
-Kairo's power comes from:
+Morphogen's power comes from:
 1. **Isolated domains** (no internal leakage)
 2. **Composable flows** between domains
 
@@ -408,7 +408,7 @@ Each domain MUST expose:
    - Progressive disclosure of complexity
 
 6. **Platform Viability**
-   - Kairo becomes extensible platform, not fixed library
+   - Morphogen becomes extensible platform, not fixed library
    - Third-party domains can integrate cleanly
    - Ecosystem growth through plugin architecture
 
@@ -460,7 +460,7 @@ Each domain MUST expose:
 
 ## Appendix: Domain Comparison Table
 
-| Pattern | TiaCAD (Geometry) | RiffStack (Audio) | Strudel (Pattern) | Kairo Generalization |
+| Pattern | TiaCAD (Geometry) | RiffStack (Audio) | Strudel (Pattern) | Morphogen Generalization |
 |---------|-------------------|-------------------|-------------------|----------------------|
 | **Reference System** | `SpatialRef` | `NodeRef`, `PortRef` | `EventRef` | One primary ref per domain |
 | **Auto-Anchors** | `face_top`, `center` | `input[0]`, `output[0]` | `cycle[n]`, `beat[n]` | Domain-specific anchors |
@@ -473,9 +473,9 @@ Each domain MUST expose:
 
 **Conclusion:**
 
-These patterns are not theoretical - they are battle-tested in production systems. Adopting them for Kairo ensures:
+These patterns are not theoretical - they are battle-tested in production systems. Adopting them for Morphogen ensures:
 - **Proven architectures** from TiaCAD, RiffStack, and Strudel
 - **Unified design** across all domains
 - **Extensible platform** for community growth
 
-Kairo is not a library. **Kairo is a platform.**
+Morphogen is not a library. **Morphogen is a platform.**

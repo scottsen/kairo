@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """Test script to verify the use statement demo works."""
 
-from kairo.lexer.lexer import Lexer
-from kairo.parser.parser import Parser
-from kairo.runtime.runtime import Runtime, ExecutionContext
-from kairo.ast.nodes import Use
+from morphogen.lexer.lexer import Lexer
+from morphogen.parser.parser import Parser
+from morphogen.runtime.runtime import Runtime, ExecutionContext
+from morphogen.ast.nodes import Use
 
 # Read the demo file
 with open('examples/use_statement_demo.kairo', 'r') as f:

@@ -1,14 +1,14 @@
-# Kairo v0.3.1 - Summary & Decision Document
+# Morphogen v0.3.1 - Summary & Decision Document
 
 **Date**: 2025-11-06
 **Session**: vebabe-1106
-**Decision**: Evolve Creative Computation DSL → Kairo v0.3.1
+**Decision**: Evolve Creative Computation DSL → Morphogen v0.3.1
 
 ---
 
 ## Executive Summary
 
-After analyzing Creative Computation DSL v0.2.2 and the Kairo v0.3.0 spec from ChatGPT, we've created **Kairo v0.3.1** - a refined specification that:
+After analyzing Creative Computation DSL v0.2.2 and the Morphogen v0.3.0 spec from ChatGPT, we've created **Morphogen v0.3.1** - a refined specification that:
 
 1. ✅ **Adopts v0.3.0's best ideas** (flow blocks, @state, explicit RNG, profiles)
 2. ✅ **Preserves v0.2.2's strengths** (explicit domain types, comprehensive stdlib, clear module system)
@@ -33,7 +33,7 @@ After analyzing Creative Computation DSL v0.2.2 and the Kairo v0.3.0 spec from C
 
 ### 2. Better Semantics
 
-| Aspect | v0.2.2 | Kairo v0.3.1 | Winner |
+| Aspect | v0.2.2 | Morphogen v0.3.1 | Winner |
 |--------|--------|--------------|--------|
 | **Time model** | `step` blocks | `flow(dt)` blocks | v0.3.1 - more explicit |
 | **State** | `step.state()` | `@state` declarations | v0.3.1 - declarative |
@@ -43,12 +43,12 @@ After analyzing Creative Computation DSL v0.2.2 and the Kairo v0.3.0 spec from C
 | **Stdlib** | Comprehensive | Same (preserved) | Tie |
 | **Examples** | 17 complete | 4 complete (expandable) | v0.2.2 (but transferable) |
 
-**Key Insight**: Kairo v0.3.1 = v0.3.0 semantics + v0.2.2 completeness
+**Key Insight**: Morphogen v0.3.1 = v0.3.0 semantics + v0.2.2 completeness
 
 ### 3. Better Branding
 
 - **"Creative Computation DSL"** - Generic, long, descriptive
-- **"Kairo"** - Unique, memorable, brandable, elegant
+- **"Morphogen"** - Unique, memorable, brandable, elegant
 
 **Etymology**: Cairo (graphics) + Kairos (Greek: opportune moment, creative time)
 
@@ -57,12 +57,12 @@ After analyzing Creative Computation DSL v0.2.2 and the Kairo v0.3.0 spec from C
 | Project | Domain | Status | Relationship |
 |---------|--------|--------|--------------|
 | **RiffStack** | Audio-only (stack-based, YAML) | MVP Complete ✅ | Audio specialist |
-| **Kairo** | Multi-domain (typed DSL) | Foundation complete, runtime in progress | Platform vision |
+| **Morphogen** | Multi-domain (typed DSL) | Foundation complete, runtime in progress | Platform vision |
 | **TiaCAD** | Parametric CAD | Established | Architectural inspiration |
 
 **Message**:
 - RiffStack = "Audio tool you can use today"
-- Kairo = "Unified creative computation platform"
+- Morphogen = "Unified creative computation platform"
 
 ---
 
@@ -124,7 +124,7 @@ After analyzing Creative Computation DSL v0.2.2 and the Kairo v0.3.0 spec from C
 
 **Decision**: Preserve v0.2.2's explicit domain types
 
-```kairo
+```morphogen
 # We use this (clear)
 temp : Field2D<f32 [K]>
 agents : Agents<Particle>
@@ -139,25 +139,25 @@ temp : Flow<Field2D<f32 [K]>>     # Too abstract!
 ### New Additions (Not in v0.2.2 or v0.3.0)
 
 #### 1. Function Syntax (Explicit)
-```kairo
+```morphogen
 fn clamp(x: f32, min: f32, max: f32) -> f32 {
     return max(min, min(x, max))
 }
 ```
 
 #### 2. Lambda Syntax
-```kairo
+```morphogen
 field.map(|x| x * 2.0)
 agents.map(|a| { vel: a.vel * 0.99, pos: a.pos + a.vel * dt })
 ```
 
 #### 3. If/Else Expressions
-```kairo
+```morphogen
 color = if temp > 100.0 { "red" } else { "blue" }
 ```
 
 #### 4. Struct Keyword
-```kairo
+```morphogen
 struct Particle {
     pos: Vec2<f32 [m]>
     vel: Vec2<f32 [m/s]>
@@ -201,7 +201,7 @@ struct Particle {
 
 ### Vs. Other Languages
 
-| Feature | Kairo v0.3.1 | Python+NumPy | GLSL | Faust |
+| Feature | Morphogen v0.3.1 | Python+NumPy | GLSL | Faust |
 |---------|--------------|--------------|------|-------|
 | **Deterministic** | ✅ Bitwise | ⚠️ Partial | ❌ No | ✅ Yes |
 | **Multi-domain** | ✅ All | ⚠️ Libraries | ❌ Graphics only | ❌ Audio only |
@@ -219,7 +219,7 @@ struct Particle {
 **Repository**:
 ```bash
 gh repo rename kairo
-git remote set-url origin https://github.com/scottsen/kairo.git
+git remote set-url origin https://github.com/scottsen/morphogen.git
 mv ~/src/projects/creative-computation-dsl ~/src/projects/kairo
 ```
 
@@ -231,7 +231,7 @@ mv creative_computation kairo
 
 **TIA Integration**:
 ```bash
-mv ~/.tia/projects/creative-computation-dsl.yaml ~/.tia/projects/kairo.yaml
+mv ~/.tia/projects/creative-computation-dsl.yaml ~/.tia/projects/morphogen.yaml
 # Update config fields
 ```
 
@@ -370,7 +370,7 @@ cp MVP.md docs/legacy/CCDSL_v0.2.2_MVP.md
 
 - **Frontend changes** - Parser updates are straightforward
 - **Rename** - No runtime to break
-- **Branding** - Kairo is a better name
+- **Branding** - Morphogen is a better name
 - **Specification** - Complete and detailed
 
 ### Medium Risk ⚠️
@@ -412,10 +412,10 @@ beth_topics:
   - mlir
 ```
 
-**Project Config** (`~/.tia/projects/kairo.yaml`):
+**Project Config** (`~/.tia/projects/morphogen.yaml`):
 ```yaml
 project_id: kairo
-name: Kairo
+name: Morphogen
 type: dsl
 status: foundation-complete
 github: https://github.com/scottsen/kairo
@@ -427,7 +427,7 @@ description: A language of creative determinism for simulation, sound, and visua
 ## Next Actions
 
 ### Immediate (This Session)
-1. ✅ Draft Kairo v0.3.1 specification (DONE)
+1. ✅ Draft Morphogen v0.3.1 specification (DONE)
 2. ✅ Create summary document (DONE)
 3. ⏸️ Get approval from user
 
@@ -442,7 +442,7 @@ description: A language of creative determinism for simulation, sound, and visua
 
 ## Conclusion
 
-**Kairo v0.3.1 represents the best evolution path**:
+**Morphogen v0.3.1 represents the best evolution path**:
 
 - ✅ **Better semantics** than v0.2.2
 - ✅ **More complete** than ChatGPT v0.3.0

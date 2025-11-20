@@ -12,7 +12,7 @@ with visual generation in a deterministic, reproducible way.
 """
 
 import numpy as np
-from kairo.cross_domain import AudioToVisualInterface
+from morphogen.cross_domain import AudioToVisualInterface
 
 print("=" * 70)
 print("AUDIO-REACTIVE VISUAL GENERATION DEMO")

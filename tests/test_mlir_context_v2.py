@@ -5,7 +5,7 @@ These tests will be skipped if MLIR is not installed.
 """
 
 import pytest
-from kairo.mlir.context import (
+from morphogen.mlir.context import (
     KairoMLIRContext,
     get_mlir_context,
     is_mlir_available,

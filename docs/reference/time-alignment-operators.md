@@ -1,4 +1,4 @@
-# Kairo Time Alignment Operators
+# Morphogen Time Alignment Operators
 
 **Version:** 1.0
 **Date:** 2025-11-15
@@ -10,7 +10,7 @@
 
 ## Overview
 
-**Time alignment** is one of the cleanest, most impactful DSP tasks to express in a Kairo pipeline. This document specifies operators for per-speaker time alignment, a critical workflow in professional audio (car audio, studio monitors, live sound) that follows Kairo's natural **measurement → analysis → operator output** pattern.
+**Time alignment** is one of the cleanest, most impactful DSP tasks to express in a Morphogen pipeline. This document specifies operators for per-speaker time alignment, a critical workflow in professional audio (car audio, studio monitors, live sound) that follows Morphogen's natural **measurement → analysis → operator output** pattern.
 
 **Why Time Alignment Matters:**
 
@@ -37,9 +37,9 @@ Every speaker in a multi-way system has:
 
 ---
 
-## Why Kairo Excels at Time Alignment
+## Why Morphogen Excels at Time Alignment
 
-Time alignment is an **ideal Kairo workflow** because:
+Time alignment is an **ideal Morphogen workflow** because:
 
 1. ✅ **Same operators, multiple domains**
    - Auto-EQ uses FFT, IR extraction, smoothing
@@ -112,8 +112,8 @@ These operators extend the existing Transform layer (Layer 2) from `../specifica
   "determinism": "strict",
   "rate": "audio",
   "implementation": {
-    "python": "kairo.stdlib.measurement.sine_sweep",
-    "mlir": "kairo.audio.measurement.sine_sweep"
+    "python": "morphogen.stdlib.measurement.sine_sweep",
+    "mlir": "morphogen.audio.measurement.sine_sweep"
   }
 }
 ```
@@ -161,8 +161,8 @@ These operators extend the existing Transform layer (Layer 2) from `../specifica
     "vectorize": true
   },
   "implementation": {
-    "python": "kairo.stdlib.analysis.impulse_response_extractor",
-    "mlir": "kairo.audio.analysis.ir_extract"
+    "python": "morphogen.stdlib.analysis.impulse_response_extractor",
+    "mlir": "morphogen.audio.analysis.ir_extract"
   }
 }
 ```
@@ -188,8 +188,8 @@ These operators extend the existing Transform layer (Layer 2) from `../specifica
     "requires_unwrapped_phase": true
   },
   "implementation": {
-    "python": "kairo.stdlib.analysis.group_delay",
-    "mlir": "kairo.audio.analysis.group_delay"
+    "python": "morphogen.stdlib.analysis.group_delay",
+    "mlir": "morphogen.audio.analysis.group_delay"
   }
 }
 ```
@@ -224,8 +224,8 @@ These operators extend the existing Transform layer (Layer 2) from `../specifica
   "determinism": "strict",
   "rate": "control",
   "implementation": {
-    "python": "kairo.stdlib.alignment.delay_designer",
-    "mlir": "kairo.audio.alignment.delay_designer"
+    "python": "morphogen.stdlib.alignment.delay_designer",
+    "mlir": "morphogen.audio.alignment.delay_designer"
   }
 }
 ```
@@ -260,7 +260,7 @@ These operators extend the existing Transform layer (Layer 2) from `../specifica
   "determinism": "strict",
   "rate": "control",
   "implementation": {
-    "python": "kairo.stdlib.export.export_delays"
+    "python": "morphogen.stdlib.export.export_delays"
   }
 }
 ```
@@ -284,11 +284,11 @@ These types are introduced to support time alignment workflows:
 
 ---
 
-## Complete Kairo Workflow: Car Audio Time Alignment
+## Complete Morphogen Workflow: Car Audio Time Alignment
 
-This is a **real-world Kairo pipeline** for time-aligning a 3-way car audio system (front left, front right, subwoofer).
+This is a **real-world Morphogen pipeline** for time-aligning a 3-way car audio system (front left, front right, subwoofer).
 
-```kairo
+```morphogen
 # ============================================================
 # Time Alignment Calibration Pipeline
 # ============================================================
@@ -438,7 +438,7 @@ validation:
     description: "Phase alignment quality check"
 ```
 
-**Press "Run" → Kairo outputs:**
+**Press "Run" → Morphogen outputs:**
 
 ```
 ============================================================
@@ -465,7 +465,7 @@ Exported:
 
 ---
 
-## Example Output: What Kairo Would Generate
+## Example Output: What Morphogen Would Generate
 
 ### 1. Delay Map (JSON Export)
 
@@ -531,9 +531,9 @@ Exported:
 
 ---
 
-## Integration with Existing Kairo Operators
+## Integration with Existing Morphogen Operators
 
-Time alignment **reuses** many operators already in Kairo:
+Time alignment **reuses** many operators already in Morphogen:
 
 ### Already Exists (From ../specifications/operator-registry.md)
 
@@ -659,7 +659,7 @@ export_delays(delays, format="minidsp", path="alignment.xml")
 
 ## Domain Architecture Integration
 
-Time alignment fits into Kairo's domain architecture (from `../architecture/domain-architecture.md`):
+Time alignment fits into Morphogen's domain architecture (from `../architecture/domain-architecture.md`):
 
 ```
 AudioMeasurementDomain
@@ -719,7 +719,7 @@ Following the pass architecture from `../specifications/operator-registry.md`:
 
 ---
 
-## Why This is AWESOME for Kairo
+## Why This is AWESOME for Morphogen
 
 ### 1. Cross-Domain Operator Reuse
 
@@ -732,9 +732,9 @@ Following the pass architecture from `../specifications/operator-registry.md`:
 
 **Same math, different domains.**
 
-### 2. Natural Kairo Workflow
+### 2. Natural Morphogen Workflow
 
-Time alignment is a **textbook Kairo pipeline**:
+Time alignment is a **textbook Morphogen pipeline**:
 
 ```
 Measurement (sine_sweep)
@@ -770,14 +770,14 @@ All operators map cleanly to MLIR:
 
 | Operator | MLIR Dialect | Lowering |
 |----------|--------------|----------|
-| `sine_sweep` | `kairo.signal` | Vectorized sin() |
+| `sine_sweep` | `morphogen.signal` | Vectorized sin() |
 | `fft` | `fft.fft_1d` | Vendor FFT (FFTW, cuFFT) |
 | `impulse_response_extractor` | `linalg` + `fft` | FFT-based deconvolution |
 | `cross_correlation` | `linalg.dot` | SIMD dot product |
 | `group_delay` | `linalg` | Phase unwrap + derivative |
 | `delay_designer` | `arith` + `scf.for` | Simple arithmetic |
 
-### 5. Extends to Other Kairo Use Cases
+### 5. Extends to Other Morphogen Use Cases
 
 | Application | Time Alignment Operators |
 |-------------|-------------------------|
@@ -831,14 +831,14 @@ Both workflows share operators but solve different problems:
 | **Shared Ops** | `sine_sweep`, `impulse_response_extractor`, `fft` | `sine_sweep`, `impulse_response_extractor`, `fft` |
 | **Unique Ops** | `ir_peak_detect`, `cross_correlation`, `group_delay`, `delay_designer` | `spectral_smoothing`, `target_curve`, `eq_designer` |
 
-**Kairo wins:** Same measurement infrastructure, different analysis → different outputs.
+**Morphogen wins:** Same measurement infrastructure, different analysis → different outputs.
 
 ---
 
 ## References
 
 - **../specifications/operator-registry.md** — Operator registry structure (7 layers)
-- **AUDIO_SPECIFICATION.md** — Kairo.Audio dialect specification
+- **AUDIO_SPECIFICATION.md** — Morphogen.Audio dialect specification
 - **OPERATOR_REGISTRY_EXPANSION.md** — Seven domain expansion plan
 - **ADR-002** — Cross-domain architectural patterns
 - **../specifications/transform.md** — Transform operators (FFT, STFT)
@@ -847,7 +847,7 @@ Both workflows share operators but solve different problems:
 
 ## Summary
 
-Time alignment is a **perfect Kairo workflow** that demonstrates:
+Time alignment is a **perfect Morphogen workflow** that demonstrates:
 
 1. ✅ **Operator reuse** — Same FFT/IR ops used across audio, physics, graphics
 2. ✅ **Clean composition** — Measurement → Analysis → Design → Export
@@ -855,7 +855,7 @@ Time alignment is a **perfect Kairo workflow** that demonstrates:
 4. ✅ **Domain extensibility** — Same operators apply to room correction, beamforming, modal analysis
 5. ✅ **Real-world impact** — Solves critical problem in pro audio (car audio, studio monitors)
 
-**Adding time alignment operators extends Kairo's AudioDomain with minimal new infrastructure, maximum reuse, and natural composability.**
+**Adding time alignment operators extends Morphogen's AudioDomain with minimal new infrastructure, maximum reuse, and natural composability.**
 
 ---
 

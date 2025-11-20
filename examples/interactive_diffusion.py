@@ -11,8 +11,8 @@ Controls:
 - Q or ESC: Quit
 """
 
-from kairo.stdlib.field import field
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.field import field
+from morphogen.stdlib.visual import visual
 
 
 def simulate_heat_diffusion():

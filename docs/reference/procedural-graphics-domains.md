@@ -4,7 +4,7 @@
 **Date:** 2025-11-15
 **Status:** ✅ IMPLEMENTED
 
-This document describes the four new procedural graphics domains added to Kairo in v0.8.1:
+This document describes the four new procedural graphics domains added to Morphogen in v0.8.1:
 - **NoiseDomain** - Procedural noise generation
 - **PaletteDomain** - Scalar-to-color mapping
 - **ColorDomain** - Color manipulation and conversion
@@ -15,7 +15,7 @@ This document describes the four new procedural graphics domains added to Kairo 
 
 ## Overview
 
-These domains unlock comprehensive procedural graphics capabilities for Kairo, enabling:
+These domains unlock comprehensive procedural graphics capabilities for Morphogen, enabling:
 - Fractal visualization (Mandelbrot, Julia sets)
 - Plasma effects and retro graphics
 - Audio-reactive visualizers
@@ -33,7 +33,7 @@ These domains unlock comprehensive procedural graphics capabilities for Kairo, e
 ### Layer 1: Basic Noise Types
 
 ```python
-from kairo.stdlib import noise
+from morphogen.stdlib import noise
 
 # Perlin noise (smooth gradient noise)
 perlin = noise.perlin2d(
@@ -114,7 +114,7 @@ plasma = noise.plasma((257, 257), seed=42)
 ### Layer 1: Palette Creation
 
 ```python
-from kairo.stdlib import palette
+from morphogen.stdlib import palette
 
 # Scientific colormaps (perceptually uniform)
 viridis = palette.viridis(resolution=256)
@@ -172,7 +172,7 @@ brighter = palette.brightness(viridis, factor=1.2)
 
 ```python
 # Map scalar field to colors
-from kairo.stdlib import noise, image
+from morphogen.stdlib import noise, image
 
 noise_field = noise.perlin2d((256, 256))
 pal = palette.viridis()
@@ -198,7 +198,7 @@ phase_image = palette.map_cyclic(pal, phase_field, frequency=2.0)
 ### Layer 1: Color Space Conversions
 
 ```python
-from kairo.stdlib import color
+from morphogen.stdlib import color
 
 # RGB ↔ HSV
 hsv = color.rgb_to_hsv((1.0, 0.0, 0.0))  # Red → (0.0, 1.0, 1.0)
@@ -269,7 +269,7 @@ thresholded = color.threshold((0.8, 0.3, 0.5), threshold_value=0.5)
 ### Layer 1: Image Creation
 
 ```python
-from kairo.stdlib import image, noise, palette
+from morphogen.stdlib import image, noise, palette
 
 # Blank image
 blank = image.blank(width=256, height=256, channels=3, fill_value=0.0)
@@ -367,8 +367,8 @@ The existing FieldDomain has been extended with additional operations for proced
 ### New Operations
 
 ```python
-from kairo.stdlib import field
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import field
+from morphogen.stdlib.field import Field2D
 
 # Gradient (spatial derivatives)
 scalar_field = Field2D(noise.perlin2d((256, 256)).data)
@@ -415,7 +415,7 @@ speed = field.magnitude(velocity_field)
 Here's a complete example combining all domains to create procedural terrain:
 
 ```python
-from kairo.stdlib import noise, palette, image, field
+from morphogen.stdlib import noise, palette, image, field
 
 # 1. Generate terrain using ridged multifractal
 terrain = noise.ridged_fbm(
@@ -469,7 +469,7 @@ Future optimizations planned:
 
 ## Architecture Patterns
 
-All domains follow Kairo's standard patterns:
+All domains follow Morphogen's standard patterns:
 
 1. **Operations Class Pattern:**
    ```python

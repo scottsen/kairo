@@ -1,14 +1,14 @@
-# The Kairo Stack — Finalized Architecture & Specs (v1.0 Draft)
+# The Morphogen Stack — Finalized Architecture & Specs (v1.0 Draft)
 
 > **For newcomers**: Start with [README.md](README.md) for the vision and [ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md) for domain coverage. This document is the **technical architecture** for implementers.
 
 ## Overview
 
-Kairo is architected as a **semantic kernel** that unifies multi-domain computation through:
+Morphogen is architected as a **semantic kernel** that unifies multi-domain computation through:
 - **One type system** with physical units (Stream, Field, Event, Agent)
 - **One scheduler** handling multiple rates (audio @ 48kHz, control @ 60Hz, physics @ 240Hz)
 - **One compiler** (MLIR → LLVM/GPU) for all domains
-- **Two human-friendly surfaces** (Kairo.Audio DSL + RiffStack performance environment)
+- **Two human-friendly surfaces** (Morphogen.Audio DSL + RiffStack performance environment)
 
 This architecture enables **cross-domain composition** that's impossible in traditional systems: circuit simulation can drive audio synthesis, fluid dynamics can generate acoustic fields, geometry can define PDE boundary conditions — all in one deterministic execution environment.
 
@@ -23,11 +23,11 @@ This architecture enables **cross-domain composition** that's impossible in trad
 3. **Transforms as a first-class grammar** — FFT is not special; *domain changes* are core operations that diagonalize operators to reveal their spectra.
 4. **Typed, reproducible computation** — every stream/field/event has type, units, domain, and a determinism tier. Operators must declare their algebraic properties (linear, unitary, self-adjoint).
 5. **Thin, pluggable backends** — CPU/GPU/Audio/FFT providers are replaceable modules implementing the same operator interfaces.
-6. **Two user surfaces** — *Composer* (Kairo.Audio) and *Performer* (RiffStack) share the same kernel and operator registry.
+6. **Two user surfaces** — *Composer* (Morphogen.Audio) and *Performer* (RiffStack) share the same kernel and operator registry.
 
-> 📍 **Operator Philosophy:** Everything in Kairo is an operator. Systems are operators, dynamics are spectra. This unifies our discrete (digital) and continuous (Philbrick analog) computation under one mathematical framework. Read **[docs/OPERATOR_PHILOSOPHY.md](docs/OPERATOR_PHILOSOPHY.md)** for the deep foundation.
+> 📍 **Operator Philosophy:** Everything in Morphogen is an operator. Systems are operators, dynamics are spectra. This unifies our discrete (digital) and continuous (Philbrick analog) computation under one mathematical framework. Read **[docs/OPERATOR_PHILOSOPHY.md](docs/OPERATOR_PHILOSOPHY.md)** for the deep foundation.
 
-> 📍 **Ecosystem Overview:** For a comprehensive map of all potential Kairo domains, modules, and expansion roadmap, see **[ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md)**
+> 📍 **Ecosystem Overview:** For a comprehensive map of all potential Morphogen domains, modules, and expansion roadmap, see **[ECOSYSTEM_MAP.md](ECOSYSTEM_MAP.md)**
 
 ---
 
@@ -38,14 +38,14 @@ This architecture enables **cross-domain composition** that's impossible in trad
 │                   Applications / IDEs                 │
 └───────────────▲───────────────────────▲───────────────┘
                 │                       │
-        (A) RiffStack               (B) Kairo.Audio
+        (A) RiffStack               (B) Morphogen.Audio
         Live YAML/RPN               Typed declarative DSL
         • patches, loopers          • scenes, modules, events
         • performance UX            • composition & rendering
                 └───────────────▲──────┘
                                 │  (Graph IR)
 ┌───────────────────────────────┴────────────────────────┐
-│                     Kairo Kernel                       │
+│                     Morphogen Kernel                       │
 │  • Types & Units (Stream<T,D,R>, Evt<A>, Space/Boundary)│
 │  • Deterministic Multirate Scheduler                    │
 │  • Transform Dialect (to/from/reparam)                  │
@@ -54,12 +54,12 @@ This architecture enables **cross-domain composition** that's impossible in trad
 │  • State & Snapshot ABI, Introspection                  │
 └───────────────────────▲─────────▲──────────────────────┘
                         │         │
-               Kairo Compiler   Runtime Backends
+               Morphogen Compiler   Runtime Backends
                (MLIR dialects   (CPU/GPU/Audio/FFT/Convolution/
                 & lowering)       Storage providers)
 ```
 
-**Contract:** RiffStack and Kairo.Audio *both* emit **Kairo Graph IR** (typed node/edge JSON). Kernel validates, compiles, schedules, and runs.
+**Contract:** RiffStack and Morphogen.Audio *both* emit **Morphogen Graph IR** (typed node/edge JSON). Kernel validates, compiles, schedules, and runs.
 
 ---
 
@@ -117,7 +117,7 @@ This architecture enables **cross-domain composition** that's impossible in trad
   },
   "determinism": "strict",
   "profile_defaults": {"live":{}, "repro":{}, "strict":{}},
-  "lowering": {"dialect":"kairo.signal", "template":"lpf_svf"}
+  "lowering": {"dialect":"morphogen.signal", "template":"lpf_svf"}
 }
 ```
 
@@ -129,14 +129,14 @@ This architecture enables **cross-domain composition** that's impossible in trad
 
 ---
 
-## 3) Kairo Compiler (MLIR)
+## 3) Morphogen Compiler (MLIR)
 
-* Dialects: `kairo.stream`, `kairo.signal`, `kairo.field`, `kairo.visual`, `kairo.transform`, `kairo.agent`.
+* Dialects: `morphogen.stream`, `morphogen.signal`, `morphogen.field`, `morphogen.visual`, `morphogen.transform`, `morphogen.agent`.
 * Passes: type/units, event fencing, fusion, vectorization, tiling, async I/O.
 * Lowering targets: `linalg/affine/vector/gpu/async` → LLVM/SPIR-V/Metal.
 * External calls: FFT/Conv providers (FFTW/MKL/cuFFT/rocFFT), device audio.
 
-**GPU & MLIR Design Principles:** The compiler follows structured lowering patterns that align Kairo's semantic kernel with MLIR's GPU pipeline. See [GPU & MLIR Principles](docs/GPU_MLIR_PRINCIPLES.md) for detailed design rules on parallelism, memory hierarchy, determinism profiles, and operator metadata.
+**GPU & MLIR Design Principles:** The compiler follows structured lowering patterns that align Morphogen's semantic kernel with MLIR's GPU pipeline. See [GPU & MLIR Principles](docs/GPU_MLIR_PRINCIPLES.md) for detailed design rules on parallelism, memory hierarchy, determinism profiles, and operator metadata.
 
 ---
 
@@ -147,9 +147,9 @@ This architecture enables **cross-domain composition** that's impossible in trad
 
 ---
 
-## 5) Kairo Graph IR (frontend-facing JSON)
+## 5) Morphogen Graph IR (frontend-facing JSON)
 
-**Purpose:** a neutral, typed graph that both RiffStack and Kairo.Audio can emit.
+**Purpose:** a neutral, typed graph that both RiffStack and Morphogen.Audio can emit.
 
 ```json
 {
@@ -168,7 +168,7 @@ Kernel validates (types/units/domains), attaches rates, compiles, runs.
 
 ---
 
-## 6) Kairo.Audio (Composer Surface)
+## 6) Morphogen.Audio (Composer Surface)
 
 * **Types:** `Sig` ≡ `Stream<f32,1D,audio>`, `Ctl` ≡ `Stream<f32,0D,control>`, `Evt<A>`, `Note`.
 * **Structure:** `scene`, `module`, `out stereo`, `score/at/loop`, `spawn`.
@@ -177,7 +177,7 @@ Kernel validates (types/units/domains), attaches rates, compiles, runs.
 
 *Example (declarative, fun-first, fully overridable):*
 
-```kairo
+```morphogen
 scene Duo {
   let seq = score [
     at 0s   note("A3",1,0.5s),
@@ -200,7 +200,7 @@ scene Duo {
 
 ## 7) RiffStack (Performer Surface)
 
-* **YAML patches + RPN expressions**, loopers, controls; compiles to Kairo Graph IR.
+* **YAML patches + RPN expressions**, loopers, controls; compiles to Morphogen Graph IR.
 * Uses kernel profiles (`live` default) and injects controls as `Evt<Control>`.
 
 *Example:*
@@ -246,7 +246,7 @@ When you run `fft(signal)`, you're not "converting to frequency." You're:
 
 All exposed uniformly:
 
-```kairo
+```morphogen
 # Explicit spectral decomposition
 let spec = transform.to(sig, domain="frequency", method="fft", window="hann")
 let shaped = spec * pink_shelf    # Diagonal operator in frequency domain
@@ -288,7 +288,7 @@ let out = transform.from(shaped, domain="time")
 **Week 3–4 — Core additions**
 
 * Implement **Transform Dialect** (fft/stft/dct/wavelet + space↔k-space).
-* Expose **Kairo Graph IR** loader/validator (JSON schema + CLI).
+* Expose **Morphogen Graph IR** loader/validator (JSON schema + CLI).
 
 **Week 5 — Runtime bridges**
 
@@ -297,7 +297,7 @@ let out = transform.from(shaped, domain="time")
 
 **Week 6 — Frontends**
 
-* Kairo.Audio emits Graph IR; RiffStack transpiles YAML/RPN → Graph IR.
+* Morphogen.Audio emits Graph IR; RiffStack transpiles YAML/RPN → Graph IR.
 * Golden tests and first public examples.
 
 ---
@@ -306,13 +306,13 @@ let out = transform.from(shaped, domain="time")
 
 * **Conceptually minimal**: one kernel, one registry, one graph, one transform grammar.
 * **Practically maximal**: supports deterministic audio today, PDE/visuals tomorrow, ML and geometry later — without revisiting fundamentals.
-* **Friendly by default**: RiffStack stays playful; Kairo.Audio stays expressive; both inherit safety and quality from the kernel.
+* **Friendly by default**: RiffStack stays playful; Morphogen.Audio stays expressive; both inherit safety and quality from the kernel.
 
 ---
 
 ### One-liner
 
-> Kairo is a **semantic, deterministic transform kernel** with two human-friendly faces: **Kairo.Audio** for composition and **RiffStack** for performance — all powered by a single operator registry, a neutral graph IR, and first-class domain transforms.
+> Morphogen is a **semantic, deterministic transform kernel** with two human-friendly faces: **Morphogen.Audio** for composition and **RiffStack** for performance — all powered by a single operator registry, a neutral graph IR, and first-class domain transforms.
 
 ---
 

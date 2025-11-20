@@ -17,7 +17,7 @@ from pathlib import Path
 # Add kairo to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from kairo.mlir.context import is_mlir_available, KairoMLIRContext
+from morphogen.mlir.context import is_mlir_available, KairoMLIRContext
 
 def example_arithmetic_without_mlir():
     """Example showing what we want to compile."""

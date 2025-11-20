@@ -81,7 +81,7 @@ python 03_simulation_checkpointing.py
 ### Image I/O
 
 ```python
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 # Load image
 img = io.load_image("texture.png")  # Returns (H, W, 3) array in [0, 1]
@@ -95,7 +95,7 @@ io.save_image("output.jpg", img_array, quality=95)  # JPEG with quality control
 ### Audio I/O
 
 ```python
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 # Load audio
 audio, sample_rate = io.load_audio("music.wav")
@@ -109,7 +109,7 @@ io.save_audio("music.flac", audio_data, sample_rate)  # Lossless compression
 ### JSON I/O
 
 ```python
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 # Load JSON
 config = io.load_json("config.json")
@@ -122,7 +122,7 @@ io.save_json("params.json", params, indent=2)
 ### HDF5 I/O
 
 ```python
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 # Save single array
 io.save_hdf5("field.h5", velocity_field)
@@ -145,7 +145,7 @@ pressure = io.load_hdf5("results.h5", dataset="pressure")
 ### Checkpointing
 
 ```python
-from kairo.stdlib import io_storage as io
+from morphogen.stdlib import io_storage as io
 
 # Save checkpoint
 state = {

@@ -1,8 +1,8 @@
 """Test and generate visual outputs for new examples 04 and 05."""
 
 import numpy as np
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
 
 print("=" * 60)
 print("Testing Examples 04 and 05")

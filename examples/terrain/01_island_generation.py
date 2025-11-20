@@ -9,7 +9,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from kairo.stdlib.terrain import TerrainOperations, BiomeType
+from morphogen.stdlib.terrain import TerrainOperations, BiomeType
 import matplotlib.pyplot as plt
 import numpy as np
 

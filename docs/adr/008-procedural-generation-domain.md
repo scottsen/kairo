@@ -9,7 +9,7 @@
 
 ## Context
 
-Kairo has successfully established itself as a multi-domain physics simulation and creative coding platform with:
+Morphogen has successfully established itself as a multi-domain physics simulation and creative coding platform with:
 
 - ✅ Audio DSP (oscillators, filters, effects)
 - ✅ Visual/Fractal rendering
@@ -41,13 +41,13 @@ SpeedTree is the industry-standard tool for procedural vegetation in games and f
 - **A parametric graph compiler** → mesh generator
 - **An animation metadata generator** (wind, sway)
 
-**This is exactly the type of system Kairo can express cleanly and exceed in generality.**
+**This is exactly the type of system Morphogen can express cleanly and exceed in generality.**
 
-SpeedTree demonstrates a critical truth: **procedural generation is a domain-specific version of what Kairo wants to generalize**.
+SpeedTree demonstrates a critical truth: **procedural generation is a domain-specific version of what Morphogen wants to generalize**.
 
-### Why Kairo Can Do Better
+### Why Morphogen Can Do Better
 
-SpeedTree is specialized for vegetation. Kairo can provide:
+SpeedTree is specialized for vegetation. Morphogen can provide:
 
 1. **True physics-based growth** — Combine AO, light, wind, resource competition
 2. **Unified procedural + simulation** — Generate branches → simulate sway → compute occlusion → feed back into growth
@@ -59,7 +59,7 @@ SpeedTree is specialized for vegetation. Kairo can provide:
 
 ## Decision
 
-**We will add a ProceduralDomain to Kairo as a core domain (v0.11-v1.0).**
+**We will add a ProceduralDomain to Morphogen as a core domain (v0.11-v1.0).**
 
 The ProceduralDomain will provide a unified framework for synthesizing complex structures through:
 
@@ -113,13 +113,13 @@ The ProceduralDomain will provide a unified framework for synthesizing complex s
 
 ---
 
-## Why ProceduralDomain Fits Kairo
+## Why ProceduralDomain Fits Morphogen
 
 ### 1. Natural Operator Composition
 
-Procedural generation is fundamentally about **composing simple rules into complex outputs** — exactly Kairo's strength:
+Procedural generation is fundamentally about **composing simple rules into complex outputs** — exactly Morphogen's strength:
 
-```kairo
+```morphogen
 // Natural composition
 procedural:
   - id: birch_tree
@@ -140,7 +140,7 @@ This outputs a fully meshed, textured, animated tree — in ~15 lines of YAML.
 ### 2. Cross-Domain Workflows Unlock Innovation
 
 **Example 1: Physics-Based Tree Growth**
-```kairo
+```morphogen
 // True biomechanical simulation
 let tree = lsystem.expand(axiom="F", iterations=8)
 let branches = branches.to_splines(tree)
@@ -165,7 +165,7 @@ let mesh = branches.to_mesh(radius_fn="structural")
 ---
 
 **Example 2: Terrain + Ecology + Audio**
-```kairo
+```morphogen
 scene ProceduralWorld {
     // Generate terrain
     let terrain = terrain.fractal(size=1000m, octaves=8)
@@ -206,7 +206,7 @@ scene ProceduralWorld {
 ---
 
 **Example 3: City Generation + Traffic Simulation**
-```kairo
+```morphogen
 // Generate road network
 let major_roads = urban.highways(city_bounds, density=0.1)
 let minor_roads = urban.subdivide_blocks(major_roads, block_size=100m)
@@ -268,7 +268,7 @@ All procedural operators are massively parallel:
 - Erosion simulation (iterative with fixed tolerance)
 - Growth algorithms (deterministic RNG, stable force ordering)
 
-**This matches Kairo's determinism profiles perfectly.**
+**This matches Morphogen's determinism profiles perfectly.**
 
 ---
 
@@ -281,7 +281,7 @@ All procedural operators are massively parallel:
 - **Unity/Unreal ProBuilder:** Game-specific, not general-purpose
 - **Substance Designer:** Materials only, not full 3D generation
 
-**Kairo + ProceduralDomain:**
+**Morphogen + ProceduralDomain:**
 - ✅ Trees + terrains + cities + materials in one system
 - ✅ Cross-domain integration (Geometry, Physics, Audio, Optimization)
 - ✅ GPU acceleration
@@ -315,7 +315,7 @@ All procedural operators are massively parallel:
    - Urban planning optimization
 
 3. **Portfolio Projects**
-   - "Kairo Trees" showcase (rival SpeedTree)
+   - "Morphogen Trees" showcase (rival SpeedTree)
    - Procedural city generator
    - Acoustic forest simulation
    - Terrain + ecology + weather system
@@ -325,10 +325,10 @@ All procedural operators are massively parallel:
    - Game studios need procedural tools
    - Film industry needs large-scale environments
    - Architecture firms need parametric design
-   - SpeedTree is expensive — Kairo could be open alternative
+   - SpeedTree is expensive — Morphogen could be open alternative
 
 5. **Academic Impact**
-   - "Kairo: A Unified Platform for Procedural Generation and Multi-Physics Simulation"
+   - "Morphogen: A Unified Platform for Procedural Generation and Multi-Physics Simulation"
    - First deterministic, GPU-accelerated procedural platform
    - Cross-domain workflows unprecedented in literature
 
@@ -384,7 +384,7 @@ All procedural operators are massively parallel:
 
 **Cons:**
 - ❌ Misses huge creative coding community
-- ❌ Limits Kairo to "serious engineering" (excludes game devs, artists, architects)
+- ❌ Limits Morphogen to "serious engineering" (excludes game devs, artists, architects)
 - ❌ No compelling "wow factor" demo (trees are universally impressive)
 - ❌ Competitors (Houdini, Blender) dominate procedural space
 - ❌ EmergenceDomain L-systems are too basic for production use
@@ -402,12 +402,12 @@ All procedural operators are massively parallel:
 
 **Cons:**
 - ❌ SpeedTree is proprietary and expensive
-- ❌ No cross-domain integration (can't feed to Kairo physics)
+- ❌ No cross-domain integration (can't feed to Morphogen physics)
 - ❌ No determinism guarantees
 - ❌ Can't extend to terrains, cities, materials
 - ❌ Dependency hell (licensing, versioning)
 
-**Rejected:** Breaks Kairo's unified compilation model and open philosophy.
+**Rejected:** Breaks Morphogen's unified compilation model and open philosophy.
 
 ---
 
@@ -530,7 +530,7 @@ All procedural operators are massively parallel:
 - [ ] Procedural → Physics (wind simulation → branch bending)
 - [ ] Procedural → Acoustics (forest → acoustic scattering)
 - [ ] Procedural → Optimization (tree growth → structural optimization)
-- [ ] Portfolio project: "Kairo Trees" — rival SpeedTree showcase
+- [ ] Portfolio project: "Morphogen Trees" — rival SpeedTree showcase
 
 ---
 
@@ -550,8 +550,8 @@ All procedural operators are massively parallel:
 - [ ] Video showcase: forest → terrain → city
 
 **Community:**
-- [ ] "Kairo Trees" becomes signature demo
-- [ ] Game developers adopt Kairo for procedural content
+- [ ] "Morphogen Trees" becomes signature demo
+- [ ] Game developers adopt Morphogen for procedural content
 - [ ] Film studios evaluate for environment generation
 - [ ] Academic papers cite ProceduralDomain
 
@@ -592,7 +592,7 @@ All procedural operators are massively parallel:
 - **Substance Designer** (procedural material authoring)
 - **Gaea** (terrain generation)
 
-### Kairo Specs
+### Morphogen Specs
 
 - **../specifications/procedural-generation.md** — Complete domain specification
 - **../reference/procedural-operators.md** — Operator catalog
@@ -604,12 +604,12 @@ All procedural operators are massively parallel:
 **✅ APPROVED for v0.11-v1.0 implementation**
 
 **Rationale:**
-1. Natural fit for Kairo's operator model (composition of simple rules)
+1. Natural fit for Morphogen's operator model (composition of simple rules)
 2. Unique cross-domain integration (no competitor offers this)
 3. Unlocks major user communities (game devs, film artists, architects)
 4. GPU-accelerable, deterministic, composable
 5. Phased rollout mitigates implementation risk
-6. "Kairo Trees" can rival SpeedTree in quality while offering far more generality
+6. "Morphogen Trees" can rival SpeedTree in quality while offering far more generality
 7. Opens path to commercial adoption (game studios, film industry)
 
 **Next Steps:**

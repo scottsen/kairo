@@ -12,7 +12,7 @@ This document specifies the **EmergenceDomain** — a unified layer for simulati
 
 ### Why EmergenceDomain?
 
-Emergence is a natural fit for Kairo because:
+Emergence is a natural fit for Morphogen because:
 
 1. **Emergent systems are graph-friendly** — Everything is local, composable, and parallelizable
 2. **Cross-domain potential** — EmergenceDomain integrates with Geometry, Physics, Acoustics, Optimization, ML
@@ -75,7 +75,7 @@ Each sub-domain provides specific operators while sharing common infrastructure 
 
 ### 1.1 Core Types
 
-```kairo
+```morphogen
 // CA grid state
 type CAGrid2D<T> {
     width: i32,
@@ -152,7 +152,7 @@ type CARule {
 ```
 
 **Example:**
-```kairo
+```morphogen
 let grid = ca.create(
     width = 512,
     height = 512,
@@ -197,7 +197,7 @@ let grid = ca.create(
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Conway's Game of Life rule
 let life_rule = CARule {
     birth: {3},
@@ -214,7 +214,7 @@ let evolved = ca.step(grid, rule=life_rule)
 
 **Create common CA rules**
 
-```kairo
+```morphogen
 ca.rule_preset(name: String) -> CARule
 ```
 
@@ -229,7 +229,7 @@ ca.rule_preset(name: String) -> CARule
 - `"lenia"` — Lenia (continuous CA)
 
 **Example:**
-```kairo
+```morphogen
 let rule = ca.rule_preset("life")
 let grid = ca.step(grid, rule=rule)
 ```
@@ -270,7 +270,7 @@ Lenia is a continuous generalization of Conway's Life with smooth kernels and co
 ```
 
 **Example:**
-```kairo
+```morphogen
 let state = field.create(256, 256, 0.0)
 state = ca.lenia(state, mu=0.15, sigma=0.015)
 ```
@@ -281,7 +281,7 @@ state = ca.lenia(state, mu=0.15, sigma=0.015)
 
 **Convert CA grid to field**
 
-```kairo
+```morphogen
 ca.to_field<T>(grid: CAGrid2D<T>) -> Field2D<f32>
 ```
 
@@ -293,7 +293,7 @@ Converts discrete CA states to continuous field (for visualization, geometry gen
 
 **Add diffusion to CA (continuous approximation)**
 
-```kairo
+```morphogen
 ca.diffuse(grid: CAGrid2D<f32>, coeff: f32, dt: Time) -> CAGrid2D<f32>
 ```
 
@@ -304,7 +304,7 @@ Applies diffusion kernel to continuous CA states.
 ### 1.3 Use Cases
 
 **Texture Generation:**
-```kairo
+```morphogen
 // Generate biological texture
 let ca = ca.create(512, 512, init="random")
 let evolved = ca.step_n(ca, rule=ca.rule_preset("highlife"), steps=200)
@@ -313,14 +313,14 @@ let geometry = geom.extrude(texture, height=texture)
 ```
 
 **Physics Approximation:**
-```kairo
+```morphogen
 // Lattice-gas hydrodynamics
 let fluid_ca = ca.create(256, 256, states=16)  // 16 velocity directions
 let evolved = ca.step(fluid_ca, rule=lattice_gas_rule)
 ```
 
 **Electronic Circuits (Wireworld):**
-```kairo
+```morphogen
 let circuit = ca.create(128, 128, states=4, init="seed")
 let evolved = ca.step(circuit, rule=ca.rule_preset("wireworld"))
 ```
@@ -342,7 +342,7 @@ let evolved = ca.step(circuit, rule=ca.rule_preset("wireworld"))
 
 ### 2.1 Core Types
 
-```kairo
+```morphogen
 // Agent attributes
 type Agent<A> {
     id: u64,
@@ -429,7 +429,7 @@ type BehaviorRule<A> {
 ```
 
 **Example:**
-```kairo
+```morphogen
 let boids = agent.create(count=500, bounds=box(100m, 100m), seed=42)
 boids = agent.boids(
     boids,
@@ -542,7 +542,7 @@ boids = agent.boids(
 
 **Rasterize agents to field (particle-in-cell)**
 
-```kairo
+```morphogen
 agent.to_field<A>(
     agents: Agents<A>,
     property: String,
@@ -558,7 +558,7 @@ Projects agent properties (density, velocity, etc.) to grid.
 
 **Sample field at agent positions**
 
-```kairo
+```morphogen
 agent.from_field<A>(
     agents: Agents<A>,
     field: Field2D<f32>,
@@ -573,7 +573,7 @@ Samples field values and updates agent attributes.
 ### 2.3 Use Cases
 
 **Flocking Animation:**
-```kairo
+```morphogen
 let boids = agent.create(count=1000, bounds=box(200m, 200m), seed=42)
 
 scene Flocking {
@@ -586,7 +586,7 @@ scene Flocking {
 ```
 
 **Crowd Simulation:**
-```kairo
+```morphogen
 let crowd = agent.create(count=5000, bounds=stadium_geometry, seed=42)
 crowd = agent.crowd_dynamics(
     crowd,
@@ -612,7 +612,7 @@ crowd = agent.crowd_dynamics(
 
 ### 3.1 Core Types
 
-```kairo
+```morphogen
 type RDSystem {
     u: Field2D<f32>,  // Activator
     v: Field2D<f32>,  // Inhibitor
@@ -661,7 +661,7 @@ type RDSystem {
 ```
 
 **Example:**
-```kairo
+```morphogen
 let u = field.create(256, 256, 1.0)
 let v = field.create(256, 256, 0.0)
 
@@ -715,7 +715,7 @@ out visual = visual.render_field(v, palette="magma")
 
 **Convert RD pattern to geometry**
 
-```kairo
+```morphogen
 rd.to_geometry(field: Field2D<f32>, threshold: f32) -> Mesh
 ```
 
@@ -726,14 +726,14 @@ Extracts isosurface from RD pattern (via marching squares/cubes).
 ### 3.3 Use Cases
 
 **Texture Generation:**
-```kairo
+```morphogen
 (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 let texture = visual.colorize(v, palette="inferno")
 let material = material.from_texture(texture)
 ```
 
 **Geometry Generation:**
-```kairo
+```morphogen
 let pattern = rd.turing(field, a=1.0, b=2.0, D1=0.5, D2=1.0)
 let mesh = rd.to_geometry(pattern, threshold=0.5)
 let surface = geom.from_mesh(mesh)
@@ -756,7 +756,7 @@ let surface = geom.from_mesh(mesh)
 
 ### 4.1 Core Types
 
-```kairo
+```morphogen
 type LSystem {
     axiom: String,
     rules: Map<Char, String>,
@@ -778,7 +778,7 @@ type LSystemState {
 
 **Create L-system**
 
-```kairo
+```morphogen
 lsys.create(axiom: String, rules: Map<Char, String>) -> LSystem
 ```
 
@@ -843,7 +843,7 @@ lsys.create(axiom: String, rules: Map<Char, String>) -> LSystem
 ```
 
 **Example:**
-```kairo
+```morphogen
 // Koch curve
 let koch = lsys.create(
     axiom = "F",
@@ -857,7 +857,7 @@ let curve = lsys.to_geometry(evolved, angle=90deg, step_size=1m)
 ```
 
 **Tree generation:**
-```kairo
+```morphogen
 let tree = lsys.create(
     axiom = "F",
     rules = {
@@ -879,14 +879,14 @@ let geometry = lsys.to_geometry(
 ### 4.3 Use Cases
 
 **Procedural Trees:**
-```kairo
+```morphogen
 let tree = lsys.fractal_tree(iterations=6)
 let mesh = lsys.to_geometry(tree, angle=22.5deg)
 let solid = geom.from_mesh(mesh)
 ```
 
 **Coral Structures:**
-```kairo
+```morphogen
 let coral = lsys.create(axiom="F", rules={'F': "F[+FF][-FF]F[-F][+F]F"})
 let evolved = lsys.evolve(coral, iterations=4)
 let structure = lsys.to_geometry(evolved)
@@ -970,7 +970,7 @@ let structure = lsys.to_geometry(evolved)
 ```
 
 **Use Case:**
-```kairo
+```morphogen
 // Generate road network connecting cities
 let field = field.create(512, 512, 0.0)
 let cities = [
@@ -1022,7 +1022,7 @@ let roads = network.threshold(0.5).to_graph()
 ### EmergenceDomain → GeometryDomain
 
 **Pattern → Surface:**
-```kairo
+```morphogen
 // Reaction-diffusion → displacement map
 let (u, v) = rd.gray_scott(u, v, f=0.04, k=0.06)
 let heightmap = v
@@ -1031,14 +1031,14 @@ let displaced = geom.displace(mesh, heightmap, scale=5m)
 ```
 
 **L-system → Tree:**
-```kairo
+```morphogen
 let tree_string = lsys.evolve(tree_lsys, iterations=6)
 let tree_geometry = lsys.to_geometry(tree_string, angle=25deg)
 let solid_tree = geom.from_mesh(tree_geometry)
 ```
 
 **CA → Extrusion:**
-```kairo
+```morphogen
 let ca = ca.step_n(grid, rule=ca.rule_preset("highlife"), steps=100)
 let height_field = ca.to_field(ca)
 let surface = geom.extrude(height_field, height=height_field * 10m)
@@ -1049,7 +1049,7 @@ let surface = geom.extrude(height_field, height=height_field * 10m)
 ### EmergenceDomain → PhysicsDomain
 
 **Agents → Rigid Bodies:**
-```kairo
+```morphogen
 let boids = agent.boids(boids, ...)
 let rigid_bodies = physics.from_agents(
     boids,
@@ -1059,7 +1059,7 @@ let rigid_bodies = physics.from_agents(
 ```
 
 **Slime Mold → Structural Optimization:**
-```kairo
+```morphogen
 let network = swarm.slime_mold(field, food_sources=anchor_points)
 let structure = geom.from_network(network, diameter=0.1m)
 let stress = physics.stress_analysis(structure, loads=loads)
@@ -1070,7 +1070,7 @@ let stress = physics.stress_analysis(structure, loads=loads)
 ### EmergenceDomain → AcousticsDomain
 
 **Boids → Sound Scattering:**
-```kairo
+```morphogen
 let boids = agent.boids(boids, count=1000)
 let positions = agent.positions(boids)
 let wave = acoustic.propagate_with_scatterers(
@@ -1085,7 +1085,7 @@ let wave = acoustic.propagate_with_scatterers(
 ### EmergenceDomain → OptimizationDomain
 
 **PSO Integration:**
-```kairo
+```morphogen
 // PSO for chamber geometry
 let result = opt.particle_swarm(
     objective = |params| simulate_chamber_efficiency(params),
@@ -1099,7 +1099,7 @@ let swarm_history = result.history
 ```
 
 **ACO for Network Routing:**
-```kairo
+```morphogen
 let path = swarm.ants(
     graph = pcb_layout,
     start = pin_a,
@@ -1113,7 +1113,7 @@ let path = swarm.ants(
 ### EmergenceDomain → VisualizationDomain
 
 **CA → Animation:**
-```kairo
+```morphogen
 scene CAAnimation {
     let ca = ca.create(512, 512, init="random")
     let rule = ca.rule_preset("life")
@@ -1127,7 +1127,7 @@ scene CAAnimation {
 ```
 
 **RD → Real-time Texture:**
-```kairo
+```morphogen
 scene RDTexture {
     let (u, v) = rd.init(256, 256)
 
@@ -1144,7 +1144,7 @@ scene RDTexture {
 
 ### Example 1: Biological Morphogenesis
 
-```kairo
+```morphogen
 scene Morphogenesis {
     // Reaction-diffusion pattern
     let (u, v) = rd.init(512, 512)
@@ -1168,7 +1168,7 @@ scene Morphogenesis {
 
 ### Example 2: Swarm → Audio
 
-```kairo
+```morphogen
 scene SwarmSonification {
     let boids = agent.create(count=100, bounds=box(100m, 100m), seed=42)
 
@@ -1194,7 +1194,7 @@ scene SwarmSonification {
 
 ### Example 3: CA → Geometry → Physics
 
-```kairo
+```morphogen
 scene CAPhysics {
     // Generate structure from CA
     let ca = ca.create(128, 128, init="random")
@@ -1218,7 +1218,7 @@ scene CAPhysics {
 
 ### Example 4: Slime Mold Network → Optimization
 
-```kairo
+```morphogen
 scene SlimeMoldOptimization {
     // Cities to connect
     let cities = [
@@ -1296,7 +1296,7 @@ scene SlimeMoldOptimization {
 ## 9. Testing Strategy
 
 ### Determinism Tests
-```kairo
+```morphogen
 // CA must be bit-exact
 let ca1 = ca.create(128, 128, seed=42)
 let ca2 = ca.create(128, 128, seed=42)
@@ -1310,7 +1310,7 @@ assert_eq!(evolved1, evolved2)
 ---
 
 ### Conservation Tests
-```kairo
+```morphogen
 // Boids: total momentum conservation
 let boids = agent.boids(boids, ...)
 let momentum_before = agent.total_momentum(boids)
@@ -1322,7 +1322,7 @@ assert_approx_eq!(momentum_before, momentum_after)
 ---
 
 ### Pattern Recognition Tests
-```kairo
+```morphogen
 // Life: Glider should move diagonally
 let glider = ca.create_pattern("glider")
 let evolved = ca.step_n(glider, rule=life_rule, steps=4)
@@ -1405,7 +1405,7 @@ The **EmergenceDomain** provides:
 ✅ **Deterministic** — Strict/repro guarantees for reproducible research
 ✅ **Creative + Scientific** — Applications from generative art to biological modeling
 
-This makes Kairo a **true synthetic universe builder** — no other tool unifies emergence, physics, audio, geometry, and optimization in one coherent system.
+This makes Morphogen a **true synthetic universe builder** — no other tool unifies emergence, physics, audio, geometry, and optimization in one coherent system.
 
 ---
 

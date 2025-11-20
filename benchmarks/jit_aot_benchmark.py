@@ -33,9 +33,9 @@ import tempfile
 
 # Try to import MLIR components
 try:
-    from kairo.mlir.context import KairoMLIRContext
-    from kairo.mlir.codegen import create_jit, create_aot, create_execution_engine
-    from kairo.mlir.lowering import lower_to_llvm
+    from morphogen.mlir.context import KairoMLIRContext
+    from morphogen.mlir.codegen import create_jit, create_aot, create_execution_engine
+    from morphogen.mlir.lowering import lower_to_llvm
     from mlir import ir
     from mlir.dialects import func, arith, scf, memref
     import numpy as np
@@ -297,7 +297,7 @@ def benchmark4_aot_compilation_time():
         return
 
     try:
-        from kairo.mlir.codegen import OutputFormat
+        from morphogen.mlir.codegen import OutputFormat
 
         ctx = KairoMLIRContext()
         module = create_simple_module(ctx)

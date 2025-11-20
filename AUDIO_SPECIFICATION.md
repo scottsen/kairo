@@ -1,17 +1,17 @@
-# 🎶 Kairo.Audio Specification v0.2
+# 🎶 Morphogen.Audio Specification v0.2
 
-**A compositional and deterministic audio language built on the Kairo kernel.**
+**A compositional and deterministic audio language built on the Morphogen kernel.**
 
 ---
 
 ## 0. Overview
 
-Kairo.Audio is a typed, stream-based audio computation dialect layered on the Kairo kernel.
+Morphogen.Audio is a typed, stream-based audio computation dialect layered on the Morphogen kernel.
 It provides deterministic semantics, physical and procedural synthesis primitives, and composable timing constructs.
 It is the intermediate layer between:
 
 - **RiffStack** — a live, stack-based performance shell
-- **Kairo Core** — the deterministic MLIR-based execution kernel
+- **Morphogen Core** — the deterministic MLIR-based execution kernel
 
 ---
 
@@ -52,14 +52,14 @@ Lossy unit coercions are compile-time errors unless annotated `@allow_unit_cast`
 
 Defines a self-contained audio composition block.
 
-```kairo
+```morphogen
 scene Ambient {
   let tone = sine(220Hz) |> reverb(0.15)
   out stereo = pan(0.1) tone
 }
 ```
 
-- Compiles to a Kairo flow with `@rate=audio`.
+- Compiles to a Morphogen flow with `@rate=audio`.
 - `out stereo` defines the primary output stream.
 - Scenes may depend on shared modules.
 
@@ -67,7 +67,7 @@ scene Ambient {
 
 Reusable synthesis or effect component.
 
-```kairo
+```morphogen
 module Pluck(freq: Ctl, vel: Ctl=1.0): Sig {
   let exc = noise(seed=2) |> lpf(8kHz) |> envexp(10ms)
   let sig = string(freq, 1.2s) exc * vel
@@ -82,8 +82,8 @@ module Pluck(freq: Ctl, vel: Ctl=1.0): Sig {
 
 Optional interoperability hooks.
 
-```kairo
-import riffstack("patch.yaml")   # Convert a YAML patch to Kairo.Audio IR
+```morphogen
+import riffstack("patch.yaml")   # Convert a YAML patch to Morphogen.Audio IR
 export yaml("scene.yaml")        # Serialize back out
 ```
 
@@ -113,7 +113,7 @@ Default parameters are musical and perceptually tuned.
 
 ### 5.1 Oscillators
 
-```kairo
+```morphogen
 sine(freq=440Hz, phase=0)
 saw(freq=440Hz, blep=true)
 square(freq=440Hz, pwm=0.5)
@@ -127,7 +127,7 @@ impulse(rate=1Hz)
 
 ### 5.2 Filters
 
-```kairo
+```morphogen
 lpf(cutoff=2kHz, q=0.707)
 hpf(cutoff=120Hz)
 bpf(center=1kHz, q=1.0)
@@ -139,7 +139,7 @@ eq3(bass=0dB, mid=0dB, treble=0dB)
 
 ### 5.3 Envelopes
 
-```kairo
+```morphogen
 adsr(a=5ms, d=80ms, s=0.7, r=200ms) (gate: Evt<void>)
 ar(a=5ms, r=300ms) (gate)
 envexp(t=50ms)
@@ -151,7 +151,7 @@ linseg(points=[(0,0),(0.1,1),(1,0.5)])
 
 ### 5.4 Effects
 
-```kairo
+```morphogen
 delay(time=300ms, feedback=0.3, mix=0.25)
 reverb(mix=0.12, size=0.8)
 chorus(rate=0.3Hz, depth=8ms, mix=0.25)
@@ -166,7 +166,7 @@ limiter(threshold=-1dB, release=50ms)
 
 ### 5.5 Utilities
 
-```kairo
+```morphogen
 mix(a,b,...)          # gain-compensated sum
 pan(pos=-0.5..0.5)
 mono(sig)
@@ -183,7 +183,7 @@ Events define timed discrete messages driving gates, notes, or parameter changes
 
 ### 6.1 Event creation
 
-```kairo
+```morphogen
 let seq = score [
   at 0s note(440Hz, 1.0, 0.5s),
   at 0.5s note(660Hz, 0.8, 0.5s)
@@ -195,7 +195,7 @@ let seq = score [
 
 ### 6.2 Event mapping
 
-```kairo
+```morphogen
 let voice = (n: Note) => Pluck(n.pitch, n.vel)
 let poly  = spawn(seq, voice, max_voices=12)
 ```
@@ -208,21 +208,21 @@ let poly  = spawn(seq, voice, max_voices=12)
 
 ### 7.1 Waveguide Models
 
-```kairo
+```morphogen
 string(freq, t60=1.5s, damp=0.3) (exc: Sig)
 membrane(size=0.4, tension=0.8) (exc: Sig)
 ```
 
 ### 7.2 Resonant Bodies
 
-```kairo
+```morphogen
 bodyIR(path="acoustic.ir", mix=0.9) (sig: Sig)
 pickup(type="humbucker", pos=0.25) (sig: Sig)
 ```
 
 ### 7.3 Amplification
 
-```kairo
+```morphogen
 amp(model="brown", drive=0.6)
 cab(ir="4x12.ir", mic="sm57")
 ```
@@ -233,7 +233,7 @@ All nonlinearities are anti-aliased (BLEP or oversampled) per profile.
 
 ## 8. Expressive Controls
 
-```kairo
+```morphogen
 let vib = sine(6Hz) * cents(7)
 let bend = ctl.curve(2s, shape="easein")
 let tone = string(note("A3") + vib + bend)
@@ -252,7 +252,7 @@ All parameters are modulatable by `Ctl` or `Sig`.
 
 ### 9.1 Mixing
 
-```kairo
+```morphogen
 scene Mix {
   out stereo = mix(
     Bass.out * -6dB,
@@ -266,7 +266,7 @@ scene Mix {
 
 Profiles control precision, oversampling, and solver choice.
 
-```kairo
+```morphogen
 profile live:   precision=f32; oversample=1; block=64
 profile render: precision=f64; oversample=2; block=256
 profile strict: precision=f64; oversample=4; block=128
@@ -292,7 +292,7 @@ Precedence: per-op > module > profile > global.
 
 | Op | Target Dialect | Notes |
 |----|---------------|-------|
-| `sine`, `saw`, etc. | `kairo.signal` → `linalg.vector` | BLEP templates |
+| `sine`, `saw`, etc. | `morphogen.signal` → `linalg.vector` | BLEP templates |
 | `filter.*` | `linalg` | Small stencil kernels |
 | `delay`, `reverb`, `conv` | `linalg` + `async` | Partitioned FFT conv |
 | `spawn` | `scf.for` | Polyphonic scheduling |
@@ -305,7 +305,7 @@ Precedence: per-op > module > profile > global.
 
 ### 12.1 Simple Pluck
 
-```kairo
+```morphogen
 scene PluckDemo {
   let note = note("D3")
   let env  = adsr(5ms, 60ms, 0.6, 200ms)
@@ -316,7 +316,7 @@ scene PluckDemo {
 
 ### 12.2 Polyphonic Sequence
 
-```kairo
+```morphogen
 scene Poly {
   let seq = score [
     at 0s note("A3",1,0.5s),
@@ -330,7 +330,7 @@ scene Poly {
 
 ### 12.3 Live Modulation
 
-```kairo
+```morphogen
 scene Mod {
   let base = note("A2")
   let vib  = sine(6Hz)*cents(8)
@@ -353,7 +353,7 @@ scene Mod {
 | **Operator registry** | JSON metadata shared with RiffStack | Cross-DSL extensibility |
 | **YAML I/O** | Optional import/export | Bridge with RiffStack patches |
 | **Diagnostics** | NaN, DC offset, RMS lints | Safe defaults for musicians |
-| **MLIR lowering** | Targets linalg, scf, async | Integrates into Kairo toolchain |
+| **MLIR lowering** | Targets linalg, scf, async | Integrates into Morphogen toolchain |
 
 ---
 
@@ -376,13 +376,13 @@ scene Mod {
 - Adaptive latency scheduler for live mode
 - Integration with Luma (visuals) for audiovisual composition
 - MIDI / OSC bridge for real controllers
-- Interactive REPL shell (`kairo.audio play`)
+- Interactive REPL shell (`morphogen.audio play`)
 
 ---
 
 ## One-line Summary
 
-> **Kairo.Audio is the compositional audio language of the Kairo ecosystem — a deterministic, fun-first, extensible DSL where musical structure meets computational clarity.**
+> **Morphogen.Audio is the compositional audio language of the Morphogen ecosystem — a deterministic, fun-first, extensible DSL where musical structure meets computational clarity.**
 
 ---
 
@@ -392,8 +392,8 @@ scene Mod {
 - **Date**: 2025-11-12
 - **Status**: Formal Specification
 - **Authors**: Scott Sen
-- **Related**: [RiffStack](https://github.com/scottsen/riffstack), [Kairo Core](../SPECIFICATION.md)
+- **Related**: [RiffStack](https://github.com/scottsen/riffstack), [Morphogen Core](../SPECIFICATION.md)
 
 ---
 
-**End of Kairo.Audio Specification v0.2**
+**End of Morphogen.Audio Specification v0.2**

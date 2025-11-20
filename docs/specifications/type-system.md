@@ -1,4 +1,4 @@
-# SPEC: Kairo Type System & Units
+# SPEC: Morphogen Type System & Units
 
 **Version:** 1.0 Draft
 **Status:** RFC
@@ -8,7 +8,7 @@
 
 ## Overview
 
-The **Kairo Type System** is the cornerstone of all semantic correctness in Kairo. Every value in the system must have:
+The **Morphogen Type System** is the cornerstone of all semantic correctness in Morphogen. Every value in the system must have:
 
 1. **Value type** — Scalar, vector, complex, etc.
 2. **Domain** — time, frequency, space, k-space, etc.
@@ -33,7 +33,7 @@ The **Kairo Type System** is the cornerstone of all semantic correctness in Kair
 - `Rate` — Execution rate (audio, control, visual, sim)
 
 **Examples:**
-```kairo
+```morphogen
 Stream<f32, time, audio>        // Audio signal (1D, time domain, 48kHz)
 Stream<f64, time, control>      // Control signal (0D, time domain, 1kHz)
 Stream<Complex<f32>, frequency, audio>  // Frequency spectrum
@@ -56,7 +56,7 @@ Stream<Vec2<f32>, space, sim>   // 2D velocity field
 - `Domain` — Domain annotation (space, k-space)
 
 **Examples:**
-```kairo
+```morphogen
 Field<f32, space>              // Scalar field (temperature, pressure)
 Field<Vec2<f32>, space>        // 2D vector field (velocity)
 Field<Vec3<f32>, space>        // 3D vector field
@@ -78,7 +78,7 @@ Field<Complex<f32>, k-space>   // Fourier-space field
 - `A` — Event payload type
 
 **Examples:**
-```kairo
+```morphogen
 Evt<Note>        // Musical note events (pitch, velocity, duration)
 Evt<Control>     // Control change events (CC number, value)
 Evt<Trigger>     // Bang/trigger events (no payload)
@@ -102,7 +102,7 @@ Evt<f32>         // Timestamped scalar values
 - `Centering` — Node-centered or cell-centered
 
 **Examples:**
-```kairo
+```morphogen
 Grid<2D, 0.1m, node>        // 2D uniform grid, 0.1m spacing, node-centered
 Grid<3D, 0.05m, cell>       // 3D uniform grid, 0.05m spacing, cell-centered
 Grid<2D, nonuniform, node>  // 2D non-uniform grid
@@ -132,12 +132,12 @@ Grid<2D, nonuniform, node>  // 2D non-uniform grid
 
 ### Complex Types
 
-```kairo
+```morphogen
 Complex<T>   // Complex number (real, imaginary)
 ```
 
 **Examples:**
-```kairo
+```morphogen
 Complex<f32>  // Single-precision complex
 Complex<f64>  // Double-precision complex
 ```
@@ -150,14 +150,14 @@ Complex<f64>  // Double-precision complex
 
 ### Fixed-Size Vectors
 
-```kairo
+```morphogen
 Vec2<T>   // 2D vector
 Vec3<T>   // 3D vector
 Vec4<T>   // 4D vector
 ```
 
 **Examples:**
-```kairo
+```morphogen
 Vec2<f32>   // 2D float vector
 Vec3<f64>   // 3D double vector
 ```
@@ -184,7 +184,7 @@ Domains describe the semantic space in which values exist. Transforms change dom
 - Cross-domain operations require explicit `transform.to()` or `transform.from()`
 
 **Examples:**
-```kairo
+```morphogen
 // ERROR: Cannot add time-domain and frequency-domain signals
 let x: Stream<f32, time, audio> = sine(440Hz)
 let y: Stream<Complex<f32>, frequency, audio> = fft(sine(880Hz))
@@ -214,7 +214,7 @@ Rates define execution frequencies and scheduling groups.
 - Events must be scheduled at rate boundaries
 
 **Examples:**
-```kairo
+```morphogen
 // ERROR: Direct connection across rates
 let audio_sig: Stream<f32, time, audio> = sine(440Hz)
 let control_sig: Stream<f32, time, control> = audio_sig  // ERROR: Rate mismatch
@@ -290,7 +290,7 @@ All numeric values with physical meaning must have units. Unit mismatches are co
 ### Rules
 
 1. **Addition/Subtraction:** Units must match exactly
-   ```kairo
+   ```morphogen
    let x: f32<Hz> = 440Hz
    let y: f32<Hz> = 880Hz
    let z = x + y  // OK: 1320Hz
@@ -301,27 +301,27 @@ All numeric values with physical meaning must have units. Unit mismatches are co
    ```
 
 2. **Multiplication:** Units multiply
-   ```kairo
+   ```morphogen
    let t: f32<s> = 2s
    let v: f32<m/s> = 10m/s
    let d = t * v  // OK: 20<m>
    ```
 
 3. **Division:** Units divide
-   ```kairo
+   ```morphogen
    let d: f32<m> = 100m
    let t: f32<s> = 10s
    let v = d / t  // OK: 10<m/s>
    ```
 
 4. **Exponentiation:** Units raise to power
-   ```kairo
+   ```morphogen
    let r: f32<m> = 5m
    let area = r * r  // OK: 25<m²>
    ```
 
 5. **Transcendental Functions:** Require unitless arguments
-   ```kairo
+   ```morphogen
    let x: f32<rad> = 1.57rad
    let y = sin(x)  // OK: sin expects <rad>, returns unitless
 
@@ -337,7 +337,7 @@ All numeric values with physical meaning must have units. Unit mismatches are co
 
 Safe conversions that don't lose information:
 
-```kairo
+```morphogen
 Hz → kHz → MHz (frequency scaling)
 s → ms → us (time scaling)
 m → cm → mm (length scaling)
@@ -347,7 +347,7 @@ m → cm → mm (length scaling)
 
 Conversions that change representation:
 
-```kairo
+```morphogen
 linear → dB:
   let amp: f32<linear> = 0.5
   let db = to_dB(amp)  // -6.02dB
@@ -363,7 +363,7 @@ rad → deg:
 
 ### Forbidden Conversions (Compile Error)
 
-```kairo
+```morphogen
 let f: f32<Hz> = 440Hz
 let t: f32<s> = f  // ERROR: Cannot convert Hz to s
 ```
@@ -386,7 +386,7 @@ Every operation is classified by its determinism guarantee.
 - Users can enforce minimum tier with profile
 
 **Examples:**
-```kairo
+```morphogen
 // Strict profile: All ops must be tier=strict
 profile strict {
   let x = sine(440Hz)  // OK: tier=strict
@@ -401,7 +401,7 @@ profile strict {
 
 ### Rule 1: Literal Inference
 
-```kairo
+```morphogen
 let x = 440  // Inferred: i32 (unitless)
 let y = 440Hz  // Inferred: f32<Hz>
 let z = 1.5s  // Inferred: f32<s>
@@ -409,7 +409,7 @@ let z = 1.5s  // Inferred: f32<s>
 
 ### Rule 2: Operator Output Types
 
-```kairo
+```morphogen
 let osc = sine(440Hz)
 // Inferred: Stream<f32, time, audio>
 
@@ -419,7 +419,7 @@ let spec = fft(osc)
 
 ### Rule 3: Binary Operations
 
-```kairo
+```morphogen
 let a: Stream<f32, time, audio> = sine(440Hz)
 let b: Stream<f32, time, audio> = sine(880Hz)
 let c = a + b
@@ -428,7 +428,7 @@ let c = a + b
 
 ### Rule 4: Cross-Rate Inference
 
-```kairo
+```morphogen
 let audio_sig: Stream<f32, time, audio> = sine(440Hz)
 let control_param: Stream<f32, time, control> = lfo(1Hz)
 let modulated = audio_sig * control_param
@@ -489,7 +489,7 @@ def validate_transform(op, input_domain, output_domain):
 
 ### Example 1: Audio Signal Processing
 
-```kairo
+```morphogen
 scene SimpleSynth {
   // Types inferred from operators
   let osc = sine(440Hz)
@@ -507,7 +507,7 @@ scene SimpleSynth {
 
 ### Example 2: Frequency-Domain Processing
 
-```kairo
+```morphogen
 scene SpectralFilter {
   let sig = sine(440Hz) + sine(880Hz)
   // sig: Stream<f32, time, audio>
@@ -527,7 +527,7 @@ scene SpectralFilter {
 
 ### Example 3: Spatial Field
 
-```kairo
+```morphogen
 scene FluidSim {
   let velocity: Field<Vec2<f32>, space> = field.init(128, 128, 0.1m)
   let density: Field<f32, space> = field.init(128, 128, 0.1m)
@@ -546,7 +546,7 @@ scene FluidSim {
 
 ## Summary
 
-The Kairo Type System provides:
+The Morphogen Type System provides:
 
 ✅ **Strong static typing** — Catch errors at compile time
 ✅ **Physical unit tracking** — Prevent unit mismatches
@@ -555,7 +555,7 @@ The Kairo Type System provides:
 ✅ **Determinism tiers** — Explicit guarantees
 ✅ **Type inference** — Concise syntax without boilerplate
 
-This is the foundation that makes Kairo safe, composable, and correct.
+This is the foundation that makes Morphogen safe, composable, and correct.
 
 ---
 

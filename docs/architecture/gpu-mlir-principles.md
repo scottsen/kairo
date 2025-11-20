@@ -1,4 +1,4 @@
-# ⚡ GPU & MLIR Principles for the Kairo Stack
+# ⚡ GPU & MLIR Principles for the Morphogen Stack
 
 > Why they matter, and how they shape the kernel/compiler architecture
 
@@ -10,11 +10,11 @@
 
 ## Introduction
 
-Kairo's compiler ultimately lowers typed, domain-rich graphs (streams, fields, transforms) into MLIR, then into GPU code (SPIR-V, Metal, CUDA). That means Kairo must be structured so that its high-level semantics map cleanly to MLIR's structured IR and then to GPU SIMT/SIMD hardware realities.
+Morphogen's compiler ultimately lowers typed, domain-rich graphs (streams, fields, transforms) into MLIR, then into GPU code (SPIR-V, Metal, CUDA). That means Morphogen must be structured so that its high-level semantics map cleanly to MLIR's structured IR and then to GPU SIMT/SIMD hardware realities.
 
-These design notes explain how the GPU checklist affects Kairo's kernel semantics, Transform Dialect, operator registry metadata, and lowering strategies.
+These design notes explain how the GPU checklist affects Morphogen's kernel semantics, Transform Dialect, operator registry metadata, and lowering strategies.
 
-**This document is not generic MLIR advice** — it reframes GPU/SIMT concepts as design rules for how Kairo should structure lowering, operator templates, and IR generation.
+**This document is not generic MLIR advice** — it reframes GPU/SIMT concepts as design rules for how Morphogen should structure lowering, operator templates, and IR generation.
 
 ---
 
@@ -22,9 +22,9 @@ These design notes explain how the GPU checklist affects Kairo's kernel semantic
 
 ### 1. Express Parallelism Structurally, Not Implicitly
 
-**Principle:** MLIR's GPU and affine dialects expect structured parallel loops. Kairo must therefore ensure that operators, transforms, and fields expose their iteration spaces explicitly.
+**Principle:** MLIR's GPU and affine dialects expect structured parallel loops. Morphogen must therefore ensure that operators, transforms, and fields expose their iteration spaces explicitly.
 
-**Implications for Kairo:**
+**Implications for Morphogen:**
 
 - **Stream / Field types** must include shape, rate, domain, so a lowering pass can derive explicit loop bounds.
 
@@ -34,7 +34,7 @@ These design notes explain how the GPU checklist affects Kairo's kernel semantic
 
 **Why This Matters:**
 
-SIMT GPUs execute threads as uniform SIMD warps. If Kairo emitted "opaque kernels," MLIR couldn't tile or map them correctly.
+SIMT GPUs execute threads as uniform SIMD warps. If Morphogen emitted "opaque kernels," MLIR couldn't tile or map them correctly.
 
 **Example:**
 
@@ -56,16 +56,16 @@ call @process_field(%field, %out) : (memref<?x?xf32>, memref<?x?xf32>) -> ()
 
 **Principle:** For GPUs, MLIR needs static loop bounds, memory access patterns, vector widths, tile sizes, and shared-memory usage.
 
-**Implications for Kairo:**
+**Implications for Morphogen:**
 
-Operator definitions in Kairo's registry should include structural hints:
+Operator definitions in Morphogen's registry should include structural hints:
 
 ```json
 {
   "name": "lpf",
   "category": "filter",
   "lowering": {
-    "dialect": "kairo.signal",
+    "dialect": "morphogen.signal",
     "template": "lpf_svf",
     "tile_hint": [32, 1],
     "vector_hint": 4,
@@ -76,7 +76,7 @@ Operator definitions in Kairo's registry should include structural hints:
 
 **Why This Matters:**
 
-Kairo ops remain "semantic" at the DSL level, but their registry entries encode just enough structure for MLIR to tile → vectorize → GPU-map them.
+Morphogen ops remain "semantic" at the DSL level, but their registry entries encode just enough structure for MLIR to tile → vectorize → GPU-map them.
 
 **Registry Fields:**
 
@@ -92,11 +92,11 @@ Kairo ops remain "semantic" at the DSL level, but their registry entries encode 
 
 ### 3. Transform Dialect Must Remain Intentionally Regular
 
-**Principle:** GPU performance collapses when transforms are irregular. Kairo's transform grammar already aims for explicit, parameterized operations.
+**Principle:** GPU performance collapses when transforms are irregular. Morphogen's transform grammar already aims for explicit, parameterized operations.
 
-**Implications for Kairo:**
+**Implications for Morphogen:**
 
-```kairo
+```morphogen
 transform.to(... domain="frequency", method="fft")
 transform.reparam(x, mapping)
 ```
@@ -129,13 +129,13 @@ Lowered to structured loops:
 
 ### 4. Memory Hierarchy Must Be Modeled Explicitly
 
-**Principle:** Kairo's Kernel treats streams/fields as typed `Stream<T, D, R>`. But for GPU lowering, we must also respect:
+**Principle:** Morphogen's Kernel treats streams/fields as typed `Stream<T, D, R>`. But for GPU lowering, we must also respect:
 
 - **Global memory:** large, slow (100+ cycles)
 - **Shared memory:** small, fast, banked (32KB-64KB per SM)
 - **Register pressure:** expensive spills
 
-**Implications for Kairo:**
+**Implications for Morphogen:**
 
 **a) Clear ABI for "logical buffers":**
 
@@ -149,7 +149,7 @@ Especially for convolution, FFT, wavelets, PDE stencils.
 
 **c) Shared-memory annotation paths:**
 
-Kairo ops like `conv2d`, `wavelet`, and k-space transforms should optionally say:
+Morphogen ops like `conv2d`, `wavelet`, and k-space transforms should optionally say:
 
 ```json
 {
@@ -174,7 +174,7 @@ Without this structural information, MLIR may not lift scratchpads into shared m
 
 ### 5. Follow the Canonical GPU Lowering Pipeline
 
-**Principle:** Kairo's compiler should adopt MLIR's standard GPU optimization pipeline.
+**Principle:** Morphogen's compiler should adopt MLIR's standard GPU optimization pipeline.
 
 **Pipeline Stages:**
 
@@ -193,18 +193,18 @@ Without this structural information, MLIR may not lift scratchpads into shared m
    Emit PTX/Metal/SPIR-V.
 ```
 
-This matches how Kairo transforms, filters, and domain operators generally decompose.
+This matches how Morphogen transforms, filters, and domain operators generally decompose.
 
 **Why This Matters:**
 
-Kairo can guarantee determinism + reproducibility across backends only if its lowering path is structured and repeatable.
+Morphogen can guarantee determinism + reproducibility across backends only if its lowering path is structured and repeatable.
 
 **Example Pipeline:**
 
 ```
-Kairo Graph IR
+Morphogen Graph IR
     ↓
-kairo.signal dialect
+morphogen.signal dialect
     ↓
 linalg.generic (tiled)
     ↓
@@ -227,13 +227,13 @@ PTX/LLVM/SPIR-V
 
 **Principle:** The kernel already tracks domain, rate, and shapes. To optimize for GPUs, prefer static dimensions whenever possible.
 
-**Implications for Kairo:**
+**Implications for Morphogen:**
 
 - **Stream lengths** should be static within a block
 - **Field dimensions** should be known at compile time whenever possible
 - **Transform windows/overlaps** should be compile-time constants
 
-**Where dynamics must exist, Kairo should:**
+**Where dynamics must exist, Morphogen should:**
 
 - Allow symbolic shapes
 - But encourage partial evaluation
@@ -251,18 +251,18 @@ STFT, convolution, DCT, and spectral transforms all depend on static tile sizes 
 | **Compilation** | Slower | Faster |
 | **Flexibility** | Limited | High |
 | **Code size** | Larger | Smaller |
-| **Kairo preference** | **Strong default** | When necessary |
+| **Morphogen preference** | **Strong default** | When necessary |
 
 ---
 
 ### 7. Avoid Divergence: Ops Must Be Warp-Friendly
 
-**Principle:** SIMT GPUs serialize divergent branches. Kairo ops should be branch-coherent, regular, and explicit about mask vs branch semantics.
+**Principle:** SIMT GPUs serialize divergent branches. Morphogen ops should be branch-coherent, regular, and explicit about mask vs branch semantics.
 
 **Guidelines:**
 
 - **Envelope generators** → mask instead of per-sample branching
-  ```kairo
+  ```morphogen
   // Good: masked computation
   let env = envexp(5ms) * (t < attack_time ? 1.0 : 0.0)
 
@@ -271,7 +271,7 @@ STFT, convolution, DCT, and spectral transforms all depend on static tile sizes 
   ```
 
 - **Saturators** → vectorized clamp functions
-  ```kairo
+  ```morphogen
   // Good: no branching
   let clipped = clamp(signal, -1.0, 1.0)
 
@@ -308,7 +308,7 @@ Guaranteeing determinism is easier when kernel execution paths are uniform.
 
 ### 8. Determinism Profiles Must Map to GPU Semantics
 
-**Principle:** GPU determinism is not trivial. But Kairo's profile system can map directly.
+**Principle:** GPU determinism is not trivial. But Morphogen's profile system can map directly.
 
 **Profile Mappings:**
 
@@ -367,13 +367,13 @@ Guaranteeing determinism is easier when kernel execution paths are uniform.
 
 **Why This Matters:**
 
-This cleanly extends Kairo's determinism tiers to GPU operators and providers.
+This cleanly extends Morphogen's determinism tiers to GPU operators and providers.
 
 ---
 
 ### 9. Graph IR Must Describe Enough Structure for GPU Mapping
 
-**Principle:** Kairo Graph IR today is `{"nodes":[...], "edges":[...]}`. For GPU correctness/performance, the IR should also include structural metadata.
+**Principle:** Morphogen Graph IR today is `{"nodes":[...], "edges":[...]}`. For GPU correctness/performance, the IR should also include structural metadata.
 
 **Required Metadata:**
 
@@ -414,11 +414,11 @@ This doesn't pollute the composer/performance surfaces — it's all validated an
 
 ---
 
-### 10. Kairo's Goals Match the MLIR/GPU Sweet Spot
+### 10. Morphogen's Goals Match the MLIR/GPU Sweet Spot
 
 **Why These Principles Matter:**
 
-Kairo is designed around:
+Morphogen is designed around:
 
 - ✅ **Determinism**
 - ✅ **Typed streams/fields**
@@ -428,14 +428,14 @@ Kairo is designed around:
 
 **This is exactly what MLIR's structured IR and GPU pipeline expect.**
 
-If Kairo embraces the checklist above, it gains:
+If Morphogen embraces the checklist above, it gains:
 
 | Benefit | Impact |
 |---------|--------|
 | **Predictable performance** | Across CPU/GPU backends |
 | **Portable kernels** | Write once, run anywhere |
 | **Backend-agnostic transforms** | FFT/DCT/Wavelet work everywhere |
-| **Reproducibility** | Core Kairo promise delivered |
+| **Reproducibility** | Core Morphogen promise delivered |
 | **Simpler debugging** | Structured IR = better introspection |
 | **Easier operator extensibility** | Clear lowering patterns |
 
@@ -443,7 +443,7 @@ If Kairo embraces the checklist above, it gains:
 
 ## Summary
 
-> **Kairo's semantic kernel is already architecturally aligned with MLIR's structured, multi-dialect GPU programming model.**
+> **Morphogen's semantic kernel is already architecturally aligned with MLIR's structured, multi-dialect GPU programming model.**
 >
 > **These GPU principles simply turn that alignment into implementation reality.**
 
@@ -458,7 +458,7 @@ If Kairo embraces the checklist above, it gains:
 7. 🌊 **Avoid warp divergence** — Uniform execution paths
 8. 🎯 **Determinism profiles map to GPU** — Strict/repro/live semantics
 9. 📊 **Graph IR describes structure** — Shapes, rates, hints
-10. ✨ **Kairo matches MLIR's sweet spot** — Semantic kernel + structured IR = 💯
+10. ✨ **Morphogen matches MLIR's sweet spot** — Semantic kernel + structured IR = 💯
 
 ---
 
@@ -468,9 +468,9 @@ If Kairo embraces the checklist above, it gains:
 - [MLIR Affine Dialect](https://mlir.llvm.org/docs/Dialects/Affine/)
 - [MLIR Vector Dialect](https://mlir.llvm.org/docs/Dialects/Vector/)
 - [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)
-- [Kairo Architecture](../ARCHITECTURE.md)
-- [Kairo Transform Dialect Spec](../specifications/transform.md)
-- [Kairo Graph IR Spec](../specifications/graph-ir.md)
+- [Morphogen Architecture](../ARCHITECTURE.md)
+- [Morphogen Transform Dialect Spec](../specifications/transform.md)
+- [Morphogen Graph IR Spec](../specifications/graph-ir.md)
 
 ---
 
@@ -484,4 +484,4 @@ If Kairo embraces the checklist above, it gains:
 
 ---
 
-*This document is part of the Kairo Stack v1.0 architecture. For questions or contributions, see the main [ARCHITECTURE.md](../ARCHITECTURE.md).*
+*This document is part of the Morphogen Stack v1.0 architecture. For questions or contributions, see the main [ARCHITECTURE.md](../ARCHITECTURE.md).*

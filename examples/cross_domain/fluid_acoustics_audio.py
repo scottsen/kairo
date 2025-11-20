@@ -37,8 +37,8 @@ import subprocess
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from kairo.stdlib import field, audio, visual, palette, acoustics
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import field, audio, visual, palette, acoustics
+from morphogen.stdlib.field import Field2D
 
 
 class FluidAcousticsPipeline:
@@ -414,7 +414,7 @@ def demo_with_formal_interfaces():
     This demonstrates how to use the FluidToAcousticsInterface and
     AcousticsToAudioInterface for composable 3-domain pipelines.
     """
-    from kairo.cross_domain import FluidToAcousticsInterface, AcousticsToAudioInterface
+    from morphogen.cross_domain import FluidToAcousticsInterface, AcousticsToAudioInterface
 
     print("=" * 60)
     print("FORMAL INTERFACE DEMO: Using Cross-Domain Transforms")

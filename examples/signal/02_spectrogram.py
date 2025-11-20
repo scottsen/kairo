@@ -9,7 +9,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from kairo.stdlib.signal import SignalOperations, WindowType
+from morphogen.stdlib.signal import SignalOperations, WindowType
 import matplotlib.pyplot as plt
 import numpy as np
 

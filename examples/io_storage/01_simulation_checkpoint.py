@@ -8,8 +8,8 @@ import numpy as np
 import sys
 sys.path.insert(0, '/home/user/kairo')
 
-from kairo.stdlib.io_storage import save_checkpoint, load_checkpoint
-from kairo.stdlib.integrators import rk4
+from morphogen.stdlib.io_storage import save_checkpoint, load_checkpoint
+from morphogen.stdlib.integrators import rk4
 
 
 def fluid_derivative(t, state):

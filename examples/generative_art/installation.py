@@ -30,10 +30,10 @@ Run: python examples/generative_art/installation.py
 import numpy as np
 from pathlib import Path
 from typing import Callable, Tuple, List
-from kairo.stdlib import (
+from morphogen.stdlib import (
     noise, optimization, palette, visual, image, color, field
 )
-from kairo.stdlib.optimization import DifferentialEvolution, OptimizationResult
+from morphogen.stdlib.optimization import DifferentialEvolution, OptimizationResult
 
 
 # ============================================================================

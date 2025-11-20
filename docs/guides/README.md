@@ -1,6 +1,6 @@
 # Guides
 
-Step-by-step guides for implementing and extending Kairo.
+Step-by-step guides for implementing and extending Morphogen.
 
 ## Available Guides
 
@@ -16,7 +16,7 @@ Step-by-step guides for implementing and extending Kairo.
 **Use this guide if:** You want to understand what "finishing" means and the plan to get all 23 domains production-ready.
 
 ### [Domain Implementation Guide](domain-implementation.md)
-Complete guide for implementing a **new** domain in Kairo:
+Complete guide for implementing a **new** domain in Morphogen:
 - Domain design principles
 - Operator implementation
 - Integration with existing domains
@@ -32,8 +32,8 @@ Complete guide for implementing a **new** domain in Kairo:
 Additional guides are planned:
 - Writing custom operators
 - Performance optimization
-- Debugging Kairo programs
-- Contributing to Kairo
+- Debugging Morphogen programs
+- Contributing to Morphogen
 
 ---
 

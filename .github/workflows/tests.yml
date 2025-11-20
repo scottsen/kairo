@@ -38,7 +38,7 @@ jobs:
       - name: Run tests with coverage (Ubuntu + Python 3.11 only)
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: |
-          pytest --cov=creative_computation --cov-report=xml --cov-report=term
+          pytest --cov=morphogen --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov (Ubuntu + Python 3.11 only)
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
@@ -69,12 +69,12 @@ jobs:
 
       - name: Run ruff
         run: |
-          ruff check creative_computation/ tests/ --select=E,F,W --ignore=E501
+          ruff check morphogen/ tests/ --select=E,F,W --ignore=E501
         continue-on-error: true
 
       - name: Run black (check only)
         run: |
-          black --check creative_computation/ tests/
+          black --check morphogen/ tests/
         continue-on-error: true
 
   test-summary:

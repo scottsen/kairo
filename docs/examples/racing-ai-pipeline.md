@@ -9,9 +9,9 @@
 
 ## 1. Overview
 
-A complete racing AI training pipeline demonstrating how Kairo's unified operator model enables seamless integration of physics simulation, neural network inference, genetic algorithms, and real-time visualization — all in one composable graph.
+A complete racing AI training pipeline demonstrating how Morphogen's unified operator model enables seamless integration of physics simulation, neural network inference, genetic algorithms, and real-time visualization — all in one composable graph.
 
-**This is one of Kairo's strongest use cases** because it combines multiple traditionally-separate technologies into a single, clean pipeline:
+**This is one of Morphogen's strongest use cases** because it combines multiple traditionally-separate technologies into a single, clean pipeline:
 
 - **Game engine** → Physics domain
 - **Python ML frameworks** → Neural Network domain
@@ -43,7 +43,7 @@ Plotting tools (matplotlib/TensorBoard)
 - Hard to reproduce
 - Debugging requires multiple tools
 
-**Kairo's Solution:**
+**Morphogen's Solution:**
 A single unified computation graph with all domains composed together.
 
 ---
@@ -62,7 +62,7 @@ A single unified computation graph with all domains composed together.
 8. **Telemetry** — Track lap times, crashes, fitness metrics
 9. **Export** — Save trained networks for deployment
 
-### Kairo Pipeline Architecture
+### Morphogen Pipeline Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -111,7 +111,7 @@ A single unified computation graph with all domains composed together.
 
 ---
 
-## 4. Kairo Configuration Example
+## 4. Morphogen Configuration Example
 
 ### Complete Pipeline Specification (YAML)
 
@@ -330,7 +330,7 @@ architecture:
   - dense: [3, activation=[tanh, sigmoid, sigmoid]]
 ```
 
-**Kairo NN Operators:**
+**Morphogen NN Operators:**
 ```
 mlp_forward(weights, biases, input) -> output
 conv2d(weights, input, stride, padding) -> output
@@ -439,7 +439,7 @@ racing_ai_training.h5
 ### 6.1 Initialization
 
 ```python
-# Pseudocode showing Kairo graph construction
+# Pseudocode showing Morphogen graph construction
 
 # 1. Load track
 track = load_operator("geometry.spline_track", "silverstone.yaml")
@@ -569,7 +569,7 @@ for generation in range(200):
 
 ---
 
-## 7. Kairo Computation Graph Lowering
+## 7. Morphogen Computation Graph Lowering
 
 ### High-Level Graph
 
@@ -742,7 +742,7 @@ Best Lap Time
 
 ### 9.3 Debugging Tools
 
-**Kairo Operators:**
+**Morphogen Operators:**
 ```
 debug.pause_on_crash(agent_id)
 debug.visualize_nn_activations(agent_id, layer_idx)
@@ -1199,11 +1199,11 @@ def test_full_training_pipeline():
 
 ---
 
-## 14. Comparison: Kairo vs Traditional Approaches
+## 14. Comparison: Morphogen vs Traditional Approaches
 
-| Aspect | Traditional (Unity + Python) | Kairo |
+| Aspect | Traditional (Unity + Python) | Morphogen |
 |--------|------------------------------|-------|
-| **Languages** | C#, Python, YAML | Kairo YAML/Python |
+| **Languages** | C#, Python, YAML | Morphogen YAML/Python |
 | **Architecture** | Game engine + ML framework + custom GA | Unified computation graph |
 | **IPC Overhead** | High (serialization, networking) | Zero (shared memory graph) |
 | **Parallelization** | Manual (complex) | Automatic (graph analysis) |
@@ -1217,7 +1217,7 @@ def test_full_training_pipeline():
 
 ---
 
-## 15. Why This Showcases Kairo's Strengths
+## 15. Why This Showcases Morphogen's Strengths
 
 ### 1. **Multi-Domain Composition**
 
@@ -1229,7 +1229,7 @@ This example requires **6+ domains**:
 - Telemetry (logging)
 - Recording (replay)
 
-Traditional approaches require duct-taping these together. **Kairo composes them natively.**
+Traditional approaches require duct-taping these together. **Morphogen composes them natively.**
 
 ### 2. **Unified Operator Model**
 
@@ -1247,7 +1247,7 @@ This means:
 
 ### 3. **Determinism & Reproducibility**
 
-Kairo graphs are **perfectly deterministic**:
+Morphogen graphs are **perfectly deterministic**:
 - Fixed RNG seed → identical results
 - Version control for exact graph structure
 - Snapshot entire training state
@@ -1275,7 +1275,7 @@ The entire system is specified in ~200 lines of YAML. Compare to:
 - Python ML repo: complex package dependencies
 - Custom GA code: brittle glue code
 
-**Kairo is maintainable, readable, and modifiable.**
+**Morphogen is maintainable, readable, and modifiable.**
 
 ---
 
@@ -1283,7 +1283,7 @@ The entire system is specified in ~200 lines of YAML. Compare to:
 
 ### 16.1 Real-World Deployment
 
-Train in Kairo, deploy to:
+Train in Morphogen, deploy to:
 - **Embedded systems** (export to C/ONNX)
 - **Web browsers** (export to WebAssembly)
 - **Mobile devices** (export to CoreML/TFLite)
@@ -1291,7 +1291,7 @@ Train in Kairo, deploy to:
 
 ### 16.2 Sim-to-Real Transfer
 
-Use Kairo to:
+Use Morphogen to:
 1. Train in idealized simulation
 2. Add noise/disturbances progressively (domain randomization)
 3. Fine-tune with real-world data (if available)
@@ -1317,7 +1317,7 @@ Open opportunities:
 
 ## 17. Conclusion
 
-**The racing AI training pipeline is one of Kairo's best examples** because it demonstrates:
+**The racing AI training pipeline is one of Morphogen's best examples** because it demonstrates:
 
 ✅ **Multi-domain integration** — Physics + NN + GA + Rendering + Telemetry
 ✅ **GPU acceleration** — Parallel evaluation, batch inference
@@ -1327,13 +1327,13 @@ Open opportunities:
 ✅ **Extensibility** — Easy to add new features (multi-agent, hybrid training)
 ✅ **Real-world applicability** — Export to deployment targets
 
-**This is exactly the kind of "multi-domain composable simulation" Kairo was built for.**
+**This is exactly the kind of "multi-domain composable simulation" Morphogen was built for.**
 
-If someone asks: *"Can Kairo do X?"*
+If someone asks: *"Can Morphogen do X?"*
 
 Point them to this example and say:
 
-> **"If Kairo can train a racing AI by composing physics, neural networks, and genetic algorithms into a single graph that runs 100× faster than Unity + Python... yes, it can do X."**
+> **"If Morphogen can train a racing AI by composing physics, neural networks, and genetic algorithms into a single graph that runs 100× faster than Unity + Python... yes, it can do X."**
 
 ---
 
@@ -1342,8 +1342,8 @@ Point them to this example and say:
 ### Quick Start
 
 ```bash
-# Clone Kairo repo
-git clone https://github.com/your-org/kairo.git
+# Clone Morphogen repo
+git clone https://github.com/your-org/morphogen.git
 cd kairo
 
 # Install dependencies
@@ -1373,6 +1373,6 @@ kairo tensorboard --logdir=runs/racing_ai_001
 
 ---
 
-**Kairo is not a library. Kairo is a platform.**
+**Morphogen is not a library. Morphogen is a platform.**
 
 🏁

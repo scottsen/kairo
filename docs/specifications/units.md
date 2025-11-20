@@ -2,7 +2,7 @@
 
 ## Overview
 
-Kairo implements a comprehensive physical unit system with dimensional analysis to enable safer cross-domain composition. The system automatically checks that operations respect physical dimensions, preventing errors like adding meters to seconds.
+Morphogen implements a comprehensive physical unit system with dimensional analysis to enable safer cross-domain composition. The system automatically checks that operations respect physical dimensions, preventing errors like adding meters to seconds.
 
 ## Features
 
@@ -19,7 +19,7 @@ Kairo implements a comprehensive physical unit system with dimensional analysis 
 
 Units are specified in square brackets after type declarations:
 
-```kairo
+```morphogen
 // Scalar with units
 let temperature: f32 [K] = 273.15;
 let distance: f32 [m] = 10.0;
@@ -41,7 +41,7 @@ let audio: Signal<f32> [Pa] = signal_from_mic();
 
 Units support algebraic expressions:
 
-```kairo
+```morphogen
 // Simple units
 [m]           // meters
 [kg]          // kilograms
@@ -80,7 +80,7 @@ The type checker automatically infers resulting units from operations:
 
 #### Addition/Subtraction
 Units must match:
-```kairo
+```morphogen
 let d1: f32 [m] = 10.0;
 let d2: f32 [m] = 5.0;
 let d3 = d1 + d2;  // Result: f32 [m]
@@ -91,7 +91,7 @@ let bad = d1 + time;  // Type error: [m] and [s] are incompatible
 
 #### Multiplication
 Units multiply:
-```kairo
+```morphogen
 let length: f32 [m] = 10.0;
 let width: f32 [m] = 5.0;
 let area = length * width;  // Result: f32 [m*m] or [m^2]
@@ -103,7 +103,7 @@ let force = mass * accel;  // Result: f32 [kg*m/s^2] (Newton)
 
 #### Division
 Units divide:
-```kairo
+```morphogen
 let distance: f32 [m] = 100.0;
 let time: f32 [s] = 10.0;
 let velocity = distance / time;  // Result: f32 [m/s]
@@ -114,7 +114,7 @@ let power = energy / time;  // Result: f32 [J/s] or [W]
 
 #### Exponentiation
 Exponent must be dimensionless:
-```kairo
+```morphogen
 let radius: f32 [m] = 5.0;
 let area = radius ^ 2;  // Result: f32 [m^2]
 
@@ -130,7 +130,7 @@ let bad = 2.0 ^ radius;  // Type error
 
 Units with the same dimensions are compatible, even if scaled differently:
 
-```kairo
+```morphogen
 let d1: f32 [m] = 1000.0;
 let d2: f32 [km] = 1.0;     // Compatible: both are length
 
@@ -146,7 +146,7 @@ let f2: f32 [N] = 10.0;     // Compatible: N ≡ kg·m/s²
 
 Units with different dimensions are not compatible:
 
-```kairo
+```morphogen
 let distance: f32 [m] = 10.0;
 let time: f32 [s] = 5.0;
 
@@ -158,7 +158,7 @@ let bad: f32 [m] = time;  // Type error: [s] is not compatible with [m]
 
 `None` (no unit annotation) is compatible with any unit:
 
-```kairo
+```morphogen
 let temp_with_unit: f32 [K] = 273.15;
 let temp_no_unit: f32 = 273.15;
 
@@ -172,7 +172,7 @@ let b: f32 = temp_with_unit;    // OK
 The runtime supports conversion between compatible units:
 
 ```python
-from kairo.types.units import Unit
+from morphogen.types.units import Unit
 
 # Create units
 meter = Unit.meter()
@@ -195,7 +195,7 @@ Units provide critical safety guarantees when composing different computational 
 
 ### Field-Agent Interaction
 
-```kairo
+```morphogen
 // Temperature field in Kelvin
 let temp_field: Field2D<f32> [K] = field2d(128, 128, 1.0);
 
@@ -218,7 +218,7 @@ struct BadParticle {
 
 ### Physics-Audio Sonification
 
-```kairo
+```morphogen
 // Physical force in Newtons
 let force: f32 [N] = calculate_collision_force();
 
@@ -231,7 +231,7 @@ let audio: Signal<f32> [Pa] = sonify(amplitude);
 
 ### Spatial-Temporal Consistency
 
-```kairo
+```morphogen
 // Position and velocity must be consistent
 let pos: Vec2<f32> [m] = Vec2(0.0, 0.0);
 let vel: Vec2<f32> [m/s] = Vec2(1.0, 0.0);
@@ -297,7 +297,7 @@ Dimensions(length=1, time=-1)
 Units support algebraic operations:
 
 ```python
-from kairo.types.units import Unit
+from morphogen.types.units import Unit
 
 meter = Unit.meter()
 second = Unit.second()
@@ -317,7 +317,7 @@ area = meter ** 2
 The parser converts unit strings to Unit objects:
 
 ```python
-from kairo.types.units import parse_unit
+from morphogen.types.units import parse_unit
 
 # Simple unit
 meter = parse_unit("m")
@@ -337,7 +337,7 @@ assert force.is_compatible_with(Unit.newton())
 The type system uses dimensional analysis for compatibility:
 
 ```python
-from kairo.ast.types import ScalarType, BaseType
+from morphogen.ast.types import ScalarType, BaseType
 
 # Create types with units
 temp_k = ScalarType(BaseType.F32, "K")
@@ -371,7 +371,7 @@ Exponent must be dimensionless, got [m]
 
 ### 1. Always Specify Units for Physical Quantities
 
-```kairo
+```morphogen
 // Good
 let temperature: f32 [K] = 273.15;
 let pressure: f32 [Pa] = 101325.0;
@@ -382,7 +382,7 @@ let temperature: f32 = 273.15;
 
 ### 2. Use Standard SI Units
 
-```kairo
+```morphogen
 // Preferred
 let distance: f32 [m] = 1000.0;
 
@@ -392,14 +392,14 @@ let distance: f32 [km] = 1.0;
 
 ### 3. Let the Type Checker Infer Derived Units
 
-```kairo
+```morphogen
 let velocity: f32 [m/s] = distance / time;  // Explicit
 let velocity = distance / time;  // Inferred (if distance and time have units)
 ```
 
 ### 4. Use Named Derived Units When Clear
 
-```kairo
+```morphogen
 // Clear intent
 let force: f32 [N] = mass * acceleration;
 
@@ -409,7 +409,7 @@ let force: f32 [kg*m/s^2] = mass * acceleration;
 
 ### 5. Document Unit Assumptions in Interfaces
 
-```kairo
+```morphogen
 /// Computes gravitational force
 /// @param mass1 First mass [kg]
 /// @param mass2 Second mass [kg]
@@ -440,7 +440,7 @@ fn gravitational_force(
 - [International System of Units (SI)](https://www.bipm.org/en/measurement-units)
 - [Dimensional Analysis](https://en.wikipedia.org/wiki/Dimensional_analysis)
 - [F# Units of Measure](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/units-of-measure)
-- Kairo Specification (SPECIFICATION.md), Section 4.7
+- Morphogen Specification (SPECIFICATION.md), Section 4.7
 
 ## Module Documentation
 

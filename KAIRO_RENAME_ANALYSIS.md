@@ -1,8 +1,8 @@
-# Comprehensive Analysis: "Kairo" References for Rename to "Morphogen"
+# Comprehensive Analysis: "Morphogen" References for Rename to "Morphogen"
 
 ## Executive Summary
 
-This codebase contains **5,344 occurrences of "kairo"** across **356 files**, spanning Python code, documentation, configuration, tests, and language examples. The rename from "Kairo" to "Morphogen" is well-documented in ADR-011 and a preparation checklist already exists in the archive.
+This codebase contains **5,344 occurrences of "kairo"** across **356 files**, spanning Python code, documentation, configuration, tests, and language examples. The rename from "Morphogen" to "Morphogen" is well-documented in ADR-011 and a preparation checklist already exists in the archive.
 
 ### Key Statistics at a Glance
 
@@ -12,7 +12,7 @@ This codebase contains **5,344 occurrences of "kairo"** across **356 files**, sp
 | **Package Code** | 576 | 63 | **CRITICAL** |
 | **Test Files** | 353 | 62 | HIGH |
 | **Example Scripts** | 333 | 68 | MEDIUM |
-| **Kairo Language Files** | 51 | 23 | MEDIUM |
+| **Morphogen Language Files** | 51 | 23 | MEDIUM |
 | **Setup/Config** | 6 | 2 | **CRITICAL** |
 | **CI/CD** | 2 | 1 | HIGH |
 | **TOTAL** | **5,344** | **356** | — |
@@ -89,11 +89,11 @@ This codebase contains **5,344 occurrences of "kairo"** across **356 files**, sp
 
 | Module | Occurrences | Type |
 |--------|------------|------|
-| `kairo.mlir.dialects.temporal.py` | 39 | MLIR operation names |
-| `kairo.mlir.dialects.audio.py` | 34 | MLIR operation names |
-| `kairo.core.domain_registry.py` | 26 | Domain registrations |
-| `kairo.mlir.dialects.field.py` | 26 | MLIR operation names |
-| `kairo.mlir.dialects.agent.py` | 26 | MLIR operation names |
+| `morphogen.mlir.dialects.temporal.py` | 39 | MLIR operation names |
+| `morphogen.mlir.dialects.audio.py` | 34 | MLIR operation names |
+| `morphogen.core.domain_registry.py` | 26 | Domain registrations |
+| `morphogen.mlir.dialects.field.py` | 26 | MLIR operation names |
+| `morphogen.mlir.dialects.agent.py` | 26 | MLIR operation names |
 
 ---
 
@@ -105,28 +105,28 @@ This codebase contains **5,344 occurrences of "kairo"** across **356 files**, sp
 
 ```python
 # Pattern 1: Core operator decorator (25 occurrences)
-from kairo.core.operator import operator, OpCategory
+from morphogen.core.operator import operator, OpCategory
 
 # Pattern 2: Field domain (14 occurrences)
-from kairo.stdlib.field import field, Field2D
+from morphogen.stdlib.field import field, Field2D
 
 # Pattern 3: Visual domain (13 occurrences)
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.visual import visual
 
 # Pattern 4: MLIR compilation (19 occurrences)
-from kairo.mlir.compiler_v2 import MLIRCompilerV2
+from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
 # Pattern 5: MLIR context (7 occurrences)
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
 
 # Pattern 6: Parser (6 occurrences)
-from kairo.parser.parser import parse
+from morphogen.parser.parser import parse
 
 # Pattern 7: Runtime (5 occurrences)
-from kairo.runtime.runtime import Runtime, ExecutionContext
+from morphogen.runtime.runtime import Runtime, ExecutionContext
 
 # Pattern 8: Lexer (4 occurrences)
-from kairo.lexer import Lexer
+from morphogen.lexer import Lexer
 ```
 
 ### Import Locations
@@ -144,13 +144,13 @@ from kairo.lexer import Lexer
 
 ```python
 # Line 1: Docstring
-"""Setup configuration for Kairo."""
+"""Setup configuration for Morphogen."""
 
 # Line 9: Package name
 name="kairo",
 
 # Line 54: Console script
-"kairo=kairo.cli:main",
+"kairo=morphogen.cli:main",
 ```
 
 **Required Changes**:
@@ -166,7 +166,7 @@ name="kairo",
 name = "kairo"
 
 # Line 70: Console script
-kairo = "kairo.cli:main"
+kairo = "morphogen.cli:main"
 
 # Line 97: Coverage configuration (commented)
 # "--cov=kairo",
@@ -183,7 +183,7 @@ source = ["kairo"]
 
 ### C. `requirements.txt` (2 occurrences)
 
-Current file mentions "Kairo v0.7.0" in comments.
+Current file mentions "Morphogen v0.7.0" in comments.
 
 **Changes Needed**:
 - Update version reference comment
@@ -222,17 +222,17 @@ Current file mentions "Kairo v0.7.0" in comments.
 ### Documentation Types of "kairo" References
 
 1. **Markdown code blocks** (language identifier)
-   - Format: ` ```kairo ... ``` `
+   - Format: ` ```morphogen ... ``` `
    - Count: ~150+ instances
    - Impact: VISUAL ONLY (no functional change needed)
 
-2. **Text references to "Kairo" project**
+2. **Text references to "Morphogen" project**
    - Count: ~1500+ instances
-   - Action: Search and replace "Kairo" → "Morphogen"
+   - Action: Search and replace "Morphogen" → "Morphogen"
 
-3. **Module/package references** (e.g., `kairo.stdlib`)
+3. **Module/package references** (e.g., `morphogen.stdlib`)
    - Count: ~600+ instances
-   - Action: Search and replace `kairo.` → `morphogen.`
+   - Action: Search and replace `morphogen.` → `morphogen.`
 
 4. **Comments in code blocks**
    - Count: ~50+ instances
@@ -300,19 +300,19 @@ tests/test_use_demo.py                   (6+ references)
 
 ```python
 # Test file header imports (would need updating)
-from kairo.stdlib.field import field, Field2D
-from kairo.stdlib.visual import visual
-from kairo.mlir.compiler_v2 import MLIRCompilerV2
-from kairo.ast.nodes import Use
+from morphogen.stdlib.field import field, Field2D
+from morphogen.stdlib.visual import visual
+from morphogen.mlir.compiler_v2 import MLIRCompilerV2
+from morphogen.ast.nodes import Use
 ```
 
 ### Root-Level Test Files (5 files)
 
 ```
-test_cellular_quick.py              (uses kairo.stdlib.cellular)
-test_diagnosis.py                   (uses kairo.stdlib imports)
-test_new_examples.py                (uses kairo.stdlib imports)
-test_proper_patterns.py             (uses kairo.stdlib imports)
+test_cellular_quick.py              (uses morphogen.stdlib.cellular)
+test_diagnosis.py                   (uses morphogen.stdlib imports)
+test_new_examples.py                (uses morphogen.stdlib imports)
+test_proper_patterns.py             (uses morphogen.stdlib imports)
 test_use_demo.py                    (uses kairo modules)
 ```
 
@@ -338,11 +338,11 @@ test_use_demo.py                    (uses kairo modules)
 ### High-Impact Examples
 
 ```
-examples/interactive_physics_sandbox/demo.py    (from kairo.stdlib.*)
-examples/phase4_agent_operations.py              (from kairo.mlir.*)
-examples/flappy_bird/train_neuroevolution.py     (from kairo.stdlib.*)
-examples/procedural_graphics/demo_all_domains.py (from kairo.stdlib.*)
-benchmarks/field_operations_benchmark.py         (from kairo.mlir.*)
+examples/interactive_physics_sandbox/demo.py    (from morphogen.stdlib.*)
+examples/phase4_agent_operations.py              (from morphogen.mlir.*)
+examples/flappy_bird/train_neuroevolution.py     (from morphogen.stdlib.*)
+examples/procedural_graphics/demo_all_domains.py (from morphogen.stdlib.*)
+benchmarks/field_operations_benchmark.py         (from morphogen.mlir.*)
 ```
 
 ### .kairo Language Files (Domain-Specific Language)
@@ -358,38 +358,38 @@ Examples:
   [+19 more files]
 ```
 
-**Note**: These are the Kairo DSL language files themselves. They don't contain "kairo" references (that's the language name for code blocks). Safe to leave as-is or minimal changes needed.
+**Note**: These are the Morphogen DSL language files themselves. They don't contain "kairo" references (that's the language name for code blocks). Safe to leave as-is or minimal changes needed.
 
 ---
 
 ## 8. MLIR DIALECT REFERENCES (CRITICAL INTERNAL)
 
-### MLIR Operation Names Using "kairo." Prefix
+### MLIR Operation Names Using "morphogen." Prefix
 
 Found throughout MLIR lowering and dialect implementations:
 
 ```python
-# kairo.audio dialect operations (dialects/audio.py)
-op_name == "kairo.audio.buffer.create"
-op_name == "kairo.audio.oscillator"
-op_name == "kairo.audio.envelope"
-op_name == "kairo.audio.filter"
-op_name == "kairo.audio.mix"
+# morphogen.audio dialect operations (dialects/audio.py)
+op_name == "morphogen.audio.buffer.create"
+op_name == "morphogen.audio.oscillator"
+op_name == "morphogen.audio.envelope"
+op_name == "morphogen.audio.filter"
+op_name == "morphogen.audio.mix"
 
-# kairo.agent dialect operations (dialects/agent.py)
-op_name == "kairo.agent.spawn"
-op_name == "kairo.agent.update"
-op_name == "kairo.agent.query"
+# morphogen.agent dialect operations (dialects/agent.py)
+op_name == "morphogen.agent.spawn"
+op_name == "morphogen.agent.update"
+op_name == "morphogen.agent.query"
 
-# kairo.field dialect operations (dialects/field.py)
-op_name == "kairo.field.create"
-op_name == "kairo.field.gradient"
-op_name == "kairo.field.laplacian"
+# morphogen.field dialect operations (dialects/field.py)
+op_name == "morphogen.field.create"
+op_name == "morphogen.field.gradient"
+op_name == "morphogen.field.laplacian"
 
-# kairo.temporal dialect operations (dialects/temporal.py)
-op_name == "kairo.temporal.flow.create"
-op_name == "kairo.temporal.flow.run"
-op_name == "kairo.temporal.state.create"
+# morphogen.temporal dialect operations (dialects/temporal.py)
+op_name == "morphogen.temporal.flow.create"
+op_name == "morphogen.temporal.flow.run"
+op_name == "morphogen.temporal.state.create"
 ```
 
 ### Files Affected
@@ -411,19 +411,19 @@ kairo/mlir/lowering/agent_to_scf.py    (18 occurrences)
 
 ## 9. KAIRO DIALECT REFERENCES IN DOCUMENTATION
 
-### Most Common kairo.* References (from docs)
+### Most Common morphogen.* References (from docs)
 
 ```
-kairo.stdlib              (91 occurrences)
-kairo.field              (44 occurrences)
-kairo.mlir               (32 occurrences)
-kairo.stream             (29 occurrences)
-kairo.cross_domain       (28 occurrences)
-kairo.transform          (23 occurrences)
-kairo.schedule           (21 occurrences)
-kairo.agent              (21 occurrences)
-kairo.ast                (8 occurrences)
-kairo.core               (7 occurrences)
+morphogen.stdlib              (91 occurrences)
+morphogen.field              (44 occurrences)
+morphogen.mlir               (32 occurrences)
+morphogen.stream             (29 occurrences)
+morphogen.cross_domain       (28 occurrences)
+morphogen.transform          (23 occurrences)
+morphogen.schedule           (21 occurrences)
+morphogen.agent              (21 occurrences)
+morphogen.ast                (8 occurrences)
+morphogen.core               (7 occurrences)
 ```
 
 **Action**: These should become `morphogen.stdlib`, `morphogen.field`, etc.
@@ -497,8 +497,8 @@ mlir-python-bindings (optional)
 
 **Current**:
 ```python
-"kairo=kairo.cli:main"  # in setup.py
-kairo = "kairo.cli:main"  # in pyproject.toml
+"kairo=morphogen.cli:main"  # in setup.py
+kairo = "morphogen.cli:main"  # in pyproject.toml
 ```
 
 **Change To**:
@@ -511,13 +511,13 @@ morphogen = "morphogen.cli:main"
 
 ### 4. MLIR DIALECT NAMESPACES (Risk: CRITICAL)
 
-MLIR operations are registered with `kairo.audio`, `kairo.field` etc. prefixes.
+MLIR operations are registered with `morphogen.audio`, `morphogen.field` etc. prefixes.
 
 **Current Registrations**:
-- `kairo.audio.*` operations (34 references)
-- `kairo.field.*` operations (26 references)  
-- `kairo.agent.*` operations (26 references)
-- `kairo.temporal.*` operations (39 references)
+- `morphogen.audio.*` operations (34 references)
+- `morphogen.field.*` operations (26 references)  
+- `morphogen.agent.*` operations (26 references)
+- `morphogen.temporal.*` operations (39 references)
 
 **Must Change**:
 - All operation name strings in dialect definitions
@@ -538,7 +538,7 @@ Classes like `KairoMLIRContext` should be renamed:
 
 Example from `/home/user/kairo/kairo/__init__.py`:
 ```python
-"""Kairo v0.10.0
+"""Morphogen v0.10.0
 
 A typed, deterministic domain-specific language for creative computation.
 """
@@ -582,17 +582,17 @@ A typed, deterministic domain-specific language for creative computation.
 ### Phase 3: Core Code Updates (CRITICAL)
 
 1. **MLIR Dialect Operations** (150+ string constants)
-   - `kairo.audio.*` → `morphogen.audio.*`
-   - `kairo.field.*` → `morphogen.field.*`
-   - `kairo.agent.*` → `morphogen.agent.*`
-   - `kairo.temporal.*` → `morphogen.temporal.*`
+   - `morphogen.audio.*` → `morphogen.audio.*`
+   - `morphogen.field.*` → `morphogen.field.*`
+   - `morphogen.agent.*` → `morphogen.agent.*`
+   - `morphogen.temporal.*` → `morphogen.temporal.*`
 
 2. **Class Definitions** (5-10 classes)
    - `KairoMLIRContext` → `MorphogenMLIRContext`
    - Update subclasses
 
 3. **Module Docstrings** (76+ files)
-   - Update "Kairo" → "Morphogen" in docstrings
+   - Update "Morphogen" → "Morphogen" in docstrings
 
 ### Phase 4: Test Updates (353 occurrences)
 
@@ -708,8 +708,8 @@ Documentation (132 files):
   docs/* directory (all files)
   
 Action: Global search & replace
-"Kairo" → "Morphogen"
-kairo. → morphogen.
+"Morphogen" → "Morphogen"
+morphogen. → morphogen.
 ```
 
 ---
@@ -725,10 +725,10 @@ kairo. → morphogen.
 
 2. **Global Find & Replace** (in this order)
    ```
-   Step 1: kairo. → morphogen.        (Package imports & module refs)
+   Step 1: morphogen. → morphogen.        (Package imports & module refs)
    Step 2: import kairo → import morphogen
    Step 3: from kairo → from morphogen
-   Step 4: Kairo → Morphogen           (Documentation & comments)
+   Step 4: Morphogen → Morphogen           (Documentation & comments)
    Step 5: kairo_* → morphogen_*       (Variable/function names)
    Step 6: KairoX → MorphogenX         (Class names)
    ```
@@ -736,8 +736,8 @@ kairo. → morphogen.
 3. **Script to Update MLIR Operations**
    ```python
    # Generate script to update MLIR op name strings
-   # kairo.audio.* → morphogen.audio.*
-   # kairo.field.* → morphogen.field.*
+   # morphogen.audio.* → morphogen.audio.*
+   # morphogen.field.* → morphogen.field.*
    # etc.
    ```
 
@@ -770,7 +770,7 @@ morphogen --help             # (instead of kairo)
 ### For Existing Users (Migration)
 ```python
 # Old code
-from kairo.stdlib import field, audio
+from morphogen.stdlib import field, audio
 
 # New code
 from morphogen.stdlib import field, audio

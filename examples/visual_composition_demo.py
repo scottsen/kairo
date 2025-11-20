@@ -10,9 +10,9 @@ import sys
 sys.path.insert(0, '/home/user/kairo')
 
 import numpy as np
-from kairo.stdlib.field import field
-from kairo.stdlib.agents import Agents
-from kairo.stdlib.visual import visual
+from morphogen.stdlib.field import field
+from morphogen.stdlib.agents import Agents
+from morphogen.stdlib.visual import visual
 
 
 def demo_agent_visualization():
@@ -260,7 +260,7 @@ def demo_generator_export():
 
             # Add some noise to keep it interesting
             noise = field.random((64, 64), seed=i)
-            from kairo.stdlib.field import Field2D
+            from morphogen.stdlib.field import Field2D
             temp_data = temp.data + noise.data * 0.05
             temp = Field2D(data=temp_data)
 

@@ -16,8 +16,8 @@ Creates stunning generative art pieces:
 """
 
 import numpy as np
-from kairo.stdlib import noise, image, color, palette, field
-from kairo.stdlib.field import Field2D
+from morphogen.stdlib import noise, image, color, palette, field
+from morphogen.stdlib.field import Field2D
 
 
 def organic_abstract_art():

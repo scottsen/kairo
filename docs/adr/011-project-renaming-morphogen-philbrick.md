@@ -11,7 +11,7 @@
 
 As of November 2025, we have two interconnected projects:
 
-1. **Kairo** - Digital temporal programming language (23 domains, 80K+ lines)
+1. **Morphogen** - Digital temporal programming language (23 domains, 80K+ lines)
 2. **Analog Platform** - Modular hardware computation vision (documentation only)
 
 ### The Strategic Question
@@ -31,7 +31,7 @@ This raised the question: **Should our naming reflect this unified vision?**
 
 ### Key Constraints
 
-1. **Kairo has momentum** - 88 PRs, established codebase, documentation
+1. **Morphogen has momentum** - 88 PRs, established codebase, documentation
 2. **Education market is primary** - GTM requires credibility and clarity
 3. **Hardware doesn't exist yet** - Analog platform is pure vision (1,810 lines of docs)
 4. **Need clear separation** - Different markets, different timelines
@@ -43,7 +43,7 @@ This raised the question: **Should our naming reflect this unified vision?**
 
 We are renaming both projects to honor the computational pioneers whose work created them:
 
-### **Digital Platform: Morphogen** (was Kairo)
+### **Digital Platform: Morphogen** (was Morphogen)
 
 Named after **Alan Turing's morphogenesis** - his pioneering work on pattern formation through reaction-diffusion equations.
 
@@ -79,7 +79,7 @@ Individual function blocks in the Philbrick platform are called **Philbricks**.
 
 ## Alternatives Considered
 
-### Alternative 1: Keep "Kairo" (Status Quo)
+### Alternative 1: Keep "Morphogen" (Status Quo)
 
 **Pros:**
 - No disruption to existing momentum
@@ -87,7 +87,7 @@ Individual function blocks in the Philbrick platform are called **Philbricks**.
 - Avoid rename complexity
 
 **Cons:**
-- "Kairo" is an invented word with no meaning
+- "Morphogen" is an invented word with no meaning
 - Misses opportunity for historical grounding
 - Doesn't reflect unified vision with analog platform
 - No educational narrative
@@ -341,11 +341,11 @@ Compute:
 
 ### Negative
 
-⚠️ **Kills Kairo Brand** - Loses 88 PRs worth of brand recognition (mitigated: pre-v1.0, no paying customers)
+⚠️ **Kills Morphogen Brand** - Loses 88 PRs worth of brand recognition (mitigated: pre-v1.0, no paying customers)
 
 ⚠️ **Rename Complexity** - All code, docs, repos, imports must change (significant effort)
 
-⚠️ **External Link Breakage** - Any external references to "Kairo" break (mitigated: GitHub auto-redirects)
+⚠️ **External Link Breakage** - Any external references to "Morphogen" break (mitigated: GitHub auto-redirects)
 
 ⚠️ **Learning Curve** - Multiple historical names to learn (mitigated: educational context makes this a feature)
 

@@ -1,10 +1,10 @@
 # Technical Specifications
 
-Detailed technical specifications for Kairo's language, infrastructure, and domains.
+Detailed technical specifications for Morphogen's language, infrastructure, and domains.
 
 ## Language Specifications
 
-- [KAX Language](kax-language.md) - The Kairo language specification
+- [KAX Language](kax-language.md) - The Morphogen language specification
 - [Type System](type-system.md) - Type system design and semantics
 
 ## Core Infrastructure
@@ -39,7 +39,7 @@ Detailed technical specifications for Kairo's language, infrastructure, and doma
 
 ## Navigation Tips
 
-- **New to Kairo?** Start with [KAX Language](kax-language.md) and [Graph IR](graph-ir.md)
+- **New to Morphogen?** Start with [KAX Language](kax-language.md) and [Graph IR](graph-ir.md)
 - **Implementing a domain?** Read the relevant domain spec, then check [Domain Implementation Guide](../guides/domain-implementation.md)
 - **Understanding why?** See [ADRs](../adr/) for the reasoning behind these designs
 - **Need examples?** Check [Examples](../examples/) for working code

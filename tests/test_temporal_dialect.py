@@ -5,8 +5,8 @@ These tests require MLIR Python bindings to be installed.
 """
 
 import pytest
-from kairo.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
-from kairo.mlir.dialects.temporal import (
+from morphogen.mlir.context import KairoMLIRContext, MLIR_AVAILABLE
+from morphogen.mlir.dialects.temporal import (
     FlowType, StateType, TemporalDialect,
     FlowCreateOp, FlowRunOp, StateCreateOp, StateUpdateOp, StateQueryOp
 )
@@ -421,7 +421,7 @@ class TestTemporalLowering:
         """Test lowering state creation to memref."""
         from mlir import ir
         from mlir.dialects import arith
-        from kairo.mlir.lowering import create_temporal_to_scf_pass
+        from morphogen.mlir.lowering import create_temporal_to_scf_pass
 
         ctx = KairoMLIRContext()
         with ctx.ctx, ir.Location.unknown():
@@ -458,7 +458,7 @@ class TestTemporalLowering:
         """Test lowering flow run to scf.for loop."""
         from mlir import ir
         from mlir.dialects import arith, memref
-        from kairo.mlir.lowering import create_temporal_to_scf_pass
+        from morphogen.mlir.lowering import create_temporal_to_scf_pass
 
         ctx = KairoMLIRContext()
         with ctx.ctx, ir.Location.unknown():
@@ -508,7 +508,7 @@ class TestTemporalCompilerIntegration:
 
     def test_compile_temporal_program_simple(self):
         """Test compiling a simple temporal program."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -528,7 +528,7 @@ class TestTemporalCompilerIntegration:
 
     def test_compile_temporal_program_with_flow(self):
         """Test compiling a temporal program with flow execution."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)
@@ -551,7 +551,7 @@ class TestTemporalCompilerIntegration:
 
     def test_compile_temporal_program_with_state_updates(self):
         """Test compiling a temporal program with state updates."""
-        from kairo.mlir.compiler_v2 import MLIRCompilerV2
+        from morphogen.mlir.compiler_v2 import MLIRCompilerV2
 
         ctx = KairoMLIRContext()
         compiler = MLIRCompilerV2(ctx)

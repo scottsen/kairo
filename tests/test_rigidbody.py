@@ -14,7 +14,7 @@ except ImportError:
     pytest = None
 
 import numpy as np
-from kairo.stdlib.rigidbody import (
+from morphogen.stdlib.rigidbody import (
     RigidBody2D,
     PhysicsWorld2D,
     Contact,
