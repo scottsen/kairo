@@ -38,7 +38,8 @@ Show density as color on a 2D plane.
 - Take a slice (or your full 2D domain)
 - Plot `ρ(x, y)` as an image
   - Bright ↔ high density, dark ↔ low density (or vice versa)
-  - **Use perceptually uniform colormaps** (e.g., viridis, plasma), not "rainbow"
+  - **Use perceptually uniform colormaps** (e.g., viridis), not "rainbow"
+  - Morphogen supports: grayscale, fire, viridis, coolwarm
 
 **For changing density in time:**
 - Create an animation (frames over time)
@@ -127,7 +128,7 @@ for seed in seeds:
 
     # Color by density at each point
     densities = [density_field(p) for p in curve.points]
-    curve.color_by_values(densities, palette="plasma")
+    curve.color_by_values(densities, palette="viridis")
 
     scene.add(curve)
 ```
@@ -249,7 +250,7 @@ def particle_flow_viz():
             particles,
             color_property='density',
             size_property='speed',
-            palette='plasma',
+            palette='viridis',
             trail=True,
             trail_length=20
         )
@@ -497,7 +498,7 @@ def streamlines_with_density():
         densities = [density[int(p[1]), int(p[0])] for p in curve.points]
 
         # Color by density
-        curve.color_by_values(densities, palette="plasma")
+        curve.color_by_values(densities, palette="viridis")
         scene.add(curve)
 
     return scene.render()
@@ -530,7 +531,7 @@ def particle_streamlines():
             color_property='speed',  # Will be 'density' when sampling works
             trail=True,
             trail_length=50,
-            palette='plasma',
+            palette='viridis',
             blend_mode='normal'
         )
         yield vis
