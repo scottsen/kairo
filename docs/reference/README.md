@@ -31,6 +31,7 @@ High-level overviews of domain capabilities:
 ## Patterns & Best Practices
 
 - [Multiphysics Success Patterns](multiphysics-success-patterns.md) ⭐ - **12 battle-tested architectural patterns** for multiphysics simulation success (23KB comprehensive guide)
+- [Scalar + Vector Field Visualization](scalar-vector-field-visualization.md) - **Comprehensive guide** to visualizing scalar fields (density, temperature) on vector fields (velocity, force)
 
 ## Other Reference Materials
 

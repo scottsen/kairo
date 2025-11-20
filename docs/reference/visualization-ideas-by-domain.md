@@ -2,6 +2,8 @@
 
 A comprehensive catalog of visualization concepts that leverage Morphogen's unique cross-domain capabilities. This document organizes visualization ideas by computational domain and highlights powerful cross-domain compositions.
 
+**See Also:** [Scalar + Vector Field Visualization Guide](scalar-vector-field-visualization.md) - Comprehensive techniques for visualizing scalar fields (density, temperature) on vector fields (velocity, force).
+
 **Status Legend:**
 - ✅ **Fully Implemented** - Ready to use now
 - 🚧 **Partially Implemented** - Some components available
