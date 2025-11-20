@@ -217,6 +217,7 @@ def register_stdlib_domains() -> None:
         ("genetic", "morphogen.stdlib.genetic", "Genetic algorithms"),
         ("temporal", "morphogen.stdlib.temporal", "Temporal logic and scheduling"),
         ("geometry", "morphogen.stdlib.geometry", "2D/3D geometry, spatial operations, and mesh processing"),
+        ("circuit", "morphogen.stdlib.circuit", "Circuit and electrical simulation"),
     ]
 
     for name, module_path, description in domains:
