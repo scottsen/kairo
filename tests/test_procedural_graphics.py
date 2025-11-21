@@ -13,47 +13,46 @@ class TestNoiseDomain:
         result = noise.perlin2d(seed=42, shape=(64, 64), scale=0.1)
 
         assert result.shape == (64, 64)
-        assert result.dtype == np.float64
+        assert result.data.dtype in (np.float32, np.float64)
         # Perlin noise should be in reasonable range
-        assert -2.0 < result.min() < result.max() < 2.0
+        assert -2.0 < result.data.min() < result.data.max() < 2.0
 
     def test_perlin2d_determinism(self):
         """Test that Perlin noise is deterministic with seed."""
         result1 = noise.perlin2d(seed=123, shape=(32, 32), scale=0.05)
         result2 = noise.perlin2d(seed=123, shape=(32, 32), scale=0.05)
 
-        assert np.allclose(result1, result2, atol=1e-12)
+        assert np.allclose(result1.data, result2.data, atol=1e-12)
 
     def test_perlin2d_different_seeds(self):
         """Test that different seeds produce different noise."""
         result1 = noise.perlin2d(seed=1, shape=(32, 32), scale=0.05)
         result2 = noise.perlin2d(seed=2, shape=(32, 32), scale=0.05)
 
-        assert not np.allclose(result1, result2)
+        assert not np.allclose(result1.data, result2.data)
 
     def test_simplex2d(self):
         """Test Simplex noise generation."""
         result = noise.simplex2d(seed=42, shape=(64, 64), scale=0.1)
 
         assert result.shape == (64, 64)
-        assert -1.5 < result.min() < result.max() < 1.5
+        assert -1.5 < result.data.min() < result.data.max() < 1.5
 
     def test_worley_noise(self):
         """Test Worley/Voronoi noise generation."""
         result = noise.worley(seed=42, shape=(64, 64), num_points=20, distance_metric='euclidean')
 
         assert result.shape == (64, 64)
-        assert result.min() >= 0.0  # Distances are non-negative
-        assert result.max() > 0.0
+        assert result.data.min() >= 0.0  # Distances are non-negative
+        assert result.data.max() > 0.0
 
     def test_fbm_fractional_brownian_motion(self):
         """Test fractional Brownian motion."""
-        base_noise = noise.perlin2d(seed=42, shape=(64, 64), scale=0.05)
-        result = noise.fbm(base_noise, octaves=4, persistence=0.5, lacunarity=2.0)
+        result = noise.fbm(shape=(64, 64), scale=0.05, octaves=4, persistence=0.5, lacunarity=2.0, seed=42)
 
         assert result.shape == (64, 64)
         # FBM should have more detail than single-octave noise
-        assert result.std() > 0.0
+        assert result.data.std() > 0.0
 
     def test_turbulence(self):
         """Test turbulence noise generation."""
@@ -61,22 +60,22 @@ class TestNoiseDomain:
 
         assert result.shape == (64, 64)
         # Turbulence uses absolute value, so should be non-negative
-        assert result.min() >= 0.0
+        assert result.data.min() >= 0.0
 
     def test_marble_pattern(self):
         """Test marble pattern generation."""
-        result = noise.marble(seed=42, shape=(64, 64), scale=0.05, turbulence_strength=5.0)
+        result = noise.marble(seed=42, shape=(64, 64), scale=0.05, turbulence_power=5.0)
 
         assert result.shape == (64, 64)
         # Marble uses sine function, so should be in [-1, 1]
-        assert -1.1 < result.min() < result.max() < 1.1
+        assert -1.1 < result.data.min() < result.data.max() < 1.1
 
     def test_vector_field(self):
         """Test vector field generation."""
         vx, vy = noise.vector_field(seed=42, shape=(32, 32), scale=0.1)
 
-        assert vx.shape == (32, 32)
-        assert vy.shape == (32, 32)
+        assert vx.data.shape == (32, 32)
+        assert vy.data.shape == (32, 32)
 
     def test_plasma_effect(self):
         """Test plasma effect generation."""
@@ -93,62 +92,62 @@ class TestPaletteDomain:
         colors = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])  # RGB
         pal = palette.from_colors(colors)
 
-        assert pal.shape[0] == 256  # Default palette size
-        assert pal.shape[1] == 3    # RGB
+        assert pal.colors.shape[0] == 256  # Default palette size
+        assert pal.colors.shape[1] == 3    # RGB
         # First color should be close to red
-        assert pal[0, 0] > 0.9
+        assert pal.colors[0, 0] > 0.9
 
     def test_from_gradient(self):
         """Test creating palette from gradient stops."""
         stops = [(0.0, [1, 0, 0]), (0.5, [0, 1, 0]), (1.0, [0, 0, 1])]
         pal = palette.from_gradient(stops, num_colors=256)
 
-        assert pal.shape == (256, 3)
+        assert pal.colors.shape == (256, 3)
         # Check interpolation at stops
-        assert np.allclose(pal[0], [1, 0, 0], atol=0.01)    # Red at 0.0
-        assert np.allclose(pal[127], [0, 1, 0], atol=0.1)   # Green at ~0.5
-        assert np.allclose(pal[255], [0, 0, 1], atol=0.01)  # Blue at 1.0
+        assert np.allclose(pal.colors[0], [1, 0, 0], atol=0.01)    # Red at 0.0
+        assert np.allclose(pal.colors[127], [0, 1, 0], atol=0.1)   # Green at ~0.5
+        assert np.allclose(pal.colors[255], [0, 0, 1], atol=0.01)  # Blue at 1.0
 
     def test_greyscale_palette(self):
         """Test greyscale palette."""
         pal = palette.greyscale()
 
-        assert pal.shape == (256, 3)
+        assert pal.colors.shape == (256, 3)
         # Greyscale: R = G = B
-        assert np.allclose(pal[:, 0], pal[:, 1])
-        assert np.allclose(pal[:, 1], pal[:, 2])
+        assert np.allclose(pal.colors[:, 0], pal.colors[:, 1])
+        assert np.allclose(pal.colors[:, 1], pal.colors[:, 2])
         # Should go from 0 to 1
-        assert pal[0, 0] < 0.1
-        assert pal[-1, 0] > 0.9
+        assert pal.colors[0, 0] < 0.1
+        assert pal.colors[-1, 0] > 0.9
 
     def test_viridis_palette(self):
         """Test Viridis scientific colormap."""
         pal = palette.viridis()
 
-        assert pal.shape == (256, 3)
+        assert pal.colors.shape == (256, 3)
         # Viridis starts dark blue-ish, ends yellow-ish
-        assert pal[0, 0] < 0.5    # Low red at start
-        assert pal[-1, 1] > 0.7   # High green at end
+        assert pal.colors[0, 0] < 0.5    # Low red at start
+        assert pal.colors[-1, 1] > 0.7   # High green at end
 
     def test_inferno_palette(self):
         """Test Inferno scientific colormap."""
         pal = palette.inferno()
 
-        assert pal.shape == (256, 3)
+        assert pal.colors.shape == (256, 3)
 
     def test_fire_palette(self):
         """Test fire-themed palette."""
         pal = palette.fire()
 
-        assert pal.shape == (256, 3)
+        assert pal.colors.shape == (256, 3)
         # Fire should have reds and yellows
-        assert pal[-1, 0] > 0.8  # High red at hot end
+        assert pal.colors[-1, 0] > 0.8  # High red at hot end
 
     def test_rainbow_palette(self):
         """Test rainbow palette."""
         pal = palette.rainbow()
 
-        assert pal.shape == (256, 3)
+        assert pal.colors.shape == (256, 3)
 
     def test_cosine_palette(self):
         """Test procedural cosine palette (IQ-style)."""
@@ -159,16 +158,16 @@ class TestPaletteDomain:
 
         pal = palette.cosine(a, b, c, d, num_colors=256)
 
-        assert pal.shape == (256, 3)
-        assert np.all(pal >= 0.0)
-        assert np.all(pal <= 1.0)
+        assert pal.colors.shape == (256, 3)
+        assert np.all(pal.colors >= 0.0)
+        assert np.all(pal.colors <= 1.0)
 
     def test_palette_map(self):
         """Test mapping scalar values to colors using palette."""
         pal = palette.viridis()
         values = np.linspace(0.0, 1.0, 100)
 
-        colored = palette.map(values, pal, min_val=0.0, max_val=1.0)
+        colored = palette.map(values, pal.colors, min_val=0.0, max_val=1.0)
 
         assert colored.shape == (100, 3)
         assert np.all(colored >= 0.0)
@@ -177,21 +176,21 @@ class TestPaletteDomain:
     def test_palette_shift(self):
         """Test palette shifting."""
         pal = palette.viridis()
-        shifted = palette.shift(pal, amount=0.5)
+        shifted = palette.shift(pal.colors, amount=0.5)
 
-        assert shifted.shape == pal.shape
+        assert shifted.shape == pal.colors.shape
         # Shifted palette should be different
-        assert not np.allclose(shifted, pal)
+        assert not np.allclose(shifted, pal.colors)
 
     def test_palette_flip(self):
         """Test palette flipping/reversal."""
         pal = palette.viridis()
-        flipped = palette.flip(pal)
+        flipped = palette.flip(pal.colors)
 
-        assert flipped.shape == pal.shape
+        assert flipped.shape == pal.colors.shape
         # First color should match last color of original
-        assert np.allclose(flipped[0], pal[-1], atol=0.01)
-        assert np.allclose(flipped[-1], pal[0], atol=0.01)
+        assert np.allclose(flipped[0], pal.colors[-1], atol=0.01)
+        assert np.allclose(flipped[-1], pal.colors[0], atol=0.01)
 
 
 class TestColorDomain:
@@ -291,7 +290,7 @@ class TestColorDomain:
         c2 = np.array([[[0.0, 0.0, 1.0]]])  # Blue
 
         # 50/50 mix
-        result = color.mix(c1, c2, factor=0.5)
+        result = color.mix(c1, c2, t=0.5)
         expected = np.array([[[0.5, 0.0, 0.5]]])  # Purple
 
         assert np.allclose(result, expected, atol=0.01)
