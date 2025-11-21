@@ -4,6 +4,11 @@
 **Status:** Concept Exploration
 **Last Updated:** 2025-11-20
 
+**Related Documentation:**
+- [Visualization Ideas by Domain](./visualization-ideas-by-domain.md) - Visual representation catalog (complementary to this sonification guide)
+- [Ambient Music Specification](../specifications/ambient-music.md) - Audio domain specification
+- [Mathematical Music Frameworks](./mathematical-music-frameworks.md) - Theoretical foundations for musical structure
+
 ---
 
 ## Overview

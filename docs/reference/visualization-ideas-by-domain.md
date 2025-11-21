@@ -6,6 +6,9 @@ A comprehensive catalog of visualization concepts that leverage Morphogen's uniq
 - [Mathematical Transformation Metaphors](./math-transformation-metaphors.md) - Intuitive frameworks for understanding the transforms behind these visualizations
 - [Advanced Visualizations](./advanced-visualizations.md) - Implemented visualization techniques
 - [Transform Specification](../specifications/transform.md) - Technical details of domain transformations
+- [Audio Visualization Ideas](./audio-visualization-ideas.md) - Sonification patterns (making computation audible)
+- [Visual Scene Domain](./visual-scene-domain.md) - Architecture for 3D scene visualization
+- [Visual Domain Quick Reference](./visual-domain-quickref.md) - Quick reference for visual operations
 
 **Status Legend:**
 - ✅ **Fully Implemented** - Ready to use now
