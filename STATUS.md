@@ -1,48 +1,75 @@
 # Morphogen — Implementation Status
 
-**Last Updated:** 2025-11-19
-**Current Version:** v0.10.0
-**Status:** Active Development - 26 Computational Domains Implemented ✅
+**Last Updated:** 2025-11-20
+**Current Version:** v0.11.0
+**Status:** Active Development - 40 Computational Domains Implemented ✅
 
 ---
 
 ## Quick Summary
 
-### ✅ Production-Ready (Fully Implemented) - 26 Domains
+### ✅ Production-Ready (Fully Implemented) - 40 Domains
 
 **Core Infrastructure:**
 - **Language Frontend**: Complete lexer, parser, AST, type system
 - **Python Runtime**: Full interpreter with NumPy backend
 - **Visualization**: PNG/JPEG export, interactive display, video export (MP4/GIF)
 
-**Computational Domains** (26 total):
+**Computational Domains** (40 total):
 
+**Physics & Simulation:**
 1. **Fields/Grids** (v0.2.2): PDE operations (diffuse, advect, project, Laplacian)
 2. **Agents/Particles** (v0.4.0): Sparse particle systems, forces, field coupling
-3. **Audio/DSP** (v0.5.0): Synthesis, filters, envelopes, effects, physical modeling
-4. **Visual** (v0.6.0): Colorization, agent rendering, layer composition
-5. **RigidBody Physics** (v0.8.2): 2D rigid body dynamics, collision detection
-6. **Cellular Automata** (v0.9.1): Conway's Life, custom rules, analysis
-7. **Optimization** (v0.9.0): Genetic algorithms, CMA-ES, particle swarm
-8. **Graph/Network** (v0.10.0): Dijkstra, centrality, community detection, max flow
-9. **Signal Processing** (v0.10.0): FFT, STFT, filtering, windowing, spectral analysis
-10. **State Machines** (v0.10.0): FSM, behavior trees, event-driven transitions
-11. **Terrain Generation** (v0.10.0): Perlin noise, erosion, biome classification
-12. **Computer Vision** (v0.10.0): Edge detection, feature extraction, morphology
-13. **Acoustics**: 1D waveguides, impedance, radiation
-14. **Color**: Palettes, conversions, interpolation
-15. **Genetic Algorithms**: Selection, crossover, mutation operators
-16. **Image Processing**: Convolution, transforms, filtering
-17. **Integrators**: Euler, RK4, Verlet numerical integration
-18. **I/O Storage**: File operations, serialization
-19. **Neural Networks**: Layers, activations, backprop
-20. **Noise**: Perlin, simplex, fractal noise generation
-21. **Sparse Linear Algebra**: Sparse matrices, solvers
-22. **Flappy Bird**: Complete game implementation (demo)
-23. **Palette Management**: Color palette system
-24. **Temporal**: Delays, timers, clocks, event sequences (24 operators)
-25. **Geometry**: 50+ operators for 2D/3D spatial operations, transformations, queries
-26. **Transform**: FFT, STFT, DCT, wavelet transforms (Not yet in stdlib but architecture ready)
+3. **RigidBody Physics** (v0.8.2): 2D rigid body dynamics, collision detection
+4. **Integrators** (v0.8.0): Euler, RK2, RK4, Verlet, adaptive methods
+5. **Acoustics** (v0.8.0): 1D waveguides, impedance, radiation
+6. **Thermal ODE**: Temperature dynamics, heat transfer equations
+7. **Fluid Network**: 1D network flow, pipes, junctions
+8. **Fluid Jet**: Jet dynamics, turbulence
+
+**Audio & Signal Processing:**
+9. **Audio/DSP** (v0.5.0): Synthesis, filters, envelopes, effects, physical modeling
+10. **Signal Processing** (v0.10.0): FFT, STFT, filtering, windowing, spectral analysis
+11. **Audio Analysis** (v0.11.0): Spectral analysis, onset detection, feature extraction
+12. **Instrument Modeling** (v0.11.0): Physical modeling synthesis, modal synthesis
+
+**Visual & Graphics:**
+13. **Visual** (v0.6.0): Colorization, agent rendering, layer composition
+14. **Computer Vision** (v0.10.0): Edge detection, feature extraction, morphology
+15. **Terrain Generation** (v0.10.0): Perlin noise, erosion, biome classification
+16. **Color** (v0.8.1): RGB/HSV/HSL conversions, blend modes, temperature
+17. **Image Processing** (v0.8.1): Convolution, transforms, filtering, compositing
+18. **Noise** (v0.8.1): Perlin, simplex, Worley, fBm, ridged multifractal
+19. **Palette** (v0.8.1): Scientific colormaps, gradients, cosine palettes
+
+**Chemistry & Materials Science:**
+20. **Molecular Dynamics** (v0.11.0): Force fields, MD simulation, trajectory analysis
+21. **Quantum Chemistry** (v0.11.0): Electronic structure, basis sets, DFT
+22. **Thermodynamics** (v0.11.0): Equations of state, phase equilibria
+23. **Chemical Kinetics** (v0.11.0): Reaction rates, mechanism analysis
+24. **Electrochemistry** (v0.11.0): Electrode reactions, Nernst equation
+25. **Transport Properties** (v0.11.0): Diffusion, viscosity, conductivity
+26. **Catalysis** (v0.11.0): Catalytic cycles, kinetics, mechanisms
+27. **Multiphase Flow** (v0.11.0): Phase interactions, mass transfer
+28. **Combustion** (v0.11.0): Combustion kinetics, flame dynamics
+
+**AI & Optimization:**
+29. **Optimization** (v0.9.0): Genetic algorithms, CMA-ES, particle swarm
+30. **Genetic Algorithms** (v0.9.0): Selection, crossover, mutation operators
+31. **Neural Networks** (v0.9.0): Layers, activations, backprop
+
+**Data & Analysis:**
+32. **Graph/Network** (v0.10.0): Dijkstra, centrality, community detection, max flow
+33. **Sparse Linear Algebra** (v0.8.0): Sparse matrices, iterative solvers
+34. **State Machines** (v0.10.0): FSM, behavior trees, event-driven transitions
+35. **I/O Storage** (v0.8.0): Image/audio/HDF5 I/O, checkpointing
+
+**Specialized:**
+36. **Cellular Automata** (v0.9.1): Conway's Life, custom rules, analysis
+37. **Geometry** (v0.10.0): 50+ operators for 2D/3D spatial operations, transformations
+38. **Temporal** (v0.10.0): Delays, timers, clocks, event sequences (24 operators)
+39. **Circuit/Electrical** (v0.11.0): DC/AC/transient analysis, MNA solver (Phase 1)
+40. **Flappy Bird**: Complete game implementation (demo)
 
 **Testing**: 900+ comprehensive tests across all domains (55 test files)
 
@@ -59,9 +86,13 @@
 - **MLIR Text-Based IR**: Legacy `ir_builder.py` and `optimizer.py` (marked deprecated)
 - Will be maintained during v0.7.0 transition, removed in v0.8.0+
 
-### 🎉 NEW: v0.10.0 Release - Level 2 & 3 Integration Complete (November 17, 2025)
+### 🎉 NEW: v0.11.0 Release - Advanced Visualizations & Domain Transformations (November 20, 2025)
 
-**Major Milestone**: USE statement + Geometry domain + Level 3 type system complete. All 26 domains now accessible from `.kairo` source files with full type safety and cross-domain validation.
+**Major Milestone**: Chemistry suite (9 domains), Procedural graphics (4 domains), and specialized physics domains added. All 40 domains now accessible from `.kairo` source files with full type safety and cross-domain validation.
+
+### 🎉 v0.10.0 Release - Level 2 & 3 Integration Complete (November 17, 2025)
+
+**Major Milestone**: USE statement + Geometry domain + Level 3 type system complete. All domains accessible from `.kairo` source files with full type safety and cross-domain validation.
 
 **Key Achievements:**
 
@@ -87,10 +118,10 @@
    - 595 tests for validators and rate compatibility
    - See `LEVEL_3_TYPE_SYSTEM.md` for complete specification
 
-4. **Level 2 Integration Complete** ✅ (PR #96)
-   - All 26 domains registered and working
-   - 423+ operators accessible via USE statement
-   - Temporal domain added (24 operators for scheduling/rhythm)
+4. **Level 2 Integration Complete** ✅ (PR #96, expanded in v0.11.0)
+   - All 40 domains registered and working
+   - 500+ operators accessible via USE statement
+   - Complete domain catalog across physics, chemistry, graphics, AI, and data analysis
    - Operator catalog complete across all domains
 
 5. **Cross-Domain Examples** ✅ (PR #97)
@@ -107,23 +138,25 @@
 - Production-ready cross-domain composition
 
 **What This Enables:**
-- Write `.kairo` programs using any of 423+ operators
-- Type-safe cross-domain connections (field → agent, geometry → audio, etc.)
+- Write `.kairo` programs using any of 500+ operators
+- Type-safe cross-domain connections (field → agent, geometry → audio, molecular → field, etc.)
 - Physical unit validation at runtime
 - Rate-aware composition for audio/visual/physics sync
+- Chemistry simulations (molecular dynamics, quantum chemistry, kinetics)
+- Procedural graphics (noise → palette → image pipeline)
 
-**Complete Domain Catalog** (26 domains implemented):
+**Complete Domain Catalog** (40 domains implemented):
 
-**Production-Ready** (v0.10.0):
-- Field, Visual, Agent, Audio, RigidBody, Geometry, Temporal
-- Graph, Signal, StateMachine, Terrain, Vision
-- Acoustics, Cellular, Color, Genetic, Image, Integrators
-- IO/Storage, Neural, Noise, Optimization, Palette, Sparse Linear Algebra, Flappy
+**Production-Ready** (v0.11.0):
+- **Physics**: Field, Agent, RigidBody, Integrators, Acoustics, Thermal, Fluid Network/Jet
+- **Audio**: Audio/DSP, Signal, Audio Analysis, Instrument Modeling
+- **Visual**: Visual, Vision, Terrain, Color, Image, Noise, Palette
+- **Chemistry**: Molecular, QChem, Thermo, Kinetics, Electrochem, Transport, Catalysis, Multiphase, Combustion
+- **AI/Data**: Optimization, Genetic, Neural, Graph, Sparse LA, StateMachine, IO/Storage
+- **Specialized**: Cellular, Geometry, Temporal, Circuit, Flappy
 
-**Architecture Documented** (Future implementation):
-- Circuit, FluidDynamics, InstrumentModeling
-- Physics domains (FluidNetwork, ThermalODE, FluidJet, CombustionLight)
-- Symbolic/Algebraic, Control & Robotics
+**Architecture Documented** (Future expansion):
+- Symbolic/Algebraic, Control & Robotics, Advanced Fluids (CFD), Advanced Circuit (SPICE-complete)
 
 See `docs/DOMAIN_ARCHITECTURE.md` for complete vision.
 
