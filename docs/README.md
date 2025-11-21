@@ -16,7 +16,9 @@ Welcome to the Morphogen documentation! This guide will help you navigate the do
 ### 📐 [Architecture](architecture/)
 High-level design and architectural principles
 - [Overview](architecture/overview.md) - Core Morphogen architecture
+- **[DSL Framework Design](architecture/dsl-framework-design.md)** ⭐ - Vision for domain reasoning language (first-class domains, translations, composition)
 - [Domain Architecture](architecture/domain-architecture.md) - How domains fit together (110KB - comprehensive!)
+- [Categorical Structure](architecture/morphogen-categorical-structure.md) - Category theory foundations and functorial semantics
 - [GPU & MLIR Principles](architecture/gpu-mlir-principles.md) - GPU execution and MLIR integration
 - [Interactive Visualization](architecture/interactive-visualization.md) - Visualization approach
 

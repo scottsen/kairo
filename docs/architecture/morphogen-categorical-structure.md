@@ -16,9 +16,12 @@ This document maps Morphogen's existing architecture to universal domain framewo
 - Guide architectural decisions using mathematical principles
 - Enable rigorous reasoning about domain compositions
 
-**Prerequisites:**
+**Related Documentation:**
+- **[DSL Framework Design](./dsl-framework-design.md)** - Vision for domain reasoning language (gaps and future extensions)
 - [Universal Domain Frameworks](../reference/universal-domain-frameworks.md) - Theoretical foundations
 - [Cross-Domain Architectural Patterns](../adr/002-cross-domain-architectural-patterns.md) - Practical patterns
+
+**Note:** This document describes the *current implementation*. For the vision of future language extensions (declarative domains, first-class translations, composition operators), see [DSL Framework Design](./dsl-framework-design.md).
 
 ---
 
