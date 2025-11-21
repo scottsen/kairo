@@ -2010,11 +2010,24 @@ def test_long_form_stability():
 
 ### Morphogen Documentation
 
-- [AUDIO_SPECIFICATION.md](../../AUDIO_SPECIFICATION.md)
-- [ADR-009](../adr/009-ambient-music-generative-domains.md)
-- [docs/specifications/emergence.md](emergence.md)
-- [docs/specifications/procedural-generation.md](procedural-generation.md)
-- [docs/architecture/domain-architecture.md](../architecture/domain-architecture.md)
+**Specifications & Architecture:**
+- [ADR-009: Ambient Music & Generative Domains](../adr/009-ambient-music-generative-domains.md)
+- [Emergence Domain Specification](emergence.md)
+- [Procedural Generation Specification](procedural-generation.md)
+- [Domain Architecture Overview](../architecture/domain-architecture.md)
+- [Acoustics Domain Specification](acoustics.md)
+
+**Examples & Patterns:**
+- [Ambient Music Pipeline Examples](../examples/ambient-music-pipelines.md)
+- [Cross-Domain Examples](../examples/README.md)
+
+**Reference Materials:**
+- [Audio Visualization Ideas](../reference/audio-visualization-ideas.md) - Sonification patterns
+- [Mathematical Music Frameworks](../reference/mathematical-music-frameworks.md) - Theoretical foundations
+- [Visualization Ideas by Domain](../reference/visualization-ideas-by-domain.md) - Visual representation patterns
+
+**Archived:**
+- [AUDIO_SPECIFICATION.md](../../archive/root-level-docs/AUDIO_SPECIFICATION.md) - Historical audio spec (archived)
 
 ---
 

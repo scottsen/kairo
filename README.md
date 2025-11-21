@@ -41,7 +41,7 @@ Morphogen presents **two human-friendly faces** powered by a single semantic ker
 
 Both compile to the same Graph IR, share the same operator registry, and guarantee deterministic, reproducible results.
 
-> 📐 **Deep Dive**: See [ARCHITECTURE.md](ARCHITECTURE.md) for the complete stack design (kernel, frontends, Graph IR, MLIR compilation)
+> 📐 **Deep Dive**: See [docs/architecture/](docs/architecture/) for the complete stack design (kernel, frontends, Graph IR, MLIR compilation)
 
 ## What Makes Morphogen Different
 

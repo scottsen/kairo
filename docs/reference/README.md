@@ -28,17 +28,27 @@ High-level overviews of domain capabilities:
 - [Visual Scene Domain](visual-scene-domain.md) - 3D scene representation and rendering
 - [Visual Domain Quick Reference](visual-domain-quickref.md) - Quick reference for visual operations
 
+## Visualization & Sonification
+
+Comprehensive catalogs of visualization and sonification techniques:
+
+- [Visualization Ideas by Domain](visualization-ideas-by-domain.md) ⭐ - **Comprehensive catalog** of visualization concepts organized by computational domain (audio, physics, fields, agents, optimization, etc.)
+- [Audio Visualization Ideas](audio-visualization-ideas.md) ⭐ - **Sonification & audio-visual coupling** - making computation audible through data sonification
+- [Advanced Visualizations](advanced-visualizations.md) - Implemented visualization techniques and patterns
+
 ## Patterns & Best Practices
 
-- [Multiphysics Success Patterns](multiphysics-success-patterns.md) ⭐ - **12 battle-tested architectural patterns** for multiphysics simulation success (23KB comprehensive guide)
+- [Multiphysics Success Patterns](multiphysics-success-patterns.md) ⭐ - **12 battle-tested architectural patterns** for multiphysics simulation success
+- [Universal Domain Frameworks](universal-domain-frameworks.md) - Theoretical foundations for universal computation across domains
 
 ## Theoretical Frameworks
 
 - [Mathematical Music Frameworks](mathematical-music-frameworks.md) ⭐ - **10 mathematical domains** that map naturally to musical structure (group theory, topology, dynamical systems, information theory, and more)
 - [Mathematical Transformation Metaphors](math-transformation-metaphors.md) - Pedagogical metaphors for understanding transformations
 
-## Other Reference Materials
+## Conventions & Standards
 
+- [Naming Conventions](NAMING_CONVENTIONS.md) - Naming standards and conventions for Morphogen code and documentation
 - [Operator Registry Expansion](operator-registry-expansion.md) - How the operator registry grows and evolves
 
 ---
