@@ -71,6 +71,9 @@ The Ambient Music domain provides four specialized sub-domains for ambient and g
 
 **Morphogen unifies all of these capabilities.**
 
+**Mathematical frameworks for composition:**
+Morphogen's design is informed by mathematical structures that map naturally to music: group theory for transformations, topology for voice-leading, dynamical systems for rhythm evolution, and information theory for expectation management. See [Mathematical Music Frameworks](../reference/mathematical-music-frameworks.md) for details on how these domains enhance generative composition.
+
 ---
 
 ## Phase Roadmap
@@ -586,6 +589,7 @@ See [docs/guides/domain-implementation.md](../guides/domain-implementation.md) f
 - [docs/specifications/ambient-music.md](../specifications/ambient-music.md) — Complete specification
 - [AUDIO_SPECIFICATION.md](../../AUDIO_SPECIFICATION.md) — Base audio domain
 - [docs/architecture/domain-architecture.md](../architecture/domain-architecture.md) — Multi-domain architecture
+- [docs/reference/mathematical-music-frameworks.md](../reference/mathematical-music-frameworks.md) — Mathematical frameworks for music representation
 
 ### Academic Research
 - Curtis Roads, *"Microsound"* (2001) — Granular synthesis
