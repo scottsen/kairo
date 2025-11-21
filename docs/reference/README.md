@@ -32,6 +32,11 @@ High-level overviews of domain capabilities:
 
 - [Multiphysics Success Patterns](multiphysics-success-patterns.md) ⭐ - **12 battle-tested architectural patterns** for multiphysics simulation success (23KB comprehensive guide)
 
+## Theoretical Frameworks
+
+- [Mathematical Music Frameworks](mathematical-music-frameworks.md) ⭐ - **10 mathematical domains** that map naturally to musical structure (group theory, topology, dynamical systems, information theory, and more)
+- [Mathematical Transformation Metaphors](math-transformation-metaphors.md) - Pedagogical metaphors for understanding transformations
+
 ## Other Reference Materials
 
 - [Operator Registry Expansion](operator-registry-expansion.md) - How the operator registry grows and evolves
@@ -43,6 +48,7 @@ High-level overviews of domain capabilities:
 - **Looking for a specific operator?** Search the relevant operator catalog
 - **Understanding a domain?** Start with the domain overview
 - **Building a multiphysics system?** Read the multiphysics success patterns
+- **Exploring music theory integration?** Review the mathematical music frameworks
 - **Need implementation details?** See [Specifications](../specifications/)
 
 [← Back to Documentation Home](../README.md)
