@@ -67,6 +67,9 @@ import morphogen
 - **ADRs**
   - [ADR 012: Universal Domain Translation](docs/adr/012-universal-domain-translation.md) — Framework for explicit domain translation with invariant preservation
 
+- **Reference Documentation**
+  - [AI Model Families](docs/reference/ai-model-families.md) — Maps 10 major AI model families (LLMs, Diffusion, World Models, RL, GNNs, NeRFs, NCAs, AlphaFold/Zero, Self-Supervised Vision, Multimodal) to Morphogen domains with integration strategies
+
 **Changed:**
 - Reorganized philosophical documentation into dedicated `docs/philosophy/` directory
 - Updated all documentation indices and cross-references
