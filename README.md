@@ -861,6 +861,144 @@ io_storage.save_checkpoint("state.ckpt", {
 
 ---
 
+### 14. Audio Analysis Domain - Timbre Extraction & Feature Analysis
+
+**✅ PRODUCTION-READY - implemented in v0.11.0!**
+
+Extract timbre features from acoustic recordings for instrument modeling and physical modeling synthesis.
+
+```morphogen
+use audio_analysis, instrument_model
+
+// Load acoustic guitar recording
+let recording = audio.load("guitar_A440.wav")
+
+// Track fundamental frequency over time
+let f0_trajectory = audio_analysis.track_fundamental(
+    recording,
+    sample_rate=44100,
+    method="autocorrelation"
+)
+
+// Track harmonic partials
+let partials = audio_analysis.track_partials(
+    recording,
+    sample_rate=44100,
+    num_partials=16
+)
+
+// Extract modal resonances
+let modes = audio_analysis.analyze_modes(
+    recording,
+    sample_rate=44100,
+    num_modes=12,
+    method="prony"
+)
+
+// Measure decay characteristics
+let decay_rates = audio_analysis.fit_exponential_decay(partials)
+let t60 = audio_analysis.measure_t60(decay_rates[0])  // Reverberation time
+
+// Measure inharmonicity (for strings)
+let inharmonicity = audio_analysis.measure_inharmonicity(
+    partials,
+    fundamental=440.0
+)
+```
+
+**Features:**
+- **Pitch Tracking**: Autocorrelation, YIN algorithm, harmonic product spectrum
+- **Harmonic Analysis**: Track partials, spectral envelope, peak detection
+- **Modal Analysis**: Prony's method, exponential decay fitting
+- **Timbre Features**: Inharmonicity measurement, T60 reverberation time
+- **Signal Separation**: Deconvolution, noise modeling
+- **Deterministic**: All operations reproducible with controlled numerical precision
+
+**Use Cases:**
+- Digital luthiery (analyze acoustic guitars → create virtual instruments)
+- Physical modeling synthesis (extract modes → resynthesizechanges)
+- Timbre morphing (interpolate between instrument models)
+- Audio forensics and analysis
+
+**Status:** Production-ready as of v0.11.0 (631 lines, 12 functions)
+
+---
+
+### 15. Instrument Modeling Domain - High-Level Physical Models
+
+**✅ PRODUCTION-READY - implemented in v0.11.0!**
+
+Create reusable, parameterized instrument models from analyzed audio recordings.
+
+```morphogen
+use instrument_model, audio_analysis
+
+// Analyze acoustic guitar recording
+let recording = audio.load("guitar_pluck_E2.wav")
+
+// Extract complete instrument model
+let guitar_model = instrument_model.from_audio(
+    recording,
+    sample_rate=44100,
+    instrument_type="modal_string",
+    fundamental=82.41  // E2
+)
+
+// Synthesize new notes with the model
+let new_note = instrument_model.synthesize(
+    guitar_model,
+    pitch=110.0,  // A2
+    duration=2.0,
+    velocity=0.8,
+    synth_params={
+        pluck_position: 0.18,  // Near bridge
+        pluck_stiffness: 0.97,
+        body_coupling: 0.9,
+        noise_level: -60.0
+    }
+)
+
+// Morph between two instruments
+let violin_model = instrument_model.from_audio(violin_recording, ...)
+let hybrid = instrument_model.morph(
+    guitar_model,
+    violin_model,
+    mix=0.5
+)
+
+// Save model for later use
+instrument_model.save(guitar_model, "models/guitar_E2.imodel")
+
+// Load and use
+let loaded = instrument_model.load("models/guitar_E2.imodel")
+```
+
+**Features:**
+- **Model Types**: Modal strings, membranes, additive, waveguide, hybrid
+- **Complete Analysis Pipeline**: Fundamental tracking, partial tracking, modal analysis
+- **Synthesis Parameters**: Pluck position/stiffness, body coupling, noise level
+- **Model Operations**: Morph, transpose, save/load
+- **MIDI Integration Ready**: Map velocity → synthesis parameters
+- **Deterministic**: Reproducible synthesis from saved models
+
+**Model Components:**
+- Harmonic partials with time-varying amplitudes
+- Resonant modes (frequency, amplitude, decay, phase)
+- Body impulse response (resonance)
+- Noise signature (broadband components)
+- Excitation model (pluck/attack transient)
+- Inharmonicity coefficient
+
+**Use Cases:**
+- **Digital Luthiery**: Record real instruments → create playable virtual instruments
+- **Timbre Morphing**: Interpolate between different instruments
+- **Parametric Control**: Adjust pluck position, stiffness without re-recording
+- **MIDI Instruments**: Build expressive virtual instruments from recordings
+
+**Status:** Production-ready as of v0.11.0 (478 lines, ~10 functions)
+
+---
+
 ## Examples
 
 ### Fluid Simulation (Navier-Stokes)
@@ -930,7 +1068,8 @@ See `examples/` directory for more!
 ## Project Status
 
 **Version**: 0.11.0
-**Status**: Active Development - 40 Computational Domains ✅
+**Status**: Production-Ready - 40 Computational Domains ✅
+**Last Updated**: 2025-11-21
 
 ### ✅ Production-Ready
 - Language specification (comprehensive)
@@ -977,7 +1116,7 @@ See `examples/` directory for more!
 - **GPU Acceleration** - Via MLIR GPU dialect (planned Phase 3-4)
 - **Advanced Optimization** - Auto-vectorization, fusion, polyhedral optimization
 
-**Current Version**: v0.10.0 - Level 2 & 3 Integration Complete (25 domains, 374+ operators, USE statement, type system)
+**Current Version**: v0.11.0 - Complete Domain Suite (40 domains, 500+ operators, chemistry/materials science, audio analysis, instrument modeling)
 **Next Focus**: Production hardening, performance optimization, geometry domain
 **Long-term Vision**: GPU acceleration, JIT compilation, advanced optimizations
 
@@ -1187,4 +1326,4 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ---
 
-**Status:** v0.10.0 - Five New Computational Domains | **Current Version:** 0.10.0 | **Last Updated:** 2025-11-16
+**Status:** v0.11.0 - Complete Multi-Domain Platform | **Current Version:** 0.11.0 | **Last Updated:** 2025-11-21
