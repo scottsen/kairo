@@ -17,8 +17,13 @@ This document maps Morphogen's existing architecture to universal domain framewo
 - Enable rigorous reasoning about domain compositions
 
 **Prerequisites:**
-- [Universal Domain Frameworks](../reference/universal-domain-frameworks.md) - Theoretical foundations
-- [Cross-Domain Architectural Patterns](../adr/002-cross-domain-architectural-patterns.md) - Practical patterns
+- [Formalization and the Evolution of Knowledge](formalization-and-knowledge.md) — Why formalization matters
+- [Universal Domain Frameworks](../reference/universal-domain-frameworks.md) — Theoretical foundations
+- [Operator Foundations](operator-foundations.md) — Operator-theoretic view
+
+**Related:**
+- [Cross-Domain Architectural Patterns](../adr/002-cross-domain-architectural-patterns.md) — Practical patterns
+- [Philosophy README](README.md) — Overview of philosophical foundations
 
 ---
 

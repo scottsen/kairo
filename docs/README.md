@@ -13,6 +13,13 @@ Welcome to the Morphogen documentation! This guide will help you navigate the do
 
 ## Documentation Structure
 
+### 🧠 [Philosophy](philosophy/)
+**Theoretical foundations and epistemological context**
+- [Formalization and Knowledge](philosophy/formalization-and-knowledge.md) ⭐ — How formalization transforms human knowledge
+- [Operator Foundations](philosophy/operator-foundations.md) — Mathematical operator theory and spectral methods
+- [Categorical Structure](philosophy/categorical-structure.md) — Category-theoretic formalization
+- [Philosophy README](philosophy/README.md) — Overview of philosophical foundations
+
 ### 📐 [Architecture](architecture/)
 High-level design and architectural principles
 - [Overview](architecture/overview.md) - Core Morphogen architecture
@@ -97,6 +104,8 @@ Deprecated CCDSL v0.2.2 documentation (for historical reference)
 
 **I want to...**
 
+- **Understand why formalization matters** → Read [Formalization and Knowledge](philosophy/formalization-and-knowledge.md) ⭐
+- **Understand Morphogen's mathematical foundations** → See [Philosophy](philosophy/) section
 - **Understand Morphogen's vision and impact** → Read the main [README.md](../README.md) and [Professional Applications](reference/professional-domains.md)
 - **Understand Morphogen's architecture** → Start with [Architecture Overview](architecture/overview.md), then [Domain Architecture](architecture/domain-architecture.md)
 - **Understand transformations intuitively** → Read [Mathematical Transformation Metaphors](reference/math-transformation-metaphors.md)
