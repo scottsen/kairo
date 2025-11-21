@@ -9,6 +9,43 @@
 - **Language**: Python-based runtime with MLIR compilation target
 - **Philosophy**: Computation = Composition across domains
 
+## Quick Start Workflow
+
+**New to the project? Start here:**
+
+1. **Install and verify**
+   ```bash
+   cd kairo
+   pip install -e ".[dev,audio,viz]"
+   pytest tests/test_field_operations.py -v  # Should pass
+   ```
+
+2. **Explore project structure**
+   ```bash
+   reveal --level 1 morphogen/stdlib/     # See all 40 domains
+   reveal --level 2 docs/architecture/overview.md  # Architecture overview
+   ```
+
+3. **Run an example**
+   ```bash
+   morphogen run examples/01_hello_heat.kairo
+   # Or for Python examples:
+   python examples/field_ops/heat_diffusion.py
+   ```
+
+4. **Understand a domain**
+   ```bash
+   reveal --level 1 morphogen/stdlib/audio.py        # See operators
+   pytest tests/test_audio_basic.py -v               # Verify tests pass
+   cat examples/audio/karplus_strong.py              # See example
+   ```
+
+5. **Make a change and test**
+   ```bash
+   # Edit a file, then run its tests
+   pytest tests/test_<domain>.py -v
+   ```
+
 ## Key Capabilities
 
 ### Production-Ready Domains (40+)
@@ -29,25 +66,219 @@ All domains share:
 - **MLIR compiler** (6 custom dialects → LLVM/GPU)
 - **Deterministic execution** (bit-exact reproducibility)
 
+## Installation & Setup
+
+### Quick Start
+```bash
+# Clone and install
+git clone https://github.com/scottsen/morphogen.git
+cd kairo
+pip install -e .
+
+# With optional dependencies
+pip install -e ".[dev]"      # Development tools (pytest, black, mypy)
+pip install -e ".[audio]"    # Audio I/O (sounddevice, soundfile)
+pip install -e ".[video]"    # Video export (imageio, ffmpeg)
+pip install -e ".[viz]"      # Visualization (matplotlib, pillow)
+pip install -e ".[io]"       # All I/O features
+
+# Verify installation
+morphogen version
+pytest tests/ -v
+```
+
+### Optional Dependencies
+- **audio**: Real-time playback/recording (`audio.play()`, `audio.record()`)
+- **video**: MP4/GIF export (`visual.video()`)
+- **viz**: Advanced visualization (matplotlib integration)
+- **dev**: Testing, linting, type checking (pytest, black, mypy, ruff)
+- **mlir**: MLIR compilation (experimental, requires separate installation)
+
 ## Project Structure
 
 ```
 kairo/
-├── src/morphogen/           # Core runtime and compiler
+├── morphogen/               # Main package
+│   ├── ast/                 # AST nodes and visitors
+│   ├── lexer/               # Tokenizer
+│   ├── parser/              # Recursive descent parser
 │   ├── runtime/             # Python interpreter
-│   ├── compiler/            # MLIR compilation
-│   ├── domains/             # Domain implementations (40+)
-│   └── stdlib/              # Standard library
-├── tests/                   # 900+ tests across 55 files
+│   ├── mlir/                # MLIR compilation (6 dialects)
+│   ├── stdlib/              # Domain implementations (40 domains)
+│   ├── cross_domain/        # Cross-domain type safety
+│   ├── core/                # Domain registry
+│   └── cli.py               # Command-line interface
+├── tests/                   # 900+ tests across 63 files
 ├── examples/                # Working examples for all domains
+│   ├── *.kairo              # Language examples
+│   ├── agents/              # Agent simulations
+│   ├── audio/               # Audio synthesis
+│   ├── field_ops/           # Field operations
+│   └── ...                  # 27 domain directories
 ├── docs/                    # Comprehensive documentation
 │   ├── architecture/        # System design
 │   ├── specifications/      # 19 domain specs
 │   ├── guides/              # Implementation guides
+│   ├── adr/                 # Architectural decisions
 │   └── roadmap/             # Development roadmap
+├── benchmarks/              # Performance benchmarks
+├── scripts/                 # Utility scripts
 └── archive/                 # Historical docs
-
 ```
+
+## Testing
+
+### Running Tests
+```bash
+# All tests (900+ tests)
+pytest tests/ -v
+
+# Specific domain
+pytest tests/test_audio_basic.py -v
+pytest tests/test_field_operations.py -v
+
+# With coverage
+pytest tests/ --cov=morphogen --cov-report=html
+open htmlcov/index.html
+
+# Parallel execution (faster)
+pytest tests/ -n auto
+
+# Test markers
+pytest tests/ -m "not slow"           # Skip slow tests
+pytest tests/ -m determinism          # Only determinism tests
+pytest tests/ -m integration          # Only integration tests
+```
+
+### Test Structure
+- `test_*_basic.py` - Core functionality for each domain
+- `test_*_operations.py` - Operator tests
+- `test_*_integration.py` - End-to-end tests
+- `test_*_dialect.py` - MLIR compilation tests
+
+### Key Test Markers
+- `slow` - Tests taking >1 second
+- `determinism` - Verifies reproducibility
+- `integration` - Cross-domain tests
+- `benchmark` - Performance tests
+
+## Common Development Commands
+
+### Language Development
+```bash
+# Run a Morphogen program
+morphogen run examples/01_hello_heat.kairo
+
+# Parse and show AST
+morphogen parse examples/01_hello_heat.kairo
+
+# Type check
+morphogen check examples/01_hello_heat.kairo
+
+# Generate MLIR IR (text-based)
+morphogen mlir examples/01_hello_heat.kairo
+```
+
+### Code Quality
+```bash
+# Format code
+black morphogen/ tests/
+
+# Lint
+ruff check morphogen/
+
+# Type check
+mypy morphogen/ --ignore-missing-imports
+
+# Run all checks
+black morphogen/ && ruff check morphogen/ && pytest tests/ -v
+```
+
+### Performance
+```bash
+# Run benchmarks
+pytest benchmarks/ -v
+
+# Profile a specific example
+python -m cProfile -s cumtime examples/field_ops/heat_diffusion.py
+```
+
+## Performance Characteristics
+
+### Current Implementation (Python/NumPy)
+- **Field Operations** (256×256): ~10-50ms per timestep
+- **Agent Systems** (1000 agents): ~5-20ms per timestep with spatial hashing
+- **Audio Synthesis** (44.1kHz): Real-time capable for most operations
+- **Parsing**: ~10-50ms for typical programs
+- **Memory**: ~100MB base + domain-specific allocations
+
+### Known Bottlenecks
+- Large grids (>512×512) become slow without GPU acceleration
+- Python interpreter overhead (MLIR compilation will address this)
+- No parallelization yet (single-threaded execution)
+- Field operations use iterative solvers (Jacobi, CG) which can be slow for large systems
+
+### Optimization Tips
+- Use smaller grid sizes during development (128×128 vs 512×512)
+- Reduce iteration counts for diffusion/projection (20 iterations is often sufficient)
+- Use spatial hashing for agent forces (`compute_pairwise_forces` with `radius` parameter)
+- Profile with `cProfile` to identify bottlenecks
+- Consider lowering time resolution (larger `dt`) if physics allows
+
+## Troubleshooting
+
+### Common Issues
+
+**Import errors after installation**
+```bash
+# Ensure editable install
+pip install -e .
+
+# Verify package location
+python -c "import morphogen; print(morphogen.__file__)"
+```
+
+**Audio playback not working**
+```bash
+# Install audio dependencies
+pip install -e ".[audio]"
+
+# Test audio backend
+python -c "import sounddevice; print(sounddevice.query_devices())"
+```
+
+**Tests failing**
+```bash
+# Update dependencies
+pip install -e ".[dev]"
+
+# Check Python version (requires >=3.9)
+python --version
+
+# Run with verbose output
+pytest tests/test_audio_basic.py -v -s
+```
+
+**MLIR import errors**
+```bash
+# MLIR is optional - system falls back to Python interpreter
+# To use MLIR features, install separately:
+pip install mlir -f https://github.com/makslevental/mlir-wheels/releases/expanded_assets/latest
+```
+
+**Visualization not displaying**
+```bash
+# Install visualization dependencies
+pip install -e ".[viz]"
+
+# For headless systems, export to file instead:
+# output(vis, "output.png")  instead of display(vis)
+```
+
+### Getting Help
+- Check `docs/troubleshooting.md` for detailed solutions
+- Search issues: https://github.com/scottsen/kairo/issues
+- Review examples in `examples/` directory for working patterns
 
 ## Tools Available
 
@@ -223,6 +454,62 @@ flow(dt=0.1ms) {
 
 ## Quick Reference
 
+### Domain Cheat Sheet
+
+**Field Operations** (`morphogen/stdlib/field.py`)
+```python
+field.alloc(shape, fill=0.0)                    # Create field
+field.diffuse(field, rate, dt, iterations=20)    # Heat diffusion
+field.advect(field, velocity, dt)                # Advection
+field.project(velocity, iterations=50)           # Pressure projection
+field.laplacian(field)                           # Laplacian operator
+field.gradient(field)                            # Gradient
+```
+
+**Agent Operations** (`morphogen/stdlib/agents.py`)
+```python
+agents.alloc(count, properties={...})            # Create agents
+agents.map(agents, property, func)               # Transform property
+agents.filter(agents, property, condition)       # Filter agents
+agents.compute_pairwise_forces(...)              # N-body forces
+agents.sample_field(agents, field, property)     # Field coupling
+```
+
+**Audio Synthesis** (`morphogen/stdlib/audio.py`)
+```python
+audio.sine(freq, duration, amplitude=0.5)        # Sine wave
+audio.string(excitation, freq, t60)              # Physical string
+audio.lowpass(signal, cutoff)                    # Filter
+audio.reverb(signal, mix=0.3, size=0.8)         # Reverb
+audio.play(buffer)                               # Real-time playback
+audio.save(buffer, "out.wav")                    # Export audio
+```
+
+**Visual Operations** (`morphogen/stdlib/visual.py`)
+```python
+visual.colorize(field, palette="viridis")        # Field → RGB
+visual.agents(agents, width, height, ...)        # Render agents
+visual.composite(layers, mode="add")             # Layer composition
+visual.video(frames, "out.mp4", fps=30)         # Export video
+visual.output(visual, "out.png")                 # Save image
+```
+
+**Graph/Network** (`morphogen/stdlib/graph.py`)
+```python
+graph.create_empty(directed=False)               # New graph
+graph.add_edge(graph, source, target, weight)    # Add edge
+graph.shortest_path(graph, source, target)       # Dijkstra
+graph.degree_centrality(graph)                   # Centrality
+graph.connected_components(graph)                # Components
+```
+
+**Optimization** (`morphogen/stdlib/optimization.py`)
+```python
+genetic.create_population(size, gene_length)     # GA population
+genetic.evolve(population, fitness_func)         # Evolution step
+optimization.cma_es(objective, x0, sigma0)       # CMA-ES
+```
+
 ### Important Files
 - `README.md` - Project overview and getting started
 - `SPECIFICATION.md` - Complete language reference
@@ -257,3 +544,4 @@ python examples/agents/boids.py
 
 **Last Updated**: 2025-11-21
 **Status**: v0.11.0 - Complete Multi-Domain Platform (40 domains, 500+ operators)
+**Contributors**: Added comprehensive installation, testing, performance, and troubleshooting guides
