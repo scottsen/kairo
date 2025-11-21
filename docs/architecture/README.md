@@ -28,8 +28,13 @@ Morphogen's approach to interactive visualization and real-time rendering.
 
 ## Related Documentation
 
-- **Why these decisions?** See [ADRs](../adr/) for architectural decision records
-- **Implementation details?** See [Specifications](../specifications/) for technical specs
-- **How to implement?** See [Guides](../guides/) for step-by-step instructions
+**Theoretical Foundations:**
+- [Philosophy](../philosophy/) — Mathematical and epistemological foundations
+- [Categorical Structure](../philosophy/categorical-structure.md) — Category theory formalization
+
+**Practical Implementation:**
+- [ADRs](../adr/) — Why architectural decisions were made
+- [Specifications](../specifications/) — Technical specifications
+- [Guides](../guides/) — Step-by-step implementation guides
 
 [← Back to Documentation Home](../README.md)

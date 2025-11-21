@@ -13,24 +13,32 @@ Welcome to the Morphogen documentation! This guide will help you navigate the do
 
 ## Documentation Structure
 
+### 🧠 [Philosophy](philosophy/)
+**Theoretical foundations and epistemological context**
+- [Formalization and Knowledge](philosophy/formalization-and-knowledge.md) ⭐ — How formalization transforms human knowledge
+- [Universal DSL Principles](philosophy/universal-dsl-principles.md) ⭐ **NEW** — Design brief for cross-domain DSLs
+- [Operator Foundations](philosophy/operator-foundations.md) — Mathematical operator theory and spectral methods
+- [Categorical Structure](philosophy/categorical-structure.md) — Category-theoretic formalization
+- [Philosophy README](philosophy/README.md) — Overview of philosophical foundations
+
 ### 📐 [Architecture](architecture/)
 High-level design and architectural principles
 - [Overview](architecture/overview.md) - Core Morphogen architecture
+- [Continuous-Discrete Semantics](architecture/continuous-discrete-semantics.md) ⭐ **NEW** — Dual computational models
 - **[DSL Framework Design](architecture/dsl-framework-design.md)** ⭐ - Vision for domain reasoning language (first-class domains, translations, composition)
 - [Domain Architecture](architecture/domain-architecture.md) - How domains fit together (110KB - comprehensive!)
-- [Categorical Structure](architecture/morphogen-categorical-structure.md) - Category theory foundations and functorial semantics
 - [GPU & MLIR Principles](architecture/gpu-mlir-principles.md) - GPU execution and MLIR integration
 - [Interactive Visualization](architecture/interactive-visualization.md) - Visualization approach
 
 ### 📋 [Specifications](specifications/)
-Detailed technical specifications (19 documents)
+Detailed technical specifications (20 documents)
 - **Language**: [KAX Language](specifications/kax-language.md), [Type System](specifications/type-system.md)
-- **Infrastructure**: [Graph IR](specifications/graph-ir.md), [MLIR Dialects](specifications/mlir-dialects.md), [Operator Registry](specifications/operator-registry.md), [Scheduler](specifications/scheduler.md), [Transform](specifications/transform.md)
+- **Infrastructure**: [Graph IR](specifications/graph-ir.md), [MLIR Dialects](specifications/mlir-dialects.md), [Operator Registry](specifications/operator-registry.md), [Scheduler](specifications/scheduler.md), [Transform](specifications/transform.md), [Transform Composition](specifications/transform-composition.md) ⭐ **NEW**
 - **Domains**: [Chemistry](specifications/chemistry.md), [Circuit](specifications/circuit.md), [Emergence](specifications/emergence.md), [Procedural Generation](specifications/procedural-generation.md), [Physics](specifications/physics-domains.md), [BI](specifications/bi-domain.md), [Video/Audio Encoding](specifications/video-audio-encoding.md)
 - **Other**: [Geometry](specifications/geometry.md), [Coordinate Frames](specifications/coordinate-frames.md), [Profiles](specifications/profiles.md), [Snapshot ABI](specifications/snapshot-abi.md), [Timbre Extraction](specifications/timbre-extraction.md)
 
 ### 📝 [Architecture Decision Records (ADRs)](adr/)
-Why key architectural decisions were made (8 records)
+Why key architectural decisions were made (12 records)
 - [001: Unified Reference Model](adr/001-unified-reference-model.md)
 - [002: Cross-Domain Architectural Patterns](adr/002-cross-domain-architectural-patterns.md)
 - [003: Circuit Modeling Domain](adr/003-circuit-modeling-domain.md)
@@ -39,6 +47,10 @@ Why key architectural decisions were made (8 records)
 - [006: Chemistry Domain](adr/006-chemistry-domain.md)
 - [007: GPU-First Domains](adr/007-gpu-first-domains.md)
 - [008: Procedural Generation Domain](adr/008-procedural-generation-domain.md)
+- [009: Ambient Music & Generative Domains](adr/009-ambient-music-generative-domains.md)
+- [010: Ecosystem Branding & Naming Strategy](adr/010-ecosystem-branding-naming-strategy.md)
+- [011: Project Renaming (Morphogen/Philbrick)](adr/011-project-renaming-morphogen-philbrick.md)
+- [012: Universal Domain Translation](adr/012-universal-domain-translation.md) ⭐ **NEW**
 
 ### 📖 [Guides](guides/)
 How-to documentation for implementers
@@ -99,6 +111,8 @@ Deprecated CCDSL v0.2.2 documentation (for historical reference)
 
 **I want to...**
 
+- **Understand why formalization matters** → Read [Formalization and Knowledge](philosophy/formalization-and-knowledge.md) ⭐
+- **Understand Morphogen's mathematical foundations** → See [Philosophy](philosophy/) section
 - **Understand Morphogen's vision and impact** → Read the main [README.md](../README.md) and [Professional Applications](reference/professional-domains.md)
 - **Understand Morphogen's architecture** → Start with [Architecture Overview](architecture/overview.md), then [Domain Architecture](architecture/domain-architecture.md)
 - **Understand transformations intuitively** → Read [Mathematical Transformation Metaphors](reference/math-transformation-metaphors.md)

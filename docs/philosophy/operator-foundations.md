@@ -1,8 +1,23 @@
-# The Operator Philosophy: Mathematical Foundation of Morphogen & Philbrick
+# Operator Foundations: Mathematical Core of Morphogen & Philbrick
 
-**Status**: Core Architectural Philosophy
-**Applies To**: Morphogen (software), Philbrick (hardware), All domains
-**Last Updated**: 2025-11-18
+**Version:** 1.0
+**Status:** Core Philosophical Foundation
+**Applies To:** Morphogen (software), Philbrick (hardware), All domains
+**Last Updated:** 2025-11-21
+
+---
+
+## Overview
+
+This document presents the **mathematical and operator-theoretic foundations** of Morphogen and Philbrick. While [Formalization and Knowledge](formalization-and-knowledge.md) explains *why* formalization matters historically, this document explains *what* mathematical framework we use.
+
+**Prerequisites:**
+- [Formalization and the Evolution of Knowledge](formalization-and-knowledge.md) — Historical context
+- [Universal Domain Frameworks](../reference/universal-domain-frameworks.md) — Theoretical background
+
+**See also:**
+- [Categorical Structure](categorical-structure.md) — Category-theoretic formalization
+- [Architecture Overview](../architecture/overview.md) — How this manifests in implementation
 
 ---
 
@@ -621,10 +636,23 @@ D = degree matrix, A = adjacency matrix. Eigenvalues of L encode graph structure
 - **"Spectral Methods for Time-Dependent Problems"** - Hesthaven et al.
 
 ### Our Docs
-- [ARCHITECTURE.md](../ARCHITECTURE.md) - System design
-- [LEVEL_3_TYPE_SYSTEM.md](../LEVEL_3_TYPE_SYSTEM.md) - Type safety
-- [philbrick/docs/vision/00-VISION.md](../../philbrick/docs/vision/00-VISION.md) - Philbrick philosophy
+
+**Philosophy:**
+- [Formalization and Knowledge](formalization-and-knowledge.md) — Why formalization matters
+- [Categorical Structure](categorical-structure.md) — Category-theoretic formalization
+- [Philosophy README](README.md) — Overview of all philosophy docs
+
+**Architecture:**
+- [Architecture Overview](../architecture/overview.md) — System design
+- [Domain Architecture](../architecture/domain-architecture.md) — Domain specifications
+- [LEVEL_3_TYPE_SYSTEM.md](../../LEVEL_3_TYPE_SYSTEM.md) — Type safety
+
+**Reference:**
+- [Universal Domain Frameworks](../reference/universal-domain-frameworks.md) — Theoretical foundations
+- [Cross-Domain API](../CROSS_DOMAIN_API.md) — Practical patterns
 
 ---
 
 **TL;DR**: Treat everything as operators with spectra. This unifies our digital (Morphogen) and analog (Philbrick) platforms under one mathematical framework that extends naturally to quantum, neuromorphic, and future backends. The math is already there — we just need to make it explicit in our APIs and documentation.
+
+**Next:** See [Categorical Structure](categorical-structure.md) for the category-theoretic formalization, or [Philosophy README](README.md) for the complete philosophical foundation.
